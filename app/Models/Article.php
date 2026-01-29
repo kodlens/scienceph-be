@@ -5,50 +5,47 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Article extends Model
 {
     use HasFactory;
 
 
-    protected $table = 'infos';
-    //protected $primaryKey = 'id';
+    protected $table = 'articles';
+
+    protected $primaryKey = 'article_id';
 
     protected $fillable = [
-        'source_id',
         'title',
         'excerpt',
 
-        'description',
-        'description_text',
-
         'alias',
-        'url',
-        'agency_code',
-        'thumbnail',
+        'intro_text',
+        'content',
 
-        'tags',
-        'status',
-        'source',
-        'source_url',
-        'content_type',
-        'region',
-        'agency',
-        'regional_office',
-
-        'is_publish',
-        'publish_date',
-        'material_type',
-
-        'catalog_date',
-        'author_name',
-        'subject_headings',
-        'publisher_name',
-        'submittcategoryed_date',
+        'section_id',
+        'category_id',
 
         'encoded_by',
-        'last_updated_by',
+        'encoded_by_alias',
+        'encoded_date',
+
+        'modified_by',
+        'modified_by_alias',
+        'modified_date',
+
+        'region',
+        'tags',
+
+        'featured_image',
+
+        'source_url',
+        'hits',
 
         'record_trail',
+
+        'publish_date',
+        'is_publish',
+
         'trash',
         'is_archive'
     ];
