@@ -19,8 +19,8 @@ class Article extends Model
         'excerpt',
 
         'alias',
-        'intro_text',
-        'content',
+        'description',
+        'description_text',
 
         'section_id',
         'category_id',

@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Section extends Model
 {
     use HasFactory;
 
+
+    protected $primaryKey = 'section_id';
+
     protected $fillable = [
-        'role',
-        'guard_name',
+        'title',
+        'alias',
+        'order_no',
+        'active'
     ];
 
-
-    public function role_has_permissions(){
-        return $this->hasMany(RoleHasPermission::class, 'role_id');
-    }
 }

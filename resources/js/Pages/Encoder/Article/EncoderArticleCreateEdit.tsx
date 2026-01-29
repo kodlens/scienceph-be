@@ -28,7 +28,7 @@ import OllamaChat from "@/Components/OllamaChat";
 import KmClassifier from "@/Components/KmClassifier";
 
 
-const EncoderPostCreateEdit = ({
+const EncoderArticleCreateEdit = ({
   id,
   auth,
   post,
@@ -376,9 +376,9 @@ const EncoderPostCreateEdit = ({
   );
 }
 
-export default EncoderPostCreateEdit;
+export default EncoderArticleCreateEdit;
 
-EncoderPostCreateEdit.layout = (page: ReactNode) => (
+EncoderArticleCreateEdit.layout = (page: ReactNode) => (
   <EncoderLayout user={(page as any).props.auth.user}>
     {page}
   </EncoderLayout>

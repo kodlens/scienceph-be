@@ -180,28 +180,28 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Encoder\EncoderDashboardController::class, 'index'])->name('encoder.dashboard.index');
 
-    Route::get('/posts', [App\Http\Controllers\Encoder\EncoderPostController::class, 'index'])->name('encoder.post.index');
-    Route::get('/posts/create', [App\Http\Controllers\Encoder\EncoderPostController::class, 'create'])->name('encoder.post.create');
-    Route::post('/posts', [App\Http\Controllers\Encoder\EncoderPostController::class, 'store'])->name('encoder.post.store');
-    Route::get('/posts/{id}/edit', [App\Http\Controllers\Encoder\EncoderPostController::class, 'edit'])->name('encoder.post.edit');
-    Route::patch('/posts/{id}', [App\Http\Controllers\Encoder\EncoderPostController::class, 'update'])->name('encoder.post.update');
+    Route::get('/articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'index'])->name('encoder.articles.index');
+    Route::get('/articles/create', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'create'])->name('encoder.articles.create');
+    Route::post('/articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'store'])->name('encoder.articles.store');
+    Route::get('/articles/{id}/edit', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'edit'])->name('encoder.articles.edit');
+    Route::patch('/articles/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'update'])->name('encoder.articles.update');
     //Route::get('/posts/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'show'])->name('author.post-show');
-    Route::delete('/posts/{id}', [App\Http\Controllers\Encoder\EncoderPostController::class, 'destroy'])->name('encoder.post.destroy');
+    Route::delete('/articles/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'destroy'])->name('encoder.articles.destroy');
 
-    //Route::resource('/posts', App\Http\Controllers\Encoder\EncoderPostController::class);
-    Route::get('/get-posts', [App\Http\Controllers\Encoder\EncoderPostController::class, 'getData'])->name('encoder.post.get-data');
+    //Route::resource('/posts', App\Http\Controllers\Encoder\EncoderArticleController::class);
+    Route::get('/get-articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'getData'])->name('encoder.articles.get-data');
 
-    Route::post('/posts-trash/{id}', [App\Http\Controllers\Encoder\EncoderPostController::class, 'trash'])->name('encoder.posts.trash');
+    Route::post('/article-trash/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'trash'])->name('encoder.articles.trash');
     //   Route::post('/temp-upload', [App\Http\Controllers\Author\AuthorPostController::class, 'tempUpload'])->name('posts.temp-upload');
     //   Route::post('/temp-remove/{filename}', [App\Http\Controllers\Author\AuthorPostController::class, 'removeUpload'])->name('posts.temp-remove');
     //   Route::post('/image-remove/{id}/{filename}', [App\Http\Controllers\Author\AuthorPostController::class, 'imageRemove'])->name('posts.image-remove');
 
     //   Route::post('/posts-published/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPublished'])->name('posts.published');
     //   Route::post('/posts-archived/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postArchived'])->name('posts.archived');
-        Route::post('/posts-draft/{id}', [App\Http\Controllers\Encoder\EncoderPostController::class, 'postDraft'])->name('encoder.posts.draft');
+        Route::post('/article-draft/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'postDraft'])->name('encoder.articles.draft');
     //   Route::post('/posts-pending/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPending'])->name('posts.pending');
 
-    Route::post('/posts-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderPostController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
+    Route::post('/article-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
 
   //   //Route::get('/get-posts-comments/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'getComments'])->name('posts.get-comments');
 

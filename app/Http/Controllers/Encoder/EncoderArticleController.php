@@ -18,13 +18,13 @@ use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 
 
-class EncoderPostController extends Controller
+class EncoderArticleController extends Controller
 {
 
 
     public function index()
     {
-        return Inertia::render('Encoder/Post/EncoderPostIndex');
+        return Inertia::render('Encoder/Article/EncoderArticleIndex');
     }
 
     public function getData(Request $req)
@@ -34,7 +34,7 @@ class EncoderPostController extends Controller
         $status = '';
 
         $user = Auth::user()->load('role');
-        $data = Post::query()->where('trash', 0);
+        $data = Article::query()->where('trash', 0);
 
         if ($req->status != '' || $req->status != null) {
             $data->where('status', $req->status);
@@ -51,7 +51,7 @@ class EncoderPostController extends Controller
     {
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
-        return Inertia::render('Encoder/Post/EncoderPostCreateEdit', [
+        return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id', 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
@@ -136,7 +136,7 @@ class EncoderPostController extends Controller
 
         $post = Post::with(['subjects'])->find($id);
 
-        return Inertia::render('Encoder/Post/EncoderPostCreateEdit', [
+        return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
             'post' => $post]);

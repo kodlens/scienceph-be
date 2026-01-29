@@ -11,5 +11,4 @@ class Agency extends Model
 
     protected $fillable = ['agency', 'description', 'active'];
 
-
 }
