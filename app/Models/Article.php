@@ -24,7 +24,7 @@ class Article extends Model
         'author',
         'content_type',
         'encoded_by_id',
-        //'encoded_at',
+        'encoded_at',
         'modified_by_id',
         //'modified_at',
         'region',
@@ -54,11 +54,11 @@ class Article extends Model
     }
 
     public function encodedBy(){
-        return $this->belongsTo(User::class, 'encoded_by_id', 'user_id');
+        return $this->belongsTo(User::class, 'encoded_by_id');
     }
 
     public function modifiedBy(){
-        return $this->belongsTo(User::class, 'modified_by_id', 'user_id');
+        return $this->belongsTo(User::class, 'modified_by_id');
     }
 
 }

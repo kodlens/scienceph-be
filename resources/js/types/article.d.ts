@@ -7,7 +7,9 @@ export interface Article {
     description_text?: string;
 
     section_id: number;
+    section?: Section;
     category_id?: number;
+    category?: Category;
 
     alias?: string;
     source_url?: string;

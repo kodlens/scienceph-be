@@ -4,7 +4,7 @@ import { SelectCategory } from "@/Pages/Encoder/Article/partials/SelectCategory"
 import { SelectRegion } from "@/Pages/Encoder/Article/partials/SelectRegion";
 import { SelectSection } from "@/Pages/Encoder/Article/partials/SelectSection";
 import { PageProps, User } from "@/types";
-import { Form, Input, Select, DatePicker, ConfigProvider, Button, App } from "antd";
+import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
 import { Article } from "@/types/article";
@@ -52,6 +52,7 @@ const CreateEditArticle = ({
         { name: "region", value: article.region },
         { name: "author", value: article.author },
         { name: "is_publish", value: article.is_publish },
+        { name: "is_press_release", value: article.is_press_release && article.is_press_release > 0 ? true : false },
         { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
       ]);
 
@@ -130,7 +131,7 @@ const CreateEditArticle = ({
         is_publish: 0,
         is_press_release: 0,
         source_url: '',
-        publish_date: null,
+        publish_date: null
       }}
     >
 
@@ -210,6 +211,16 @@ const CreateEditArticle = ({
             help={errors.publish_date ? errors.publish_date[0] : ""}
           >
             <DatePicker className="w-full" placeholder="Publish Date" />
+          </Form.Item>
+
+           <Form.Item
+            name="is_press_release"
+            valuePropName="checked"
+            className="w-full"
+            validateStatus={errors.is_press_release ? "error" : ""}
+            help={errors.is_press_release ? errors.is_press_release[0] : ""}
+          >
+            <Checkbox>PRESS RELEASE</Checkbox>
           </Form.Item>
 
           <div className="flex mb-4 mt-6">

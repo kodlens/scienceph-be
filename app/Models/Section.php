@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Section extends Model
 {
     use HasFactory;
-
-
-    protected $primaryKey = 'section_id';
-
       protected $fillable = [
         'name',
         'slug',

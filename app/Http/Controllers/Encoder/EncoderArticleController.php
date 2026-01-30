@@ -36,7 +36,8 @@ class EncoderArticleController extends ArticleController
         $status = '';
 
         $user = Auth::user();
-        $data = Article::query()->where('trash', 0);
+        $data = Article::with(['section', 'category'])
+            ->where('trash', 0);
 
         if ($req->status != '' || $req->status != null) {
             $data->where('status', $req->status);

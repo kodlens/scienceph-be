@@ -71,7 +71,7 @@ class ArticleController extends Controller
                     'status' => $req->status,
                     'publish_date' => $dateFormated,
                     'is_publish' => 0,
-                    'is_press_release' => 0,
+                    'is_press_release' => $req->is_press_release ? 1 : 0,
                     'record_trail' => (new RecordTrail())
                         ->recordTrail('', 'insert', $user->id, $name),
                 ]);
@@ -144,9 +144,8 @@ class ArticleController extends Controller
         $data->source_url = $req->source_url;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;
-        $data->is_press_release = $req->is_press_release;
-        $data->record_trail = (new RecordTrail())
-            ->recordTrail($req->record_trail, 'update', $user->id, $name);
+        $data->is_press_release = $req->is_press_release ? 1 : 0;
+        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
         $data->save();
 
         // $info = Information::where('article_id', $id)

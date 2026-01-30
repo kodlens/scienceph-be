@@ -27,7 +27,7 @@ import { Article } from '@/types/article';
 import Error404 from '@/Components/Error404';
 import { PageProps } from '@/types';
 
-export default function EncoderPostIndex( {auth}: {auth: PageProps}){
+export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
 
   const { modal } = App.useApp();
 
@@ -52,7 +52,7 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
     refetchOnWindowFocus: false,
   })
 
-  if(error) {
+  if (error) {
     return <Error404 error={error} />
   }
 
@@ -149,20 +149,47 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
               rowKey={(data: Article) => data.id}
               pagination={false}
               expandable={{
-                expandedRowRender: (article:Article) => (
-                  <div>
-                    <p>{ dateFormat(article?.modified_at ? article.modified_at.toString() : '') }</p>
-                  </div>
+                expandedRowRender: (article: Article) => (
+                  <table className=''>
+                    <tr>
+                      <th className='text-left py-1 text-sm text-gray-500'>Category</th>
+                      <th className='text-left py-1 text-sm text-gray-500'>Section</th>
+                      <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
+                      <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
+                    </tr>
+                    <tr>
+                      <td>{article?.category?.name}</td>
+                      <td>{article?.section?.name}</td>
+                      <td>
+                      </td>
+                      <td>
+                        {
+                          dateFormat(article?.modified_at ? article.modified_at.toString() : '')
+                        }
+                      </td>
+                      <td>
+                        {
+                          dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
+                        }
+                      </td>
+                    </tr>
+                  </table>
                 )
               }}>
-
               <Column title="Id" dataIndex="id" />
               <Column title="Title" dataIndex="title" key="title" />
               <Column title="Description"
-                dataIndex="description_text"
                 key="description_text"
-                render={(description_text) => (
-                  <span>{description_text ? truncate(description_text, 20) : ''}</span>
+                render={(_, article: Article) => (
+                  <>
+                    <div>{article?.description_text ? truncate(article?.description_text, 15) : ''}</div>
+                    <div className='mt-4'>
+                      <span className='font-bold text-[.8rem] mr-4 text-gray-600'>PRESS RELEASE:</span>
+                      <span className={article?.is_press_release ? 'text-green-600 bg-green-100 px-2 py-1 rounded text-[.8rem]' : 'text-red-600 bg-red-100 px-2 py-1 rounded text-[.8rem]'}>
+                        {article?.is_press_release ? 'YES' : 'NO'}
+                      </span>
+                    </div>
+                  </>
                 )}
               />
 
@@ -221,12 +248,14 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
               <Column title="Action" key="action"
                 render={(_, data: Article) => (
                   <Space size="small">
-                    <Dropdown trigger={['click']} menu={{ items: contextMenuItems(
-                      { article: data, 
-                          handleEditClick: () => handleEditClick(data.id), 
-                          handleTrashClick: () => handleTrashClick(data.id) ,
+                    <Dropdown trigger={['click']} menu={{
+                      items: contextMenuItems(
+                        {
+                          article: data,
+                          handleEditClick: () => handleEditClick(data.id),
+                          handleTrashClick: () => handleTrashClick(data.id),
                           auth: auth
-                      }) 
+                        })
                     }} >
                       <Space>
                         <Button variant='outlined'>...</Button>
