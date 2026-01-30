@@ -151,28 +151,32 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
               expandable={{
                 expandedRowRender: (article: Article) => (
                   <table className=''>
-                    <tr>
-                      <th className='text-left py-1 text-sm text-gray-500'>Category</th>
-                      <th className='text-left py-1 text-sm text-gray-500'>Section</th>
-                      <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
-                      <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
-                    </tr>
-                    <tr>
-                      <td>{article?.category?.name}</td>
-                      <td>{article?.section?.name}</td>
-                      <td>
-                      </td>
-                      <td>
-                        {
-                          dateFormat(article?.modified_at ? article.modified_at.toString() : '')
-                        }
-                      </td>
-                      <td>
-                        {
-                          dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
-                        }
-                      </td>
-                    </tr>
+                    <thead>
+                      <tr>
+                        <th className='text-left py-1 text-sm text-gray-500'>Category</th>
+                        <th className='text-left py-1 text-sm text-gray-500'>Section</th>
+                        <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
+                        <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{article?.category?.name}</td>
+                        <td>{article?.section?.name}</td>
+                        <td>
+                        </td>
+                        <td>
+                          {
+                            dateFormat(article?.modified_at ? article.modified_at.toString() : '')
+                          }
+                        </td>
+                        <td>
+                          {
+                            dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
+                          }
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 )
               }}>

@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Section;
 use App\Models\Category;
 use App\Models\Agency;
+use App\Models\Article;
 use App\Models\Region;
 use Illuminate\Http\JsonResponse;
+
+
 class OpenController extends Controller
 {
     public function getSections() : JsonResponse{
@@ -32,6 +35,16 @@ class OpenController extends Controller
         return response()->json($data);
     }
 
+    public function getAuthorsAutocomplete(): JsonResponse{
+            $data = Article::distinct('author')
+            ->select('author')
+            ->orderBy('author', 'asc')
+            ->get();
+            
+        return response()->json($data);
+    }
+
 
 
 }
+

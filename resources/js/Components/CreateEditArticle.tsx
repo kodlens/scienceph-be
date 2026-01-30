@@ -1,8 +1,8 @@
 import { statusDropdownMenu } from "@/helper/statusMenu";
-import { SelectAgency } from "@/Pages/Encoder/Article/partials/SelectAgency";
-import { SelectCategory } from "@/Pages/Encoder/Article/partials/SelectCategory";
-import { SelectRegion } from "@/Pages/Encoder/Article/partials/SelectRegion";
-import { SelectSection } from "@/Pages/Encoder/Article/partials/SelectSection";
+import { SelectAgency } from "@/Components/SelectAgency";
+import { SelectCategory } from "@/Components/SelectCategory";
+import { SelectRegion } from "@/Components/SelectRegion";
+import { SelectSection } from "@/Components/SelectSection";
 import { PageProps, User } from "@/types";
 import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
@@ -12,6 +12,7 @@ import axios from "axios";
 import { router } from "@inertiajs/react";
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import AuthorAutoComplete from "./AuthorAutoComplete";
 
 const CreateEditArticle = ({
   id,
@@ -168,7 +169,7 @@ const CreateEditArticle = ({
             validateStatus={errors.author ? "error" : ""}
             help={errors.author ? errors.author[0] : ""}
           >
-            <Input placeholder="Author Name" />
+            <AuthorAutoComplete form={form} />
           </Form.Item>
 
           <Form.Item
