@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 
-use App\Http\Controllers\Basee\ArticleController;
+use App\Http\Controllers\Base\ArticleController;
 
 
 class EncoderArticleController extends ArticleController

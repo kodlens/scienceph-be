@@ -19,10 +19,6 @@ export default function EncoderLayout(
   { user, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
 
   const { post } = useForm();
-
-  //destruct object permissions
-  const { permissions } = usePage<PageProps>().props;
-
   const [collapsed, setCollapsed] = useState(false);
 
   const handleLogout = () => {
@@ -40,19 +36,19 @@ export default function EncoderLayout(
         onClick: () => router.visit('/encoder/dashboard')
       },
       {
-        key: 'encoder.posts',
+        key: 'encoder.articles',
         icon: <FormOutlined />,
-        label: 'Posts',
+        label: 'Articles',
         children: [
           {
-            key: 'encoder.posts.index',
-            label: 'Posts/Articles',
-            onClick: () => router.visit('/encoder/posts'),
+            key: 'encoder.articles.index',
+            label: 'Articles',
+            onClick: () => router.visit('/encoder/articles'),
           },
           {
-            key: 'encoder.posts.create',
+            key: 'encoder.articles.create',
             label: 'New Post/Article',
-            onClick: () => router.visit('/encoder/posts/create'),
+            onClick: () => router.visit('/encoder/articles/create'),
           },
 
         ],

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Head, router } from '@inertiajs/react'
 import ApplicationLogo from '@/Components/ApplicationLogo'
 

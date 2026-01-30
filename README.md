@@ -1,4 +1,4 @@
-## KM EXTERNAL BACKEND
+## SCIENCE PH BACKEND PANEL
 
 ### Application Requirements (Windows)
 Install the following:
@@ -37,7 +37,7 @@ Install the following:
 
 Clone the repository or run the command (only the collaborator can clone this repo)
 ```bash    
-git clone https://github.com/kodlens/km-external-be.git
+git clone https://github.com/kodlens/scienceph-be.git
 ```
 
 Go to the repository (repo-name is publication-portal)

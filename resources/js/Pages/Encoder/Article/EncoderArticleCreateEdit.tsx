@@ -282,26 +282,6 @@ const EncoderArticleCreateEdit = ({
               </div>
               {/* flex contaner */}
 
-              <div>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    handleClassification();
-                  }}>
-                    Classify
-                  </Button>
-              </div>
-              {/* <KmClassifier /> */}
-
-              <div className="my-6 border-t p-6 bg-gray-50 rounded-md">
-                <div className="font-bold mb-4">Manage Subjects/Subject Headings</div>
-                {errors && errors.subjects ? (
-                  <div className="mb-4 text-red-600">{errors.subjects[0]}</div>
-                ) : null }
-                <SelectSubjects form={form} />
-
-              </div>
-
               <div className="flex mb-4 mt-6">
                 <ConfigProvider
                   theme={{
@@ -346,8 +326,6 @@ const EncoderArticleCreateEdit = ({
           {/* end input card */}
         </div>
         {/* end card container */}
-
-        <OllamaChat />
       </div>
       {/* card container */}
     </>
