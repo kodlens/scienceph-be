@@ -59,8 +59,8 @@ html, body {
 
 
 .ck-editor__editable_inline {
-    max-height: 1020px;   /* set your limit */
-    min-height: 1020px;   /* optional */
+    max-height: 800px;   /* set your limit */
+    min-height: 800px;   /* optional */
     overflow-y: auto;
 }
 

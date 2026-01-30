@@ -25,11 +25,13 @@ class ArticleController extends Controller
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['required', 'string', 'nullable'],
             'description' => ['required'],
-            'category_id' => ['required'],
-            'section_id' => ['required'],
+            'category' => ['required'],
+            'section' => ['required'],
         ], [
             'description.required' => 'Description is required.',
         ]);
+
+        return $req;
 
         try {
 

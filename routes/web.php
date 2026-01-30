@@ -29,9 +29,10 @@ Route::get('/', function () {
  */
 Route::get('/km/login', [App\Http\Controllers\WelcomePageController::class, 'index'])->name('welcome');
 
-Route::get('/get-subjects', [App\Http\Controllers\OpenController::class, 'getSubjects'])->name('open.subjects');
-Route::get('/get-subject-headings/{subjectId}', [App\Http\Controllers\OpenController::class, 'getSubjectHeadingsWithParams'])->name('open.subject-headings-with-params');
-Route::get('/get-subject-headings', [App\Http\Controllers\OpenController::class, 'getSubjectHeadings'])->name('open.subject-headings');
+Route::get('/get-sections', [App\Http\Controllers\OpenController::class, 'getSections'])->name('open.sections');
+Route::get('/get-categories', [App\Http\Controllers\OpenController::class, 'getCategories'])->name('open.categories');
+Route::get('/get-agencies', [App\Http\Controllers\OpenController::class, 'getAgencies'])->name('open.agencies');
+Route::get('/get-regions', [App\Http\Controllers\OpenController::class, 'getRegions'])->name('open.regions');
 
 
 

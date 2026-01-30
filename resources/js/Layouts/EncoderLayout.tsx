@@ -108,7 +108,7 @@ export default function EncoderLayout(
                 background: "#084c7f",
                 color: 'white',
               }}
-              defaultOpenKeys={['encoder.posts']}
+              defaultOpenKeys={['encoder.articles']}
               defaultSelectedKeys={[`${route().current()}`]}
               items={
                 navigationItems()

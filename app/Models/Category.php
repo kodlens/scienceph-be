@@ -5,16 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Region extends Model
+class Category extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'region_id';
+    protected $table = 'categories';
+    //protected $primaryKey = 'category_id';
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'order_no',
         'active'
     ];
+
+
 }

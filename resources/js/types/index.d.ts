@@ -61,29 +61,6 @@ export interface CategoryArticles {
 }
 
 
-// cateogires
-export interface Category {
-	data(data: any): unknown;
-    id: number;
-    title: string;
-    description: string;
-    slug:string;
-    active: boolean;
-    created_at: Date,
-    update_at: Date
-}
-
-
-//statuses
-export interface Status extends StatusPair {
-	// map(arg0: (item: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-	data(data: any): unknown;
-    id: number;
-    status: string;
-    status_key: string;
-    bgcolor: string;
-    active: boolean;
-}
 
 //statuses
 export interface StatusPair {
@@ -95,69 +72,6 @@ export interface StatusPair {
 }
 
 
-//academic year
-export interface Quarter {
-	// map(arg0: (item: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-	data(data: any): unknown;
-    id:number;
-    quarter_name: string;
-    is_active: number;
-}
-
-export interface Section {
-	// map(arg0: (item: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-    id:number;
-	data(data: any): unknown;
-    section: string;
-    section_key: string;
-    order_no: number;
-    active: number;
-}
-
-export interface ArticleComment {
-    data(data: any): unknown;
-    comment_id: number;
-    article_id: number;
-    user_id: number;
-    comment: string;
-    article: {title:string};
-    user: {lname:string, fname:string, mname:string};
-}
-
-
-// role
-export interface Role {
-	data(data: any): unknown;
-    id: number;
-    role: string;
-    guard_name: string;
-}
-
-export interface RoleHasPermission {
-	data(data: any): unknown;
-    id: number;
-    permission_id: number;
-    permission: {
-        label:string;
-        name:string;
-        description: string;
-    }
-    role_id: {
-        role:string;
-        guard_name:string;
-    };
-}
-
-
-export interface Comments extends User {
-	data(data: any): unknown;
-    id: number;
-    post_id:number;
-    user_id:number;
-    role:string;
-    comments: string;
-    created_at:Date;
-}
 export interface Template {
 	data(data: any): unknown;
     id: number;

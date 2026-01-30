@@ -12,11 +12,13 @@ class Section extends Model
 
     protected $primaryKey = 'section_id';
 
-    protected $fillable = [
-        'title',
-        'alias',
+      protected $fillable = [
+        'name',
+        'slug',
+        'description',
         'order_no',
         'active'
     ];
+
 
 }

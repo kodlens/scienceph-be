@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Encoder;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Models\Article;
 
 use App\Models\User;
 use App\Rules\ValidateSlug;
@@ -66,12 +66,12 @@ class EncoderArticleController extends ArticleController
     {
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
-        $post = Post::with(['subjects'])->find($id);
+        $article = Article::find($id);
 
         return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
-            'post' => $post]);
+            'article' => $article]);
     }
 
     /** ======================================
@@ -81,7 +81,7 @@ class EncoderArticleController extends ArticleController
     {
         $user = Auth::user();
 
-        $data = Post::find($id);
+        $data = Article::find($id);
 
         if (! $data->description) {
             return response()->json([
@@ -103,7 +103,7 @@ class EncoderArticleController extends ArticleController
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $name);
         $data->save();
 
-        Post::destroy($id);
+        Article::destroy($id);
 
 
         return response()->json([
@@ -117,7 +117,7 @@ class EncoderArticleController extends ArticleController
     public function trash($id)
     {
         $user = Auth::user();
-        $data = Post::find($id);
+        $data = Article::find($id);
         $data->trash = 1;
         $name = $user->lname . ',' . $user->fname;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'trash', $user->id, $name);
@@ -162,7 +162,7 @@ class EncoderArticleController extends ArticleController
         if (Storage::exists('public/featured_images/'.$fileName)) {
             Storage::delete('public/featured_images/'.$fileName);
 
-            Post::where('featured_image', $fileName)
+            Article::where('featured_image', $fileName)
                 ->update([
                     'featured_image' => null,
                 ]);
@@ -180,7 +180,7 @@ class EncoderArticleController extends ArticleController
     public function postDraft($id)
     {
         $user = Auth::user();
-        $data = Post::find($id);
+        $data = Article::find($id);
         $data->status = 'draft'; // submit-for-publishing (static)
         $data->trash = 0; // be sure to set 0 the trash if draft
         $name = $user->lname . ',' . $user->fname;
@@ -197,7 +197,7 @@ class EncoderArticleController extends ArticleController
         $user = Auth::user();
         $name = $user->lname . ',' . $user->fname;
 
-        $data = Post::find($id);
+        $data = Article::find($id);
         // $data->status_id = 3; //submit-for-publishing (static)
         $data->status = 'archive'; // submit-for-publishing (static)
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'archive', $user->id, $name);
@@ -213,7 +213,7 @@ class EncoderArticleController extends ArticleController
         $user = Auth::user();
         $name = $user->lname . ',' . $user->fname;
 
-        $data = Post::find($id);
+        $data = Article::find($id);
         $data->status = 'submit'; // submit-for-publishing (static)
         // $data->status_id = 7; //submit-for-publishing (static)
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'submit', $user->id, $name);

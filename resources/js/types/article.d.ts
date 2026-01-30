@@ -5,15 +5,20 @@ export interface Article {
     title?: string;
     description?: string;
     description_text?: string;
+
+    section_id: number;
+    category_id?: number;
+
     alias?: string;
     source_url?: string;
-    agency?: string;
+
     status?: string;
     tags?: string[];
     content_type: string;
 
-    region?: string;
     agency?: string;
+    region?: string;
+
 
     is_publish?: string;
     publish_date?: string | Date;

@@ -9,6 +9,6 @@ class Agency extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['agency', 'description', 'active'];
+    protected $fillable = ['code', 'name', 'description', 'active'];
 
 }

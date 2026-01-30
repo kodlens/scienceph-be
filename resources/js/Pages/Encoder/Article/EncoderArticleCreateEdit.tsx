@@ -19,11 +19,13 @@ import axios from "axios";
 
 import EncoderLayout from "@/Layouts/EncoderLayout";
 import Ckeditor from "@/Components/Ckeditor";
-import SelectSubjects from "@/Components/SelectSubjects";
 import dayjs from "dayjs";
-import { statusDropdownMenu } from "@/helper/statusMenu";
-import OllamaChat from "@/Components/OllamaChat";
 import { Article } from "@/types/article";
+import { SelectSection } from "./partials/SelectSection";
+import { SelectCategory } from "./partials/SelectCategory";
+import { SelectAgency } from "./partials/SelectAgency";
+import { SelectRegion } from "./partials/SelectRegion";
+import { statusDropdownMenu } from "@/helper/statusMenu";
 
 
 const EncoderArticleCreateEdit = ({
@@ -57,7 +59,10 @@ const EncoderArticleCreateEdit = ({
         { name: "description", value: article.description },
         { name: "status", value: article.status },
         { name: "source_url", value: article.source_url },
+        { name: "category", value: article.category_id },
+        { name: "section", value: article.section_id },
         { name: "agency", value: article.agency },
+        { name: "region", value: article.region },
         { name: "author", value: article.author },
         { name: "is_publish", value: article.is_publish },
         { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
@@ -72,14 +77,14 @@ const EncoderArticleCreateEdit = ({
     setErrors({});
 
     if (id > 0) {
-      axios.patch('/encoder/posts/' + id, values).then(res => {
+      axios.patch('/encoder/articles/' + id, values).then(res => {
 
         if (res.data.status === 'updated') {
           modal.success({
             title: "Updated!",
             content: <div>Post successfully updated.</div>,
             onOk() {
-              router.visit("/encoder/posts");
+              router.visit("/encoder/articles");
             },
           });
         }
@@ -95,14 +100,14 @@ const EncoderArticleCreateEdit = ({
       })
 
     } else {
-      axios.post('/encoder/posts', values).then(res => {
+      axios.post('/encoder/articles', values).then(res => {
         if (res.data.status === 'saved') {
           modal.success({
             title: "Saved!",
             content: <div>Post successfully saved.</div>,
             onOk() {
 
-              router.visit("/encoder/posts");
+              router.visit("/encoder/articles");
             },
           });
         }
@@ -118,18 +123,7 @@ const EncoderArticleCreateEdit = ({
     }
   };
 
-  const handleClassification = () => {
-    setLoading(true)
-    const content = form.getFieldValue("description");
-    console.log(content);
 
-    axios.post("/classify-article", { content:content }).then((res) => {
-      console.log(res.data);
-      setLoading(false)
-
-    })
-
-  }
 
   return (
     <>
@@ -161,7 +155,7 @@ const EncoderArticleCreateEdit = ({
                 section: "",
                 status: 'draft',
                 region: '',
-                agency: '',
+                agency: 'DOST-STII',
                 author: '',
                 is_publish: 0,
                 is_press_release: 0,
@@ -191,6 +185,11 @@ const EncoderArticleCreateEdit = ({
                     <Input disabled placeholder="Slug" />
                   </Form.Item>
 
+
+                  <SelectSection errors={errors}/>
+
+                  <SelectCategory errors={errors}/>
+
                   <Flex gap="middle">
 
                     <Form.Item
@@ -219,8 +218,8 @@ const EncoderArticleCreateEdit = ({
                     </Form.Item>
                   </Flex>
 
-                  <Flex gap={`middle`}>
-                    <Form.Item
+
+                  <Form.Item
                       name="source_url"
                       label="Source"
                       className="w-full"
@@ -230,18 +229,11 @@ const EncoderArticleCreateEdit = ({
                       <Input placeholder="Source" />
                     </Form.Item>
 
-                    <Form.Item
-                      name="agency"
-                      label="Agency"
-                      className="w-full"
-                      validateStatus={errors.agency ? "error" : ""}
-                      help={errors.agency ? errors.agency[0] : ""}
-                    >
-                      <Input placeholder="Agency" />
-                    </Form.Item>
+                  <SelectAgency errors={errors}/>
+
+                  <SelectRegion errors={errors} />
 
 
-                  </Flex>
 
                   <Form.Item
                     name="publish_date"
@@ -253,7 +245,49 @@ const EncoderArticleCreateEdit = ({
                     <DatePicker className="w-full" placeholder="Publish Date" />
                   </Form.Item>
 
+                  <div className="flex mb-4 mt-6">
+                    <ConfigProvider
+                      theme={{
+                        components: {
+                          Button: {
+                            defaultBg: 'green',
+                            defaultColor: 'white',
+                            defaultHoverBorderColor: 'green',
+
+                            defaultActiveColor: 'white',
+                            defaultActiveBorderColor: '#1a8c12',
+                            defaultActiveBg: '#1a8c12',
+
+                            defaultHoverBg: '#379b30',
+                            defaultHoverColor: 'white',
+                          }
+                        }
+                      }}>
+                      <Button
+                        className="ml-2"
+                        htmlType="submit"
+                        icon={<ProjectOutlined />}
+                        loading={loading}
+                      >
+                        Save Post/Article
+                      </Button>
+                    </ConfigProvider>
+
+                    <Button
+                      danger
+                      onClick={() => history.back()}
+                      className="ml-auto"
+                      icon={<ArrowLeftOutlined />}
+                      loading={loading}
+                      type="primary"
+                    >
+                      BACK
+                    </Button>
+                  </div>
+
                 </div>
+
+
 
                 {/* CKEditor */}
                 <div className="w-full lg:w-2/3">
@@ -282,45 +316,7 @@ const EncoderArticleCreateEdit = ({
               </div>
               {/* flex contaner */}
 
-              <div className="flex mb-4 mt-6">
-                <ConfigProvider
-                  theme={{
-                    components: {
-                      Button: {
-                        defaultBg: 'green',
-                        defaultColor: 'white',
-                        defaultHoverBorderColor: 'green',
 
-                        defaultActiveColor: 'white',
-                        defaultActiveBorderColor: '#1a8c12',
-                        defaultActiveBg: '#1a8c12',
-
-                        defaultHoverBg: '#379b30',
-                        defaultHoverColor: 'white',
-                      }
-                    }
-                  }}>
-                  <Button
-                    className="ml-2"
-                    htmlType="submit"
-                    icon={<ProjectOutlined />}
-                    loading={loading}
-                  >
-                    Save Post/Article
-                  </Button>
-                </ConfigProvider>
-
-                <Button
-                  danger
-                  onClick={() => history.back()}
-                  className="ml-auto"
-                  icon={<ArrowLeftOutlined />}
-                  loading={loading}
-                  type="primary"
-                >
-                  BACK
-                </Button>
-              </div>
             </Form>
           </div>
           {/* end input card */}
