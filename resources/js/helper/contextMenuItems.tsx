@@ -1,71 +1,35 @@
 import { Article } from "@/types/article";
 import { MenuProps } from "antd";
-import modal from "antd/es/modal";
-import axios from "axios";
-import { ProjectOutlined, EditOutlined, PaperClipOutlined, DeleteOutlined } from "@ant-design/icons";
-import { PageProps } from "@/types";
+
+import { PageProps, User } from "@/types";
+import { encoderMenuItems } from "./encoderMenuItems";
+import { publisherMenuItems } from "./publisherMenuItems";
+import { adminMenuItems } from "./adminMenuItems";
 
 type Props = {
   article: Article;
-  refetch: () => void;
   handleEditClick: (id: number) => void;
   handleTrashClick: (id: number) => void;
   auth: PageProps
 }
-export const contextMenuItems = ({ article, refetch, handleEditClick, handleTrashClick }: Props) => {
+export const contextMenuItems = ({ article, handleEditClick, handleTrashClick, auth }: Props) => {
 
     const items: MenuProps['items'] = [];
 
+    const role = (auth.user as User) ? (auth.user as User).role.toLowerCase() : null;
+
+    const encoderItems = encoderMenuItems({handleEditClick, handleTrashClick, article});
+
+    const publisherItems = publisherMenuItems({handleEditClick, article});
+
+    const adminItems = adminMenuItems({handleEditClick, article});
+
+
     items.push(
-        // {
-        //   key: 'articles.submit-for-publishing',
-        //   icon: <ProjectOutlined />,
-        //   label: 'Submit for Publishing',
-        //   onClick: () => {
-
-        //     axios.post('/encoder/articles-submit-for-publishing/' + article.id).then(res => {
-        //       if (res.data.status === 'submit-for-publishing') {
-        //         modal.success({
-        //           title: 'Submitted!',
-        //           content: 'Successfully submitted.'
-        //         })
-        //         refetch()
-        //       }
-        //     })
-        //   },
-        // },
-        {
-          label: 'Edit',
-          key: '2',
-          disabled: true,
-          
-          icon: <EditOutlined />,
-          onClick: () => handleEditClick(article.id),
-        },
-        {
-          label: 'Draft',
-          key: '1',
-          icon: <PaperClipOutlined />,
-          onClick: () => {
-
-            axios.post('/encoder/articles-draft/' + article.id).then(res => {
-              if (res.data.status === 'draft') {
-                modal.success({
-                  title: 'Draft!',
-                  content: 'Successfully draft.'
-                })
-                refetch()
-              }
-            })
-          },
-        },
-        {
-          label: 'Trash',
-          key: '3',
-          icon: <DeleteOutlined />,
-          onClick: () => handleTrashClick(article.id)
-        },
-      );
+        ...(role === 'encoder' ? encoderItems : []),
+        ...(role === 'publisher' ? publisherItems : []),
+        ...(role === 'admin' ? adminItems : [])
+    );
 
     return items;
   }

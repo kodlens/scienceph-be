@@ -37,9 +37,6 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
 
   const perPage = 10;
 
-  
-
-
   const { data, isFetching, error, refetch } = useQuery({
     queryKey: ['posts', { perPage, page }],
     queryFn: async () => {
@@ -66,42 +63,27 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
 
   const handleStatusChange = (value: string) => {
     setStatus(value)
-    //loadAsync(search, perPage, page)
   }
-
-
 
   const handClickNew = () => {
-    router.visit('/encoder/posts/create');
+    router.visit('/encoder/articles/create');
   }
   const handleEditClick = (id: number) => {
-    router.visit('/encoder/posts/' + id + '/edit');
+    router.visit('/encoder/articles/' + id + '/edit');
   }
   const handleTrashClick = (id: number) => {
 
     modal.confirm({
       title: 'Trash?',
-      content: 'Are you sure you want to move to trash this post?',
+      content: 'Are you sure you want to move this article to trash?',
       onOk: async () => {
-        const res = await axios.post('/encoder/posts-trash/' + id);
+        const res = await axios.post('/encoder/articles-trash/' + id);
         if (res.data.status === 'trashed') {
           refetch()
         }
       }
     })
   }
-  // const handleSoftDelete = (id: number) => {
-  //   modal.confirm({
-  //     title: 'Delete?',
-  //     content: 'Are you sure you want to delete this post?',
-  //     onOk: async () => {
-  //       const res = await axios.post('/encoder/posts-soft-delete/' + id);
-  //       if (res.data.status === 'soft_deteled') {
-  //         refetch()
-  //       }
-  //     }
-  //   })
-  // }
 
   const handSearchClick = () => {
     refetch()
@@ -165,7 +147,14 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
             <Table dataSource={data?.data}
               loading={isFetching}
               rowKey={(data: Article) => data.id}
-              pagination={false}>
+              pagination={false}
+              expandable={{
+                expandedRowRender: (article:Article) => (
+                  <div>
+                    <p>{ dateFormat(article?.modified_at ? article.modified_at.toString() : '') }</p>
+                  </div>
+                )
+              }}>
 
               <Column title="Id" dataIndex="id" />
               <Column title="Title" dataIndex="title" key="title" />
@@ -234,9 +223,6 @@ export default function EncoderPostIndex( {auth}: {auth: PageProps}){
                   <Space size="small">
                     <Dropdown trigger={['click']} menu={{ items: contextMenuItems(
                       { article: data, 
-                        refetch: () => {
-                          refetch()
-                        }, 
                           handleEditClick: () => handleEditClick(data.id), 
                           handleTrashClick: () => handleTrashClick(data.id) ,
                           auth: auth

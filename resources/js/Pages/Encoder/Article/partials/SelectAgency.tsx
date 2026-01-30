@@ -38,7 +38,7 @@ export const SelectAgency = ( { errors } : Props ) => {
         validateStatus={errors.agency ? "error" : ""}
         help={errors.agency ? errors.agency[0] : ""}
       >
-        <Select loading={loading} options={data ? selectData() : []} />
+        <Select loading={loading} options={data ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )

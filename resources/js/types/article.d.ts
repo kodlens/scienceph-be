@@ -19,6 +19,9 @@ export interface Article {
     agency?: string;
     region?: string;
 
+    encoded_at?: string | Date;
+    modified_at?: string | Date;
+
 
     is_publish?: string;
     publish_date?: string | Date;

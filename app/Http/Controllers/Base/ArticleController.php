@@ -62,7 +62,7 @@ class ArticleController extends Controller
                     'section_id' => $req->section,
                     'category_id' => $req->category,
                     'author' => $req->author,
-                    'encoded_by_id' => $user->user_id,
+                    'encoded_by_id' => $user->id,
                     'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
@@ -73,7 +73,7 @@ class ArticleController extends Controller
                     'is_publish' => 0,
                     'is_press_release' => 0,
                     'record_trail' => (new RecordTrail())
-                        ->recordTrail('', 'insert', $user->user_id, $name),
+                        ->recordTrail('', 'insert', $user->id, $name),
                 ]);
             });
 
@@ -92,16 +92,14 @@ class ArticleController extends Controller
     public function update(Request $req, $id){
 
         $req->validate([
-            'title' => ['required', 'unique:articles,title,' . $id . ',article_id'],
-            'introtext' => ['required'],
-            'category_id' => ['required'],
-            'section_id' => ['required'],
+            'title' => ['required', 'unique:articles,title,' . $id . ',id'],
+            'description' => ['required', 'string'],
+            'category' => ['required'],
+            'section' => ['required'],
 
-        ],[
-            'category_id.required' => 'Category is required.',
-            'introtext.required' => 'Content is required.',
-            'section_id.required' => 'Section is required.'
         ]);
+
+        //return $req;
 
 
         $filterDom = new FilterDom();
@@ -128,28 +126,29 @@ class ArticleController extends Controller
 
         //call user for record trail
         $user = Auth::user();
+        $name = $user->lname . ',' . $user->fname;
 
         //update data in table articles
         $data = Article::find($id);
         $data->title = $req->title;
         $data->alias = Str::slug($req->title);
         $data->description = $modifiedHtml;
-        $data->content = $content;
-        $data->section_id = $req->section_id;
-        $data->category_id = $req->category_id;
+        $data->description_text = $content;
+        $data->section_id = $req->section;
+        $data->category_id = $req->category;
         $data->author = $req->author;
-        $data->modified_by_id = $user->user_id;
+        $data->modified_by_id = $user->id;
         $data->modified_at = now();
         $data->region = $req->region;
         //$data->tags = $tagsString;
-        //$data->is_published = $req->is_published;
         $data->source_url = $req->source_url;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;
         $data->is_press_release = $req->is_press_release;
         $data->record_trail = (new RecordTrail())
-            ->recordTrail('', 'insert', $user->user_id, $name);
+            ->recordTrail($req->record_trail, 'update', $user->id, $name);
         $data->save();
+
         // $info = Information::where('article_id', $id)
         //     ->update([
         //         'title' => $req->title,

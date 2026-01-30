@@ -39,7 +39,7 @@ export const SelectRegion = ( { errors } : Props ) => {
         validateStatus={errors.region ? "error" : ""}
         help={errors.region ? errors.region[0] : ""}
       >
-        <Select loading={loading} options={data ? selectData() : []} />
+        <Select loading={loading} options={data ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export const dateFormat = (item: string): string => {
-    return dayjs(new Date(item)).format("MMM-DD-YYYY");
+    return item ? dayjs(new Date(item)).format("MMM-DD-YYYY") : 'No Date';
 };
 
 

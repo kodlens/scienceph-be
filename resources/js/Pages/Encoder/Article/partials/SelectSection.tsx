@@ -38,7 +38,7 @@ export const SelectSection = ({ errors } : Props) => {
         validateStatus={errors.section ? "error" : ""}
         help={errors.section ? errors.section[0] : ""}
       >
-        <Select loading={loading} options={sections ? selectSections() : []} />
+        <Select loading={loading} options={sections ? selectSections() : []} allowClear/>
       </Form.Item>
     </>
   )

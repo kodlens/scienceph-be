@@ -26,9 +26,6 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         user: User;
         csrf_token: string;
     };
-    categories?: string[];
-    permissions?: string[];
-    statuses?:Status[]
 };
 
 
