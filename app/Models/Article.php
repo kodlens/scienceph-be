@@ -16,48 +16,51 @@ class Article extends Model
 
     protected $fillable = [
         'title',
-        'excerpt',
+       // 'excerpt',
 
         'alias',
         'description',
         'description_text',
-
         'section_id',
         'category_id',
-
-        'encoded_by',
-        'encoded_by_alias',
-        'encoded_date',
-
-        'modified_by',
-        'modified_by_alias',
-        'modified_date',
-
+        'author',
+        'content_type',
+        'encoded_by_id',
+        //'encoded_at',
+        'modified_by_id',
+        //'modified_at',
         'region',
         'tags',
-
-        'featured_image',
-
+        'agency',
+        //'featured_image',
         'source_url',
         'hits',
-
-        'record_trail',
-
+        'status',
         'publish_date',
         'is_publish',
-
+        'is_press_release',
         'trash',
-        'is_archive'
+        'is_archive',
+        'record_trail',
     ];
 
 
 
 
-    public function subjects(){
-        return $this->hasMany(InfoSubjectHeading::class, 'info_id', 'id')
-          ->join('subject_headings', 'info_subject_headings.subject_heading_id', '=', 'subject_headings.id')
-          ->join('subjects', 'subject_headings.subject_id', '=', 'subjects.id')
-          ->select('info_subject_headings.*', 'subject_heading', 'subject', 'subject_id');
+    public function section(){
+        return $this->belongsTo(Section::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function encodedBy(){
+        return $this->belongsTo(User::class, 'encoded_by_id', 'user_id');
+    }
+
+    public function modifiedBy(){
+        return $this->belongsTo(User::class, 'modified_by_id', 'user_id');
     }
 
 }

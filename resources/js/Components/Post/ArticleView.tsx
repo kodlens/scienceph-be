@@ -1,5 +1,5 @@
 import { PageProps } from '@/types'
-import { Post } from '@/types/post'
+import { Post } from '@/types/article'
 import React from 'react'
 
 export default function ArticleView({ post, className }: {post:Post, className:string } ) {

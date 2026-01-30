@@ -61,7 +61,7 @@ import {
 } from "ckeditor5";
 
 import "ckeditor5/ckeditor5.css";
-import { Post } from '@/types/post';
+import { Post } from '@/types/article';
 import { FormInstance } from 'antd';
 
 

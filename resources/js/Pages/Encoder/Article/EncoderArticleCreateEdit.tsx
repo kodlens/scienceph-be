@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Head, router, usePage } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 
@@ -17,38 +17,31 @@ import {
 import { PageProps, User } from "@/types";
 import axios from "axios";
 
-import { Post } from "@/types/post";
 import EncoderLayout from "@/Layouts/EncoderLayout";
-import form from "antd/es/form";
 import Ckeditor from "@/Components/Ckeditor";
 import SelectSubjects from "@/Components/SelectSubjects";
 import dayjs from "dayjs";
 import { statusDropdownMenu } from "@/helper/statusMenu";
 import OllamaChat from "@/Components/OllamaChat";
-import KmClassifier from "@/Components/KmClassifier";
+import { Article } from "@/types/article";
 
 
 const EncoderArticleCreateEdit = ({
   id,
   auth,
-  post,
+  article,
   ckLicense
 }: {
   id: number,
   auth: PageProps,
-  post: Post,
+  article: Article,
   ckLicense: string
 }) => {
-  const { props } = usePage<PageProps>();
-  const csrfToken: string = props.auth.csrf_token ?? ""; // Ensure csrfToken is a string
 
   const [form] = Form.useForm();
-
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
-
-  const { message, modal, notification } = App.useApp();
-
+  const { message, modal } = App.useApp();
 
   useEffect(() => {
     if (id > 0) {
@@ -59,24 +52,22 @@ const EncoderArticleCreateEdit = ({
   const getData = () => {
     try {
       form.setFields([
-        { name: "title", value: post.title },
-        { name: "slug", value: post.alias },
-        { name: "description", value: post.description },
-        { name: "excerpt", value: post.excerpt },
-        { name: "status", value: post.status },
-        { name: "source_url", value: post.source_url },
-        { name: "agency", value: post.agency },
-        { name: "author_name", value: post.author_name },
-        { name: "is_publish", value: post.is_publish },
-        { name: "subjects", value: post.subjects },
-        { name: "publish_date", value: post.publish_date ? dayjs(post.publish_date) : null },
+        { name: "title", value: article.title },
+        { name: "slug", value: article.alias },
+        { name: "description", value: article.description },
+        { name: "status", value: article.status },
+        { name: "source_url", value: article.source_url },
+        { name: "agency", value: article.agency },
+        { name: "author", value: article.author },
+        { name: "is_publish", value: article.is_publish },
+        { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
       ]);
-      console.log(post);
+      console.log(article);
 
     } catch (err) { }
   };
 
-  const submit = (values: Post) => {
+  const submit = (values: Article) => {
     setLoading(true)
     setErrors({});
 
@@ -166,13 +157,15 @@ const EncoderArticleCreateEdit = ({
               initialValues={{
                 title: "",
                 slug: '',
-                excerpt: "",
-                description: "",
+                category: "",
+                section: "",
                 status: 'draft',
-                is_publish: 0,
-                source_url: '',
+                region: '',
                 agency: '',
-                author_name: '',
+                author: '',
+                is_publish: 0,
+                is_press_release: 0,
+                source_url: '',
                 publish_date: null,
               }}
             >
@@ -198,29 +191,14 @@ const EncoderArticleCreateEdit = ({
                     <Input disabled placeholder="Slug" />
                   </Form.Item>
 
-
-
-                  <Form.Item
-                    name="excerpt"
-                    label="Excerpt"
-                    validateStatus={errors.excerpt ? "error" : ""}
-                    help={errors.excerpt ? errors.excerpt[0] : ""}
-                  >
-                    <Input.TextArea
-                      rows={4}
-                      placeholder="Excerpt"
-                    />
-                  </Form.Item>
-
-
                   <Flex gap="middle">
 
                     <Form.Item
-                      name="author_name"
+                      name="author"
                       label="Author Name"
                       className="w-full"
-                      validateStatus={errors.author_name ? "error" : ""}
-                      help={errors.author_name ? errors.author_name[0] : ""}
+                      validateStatus={errors.author ? "error" : ""}
+                      help={errors.author ? errors.author[0] : ""}
                     >
                       <Input placeholder="Author Name" />
                     </Form.Item>
@@ -295,7 +273,7 @@ const EncoderArticleCreateEdit = ({
                           : ""
                       }
                     >
-                      <Ckeditor post={post || undefined} form={form} ckLicense={ckLicense} />
+                      <Ckeditor post={article || undefined} form={form} ckLicense={ckLicense} />
                     </Form.Item>
                   </div>
 

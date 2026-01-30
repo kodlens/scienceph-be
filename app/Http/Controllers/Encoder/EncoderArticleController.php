@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 
+use App\Http\Controllers\Basee\ArticleController;
 
-class EncoderArticleController extends Controller
+
+class EncoderArticleController extends ArticleController
 {
 
 
@@ -58,76 +60,6 @@ class EncoderArticleController extends Controller
         ]);
     }
 
-    public function store(Request $req)
-    {
-        $req->validate([
-            'title' => ['required', new ValidateTitle(0)],
-            'author_name' => ['string', 'nullable'],
-            'description' => ['required'],
-            'subjects' => ['required', 'array', 'min:1'],
-        ], [
-            'description.required' => 'Description is required.',
-        ]);
-
-        try {
-
-            DB::transaction(function () use ($req) {
-
-                /* ==============================
-                    Convert base64 images → files and rewrite HTML
-                ============================== */
-                $filterDom = new FilterDom();
-                $modifiedHtml = $filterDom->filterDOM($req->description);
-
-                /* ==============================
-                    Clean HTML → plain text
-                ============================== */
-                $content = $filterDom->htmlToPlainText($req->description);
-
-                $dateFormated = $req->publish_date
-                    ? date('Y-m-d', strtotime($req->publish_date))
-                    : null;
-
-                $user = Auth::user();
-                $name = $user->lname . ',' . $user->fname;
-
-                $post = Post::create([
-                    'title' => $req->title,
-                    'alias' => Str::slug($req->title),
-                    'excerpt' => $req->excerpt,
-                    'source_url' => $req->source_url,
-                    'agency' => $req->agency,
-                    'status' => $req->status,
-                    'is_publish' => 0,
-                    'description' => $modifiedHtml,
-                    'description_text' => $content,
-                    'author_name' => $req->author_name,
-                    'encoded_by' => $user->id,
-                    'publish_date' => $dateFormated,
-                    'record_trail' => (new RecordTrail())
-                        ->recordTrail('', 'insert', $user->id, $name),
-                ]);
-
-                foreach ($req->subjects as $subject) {
-                    if (!empty($subject['subject_heading_id'])) {
-                        DB::table('info_subject_headings')->insert([
-                            'info_id' => $post->id,
-                            'subject_heading_id' => $subject['subject_heading_id'],
-                        ]);
-                    }
-                }
-            });
-
-            return response()->json([
-                'status' => 'saved',
-            ], 200);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
 
 
     public function edit($id)
@@ -141,80 +73,6 @@ class EncoderArticleController extends Controller
             'ckLicense' => $CK_LICENSE,
             'post' => $post]);
     }
-
-    public function update(Request $req, $id)
-    {
-        $req->validate([
-            'title' => ['required', new ValidateTitle($id)],
-            'author_name' => ['string', 'nullable'],
-            'description' => ['required'],
-            'subjects' => ['required', 'array', 'min:1'],
-        ], [
-            'description.required' => 'Content is required.'
-        ]);
-
-        try {
-            DB::transaction(function () use ($req, $id) {
-                /* ==============================
-                    this will convert all base64 images to files and rewrite the html,
-                */
-                $modifiedHtml = (new FilterDom())->filterDOM($req->description);
-
-                /* ============================== */
-
-                /* ==============================
-                    this will clean all html tags, leaving the content, this data may use to train AI models,
-                */
-                $content = trim(strip_tags($req->description)); // cleaning all tags
-                /* ============================== */
-
-                $dateFormated = $req->publish_date ? date('Y-m-d', strtotime($req->publish_date)) : null;
-
-                $user = Auth::user();
-
-                $data = Post::find($id);
-
-                $data->title = $req->title;
-                $data->alias = Str::slug($req->title);
-                $data->excerpt = $req->excerpt ? $req->excerpt : null;
-                $data->source_url = $req->source_url;
-                $data->agency = $req->agency;
-                $data->status = $req->status;
-                $data->is_publish = 0;
-                $data->description = $modifiedHtml;
-                $data->description_text = $content;
-                $data->author_name = $req->author_name;
-                $data->last_updated_by = $user->id;
-                $data->publish_date = $dateFormated;
-                $name = $user->lname . ',' . $user->fname;
-                $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
-                $data->save();
-
-                //delete all related subjects
-                DB::table('info_subject_headings')->where('info_id', $id)->delete();
-                foreach($req->subjects as $subject){
-                    if(!empty($subject['subject_heading_id'])){
-                        DB::table('info_subject_headings')->insert([
-                            'info_id' => $id,
-                            'subject_heading_id' => $subject['subject_heading_id'],
-                        ]);
-                    }
-                }
-            });
-
-            return response()->json([
-                'status' => 'updated',
-            ], 200);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
-
-    }
-
-
 
     /** ======================================
      * This is delete function
