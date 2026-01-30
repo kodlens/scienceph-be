@@ -35,7 +35,7 @@ class EncoderArticleController extends ArticleController
         $sort = explode('.', $req->sort_by);
         $status = '';
 
-        $user = Auth::user()->load('role');
+        $user = Auth::user();
         $data = Article::query()->where('trash', 0);
 
         if ($req->status != '' || $req->status != null) {

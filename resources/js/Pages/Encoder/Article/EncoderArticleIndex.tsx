@@ -1,124 +1,43 @@
-
-import { PageProps, User, Status } from '@/types'
 import { Head, router } from '@inertiajs/react'
 
 import {
-  FileAddOutlined, DropboxOutlined,
-  DownOutlined,
-  DeleteOutlined, EditOutlined,
-  EyeOutlined, UserOutlined,
-  ProjectOutlined, DeliveredProcedureOutlined, PaperClipOutlined,
-  PicRightOutlined
+  FileAddOutlined
 } from '@ant-design/icons';
 
 import {
-  Card, Space, Table,
+  Space, Table,
   Pagination, Button,
   Input, Select,
   Dropdown,
-  MenuProps,
   App
 } from 'antd';
+import { contextMenuItems } from '@/helper/contextMenuItems';
 
-
-import React, { KeyboardEvent, ReactNode, useState } from 'react'
+import { KeyboardEvent, ReactNode, useState } from 'react'
 import axios from 'axios';
-
 
 const { Column } = Table;
 
-interface PostResponse {
-  data: any[]
-  //data: Post[];
-  total: number;
-}
 
-interface Option {
-  label: string;
-  value: string;
-}
-
-
-import dayjs from 'dayjs';
-import { AnyObject } from 'antd/es/_util/type';
-import ArticleView from '@/Components/Post/ArticleView';
 import EncoderLayout from '@/Layouts/EncoderLayout';
 import { dateFormat, truncate } from '@/helper/helperFunctions';
-import { Post } from '@/types/article';
+
 import { useQuery } from '@tanstack/react-query';
+import { Article } from '@/types/article';
+import Error404 from '@/Components/Error404';
+import { PageProps } from '@/types';
 
-
-
-export default function EncoderPostIndex(
-  { auth, permissions }:
-    PageProps) {
+export default function EncoderPostIndex( {auth}: {auth: PageProps}){
 
   const { modal } = App.useApp();
 
   const [status, setStatus] = useState('');
-  const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
 
-  const createMenuItems = (post: Post) => {
+  const perPage = 10;
 
-    const items: MenuProps['items'] = [];
-
-    if (post.status === 'draft' || post.status === 'return') { //published (7)
-      items.push(
-        {
-          key: 'posts.submit-for-publishing',
-          icon: <ProjectOutlined />,
-          label: 'Submit for Publishing',
-          onClick: () => {
-
-            axios.post('/encoder/posts-submit-for-publishing/' + post.id).then(res => {
-              if (res.data.status === 'submit-for-publishing') {
-                modal.success({
-                  title: 'Submitted!',
-                  content: 'Successfully submitted.'
-                })
-
-                refetch()
-              }
-            })
-          },
-        },
-        {
-          label: 'Edit',
-          key: '2',
-          icon: <EditOutlined />,
-          onClick: () => handleEditClick(post.id),
-        },
-        {
-          label: 'Draft',
-          key: '1',
-          icon: <PaperClipOutlined />,
-          onClick: () => {
-
-            axios.post('/encoder/posts-draft/' + post.id).then(res => {
-              if (res.data.status === 'draft') {
-                modal.success({
-                  title: 'Draft!',
-                  content: 'Successfully draft.'
-                })
-                refetch()
-
-              }
-            })
-          },
-        },
-        {
-          label: 'Trash',
-          key: '3',
-          icon: <DeleteOutlined />,
-          onClick: () => handleTrashClick(post.id)
-        },
-      );
-    }
-
-    return items;
-  }
+  
 
 
   const { data, isFetching, error, refetch } = useQuery({
@@ -130,11 +49,15 @@ export default function EncoderPostIndex(
         `page=${page}`,
         `status=${status}`
       ].join('&');
-      const res = await axios.get(`/encoder/get-posts?${params}`);
+      const res = await axios.get(`/encoder/get-articles?${params}`);
       return res.data
     },
     refetchOnWindowFocus: false,
   })
+
+  if(error) {
+    return <Error404 error={error} />
+  }
 
   const onPageChange = (index: number) => {
     setPage(index)
@@ -167,18 +90,18 @@ export default function EncoderPostIndex(
       }
     })
   }
-  const handleSoftDelete = (id: number) => {
-    modal.confirm({
-      title: 'Delete?',
-      content: 'Are you sure you want to delete this post?',
-      onOk: async () => {
-        const res = await axios.post('/author/posts-soft-delete/' + id);
-        if (res.data.status === 'soft_deteled') {
-          refetch()
-        }
-      }
-    })
-  }
+  // const handleSoftDelete = (id: number) => {
+  //   modal.confirm({
+  //     title: 'Delete?',
+  //     content: 'Are you sure you want to delete this post?',
+  //     onOk: async () => {
+  //       const res = await axios.post('/encoder/posts-soft-delete/' + id);
+  //       if (res.data.status === 'soft_deteled') {
+  //         refetch()
+  //       }
+  //     }
+  //   })
+  // }
 
   const handSearchClick = () => {
     refetch()
@@ -187,11 +110,6 @@ export default function EncoderPostIndex(
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter')
       handSearchClick()
-  }
-
-  /**handle error image */
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/img/no-img.png';
   }
 
   return (
@@ -246,7 +164,7 @@ export default function EncoderPostIndex(
 
             <Table dataSource={data?.data}
               loading={isFetching}
-              rowKey={(data: Post) => data.id}
+              rowKey={(data: Article) => data.id}
               pagination={false}>
 
               <Column title="Id" dataIndex="id" />
@@ -312,9 +230,18 @@ export default function EncoderPostIndex(
               />
 
               <Column title="Action" key="action"
-                render={(_, data: Post) => (
+                render={(_, data: Article) => (
                   <Space size="small">
-                    <Dropdown trigger={['click']} menu={{ items: createMenuItems(data) }} >
+                    <Dropdown trigger={['click']} menu={{ items: contextMenuItems(
+                      { article: data, 
+                        refetch: () => {
+                          refetch()
+                        }, 
+                          handleEditClick: () => handleEditClick(data.id), 
+                          handleTrashClick: () => handleTrashClick(data.id) ,
+                          auth: auth
+                      }) 
+                    }} >
                       <Space>
                         <Button variant='outlined'>...</Button>
                       </Space>

@@ -31,8 +31,6 @@ class ArticleController extends Controller
             'description.required' => 'Description is required.',
         ]);
 
-        return $req;
-
         try {
 
             DB::transaction(function () use ($req) {
@@ -61,10 +59,11 @@ class ArticleController extends Controller
                     //'excerpt' => $req->excerpt,
                     'description' => $modifiedHtml,
                     'description_text' => $content,
-                    'section_id' => $req->section_id,
-                    'category_id' => $req->category_id,
+                    'section_id' => $req->section,
+                    'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->user_id,
+                    'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
                     'tags' => $req->tags,
@@ -140,6 +139,7 @@ class ArticleController extends Controller
         $data->category_id = $req->category_id;
         $data->author = $req->author;
         $data->modified_by_id = $user->user_id;
+        $data->modified_at = now();
         $data->region = $req->region;
         //$data->tags = $tagsString;
         //$data->is_published = $req->is_published;
