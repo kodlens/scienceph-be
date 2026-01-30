@@ -90,7 +90,7 @@ class ArticleController extends Controller
 
 
     public function update(Request $req, $id){
-        
+        return $req;
         $req->validate([
             'title' => ['required', 'unique:articles,title,' . $id . ',id'],
             'description' => ['required', 'string'],

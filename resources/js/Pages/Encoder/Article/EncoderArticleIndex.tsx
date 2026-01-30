@@ -155,6 +155,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                       <tr>
                         <th className='text-left py-1 text-sm text-gray-500'>Category</th>
                         <th className='text-left py-1 text-sm text-gray-500'>Section</th>
+                        <th className='text-left py-1 text-sm text-gray-500'>Author</th>
                         <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
                         <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
                       </tr>
@@ -163,8 +164,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                       <tr>
                         <td>{article?.category?.name}</td>
                         <td>{article?.section?.name}</td>
-                        <td>
-                        </td>
+                        <td>{article?.author}</td>
                         <td>
                           {
                             dateFormat(article?.modified_at ? article.modified_at.toString() : '')

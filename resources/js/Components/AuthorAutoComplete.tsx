@@ -27,7 +27,14 @@ export default function AuthorAutoComplete({ form }: { form: FormInstance }) {
 
   useEffect(() => {
     fetchAuthors()
+    console.log('mount it first');
+    
   }, [])
+
+  useEffect(() => {
+    console.log('done loading authors', options);
+    
+  }, [options])
 
   const handleSearch = (value: string) => {
     if (!value) {
@@ -50,12 +57,14 @@ export default function AuthorAutoComplete({ form }: { form: FormInstance }) {
 
   return (
     <AutoComplete
+     
       options={filteredOptions}
       onSearch={handleSearch}
       onSelect={handleSelect}
       style={{ width: '100%' }}
+      placeholder="Author"
+      allowClear
     >
-      <Input placeholder="Author" />
     </AutoComplete>
   )
 }
