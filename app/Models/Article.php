@@ -40,6 +40,7 @@ class Article extends Model
         'trash',
         'is_archive',
         'record_trail',
+        'is_ojt',
     ];
 
 

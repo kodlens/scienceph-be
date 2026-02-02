@@ -104,7 +104,7 @@ export default function Login() {
 
           {/* Footer */}
           <div className="text-center mt-6 text-sm text-gray-500">
-            © {new Date().getFullYear()} Knowledge Management System
+            © {new Date().getFullYear()} Science PH
           </div>
         </div>
       </div>

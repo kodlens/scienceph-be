@@ -1,4 +1,4 @@
-import { AutoComplete, FormInstance, Input } from 'antd'
+import { AutoComplete, FormInstance } from 'antd'
 import { useEffect, useState } from 'react'
 
 interface AuthorApi {
@@ -9,11 +9,14 @@ interface AutoCompleteOption {
   value: string
 }
 
-export default function AuthorAutoComplete({ form }: { form: FormInstance }) {
-  
+type Props = {
+  form: FormInstance
+}
+
+export default function AuthorAutoComplete({ form }: Props) {
+
   const [options, setOptions] = useState<AutoCompleteOption[]>([])
   const [filteredOptions, setFilteredOptions] = useState<AutoCompleteOption[]>([])
-
   const fetchAuthors = async () => {
     const response = await fetch('/get-authors-autocomplete')
     const data: AuthorApi[] = await response.json()
@@ -29,12 +32,11 @@ export default function AuthorAutoComplete({ form }: { form: FormInstance }) {
   useEffect(() => {
     fetchAuthors()
     console.log('mount it first');
-    
   }, [])
 
   useEffect(() => {
     console.log('done loading authors', options);
-    
+
   }, [options])
 
   const handleSearch = (value: string) => {
@@ -56,14 +58,22 @@ export default function AuthorAutoComplete({ form }: { form: FormInstance }) {
     })
   }
 
+
   return (
     <AutoComplete
-     
+
       options={filteredOptions}
       onSearch={handleSearch}
       onSelect={handleSelect}
       style={{ width: '100%' }}
       placeholder="Author"
+      //defaultValue={author}
+      value={form.getFieldsValue().author}
+      onChange={(value)=>{
+        //setAuthor(value)
+        form.setFieldValue('author', value)
+
+      }}
       allowClear
     >
     </AutoComplete>

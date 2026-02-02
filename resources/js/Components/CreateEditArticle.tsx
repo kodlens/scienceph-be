@@ -57,6 +57,7 @@ const CreateEditArticle = ({
         { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
       ]);
 
+
     } catch (err) { }
   };
 
@@ -201,8 +202,6 @@ const CreateEditArticle = ({
           <SelectAgency errors={errors} />
 
           <SelectRegion errors={errors} />
-
-
 
           <Form.Item
             name="publish_date"
