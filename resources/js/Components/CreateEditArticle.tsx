@@ -57,7 +57,6 @@ const CreateEditArticle = ({
         { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
       ]);
 
-
     } catch (err) { }
   };
 
@@ -127,8 +126,8 @@ const CreateEditArticle = ({
         category: "",
         section: "",
         status: 'draft',
-        region: '',
-        agency: 'DOST-STII',
+        region: null,
+        agency: null,
         author: '',
         is_publish: 0,
         is_press_release: 0,

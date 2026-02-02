@@ -11,12 +11,12 @@ type Props = {
 export const SelectRegion = ( { errors } : Props ) => {
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Region[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
 
-  const loadData = () => {
+  const loadData = async () => {
     setLoading(true);
-    axios.get('/get-regions').then(res => {
-      setData(res.data);
+    await axios.get('/get-regions').then(res => {
+      setRegions(res.data);
       setLoading(false)
     })
   }
@@ -26,7 +26,11 @@ export const SelectRegion = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return data.map(item => ({ value: item.id, label: item.name }))
+    const sdata = regions.map(item => ({ value: item.name, label: item.name }))
+
+    console.log(sdata);
+    return sdata;
+
   }
 
 
@@ -39,7 +43,7 @@ export const SelectRegion = ( { errors } : Props ) => {
         validateStatus={errors.region ? "error" : ""}
         help={errors.region ? errors.region[0] : ""}
       >
-        <Select loading={loading} options={data ? selectData() : []} allowClear/>
+        <Select loading={loading} options={regions ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )

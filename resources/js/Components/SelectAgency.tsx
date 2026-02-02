@@ -10,12 +10,12 @@ type Props = {
 export const SelectAgency = ( { errors } : Props ) => {
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Agency[]>([]);
+  const [agencies, setAgencies] = useState<Agency[]>([]);
 
   const loadData = () => {
     setLoading(true);
     axios.get('/get-agencies').then(res => {
-      setData(res.data);
+      setAgencies(res.data);
       setLoading(false)
     })
   }
@@ -25,7 +25,7 @@ export const SelectAgency = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return data.map(item => ({ value: item.code, label: item.code }))
+    return agencies.map(item => ({ value: item.code, label: item.code }))
   }
 
 
@@ -38,7 +38,7 @@ export const SelectAgency = ( { errors } : Props ) => {
         validateStatus={errors.agency ? "error" : ""}
         help={errors.agency ? errors.agency[0] : ""}
       >
-        <Select loading={loading} options={data ? selectData() : []} allowClear/>
+        <Select loading={loading} options={agencies ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )

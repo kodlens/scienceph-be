@@ -136,7 +136,8 @@ class ArticleController extends Controller
         $data->author = $req->author;
         $data->modified_by_id = $user->id;
         $data->modified_at = now();
-        $data->region = $req->region;
+        $data->agency = $req->agency ? $req->agency : null;
+        $data->region = $req->region ? $req->region : null;
         //$data->tags = $tagsString;
         $data->source_url = $req->source_url;
         $data->status = $req->status;

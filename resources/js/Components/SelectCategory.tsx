@@ -9,12 +9,12 @@ type Props = {
 }
 export const SelectCategory = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const loadData = () => {
     setLoading(true);
     axios.get('/get-categories').then(res => {
-      setData(res.data);
+      setCategories(res.data);
       setLoading(false)
     })
   }
@@ -24,7 +24,7 @@ export const SelectCategory = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return data.map(item => ({ value: item.id, label: item.name }))
+    return categories.map(item => ({ value: item.id, label: item.name }))
   }
 
 
@@ -37,7 +37,7 @@ export const SelectCategory = ( { errors } : Props ) => {
         validateStatus={errors.category ? "error" : ""}
         help={errors.category ? errors.category[0] : ""}
       >
-        <Select loading={loading} options={data ? selectData() : []} allowClear/>
+        <Select loading={loading} options={categories ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )
