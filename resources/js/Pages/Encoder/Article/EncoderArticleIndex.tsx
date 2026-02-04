@@ -280,6 +280,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                         {
                           handleEditClick: () => handleEditClick(data.id),
                           handleTrashClick: () => handleTrashClick(data.id),
+                          article: data
                         })
                     }} >
                       <Space>
