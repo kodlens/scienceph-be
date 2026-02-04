@@ -11,6 +11,7 @@ import {
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
+import { LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 
@@ -138,7 +139,9 @@ export default function EncoderLayout(
 
               <div className='ml-auto mr-4 flex items-center gap-4'>
                 <Link href=''>{user.lname} {user.fname[0]}.</Link>
-                <Button className='' onClick={handleLogout}>Logout</Button>
+                 <Button className='' danger onClick={handleLogout}>
+                  <LogOut size={15} />
+                </Button>
               </div>
 
             </div>

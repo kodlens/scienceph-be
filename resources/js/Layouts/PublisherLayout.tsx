@@ -1,17 +1,16 @@
 import { useState, PropsWithChildren, ReactNode } from 'react';
-import { Link, router, useForm, usePage } from '@inertiajs/react';
-import { PageProps } from '@/types';
-
+import { Link, router, useForm } from '@inertiajs/react';
 import {
   MenuFoldOutlined,
-  MenuUnfoldOutlined, MinusSquareOutlined,
-  UserOutlined, FormOutlined, CreditCardOutlined, LockOutlined,
+  MenuUnfoldOutlined,
+  UserOutlined, FormOutlined, LockOutlined,
   PlusOutlined,
   MenuOutlined
 } from '@ant-design/icons';
 
-import { Button, ConfigProvider, Layout, Menu, MenuProps, theme } from 'antd';
+import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
+import { LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 
@@ -19,9 +18,6 @@ export default function PublisherLayout(
   { user, children }: PropsWithChildren<{ user: any, header?: ReactNode }>) {
 
   const { post } = useForm();
-
-  //destruct object permissions
-  const { permissions } = usePage<PageProps>().props;
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -170,7 +166,9 @@ export default function PublisherLayout(
 
               <div className='ml-auto mr-4 flex items-center gap-4'>
                 <Link href=''>{user.lname} {user.fname[0]}.</Link>
-                <Button className='' onClick={handleLogout}>Logout</Button>
+                <Button className='' danger onClick={handleLogout}>
+                  <LogOut size={15} />
+                </Button>
               </div>
 
             </div>
