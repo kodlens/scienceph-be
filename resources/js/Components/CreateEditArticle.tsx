@@ -322,7 +322,7 @@ const CreateEditArticle = ({
           {/* EDITOR CK WYSIWYG */}
           <div className="min-h-[300px] ">
             <Form.Item
-              label="Body"
+              label="Write your content here"
               name="description"
               className="prose-lg !max-w-none"
               validateStatus={

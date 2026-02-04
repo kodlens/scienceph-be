@@ -150,34 +150,56 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
               pagination={false}
               expandable={{
                 expandedRowRender: (article: Article) => (
-                  <table className=''>
-                    <thead>
-                      <tr>
-                        <th className='text-left py-1 text-sm text-gray-500'>Category</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Section</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Author</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{article?.category?.name}</td>
-                        <td>{article?.section?.name}</td>
-                        <td>{article?.author}</td>
-                        <td>
-                          {
-                            dateFormat(article?.modified_at ? article.modified_at.toString() : '')
-                          }
-                        </td>
-                        <td>
-                          {
-                            dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
-                          }
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <>
+                    <table className=''>
+                      <thead>
+                        <tr>
+                          <th className='text-left py-1 text-sm text-gray-500'>Category</th>
+                          <th className='text-left py-1 text-sm text-gray-500'>Section</th>
+                          <th className='text-left py-1 text-sm text-gray-500'>Author</th>
+                          <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
+                          <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{article?.category?.name}</td>
+                          <td>{article?.section?.name}</td>
+                          <td>{article?.author}</td>
+                          <td>
+                            {
+                              dateFormat(article?.modified_at ? article.modified_at.toString() : '')
+                            }
+                          </td>
+                          <td>
+                            {
+                              dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
+                            }
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <div className='flex gap-4'>
+                      <div className='mt-4'>
+                        <span className='font-bold text-[.8rem] mr-4 text-gray-600'>ENCODED:</span>
+                        {article?.encoded_by && (
+                          <span>
+                            {article?.encoded_by?.lname}, {article?.encoded_by?.fname}
+                          </span>
+                        )}
+
+                      </div>
+
+                      <div className='mt-4'>
+                        <span className='font-bold text-[.8rem] mr-4 text-gray-600'>MODIFIED:</span>
+                        { article.modified_by && (
+                          <span>
+                            {article?.modified_by?.lname}, {article?.modified_by?.fname}
+                          </span>) }
+                      </div>
+                    </div>
+                  </>
                 )
               }}>
               <Column title="Id" dataIndex="id" />
@@ -200,9 +222,9 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
               <Column title="Publication Date"
                 dataIndex="publish_date"
                 key="publish_date"
-                render={(publish_date) => (
+                render={(_, article) => (
                   <>
-                    {publish_date && dateFormat(publish_date)}
+                    {article.publish_date && dateFormat(article.publish_date)}
                   </>
                 )}
               />
@@ -228,7 +250,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                   )}
                   {status === 'return' && (
                     <div className='bg-red-200 font-bold text-center text-[10px] px-2 py-1 rounded-full'>
-                      RETURN TO AUTHOR
+                      RETURN TO ENCODER
                     </div>
                   )}
 

@@ -21,7 +21,12 @@ export interface Article {
     agency?: string;
     region?: string;
 
+    encoded_by_id?: number;
+    encoded_by?: User;
     encoded_at?: string | Date;
+
+    modified_by_id?: number;
+    modified_by?: User;
     modified_at?: string | Date;
 
 

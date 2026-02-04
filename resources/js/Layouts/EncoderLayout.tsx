@@ -1,12 +1,11 @@
 import { useState, PropsWithChildren, ReactNode } from 'react';
-import { Link, router, useForm, usePage } from '@inertiajs/react';
-import { PageProps, User } from '@/types';
+import { Link, router, useForm } from '@inertiajs/react';
+import { User } from '@/types';
 
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  CreditCardOutlined,
-  HomeOutlined, DeleteOutlined,
+  HomeOutlined,
   FormOutlined, UserOutlined, LockOutlined
 } from '@ant-design/icons';
 
@@ -70,7 +69,7 @@ export default function EncoderLayout(
         type: 'divider'
       },
       {
-        key: 'encoder.my-account.index',
+        key: 'my-account.index',
         icon: <UserOutlined />,
         label: 'My Account',
         onClick: () => router.visit('/my-account')
@@ -95,6 +94,8 @@ export default function EncoderLayout(
     <>
       <Layout>
         <Sider trigger={null} collapsible
+          breakpoint='md'
+          onBreakpoint={(b) => setCollapsed(b)}
           collapsed={collapsed} width={300} style={{ background: "#084c7f" }}>
           <PanelSideBarLogo />
           <ConfigProvider theme={{

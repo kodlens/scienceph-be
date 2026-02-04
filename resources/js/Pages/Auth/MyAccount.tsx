@@ -2,7 +2,6 @@ import { App, Button, Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
 import { SaveOutlined } from "@ant-design/icons";
 import { PageProps } from "@/types";
-import AuthorLayout from "@/Layouts/EncoderLayout";
 import { Head, router } from "@inertiajs/react";
 import axios from "axios";
 
@@ -11,7 +10,7 @@ export default function MyAccount({ auth }: PageProps) {
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm()
-  const { message, modal, notification } = App.useApp();
+  const {  modal } = App.useApp();
 
   const loadAuthUser = () => {
     form.setFieldValue('username', auth.user.username)

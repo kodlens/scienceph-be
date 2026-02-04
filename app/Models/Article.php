@@ -55,11 +55,13 @@ class Article extends Model
     }
 
     public function encodedBy(){
-        return $this->belongsTo(User::class, 'encoded_by_id');
+        return $this->belongsTo(User::class, 'encoded_by_id')
+            ->select('id', 'lname', 'fname', 'mname', 'sex', 'agency_code');
     }
 
     public function modifiedBy(){
-        return $this->belongsTo(User::class, 'modified_by_id');
+        return $this->belongsTo(User::class, 'modified_by_id')
+            ->select('id', 'lname', 'fname', 'mname', 'sex', 'agency_code');
     }
 
 }

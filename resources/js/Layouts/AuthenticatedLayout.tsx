@@ -7,7 +7,7 @@ import EncoderLayout from './EncoderLayout';
 import { User } from '@/types';
 
 export default function AuthenticatedLayout(
-  { user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
+  { user, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
 
   return (
 

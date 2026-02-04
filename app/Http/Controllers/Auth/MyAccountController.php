@@ -14,11 +14,11 @@ class MyAccountController extends Controller
 
         $user = Auth::user();
 
-        if($user->role == 'publisher'){
+        if(strtolower($user->role) == 'publisher'){
             return Inertia::render('Publisher/PublisherMyAccount', []);
         }
 
-        if($user->role == 'encoder'){
+        if(strtolower($user->role) == 'encoder'){
             return Inertia::render('Encoder/EncoderMyAccount', []);
         }
 

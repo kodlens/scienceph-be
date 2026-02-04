@@ -40,26 +40,11 @@ Route::get('/get-tags', [App\Http\Controllers\OpenController::class, 'getTags'])
 
 Route::middleware('auth')->group(function () {
 
-    Route::post('/classify-article', [App\Http\Controllers\ArticleClassifierController::class, 'classify']);
-
-
-    Route::post('/posts-comments/{id}', [App\Http\Controllers\PostCommentController::class, 'postCommentStore'])->name('posts.comments-store');
-    Route::get('/get-posts-comments/{id}', [App\Http\Controllers\PostCommentController::class, 'getComments'])->name('posts.get-comments');
-
     Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index']);
     Route::patch('/my-account-update', [App\Http\Controllers\Auth\MyAccountController::class, 'update']);
 
     Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'index']);
     Route::post('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'changePassword']);
-
-    /** ====================REPORTS======================== */
-
-    Route::get('/reports/articles-by-quarter', [ReportController::class, 'articlesByQuarter']);
-    Route::get('/reports/articles-by-status', [ReportController::class, 'articlesByStatus']);
-    Route::get('/reports/publication-timeliness', [ReportController::class, 'publicationTimeliness']);
-
-    //global service API
-    //Route::get('/remove-file/{filename}', [App\Http\Controllers\FileController::class, 'removeFile']);
 
 });
 
