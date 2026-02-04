@@ -15,8 +15,10 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
+use Illuminate\Http\JsonResponse;
+use App\Models\Article;
 
-class PublisherPostController extends Controller
+class PublisherArticleController extends Controller
 {
 
     private $uploadPath = 'storage/upfiles'; //this is the upload path
@@ -26,18 +28,14 @@ class PublisherPostController extends Controller
 
     public function index()
     {
-        return Inertia::render('Publisher/Post/PublisherPostIndex');
+        return Inertia::render('Publisher/Article/PublisherArticleIndex');
     }
 
-    public function getData(Request $req){
+    public function getData(Request $req) : JsonResponse {
 
         //$sort = explode('.', $req->sort_by);
 
-        $status = '';
-
-        $user = Auth::user()->load('role');
-
-        $data = Post::with(['subjects'])
+        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
             ->whereIn('status', ['publish', 'submit', 'unpublish'])
             ->when($req->search, function ($q) use ($req) {
@@ -64,70 +62,6 @@ class PublisherPostController extends Controller
             'ckLicense' => $CK_LICENSE,
             'post' => $post
         ]);
-    }
-
-    public function update(Request $req, $id)
-    {
-        $req->validate([
-            'title' => ['required', new ValidateTitle($id)],
-            'author_name' => ['string', 'nullable'],
-            'description' => ['required'],
-            'subjects' => ['required', 'array', 'min:1'],
-        ], [
-            'description.required' => 'Content is required.'
-        ]);
-
-        try {
-
-            // convert base64 images → files and rewrite HTML
-            $modifiedHtml = (new FilterDom())->filterDOM($req->description);
-
-            /* ==============================
-                this will clean all html tags, leaving the content, this data may use to train AI models,
-            */
-            $content = trim(strip_tags($req->description)); // cleaning all tags
-            /* ============================== */
-
-
-            //format publish date
-            $dateFormated = $req->publish_date ? date('Y-m-d', strtotime($req->publish_date)) : null;
-
-            $data = Post::find($id);
-            $user = Auth::user();
-
-            $data->title = $req->title;
-            $data->alias = Str::slug($req->title);
-            $data->excerpt = $req->excerpt ? $req->excerpt : null;
-            $data->source_url = $req->source_url;
-            $data->agency = $req->agency;
-            $data->status = $req->status;
-            $data->description = $modifiedHtml;
-            $data->description_text = $content;
-            $data->author_name = $req->author_name;
-            $data->last_updated_by = $user->id;
-            $data->publish_date = $dateFormated;
-            $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $user->fname . ' ' . $user->lname);
-
-            $data->save();
-
-            //delete all related subjects
-            DB::table('info_subject_headings')->where('info_id', $id)->delete();
-            foreach($req->subjects as $subject){
-                DB::table('info_subject_headings')->insert([
-                    'info_id' => $id,
-                    'subject_heading_id' => $subject['subject_heading_id'],
-                ]);
-            }
-
-            return response()->json([
-                'status' => 'updated',
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 200);
-        }
     }
 
 

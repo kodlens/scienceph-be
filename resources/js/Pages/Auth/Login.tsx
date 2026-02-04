@@ -22,9 +22,9 @@ export default function Login() {
     setErrors({})
 
     axios
-      .post('/km/login', values)
+      .post('/login', values)
       .then(() => {
-        router.visit('/km/login')
+        router.visit('/login')
       })
       .catch((err) => {
         setErrors(err.response?.data?.errors || {})

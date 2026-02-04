@@ -43,10 +43,10 @@ export default function PublisherLayout(
         type: 'divider',
       },
       {
-        key: 'publisher.posts.index',
+        key: 'publisher.articles.index',
         icon: <FormOutlined />,
-        label: 'Posts',
-        onClick: () => router.visit('/publisher/posts')
+        label: 'Articles',
+        onClick: () => router.visit('/publisher/articles')
       },
       // {
       //   key: 'publisher.posts-publish',

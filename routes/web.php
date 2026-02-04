@@ -27,7 +27,7 @@ Route::get('/', function () {
  * CATEGORY PAGES HERE
  * ========================================
  */
-Route::get('/km/login', [App\Http\Controllers\WelcomePageController::class, 'index'])->name('welcome');
+Route::get('/login', [App\Http\Controllers\WelcomePageController::class, 'index'])->name('welcome');
 
 Route::get('/get-sections', [App\Http\Controllers\OpenController::class, 'getSections'])->name('open.sections');
 Route::get('/get-categories', [App\Http\Controllers\OpenController::class, 'getCategories'])->name('open.categories');
@@ -142,16 +142,16 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Publisher\PublisherDashboardController::class, 'index'])->name('publisher.dashboard.index');
 
-    Route::get('/posts', [App\Http\Controllers\Publisher\PublisherPostController::class, 'index'])->name('publisher.posts.index');
-    Route::patch('/posts/{id}', [App\Http\Controllers\Publisher\PublisherPostController::class, 'update'])->name('publisher.posts.update');;
+    Route::get('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'index'])->name('publisher.articles.index');
+    Route::patch('/articles/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'update'])->name('publisher.articles.update');;
 
-    Route::get('/posts-form-view/{id}', [App\Http\Controllers\Publisher\PublisherPostController::class, 'formView'])->name('publisher.posts.form-view');
-    Route::get('/get-posts', [App\Http\Controllers\Publisher\PublisherPostController::class, 'getData'])->name('publisher.posts.get-data');
+    Route::get('/articles-form-view/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'formView'])->name('publisher.articles.form-view');
+    Route::get('/get-articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'getData'])->name('publisher.articles.get-data');
 
 
-    Route::post('/posts-publish/{id}', [App\Http\Controllers\Publisher\PublisherPostController::class, 'postPublish'])->name('publisher.posts.publish');
-    Route::post('/posts-unpublish/{id}', [App\Http\Controllers\Publisher\PublisherPostController::class, 'postUnpublish'])->name('publisher.posts.unpublish');
-    Route::post('/posts-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherPostController::class, 'postReturnToEncoder'])->name('publisher.posts.return-to-encoder');
+    Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postPublish'])->name('publisher.articles.publish');
+    Route::post('/articles-unpublish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postUnpublish'])->name('publisher.articles.unpublish');
+    Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
 
     // Route::get('/post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'index']);
     // Route::get('/get-post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'getData'])->name('author.post-publish-get-data');

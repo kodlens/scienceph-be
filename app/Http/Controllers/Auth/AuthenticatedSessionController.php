@@ -67,6 +67,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/km/login');
+        return redirect('/login');
     }
 }

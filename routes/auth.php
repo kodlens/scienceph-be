@@ -18,11 +18,11 @@ Route::middleware('guest')->group(function () {
 
     // Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('/km/login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login')
-                ->middleware('no_cache');
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login')
+        ->middleware('no_cache');
 
-    Route::post('/km/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
     // Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     //             ->name('password.request');
@@ -57,5 +57,5 @@ Route::middleware('auth')->group(function () {
     // Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+        ->name('logout');
 });
