@@ -5,6 +5,7 @@ import {
   Alignment,
   Autoformat,
   Bold,
+  BalloonToolbar,
   //CKBox,
   Code,
   Italic,
@@ -61,17 +62,17 @@ import {
 } from "ckeditor5";
 
 import "ckeditor5/ckeditor5.css";
-import { Post } from '@/types/article';
 import { FormInstance } from 'antd';
+import { Article } from "@/types/article";
 
 
-const Ckeditor = ({ post, form, ckLicense }: { post?: Post, form: FormInstance, ckLicense: string }) => {
+const Ckeditor = ({ post, form, ckLicense }: { post?: Article, form: FormInstance, ckLicense: string }) => {
   return (
     <>
       <CKEditor
         data={ post?.description ?? ''}
         editor={ClassicEditor}
-        onChange={(event, editor) => {
+        onChange={(_, editor) => {
           const data = editor.getData();
           //setEditorData(data);
           form.setFieldsValue({
@@ -144,7 +145,17 @@ const Ckeditor = ({ post, form, ckLicense }: { post?: Post, form: FormInstance, 
               "outdent",
               "indent",
             ],
+
           },
+           balloonToolbar: [
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'link',
+            'highlight',
+            'removeFormat'
+          ],
 
           heading: {
             options: [
@@ -223,11 +234,13 @@ const Ckeditor = ({ post, form, ckLicense }: { post?: Post, form: FormInstance, 
           },
 
           plugins: [
+
             Alignment,
             Autoformat,
             AutoImage,
             AutoLink,
             BlockQuote,
+            BalloonToolbar,
             Bold,
             CloudServices,
             Code,

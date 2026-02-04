@@ -9,8 +9,6 @@ import { router } from "@inertiajs/react";
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AuthorAutoComplete from "./AuthorAutoComplete";
-import SelectTags from "./SelectTags";
-
 const CreateEditArticle = ({
   id,
   auth,
@@ -50,6 +48,7 @@ const CreateEditArticle = ({
         { name: "region", value: article.region },
         { name: "author", value: article.author },
         { name: "is_publish", value: article.is_publish },
+        { name: "tags", value: article.tags ? article.tags.split(',') : [] },
         { name: "is_press_release", value: article.is_press_release && article.is_press_release > 0 ? true : false },
         { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
       ]);
@@ -155,6 +154,19 @@ const CreateEditArticle = ({
             <Input disabled placeholder="Slug" />
           </Form.Item>
 
+          <Form.Item
+            name="category"
+            label="Select Category"
+            className="w-full"
+            validateStatus={errors.category ? "error" : ""}
+            help={errors.category ? errors.category[0] : ""}
+          >
+            <Select
+              options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }
+              allowClear
+              placeholder="Select Category"
+            />
+          </Form.Item>
 
           <Form.Item
             name="section"
@@ -165,16 +177,6 @@ const CreateEditArticle = ({
           >
             {/* <SelectSection sections={sections} errors={errors} /> */}
             <Select options={sections ? sections.map(section => ({ value: Number(section.id), label: section.name })) : [] }  allowClear/>
-          </Form.Item>
-
-          <Form.Item
-            name="category"
-            label="Select Category"
-            className="w-full"
-            validateStatus={errors.category ? "error" : ""}
-            help={errors.category ? errors.category[0] : ""}
-          >
-            <Select options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }  allowClear/>
           </Form.Item>
 
 
@@ -206,12 +208,12 @@ const CreateEditArticle = ({
 
           <Form.Item
             name="source_url"
-            label="Source"
+            label="Source URL"
             className="w-full"
             validateStatus={errors.source_url ? "error" : ""}
             help={errors.source_url ? errors.source_url[0] : ""}
           >
-            <Input placeholder="Source" />
+            <Input placeholder="Source URL" />
           </Form.Item>
 
           <Form.Item
@@ -243,7 +245,6 @@ const CreateEditArticle = ({
           >
             <DatePicker className="w-full" placeholder="Publish Date" />
           </Form.Item>
-
 
           <Form.Item
             name="tags"

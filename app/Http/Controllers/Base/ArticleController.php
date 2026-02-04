@@ -21,14 +21,13 @@ class ArticleController extends Controller
     //
     public function store(Request $req)
     {
-        return $req;
-
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['required', 'string', 'nullable'],
             'description' => ['required'],
             'category' => ['required'],
             'section' => ['required'],
+            'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',
         ]);
@@ -36,6 +35,7 @@ class ArticleController extends Controller
         try {
 
             DB::transaction(function () use ($req) {
+
 
                 /* ==============================
                     Convert base64 images → files and rewrite HTML
@@ -52,13 +52,27 @@ class ArticleController extends Controller
                     ? date('Y-m-d', strtotime($req->publish_date))
                     : null;
 
+                /* ==============================
+                Covert Array tags to string/plain text
+                ============================== */
+                $tagsString = null;
+                if(isset($req->tags)){
+
+                    foreach($req->tags as $key => $tag){
+                        if($key == 0){
+                            $tagsString = $tag;
+                        }else{
+                            $tagsString = $tagsString . ',' .$tag;
+                        }
+                    }
+                }
+
                 $user = Auth::user();
                 $name = $user->lname . ',' . $user->fname;
 
                 $post = Article::create([
                     'title' => $req->title,
                     'alias' => Str::slug($req->title),
-                    //'excerpt' => $req->excerpt,
                     'description' => $modifiedHtml,
                     'description_text' => $content,
                     'section_id' => $req->section,
@@ -68,7 +82,7 @@ class ArticleController extends Controller
                     'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
-                    'tags' => $req->tags,
+                    'tags' => $tagsString,
                     'source_url' => $req->source_url,
                     'status' => $req->status,
                     'publish_date' => $dateFormated,
@@ -93,13 +107,14 @@ class ArticleController extends Controller
 
     public function update(Request $req, $id){
 
-        return $req;
+        //return $req;
 
         $req->validate([
             'title' => ['required', 'unique:articles,title,' . $id . ',id'],
             'description' => ['required', 'string'],
             'category' => ['required'],
             'section' => ['required'],
+            'publish_date' => ['required'],
         ]);
 
 
@@ -116,14 +131,17 @@ class ArticleController extends Controller
             : null;
 
         //convert tags to string
-        // $tagsString = '';
-        // foreach($req->tags as $key => $tag){
-        //     if($key == 0){
-        //         $tagsString = $tag;
-        //     }else{
-        //         $tagsString = $tagsString . ',' .$tag;
-        //     }
-        // }
+        $tagsString = null;
+        if(isset($req->tags)){
+
+            foreach($req->tags as $key => $tag){
+                if($key == 0){
+                    $tagsString = $tag;
+                }else{
+                    $tagsString = $tagsString . ',' .$tag;
+                }
+            }
+        }
 
         //call user for record trail
         $user = Auth::user();
@@ -146,6 +164,7 @@ class ArticleController extends Controller
         $data->source_url = $req->source_url;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;
+        $data->tags = $tagsString;
         $data->is_press_release = $req->is_press_release ? 1 : 0;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
         $data->save();
