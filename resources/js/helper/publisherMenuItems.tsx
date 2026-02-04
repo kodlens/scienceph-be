@@ -1,5 +1,4 @@
-import { Article } from "@/types/article";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
 
 export const publisherMenuItems = (
   {
@@ -31,13 +30,13 @@ export const publisherMenuItems = (
     {
       label: 'Publish',
       key: 'encoder.articles.publish',
-      icon: <DeleteOutlined />,
+      icon: <GlobalOutlined  />,
       onClick: () => handlePublish()
     },
     {
       label: 'Unpublish',
       key: 'encoder.articles.unpublish',
-      icon: <DeleteOutlined />,
+      icon: <StopOutlined />,
       onClick: () => handleUnpublish()
     },
 

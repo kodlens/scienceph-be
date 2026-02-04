@@ -21,18 +21,14 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { dateFormat, truncate } from "@/helper/helperFunctions";
 import ModalUpdatePublishDate, { ModalUpdatePublishDateHandle } from "@/Components/ModalUpdatePublishDate";
-import { PageProps } from "@/types";
 import { Article } from "@/types/article";
-import { contextMenuItems } from "@/helper/contextMenuItems";
 import { publisherMenuItems } from "@/helper/publisherMenuItems";
 
 
 const { Column } = Table;
 
 
-export default function PublisherArticleIndex({
-  auth
-}: { auth: PageProps }) {
+export default function PublisherArticleIndex() {
   const { modal } = App.useApp();
 
   //const [form] = Form.useForm();

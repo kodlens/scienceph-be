@@ -1,16 +1,13 @@
-import { Article } from "@/types/article";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export const encoderMenuItems = (
   {
     handleEditClick,
-    handleTrashClick,
-    article
+    handleTrashClick
   }:
   {
-    handleEditClick: (id: number) => void,
-    handleTrashClick: (id: number) => void,
-    article: Article
+    handleEditClick: () => void,
+    handleTrashClick: () => void,
   }) => {
 
     return [
@@ -18,13 +15,13 @@ export const encoderMenuItems = (
         label: 'Edit',
         key: 'encoder.articles.edit',
         icon: <EditOutlined />,
-        onClick: () => handleEditClick(article.id),
+        onClick: () => handleEditClick(),
       },
       {
         label: 'Trash',
         key: 'encoder.articles.trash',
         icon: <DeleteOutlined />,
-        onClick: () => handleTrashClick(article.id)
+        onClick: () => handleTrashClick()
       },
     ]
 }

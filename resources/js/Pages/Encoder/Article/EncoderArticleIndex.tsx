@@ -26,6 +26,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Article } from '@/types/article';
 import Error404 from '@/Components/Error404';
 import { PageProps } from '@/types';
+import { encoderMenuItems } from '@/helper/encoderMenuItems';
 
 export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
 
@@ -275,12 +276,10 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                 render={(_, data: Article) => (
                   <Space size="small">
                     <Dropdown trigger={['click']} menu={{
-                      items: contextMenuItems(
+                      items: encoderMenuItems(
                         {
-                          article: data,
                           handleEditClick: () => handleEditClick(data.id),
                           handleTrashClick: () => handleTrashClick(data.id),
-                          auth: auth
                         })
                     }} >
                       <Space>
