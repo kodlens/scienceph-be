@@ -22,8 +22,6 @@ class ChangePasswordController extends Controller
         if(strtolower($user->role) == 'encoder'){
             return Inertia::render('Encoder/EncoderChangePassword');
         }
-
-
     }
 
     public function changePassword(Request $req){
