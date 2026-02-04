@@ -147,7 +147,7 @@ const Ckeditor = ({ post, form, ckLicense }: { post?: Article, form: FormInstanc
             ],
 
           },
-           balloonToolbar: [
+          balloonToolbar: [
             'bold',
             'italic',
             'underline',
