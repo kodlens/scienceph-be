@@ -190,5 +190,87 @@ class ArticleController extends Controller
     }
 
 
+     /** ======================================
+     * This is delete function
+    */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+
+        $data = Article::find($id);
+
+        if (! $data->description) {
+            return response()->json([
+                'errors' => [
+                    'description' => 'No Content.',
+                ],
+                'message' => 'No image to remove from the content.',
+            ], 422);
+        }
+        /*------------------------------------------------------
+            Before executing delete, image must remove from the storage
+            to free some memory.
+        ------------------------------------------------------*/
+        $filterDom = new FilterDom();
+        $filterDom->removeImagesFromDOM($data->description);
+
+
+        $name = $user->lname . ',' . $user->fname;
+        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $name);
+        $data->save();
+
+        Article::destroy($id);
+
+
+        return response()->json([
+            'status' => 'deleted',
+        ], 200);
+    }
+
+    /** ======================================
+     * This is soft trash/soft delete function
+    */
+    public function trash($id)
+    {
+        $user = Auth::user();
+        $data = Article::find($id);
+        $data->trash = 1;
+        $name = $user->lname . ',' . $user->fname;
+        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'trash', $user->id, $name);
+        $data->save();
+
+        return response()->json([
+            'status' => 'trashed',
+        ], 200);
+    }
+
+        public function publish($id){
+        $user = Auth::user();
+
+        $data = Article::find($id);
+        $data->status = 'publish'; //submit-for-publishing (static)
+        $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+        $data->save();
+
+        return response()->json([
+            'status' => 'publish'
+        ], 200);
+
+    }
+
+    public function unpublish($id){
+        $user = Auth::user();
+        $data = Article::find($id);
+        $data->status = 'unpublish';
+        $data->record_trail = $data->record_trail . 'unpublish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+        $data->save();
+
+        return response()->json([
+            'status' => 'unpublish'
+        ], 200);
+    }
+
+
+
 
 }

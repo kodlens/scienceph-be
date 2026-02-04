@@ -143,16 +143,19 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Publisher\PublisherDashboardController::class, 'index'])->name('publisher.dashboard.index');
 
     Route::get('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'index'])->name('publisher.articles.index');
+    Route::get('/articles/create', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'create'])->name('publisher.articles.create');
+    Route::post('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'store'])->name('publisher.articles.store');
     Route::get('/articles/{id}/edit', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'edit'])->name('publisher.articles.edit');
     Route::patch('/articles/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'update'])->name('publisher.articles.update');;
 
-    Route::get('/articles-form-view/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'formView'])->name('publisher.articles.form-view');
+
     Route::get('/get-articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'getData'])->name('publisher.articles.get-data');
 
 
-    Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postPublish'])->name('publisher.articles.publish');
-    Route::post('/articles-unpublish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postUnpublish'])->name('publisher.articles.unpublish');
-    Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
+    Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
+    Route::post('/articles-unpublish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'unpublish'])->name('publisher.articles.unpublish');
+    //Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
+    Route::post('/articles-trash/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'trash'])->name('publisher.articles.trash');
 
     // Route::get('/post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'index']);
     // Route::get('/get-post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'getData'])->name('author.post-publish-get-data');

@@ -1,22 +1,46 @@
 import { Article } from "@/types/article";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export const publisherMenuItems = (
   {
     handleEditClick,
-    article
+    handleTrashClick,
+    handlePublish,
+    handleUnpublish
   }:
-    {
-      handleEditClick: (id: number) => void,
-      article: Article
-    }
+  {
+    handleEditClick: () => void,
+    handleTrashClick: () => void,
+    handlePublish: () => void,
+    handleUnpublish: () => void,
+  }
 ) => {
   return [
     {
       label: 'Edit',
       key: 'publisher.articles.edit',
       icon: <EditOutlined />,
-      onClick: () => handleEditClick(article.id),
+      onClick: () => handleEditClick(),
     },
+    {
+      label: 'Trash',
+      key: 'encoder.articles.trash',
+      icon: <DeleteOutlined />,
+      onClick: () => handleTrashClick()
+    },
+    {
+      label: 'Publish',
+      key: 'encoder.articles.publish',
+      icon: <DeleteOutlined />,
+      onClick: () => handlePublish()
+    },
+    {
+      label: 'Unpublish',
+      key: 'encoder.articles.unpublish',
+      icon: <DeleteOutlined />,
+      onClick: () => handleUnpublish()
+    },
+
+
   ]
 }

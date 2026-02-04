@@ -5,7 +5,9 @@ import { PageProps } from '@/types';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined, MinusSquareOutlined,
-  UserOutlined, FormOutlined, CreditCardOutlined, LockOutlined
+  UserOutlined, FormOutlined, CreditCardOutlined, LockOutlined,
+  PlusOutlined,
+  MenuOutlined
 } from '@ant-design/icons';
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps, theme } from 'antd';
@@ -44,20 +46,21 @@ export default function PublisherLayout(
       },
       {
         key: 'publisher.articles',
-        icon: <FormOutlined />,
+        icon: <MenuOutlined  />,
         label: 'Articles',
         children: [
           {
             key: 'publisher.articles.index',
             label: 'Articles',
+            icon: <FormOutlined />,
             onClick: () => router.visit('/publisher/articles'),
           },
           {
             key: 'publisher.articles.create',
             label: 'New Post/Article',
+            icon: <PlusOutlined  />,
             onClick: () => router.visit('/publisher/articles/create'),
           },
-
         ],
       },
       // {

@@ -6,8 +6,8 @@ export const statusDropdownMenu = (role:string) => {
         { value: 'publish', label: 'Publish' },
         { value: 'unpublish', label: 'Unpublish' },
         //{ value: 'archive', label: 'Archive' },
-        { value: 'return', label: 'Return' },
-        { value: 'submit', label: 'Submit for Publishing' }
+        //{ value: 'return', label: 'Return' },
+        //{ value: 'submit', label: 'Submit for Publishing' }
       ]
     case 'publisher':
       return [

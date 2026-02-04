@@ -20,7 +20,7 @@ export const contextMenuItems = ({ article, handleEditClick, handleTrashClick, a
 
     const encoderItems = encoderMenuItems({handleEditClick, handleTrashClick, article});
 
-    const publisherItems = publisherMenuItems({handleEditClick, article});
+    const publisherItems = publisherMenuItems({handleEditClick, handleTrashClick, handlePublish, handleUnpublish, article});
 
     const adminItems = adminMenuItems({handleEditClick, article});
 

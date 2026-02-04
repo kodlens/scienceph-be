@@ -1,9 +1,6 @@
 import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
-
-
 import { CreateEditProps } from "@/types";
-import EncoderLayout from "@/Layouts/EncoderLayout";
 import CreateEditArticle from "@/Components/CreateEditArticle";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
@@ -46,7 +43,7 @@ const PublisherArticleCreateEdit = ({
               ckLicense={ckLicense}
               sections={sections}
               categories={categories}
-              uri="/encoder/articles"
+              uri="/publisher/articles"
               authors={authors}
               agencies={agencies}
               regions={regions}

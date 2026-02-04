@@ -19,14 +19,10 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Article;
 use App\Http\Controllers\Helpers\RecordTrail;
 use App\Http\Controllers\Helpers\Fetcher;
+use App\Http\Controllers\Base\ArticleController;
 
-class PublisherArticleController extends Controller
+class PublisherArticleController extends ArticleController
 {
-
-    private $uploadPath = 'storage/upfiles'; //this is the upload path
-    private $fileCustomPath = 'public/upfiles/'; //this is for delete, or checking if file is exist
-
-
 
     public function index()
     {
@@ -113,144 +109,6 @@ class PublisherArticleController extends Controller
 
 
 
-    /** ======================================
-     * This is delete function
-    ==========================================*/
-    public function destroy($id){
-        $user = Auth::user();
-
-        $data = Post::find($id);
-
-        if(!$data->description){
-            return response()->json([
-                'errors' => [
-                    'empty_description' => 'No Content.'
-                ],
-                'message' => 'Error'
-            ], 422);
-        }
-        /*------------------------------------------------------
-            Before executing delete, image must remove from the storage
-            to free some memory.
-        ------------------------------------------------------*/
-        $filterDom = new FilterDom();
-        $filterDom->removeImagesFromDOM($data->description);
-
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $user->fname . ' ' . $user->lname);
-        $data->save();
-        Post::destroy($id);
-
-
-        return response()->json([
-            'status' => 'deleted'
-        ], 200);
-    }
-
-
-    /** ======================================
-     * This is soft delete function
-    ==========================================*/
-    public function trash($id){
-        $user = Auth::user();
-        $data = Post::find($id);
-        $data->trash = 1;
-        $data->save();
-        $data->record_trail = $data->record_trail . "trashed|".$user->id."|".$user->lname . ",". $user->fname . "|" . date('Y-m-d H:i:s') . ";";
-
-
-
-        return response()->json([
-            'status' => 'trashed'
-        ], 200);
-    }
-
-
-
-    /** IMAGE HANDLING */
-    /* ================= */
-    public function tempUpload(Request $req){
-        //return $req;
-        $req->validate([
-            'featured_image' => ['required', 'mimes:jpg,jpeg,png']
-        ]);
-        $file = $req->featured_image;
-        $fileGenerated = md5($file->getClientOriginalName() . time());
-        $imageName = $fileGenerated . '.' . $file->getClientOriginalExtension();
-        $imagePath = $file->storeAs('public/temp', $imageName);
-        $n = explode('/', $imagePath);
-        return $n[2];
-    }
-
-    public function removeUpload($fileName){
-
-        if(Storage::exists('public/temp/' .$fileName)) {
-
-            Storage::delete('public/temp/' . $fileName);
-
-            return response()->json([
-                'status' => 'temp_deleted'
-            ], 200);
-        }
-
-        return response()->json([
-            'status' => 'temp_error'
-        ], 200);
-    }
-
-
-    // //remove from featured_image folder
-    public function imageRemove($id, $fileName){
-
-        $data = Post::find($id);
-        $data->featured_image = null;
-        $data->save();
-
-        if(Storage::exists('public/featured_images/' .$fileName)) {
-            Storage::delete('public/featured_images/' . $fileName);
-
-            if(Storage::exists('public/temp/' .$fileName)) {
-                Storage::delete('public/temp/' . $fileName);
-            }
-
-            return response()->json([
-                'status' => 'temp_deleted'
-            ], 200);
-        }
-
-        return response()->json([
-            'status' => 'temp_error'
-        ], 200);
-    }
-
-
-
-
-
-    public function postPublish($id){
-        $user = Auth::user();
-
-        $data = Post::find($id);
-        $data->status = 'publish'; //submit-for-publishing (static)
-        $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
-        $data->save();
-
-        return response()->json([
-            'status' => 'publish'
-        ], 200);
-
-    }
-
-    public function postUnpublish($id){
-        $user = Auth::user();
-        $data = Post::find($id);
-        $data->status = 'unpublish';
-        $data->record_trail = $data->record_trail . 'unpublish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
-        $data->save();
-
-        return response()->json([
-            'status' => 'unpublish'
-        ], 200);
-    }
 
     public function postReturnToEncoder($id){
         $user = Auth::user();

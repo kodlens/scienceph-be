@@ -2,26 +2,16 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, router } from "@inertiajs/react";
 
 
-import {
-  EnterOutlined,
-  EditOutlined,
-  EyeOutlined,
-  ProjectOutlined,
-} from "@ant-design/icons";
 
 import {
   Space,
   Table,
   Pagination,
   Button,
-  Form,
   Input,
   Select,
   Dropdown,
-  MenuProps,
-  App,
-  Modal,
-  DatePicker,
+  App
 } from "antd";
 
 import { KeyboardEvent, useCallback, useRef, useState } from "react";
@@ -34,15 +24,10 @@ import ModalUpdatePublishDate, { ModalUpdatePublishDateHandle } from "@/Componen
 import { PageProps } from "@/types";
 import { Article } from "@/types/article";
 import { contextMenuItems } from "@/helper/contextMenuItems";
+import { publisherMenuItems } from "@/helper/publisherMenuItems";
 
 
 const { Column } = Table;
-
-interface PostResponse {
-  data: any[];
-  //data: Post[];
-  total: number;
-}
 
 
 export default function PublisherArticleIndex({
@@ -90,7 +75,7 @@ export default function PublisherArticleIndex({
       title: "Trash?",
       content: "Are you sure you want to move to trash this post?",
       onOk: async () => {
-        const res = await axios.post("/publisher/posts-trash/" + id);
+        const res = await axios.post("/publisher/articles-trash/" + id);
         if (res.data.status === "trashed") {
           refetch()
         }
@@ -98,20 +83,32 @@ export default function PublisherArticleIndex({
     });
   };
 
-  const handleSoftDelete = (id: number) => {
+  const handleUnpublish = (id: number) => {
     modal.confirm({
-      title: "Delete?",
-      content: "Are you sure you want to delete this post?",
+      title: "Trash?",
+      content: "Are you sure you want to set this article as unpublished?",
       onOk: async () => {
-        const res = await axios.post(
-          "/publisher/posts-soft-delete/" + id
-        );
-        if (res.data.status === "soft_deteled") {
+        const res = await axios.post("/publisher/articles-unpublish/" + id);
+        if (res.data.status === "unpublish") {
           refetch()
         }
       },
     });
   };
+
+   const handlePublish = (id: number) => {
+    modal.confirm({
+      title: "Trash?",
+      content: "Are you sure you want to set this article as published?",
+      onOk: async () => {
+        const res = await axios.post("/publisher/articles-publish/" + id);
+        if (res.data.status === "publish") {
+          refetch()
+        }
+      },
+    });
+  };
+
 
   const handSearchClick = () => {
     refetch()
@@ -298,12 +295,12 @@ export default function PublisherArticleIndex({
               render={(_, data: Article) => (
                 <Space size="small">
                   <Dropdown trigger={['click']} menu={{
-                    items: contextMenuItems(
+                    items: publisherMenuItems(
                       {
-                        article: data,
                         handleEditClick: () => handleEditClick(data.id),
                         handleTrashClick: () => handleTrashClick(data.id),
-                        auth: auth
+                        handlePublish: () => handlePublish(data.id),
+                        handleUnpublish: () => handleUnpublish(data.id),
                       })
                   }} >
                     <Space>
