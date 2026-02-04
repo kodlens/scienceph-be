@@ -143,6 +143,7 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Publisher\PublisherDashboardController::class, 'index'])->name('publisher.dashboard.index');
 
     Route::get('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'index'])->name('publisher.articles.index');
+    Route::get('/articles/{id}/edit', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'edit'])->name('publisher.articles.edit');
     Route::patch('/articles/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'update'])->name('publisher.articles.update');;
 
     Route::get('/articles-form-view/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'formView'])->name('publisher.articles.form-view');

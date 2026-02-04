@@ -43,10 +43,22 @@ export default function PublisherLayout(
         type: 'divider',
       },
       {
-        key: 'publisher.articles.index',
+        key: 'publisher.articles',
         icon: <FormOutlined />,
         label: 'Articles',
-        onClick: () => router.visit('/publisher/articles')
+        children: [
+          {
+            key: 'publisher.articles.index',
+            label: 'Articles',
+            onClick: () => router.visit('/publisher/articles'),
+          },
+          {
+            key: 'publisher.articles.create',
+            label: 'New Post/Article',
+            onClick: () => router.visit('/publisher/articles/create'),
+          },
+
+        ],
       },
       // {
       //   key: 'publisher.posts-publish',
@@ -126,6 +138,7 @@ export default function PublisherLayout(
                 background: "#084c7f",
                 color: 'white',
               }}
+              defaultOpenKeys={['publisher.articles']}
               defaultSelectedKeys={[`${route().current()}`]}
               items={
                 navigationItems()

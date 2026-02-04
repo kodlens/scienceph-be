@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use Illuminate\Http\JsonResponse;
 use App\Models\Article;
+use App\Http\Controllers\Helpers\RecordTrail;
+use App\Http\Controllers\Helpers\Fetcher;
 
 class PublisherArticleController extends Controller
 {
@@ -37,7 +39,7 @@ class PublisherArticleController extends Controller
 
         $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
-            ->whereIn('status', ['publish', 'submit', 'unpublish'])
+            ->whereIn('status', ['publish', 'draft', 'unpublish'])
             ->when($req->search, function ($q) use ($req) {
                 $q->where(function ($qq) use ($req) {
                     $qq->where('title', 'like', '%' . $req->search . '%')
@@ -50,19 +52,65 @@ class PublisherArticleController extends Controller
         return response()->json($data, 200);
     }
 
-    public function formView($id){
 
+     public function create()
+    {
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
-        $roleId = Auth::user()->role_id;
+        //$openController = new OpenController();
+        $fetcher = new Fetcher();
 
-        $post = Post::with(['subjects'])->find($id);
+        $sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
 
-        return Inertia::render('Publisher/Post/PublisherPostFormView',[
-            'id' => $id,
+
+        return Inertia::render('Publisher/Article/PublisherArticleCreateEdit', [
+            'id', 0,
             'ckLicense' => $CK_LICENSE,
-            'post' => $post
+            'post' => null,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'categories' => $categories,
+            'sections' => $sections,
+            'authors' => $authors
         ]);
     }
+
+
+
+    public function edit($id)
+    {
+        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+
+        $fetcher = new Fetcher();
+
+        $sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
+
+        $article = Article::find($id);
+
+
+        return Inertia::render('Publisher/Article/PublisherArticleCreateEdit', [
+            'id' => $id,
+            'ckLicense' => $CK_LICENSE,
+            'article' => $article,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'categories' => $categories,
+            'sections' => $sections,
+            'authors' => $authors
+        ]);
+    }
+
 
 
     /** ======================================

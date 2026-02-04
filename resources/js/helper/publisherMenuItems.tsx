@@ -14,7 +14,7 @@ export const publisherMenuItems = (
   return [
     {
       label: 'Edit',
-      key: 'admin.articles.edit',
+      key: 'publisher.articles.edit',
       icon: <EditOutlined />,
       onClick: () => handleEditClick(article.id),
     },

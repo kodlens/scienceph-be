@@ -81,7 +81,7 @@ export default function PublisherArticleIndex({
   };
 
   const handleEditClick = (id: number) => {
-    router.visit('/encoder/articles/' + id + '/edit');
+    router.visit('/publisher/articles/' + id + '/edit');
   }
 
 
