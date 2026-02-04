@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 
+use App\Http\Controllers\OpenController; // <--extending the open controller
+use App\Http\Controllers\Helpers\Fetcher; // <--extending the Fetch
+
 use App\Http\Controllers\Base\ArticleController;
 
 
@@ -53,11 +56,27 @@ class EncoderArticleController extends ArticleController
     public function create()
     {
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        //$openController = new OpenController();
+        $fetcher = new Fetcher();
+
+        $sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
+
 
         return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id', 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'categories' => $categories,
+            'sections' => $sections,
+            'authors' => $authors
         ]);
     }
 
@@ -67,12 +86,29 @@ class EncoderArticleController extends ArticleController
     {
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
+        $fetcher = new Fetcher();
+
+        $sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
+
         $article = Article::find($id);
+
 
         return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
-            'article' => $article]);
+            'article' => $article,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'categories' => $categories,
+            'sections' => $sections,
+            'authors' => $authors
+        ]);
     }
 
     /** ======================================

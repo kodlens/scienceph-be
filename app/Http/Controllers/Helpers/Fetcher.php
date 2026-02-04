@@ -1,55 +1,55 @@
 <?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Helpers;
 use App\Models\Section;
 use App\Models\Category;
+use App\Models\Region;
 use App\Models\Agency;
 use App\Models\Article;
-use App\Models\Region;
-use Illuminate\Http\JsonResponse;
 
 
-class OpenController extends Controller
-{
-    public function getSections() : JsonResponse{
+class Fetcher {
+
+public function getSections() {
         $data = Section::where('active', 1)->get();
-        return response()->json($data);
+        return $data;
     }
 
-    public function getCategories(): JsonResponse{
+    public function getCategories(){
         $data = Category::where('active', 1)->get();
-        return response()->json($data);
+        //return response()->json($data);
+        return $data;
     }
 
-     public function getRegions(): JsonResponse{
+     public function getRegions(){
         $data = Region::where('active', 1)
         ->orderBy('order_no', 'asc')
         ->get();
-        return response()->json($data);
+        return $data;
+
     }
 
-     public function getAgencies(): JsonResponse{
+     public function getAgencies(){
         $data = Agency::where('active', 1)->get();
-        return response()->json($data);
+        return $data;
+
     }
 
-    public function getAuthorsAutocomplete(): JsonResponse{
+    public function getAuthorsAutocomplete(){
             $data = Article::distinct('author')
             ->select('author')
             ->orderBy('author', 'asc')
             ->get();
 
-        return response()->json($data);
+        return $data;
+
     }
 
 
-    public function getTags():JsonResponse{
+    public function getTags(){
         $data = Article::distinct('tags')
-        ->select('tags')
-        ->orderBy('tags', 'asc')
-        ->get();
+            ->select('tags')
+            ->orderBy('tags', 'asc')
+            ->get();
 
         $tags = [];
 
@@ -62,9 +62,8 @@ class OpenController extends Controller
             }
         }
 
-        return response()->json($tags);
+        return $tags;
     }
 
 
 }
-

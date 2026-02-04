@@ -59,15 +59,19 @@ export interface CategoryArticles {
 
 
 
-//statuses
-export interface StatusPair {
-	// map(arg0: (item: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-	data(data: any): unknown;
-    id: number;
-    status_id: number;
-    role_id: number;
+export interface CreateEditProps {
+  id: number,
+  auth: PageProps,
+  article: Article,
+  ckLicense: string,
+  sections: Section[],
+  categories: Category[],
+  authors: AuthorApi,
+  agencies: Agency[],
+  regions: Region[],
+  tags: string[],
+  uri: string
 }
-
 
 export interface Template {
 	data(data: any): unknown;
@@ -76,6 +80,13 @@ export interface Template {
     created_at:Date;
     updated_at:Date;
 }
+
+export interface Author {
+  id?: number;
+  author?:string;
+  value?:string;
+}
+
 
 
 export interface Page {

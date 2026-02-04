@@ -27,8 +27,6 @@ export const SelectRegion = ( { errors } : Props ) => {
 
   const selectData = () => {
     const sdata = regions.map(item => ({ value: item.name, label: item.name }))
-
-    console.log(sdata);
     return sdata;
 
   }

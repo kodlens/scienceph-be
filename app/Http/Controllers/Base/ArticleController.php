@@ -21,6 +21,8 @@ class ArticleController extends Controller
     //
     public function store(Request $req)
     {
+        return $req;
+
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['required', 'string', 'nullable'],
@@ -90,7 +92,9 @@ class ArticleController extends Controller
 
 
     public function update(Request $req, $id){
-        //return $req;
+
+        return $req;
+
         $req->validate([
             'title' => ['required', 'unique:articles,title,' . $id . ',id'],
             'description' => ['required', 'string'],

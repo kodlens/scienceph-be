@@ -2,9 +2,8 @@ import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 
 
-import { PageProps } from "@/types";
+import { CreateEditProps } from "@/types";
 import EncoderLayout from "@/Layouts/EncoderLayout";
-import { Article } from "@/types/article";
 import CreateEditArticle from "@/Components/CreateEditArticle";
 
 
@@ -12,14 +11,14 @@ const EncoderArticleCreateEdit = ({
   id,
   auth,
   article,
-  ckLicense
-}: {
-  id: number,
-  auth: PageProps,
-  article: Article,
-  ckLicense: string
-}) => {
-
+  ckLicense,
+  sections,
+  categories,
+  authors,
+  agencies,
+  regions,
+  tags
+}: CreateEditProps) => {
 
   return (
     <>
@@ -39,14 +38,20 @@ const EncoderArticleCreateEdit = ({
               ADD/EDIT POST
             </div>
 
-            <CreateEditArticle 
+            <CreateEditArticle
               id={id}
               auth={auth}
               article={article}
               ckLicense={ckLicense}
+              sections={sections}
+              categories={categories}
               uri="/encoder/articles"
+              authors={authors}
+              agencies={agencies}
+              regions={regions}
+              tags={tags}
             />
-            
+
           </div>
           {/* end input card */}
         </div>

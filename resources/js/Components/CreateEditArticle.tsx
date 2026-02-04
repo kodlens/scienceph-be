@@ -1,9 +1,5 @@
 import { statusDropdownMenu } from "@/helper/statusMenu";
-import { SelectAgency } from "@/Components/SelectAgency";
-import { SelectCategory } from "@/Components/SelectCategory";
-import { SelectRegion } from "@/Components/SelectRegion";
-import { SelectSection } from "@/Components/SelectSection";
-import { PageProps, User } from "@/types";
+import { CreateEditProps, User } from "@/types";
 import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
@@ -13,20 +9,21 @@ import { router } from "@inertiajs/react";
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AuthorAutoComplete from "./AuthorAutoComplete";
+import SelectTags from "./SelectTags";
 
 const CreateEditArticle = ({
   id,
   auth,
   article,
   ckLicense,
+  sections,
+  categories,
+  agencies,
+  regions,
+  authors,
+  tags,
   uri
-}: {
-  id: number,
-  auth: PageProps,
-  article: Article,
-  ckLicense: string,
-  uri: string,
-}) => {
+}: CreateEditProps) => {
 
   const [form] = Form.useForm();
   const [errors, setErrors] = useState<any>({});
@@ -121,18 +118,19 @@ const CreateEditArticle = ({
       autoComplete="off"
       onFinish={submit}
       initialValues={{
-        title: "",
+        title: '',
         slug: '',
         category: "",
-        section: "",
+        section: 1,
         status: 'draft',
         region: null,
-        agency: null,
+        agency: 'DOST-STII',
         author: '',
         is_publish: 0,
         is_press_release: 0,
         source_url: '',
-        publish_date: null
+        publish_date: null,
+        tags: null
       }}
     >
 
@@ -158,9 +156,27 @@ const CreateEditArticle = ({
           </Form.Item>
 
 
-          <SelectSection errors={errors} />
+          <Form.Item
+            name="section"
+            label="Select Section"
+            className="w-full"
+            validateStatus={errors.section ? "error" : ""}
+            help={errors.section ? errors.section[0] : ""}
+          >
+            {/* <SelectSection sections={sections} errors={errors} /> */}
+            <Select options={sections ? sections.map(section => ({ value: Number(section.id), label: section.name })) : [] }  allowClear/>
+          </Form.Item>
 
-          <SelectCategory errors={errors} />
+          <Form.Item
+            name="category"
+            label="Select Category"
+            className="w-full"
+            validateStatus={errors.category ? "error" : ""}
+            help={errors.category ? errors.category[0] : ""}
+          >
+            <Select options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }  allowClear/>
+          </Form.Item>
+
 
           <Form.Item
             name="author"
@@ -169,7 +185,7 @@ const CreateEditArticle = ({
             validateStatus={errors.author ? "error" : ""}
             help={errors.author ? errors.author[0] : ""}
           >
-            <AuthorAutoComplete form={form} />
+            <AuthorAutoComplete authors={authors} />
           </Form.Item>
 
           <Form.Item
@@ -198,9 +214,25 @@ const CreateEditArticle = ({
             <Input placeholder="Source" />
           </Form.Item>
 
-          <SelectAgency errors={errors} />
+          <Form.Item
+            name="agency"
+            label="Select Agency"
+            className="w-full"
+            validateStatus={errors.agency ? "error" : ""}
+            help={errors.agency ? errors.agency[0] : ""}
+          >
+            <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/>
+          </Form.Item>
 
-          <SelectRegion errors={errors} />
+          <Form.Item
+            name="region"
+            label="Select Region"
+            className="w-full"
+            validateStatus={errors.region ? "error" : ""}
+            help={errors.region ? errors.region[0] : ""}
+          >
+            <Select options={regions ? regions.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
+          </Form.Item>
 
           <Form.Item
             name="publish_date"
@@ -210,6 +242,23 @@ const CreateEditArticle = ({
             help={errors.publish_date ? errors.publish_date[0] : ""}
           >
             <DatePicker className="w-full" placeholder="Publish Date" />
+          </Form.Item>
+
+
+          <Form.Item
+            name="tags"
+            label="Tags"
+            className="w-full"
+            validateStatus={errors.tags ? "error" : ""}
+            help={errors.tags ? errors.tags[0] : ""}
+          >
+            <Select
+              loading={loading}
+              mode="tags"
+              style={{ width: '100%' }}
+              placeholder="Tags Mode"
+              options={tags.map(item => ({ value: item, label: item }))}
+            />
           </Form.Item>
 
            <Form.Item
