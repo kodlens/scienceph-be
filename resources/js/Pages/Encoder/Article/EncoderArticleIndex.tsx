@@ -1,30 +1,20 @@
 import { Head, router } from '@inertiajs/react'
 import { FileAddOutlined } from '@ant-design/icons'
 import {
-  Space,
-  Table,
-  Pagination,
   Button,
   Input,
   Select,
-  Dropdown,
-  App,
+
 } from 'antd'
 import { KeyboardEvent, ReactNode, useState } from 'react'
 import axios from 'axios'
-
 import EncoderLayout from '@/Layouts/EncoderLayout'
-import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { useQuery } from '@tanstack/react-query'
-import { Article } from '@/types/article'
 import Error404 from '@/Components/Error404'
-import { encoderMenuItems } from '@/helper/encoderMenuItems'
-import ArticleView from '@/Components/ArticleView'
 
-const { Column } = Table
+import TableArticle from '@/Components/TableArticle'
 
 export default function EncoderPostIndex() {
-  const { modal } = App.useApp()
 
   const [status, setStatus] = useState('')
   const [page, setPage] = useState(1)
@@ -56,20 +46,7 @@ export default function EncoderPostIndex() {
     if (e.key === 'Enter') refetch()
   }
 
-  const handleView = (article: Article) => {
-    modal.info({
-      width: 1024,
-      title: 'Article Preview',
-      content: <ArticleView article={article} className={''} />,
-    })
-  }
 
-  const statusStyles: Record<string, string> = {
-    submit: 'bg-blue-100 text-blue-700',
-    publish: 'bg-green-100 text-green-700',
-    draft: 'bg-slate-100 text-slate-700',
-    return: 'bg-red-100 text-red-700',
-  }
 
   return (
     <>
@@ -115,6 +92,14 @@ export default function EncoderPostIndex() {
             </Button>
           </div>
 
+          <TableArticle
+            data={data}
+            isFetching={isFetching}
+            refetch={refetch} page={1}
+            setPage={10}
+            editUrl={`/encoder/articles`}
+            trashUrl='/encoder/article-trash'         />
+
           {/* ================= ACTION ================= */}
           <div className="flex justify-end mb-4">
             <Button
@@ -126,174 +111,7 @@ export default function EncoderPostIndex() {
             </Button>
           </div>
 
-          {/* ================= TABLE ================= */}
-          <Table
-            size="middle"
-            bordered
-            loading={isFetching}
-            dataSource={data?.data}
-            rowKey={(row: Article) => row.id}
-            pagination={false}
-            expandable={{
-              expandedRowRender: (article: Article) => (
-                <div className="bg-slate-50 p-4 rounded-md border border-slate-200">
-                  <div className="grid md:grid-cols-5 gap-4 text-sm">
-                    <div>
-                      <div className="text-slate-500">Category</div>
-                      <div className="font-medium">{article.category?.name}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Section</div>
-                      <div className="font-medium">{article.section?.name}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Author</div>
-                      <div className="font-medium">{article.author}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Modified</div>
-                      <div>{dateFormat(article.modified_at?.toString() ?? '')}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Encoded</div>
-                      <div>{dateFormat(article.encoded_at?.toString() ?? '')}</div>
-                    </div>
-                  </div>
-                </div>
-              ),
-            }}
-          >
 
-            {/* ID */}
-            <Column title="ID" dataIndex="id" width={70} />
-
-            {/* TITLE */}
-            <Column
-              title="Title"
-              dataIndex="title"
-              render={(title) => (
-                <div className="font-medium text-slate-900">
-                  {title}
-                </div>
-              )}
-            />
-
-            {/* SUMMARY */}
-            <Column
-              title="Article"
-              render={(_, article: Article) => (
-                <div className="space-y-2">
-                  <p className="text-sm text-slate-600">
-                    {article.description_text
-                      ? truncate(article.description_text, 14)
-                      : '—'}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">Press Release:</span>
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-medium ${
-                        article.is_press_release
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {article.is_press_release ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">Encoded By:</span>
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-medium `}
-                    >
-                      {article.encoded_by.fname } {article.encoded_by.lname}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">Modified By:</span>
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-medium `}
-                    >
-                      { article.modified_by ?? article.modified_by.lname }
-                    </span>
-                  </div>
-
-                </div>
-              )}
-            />
-
-            {/* PUBLICATION DATE */}
-            <Column
-              title="Publication Date"
-              render={(_, article: Article) => (
-                <span className="text-sm text-slate-700">
-                  {article.publish_date
-                    ? dateFormat(article.publish_date.toString())
-                    : '—'}
-                </span>
-              )}
-            />
-
-            {/* STATUS */}
-            <Column
-              title="Status"
-              dataIndex="status"
-              render={(status: string) => (
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    statusStyles[status] ?? 'bg-slate-100'
-                  }`}
-                >
-                  {status.toUpperCase()}
-                </span>
-              )}
-            />
-
-            {/* ACTION */}
-            <Column
-              title="Action"
-              render={(_, article: Article) => (
-                <Dropdown
-                  trigger={['click']}
-                  menu={{
-                    items: encoderMenuItems({
-                      article,
-                      handleEditClick: () =>
-                        router.visit(`/encoder/articles/${article.id}/edit`),
-                      handleTrashClick: async () => {
-                        modal.confirm({
-                          title: 'Move to Trash?',
-                          content: 'This article will be moved to trash.',
-                          onOk: async () => {
-                            await axios.post(`/encoder/articles-trash/${article.id}`)
-                            refetch()
-                          },
-                        })
-                      },
-                      handleView: () => handleView(article),
-                    }),
-                  }}
-                >
-                  <Button size="small" type="text">
-                    •••
-                  </Button>
-                </Dropdown>
-              )}
-            />
-
-          </Table>
-
-          {/* ================= PAGINATION ================= */}
-          <div className="mt-6 flex justify-end">
-            <Pagination
-              size="small"
-              current={page}
-              total={data?.total}
-              onChange={setPage}
-            />
-          </div>
         </div>
       </div>
     </>
