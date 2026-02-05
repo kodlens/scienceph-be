@@ -23,6 +23,7 @@ import { dateFormat, truncate } from "@/helper/helperFunctions";
 import ModalUpdatePublishDate, { ModalUpdatePublishDateHandle } from "@/Components/ModalUpdatePublishDate";
 import { Article } from "@/types/article";
 import { publisherMenuItems } from "@/helper/publisherMenuItems";
+import ArticleView from "@/Components/ArticleView";
 
 
 const { Column } = Table;
@@ -109,6 +110,15 @@ export default function PublisherArticleIndex() {
   const handSearchClick = () => {
     refetch()
   };
+
+  const handleView = (article:Article) => {
+    modal.info({
+      width: 1024,
+      title: "Article Display",
+      content: <ArticleView article={article} className="" />,
+      onOk() { },
+    });
+  }
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Enter") handSearchClick();
@@ -297,6 +307,7 @@ export default function PublisherArticleIndex() {
                         handleTrashClick: () => handleTrashClick(data.id),
                         handlePublish: () => handlePublish(data.id),
                         handleUnpublish: () => handleUnpublish(data.id),
+                        handleView: () => handleView(data)
                       })
                   }} >
                     <Space>

@@ -1,17 +1,20 @@
 import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
+import { Eye } from "lucide-react";
 
 export const publisherMenuItems = (
   {
     handleEditClick,
     handleTrashClick,
     handlePublish,
-    handleUnpublish
+    handleUnpublish,
+    handleView
   }:
   {
     handleEditClick: () => void,
     handleTrashClick: () => void,
     handlePublish: () => void,
     handleUnpublish: () => void,
+    handleView: () => void
   }
 ) => {
   return [
@@ -38,6 +41,12 @@ export const publisherMenuItems = (
       key: 'encoder.articles.unpublish',
       icon: <StopOutlined />,
       onClick: () => handleUnpublish()
+    },
+    {
+      label: 'View',
+      key: 'encoder.articles.view',
+      icon: <Eye size={15} />,
+      onClick: () => handleView()
     },
 
 

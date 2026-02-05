@@ -11,7 +11,6 @@ import {
   Dropdown,
   App
 } from 'antd';
-import { contextMenuItems } from '@/helper/contextMenuItems';
 
 import { KeyboardEvent, ReactNode, useState } from 'react'
 import axios from 'axios';
@@ -25,10 +24,10 @@ import { dateFormat, truncate } from '@/helper/helperFunctions';
 import { useQuery } from '@tanstack/react-query';
 import { Article } from '@/types/article';
 import Error404 from '@/Components/Error404';
-import { PageProps } from '@/types';
 import { encoderMenuItems } from '@/helper/encoderMenuItems';
+import ArticleView from '@/Components/ArticleView';
 
-export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
+export default function EncoderPostIndex() {
 
   const { modal } = App.useApp();
 
@@ -86,6 +85,15 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
     })
   }
 
+  const handleView = (article:Article) => {
+    modal.info({
+      width: 1024,
+      title: "Article Display",
+      content: <ArticleView article={article} className="" />,
+      onOk() { },
+    });
+  }
+
   const handSearchClick = () => {
     refetch()
   }
@@ -102,8 +110,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
 
       <div className='flex w-full justify-center items-center'>
         {/* card */}
-        <div className='p-6 w-[1320px] overflow-auto mx-2 bg-white shadow-sm rounded-md
-					sm:w-[740px]
+        <div className='p-6 overflow-auto mx-2 bg-white shadow-sm rounded-md
 					md:w-[1300px]'>
           {/* card header */}
           <div className="font-bold text-lg mb-4">LIST OF POST/ARTICLES</div>
@@ -181,25 +188,6 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                       </tbody>
                     </table>
 
-                    <div className='flex gap-4'>
-                      <div className='mt-4'>
-                        <span className='font-bold text-[.8rem] mr-4 text-gray-600'>ENCODED:</span>
-                        {article?.encoded_by && (
-                          <span>
-                            {article?.encoded_by?.lname}, {article?.encoded_by?.fname}
-                          </span>
-                        )}
-
-                      </div>
-
-                      <div className='mt-4'>
-                        <span className='font-bold text-[.8rem] mr-4 text-gray-600'>MODIFIED:</span>
-                        { article.modified_by && (
-                          <span>
-                            {article?.modified_by?.lname}, {article?.modified_by?.fname}
-                          </span>) }
-                      </div>
-                    </div>
                   </>
                 )
               }}>
@@ -209,7 +197,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                 key="description_text"
                 render={(_, article: Article) => (
                   <>
-                    <div>{article?.description_text ? truncate(article?.description_text, 15) : ''}</div>
+                    <div>{article?.description_text ? truncate(article?.description_text, 10) : ''}</div>
                     <div className='mt-4'>
                       <span className='font-bold text-[.8rem] mr-4 text-gray-600'>PRESS RELEASE:</span>
                       <span className={article?.is_press_release ? 'text-green-600 bg-green-100 px-2 py-1 rounded text-[.8rem]' : 'text-red-600 bg-red-100 px-2 py-1 rounded text-[.8rem]'}>
@@ -217,6 +205,33 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                       </span>
                     </div>
                   </>
+                )}
+              />
+
+              <Column title="Encoded/Modified"
+                key="description_text"
+                render={(_, article: Article) => (
+                  <>
+                    <div className='mt-4'>
+                      <span className='font-bold text-[.8rem] mr-4 text-gray-600'>ENCODED:</span>
+                      {article?.encoded_by && (
+                        <span>
+                          {article?.encoded_by?.fname[0]}{article?.encoded_by?.lname}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className='mt-4'>
+                      <span className='font-bold text-[.8rem] mr-4 text-gray-600'>MODIFIED:</span>
+                      { article.modified_by && (
+                        <span>
+                          {article?.modified_by?.fname[0]}{article?.modified_by?.lname}
+                        </span>) }
+                    </div>
+
+
+                  </>
+
                 )}
               />
 
@@ -260,17 +275,6 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
               )}
               />
 
-              <Column
-                title="Date Created"
-                dataIndex="created_at"
-                key="created_at"
-                render={(created_at) => (
-                  <>
-                    {created_at &&
-                      dateFormat(created_at)}
-                  </>
-                )}
-              />
 
               <Column title="Action" key="action"
                 render={(_, data: Article) => (
@@ -280,6 +284,7 @@ export default function EncoderPostIndex({ auth }: { auth: PageProps }) {
                         {
                           handleEditClick: () => handleEditClick(data.id),
                           handleTrashClick: () => handleTrashClick(data.id),
+                          handleView: () => handleView(data),
                           article: data
                         })
                     }} >

@@ -37,8 +37,11 @@ class EncoderArticleController extends ArticleController
 
         $sort = explode('.', $req->sort_by);
 
+        $userId = Auth::user()->id;
+
         $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
-            ->where('trash', 0);
+            ->where('trash', 0)
+            ->where('encoded_by_id', $userId);
 
         if ($req->status != '' || $req->status != null) {
             $data->where('status', $req->status);
