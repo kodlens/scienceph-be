@@ -29,23 +29,37 @@ class PublisherArticleController extends ArticleController
         return Inertia::render('Publisher/Article/PublisherArticleIndex');
     }
 
-    public function getData(Request $req) : JsonResponse {
+    public function getData(Request $request): JsonResponse
+    {
+        $perPage = $request->integer('perpage', 10);
+        $status  = $request->string('status')->toString();
+        $search  = $request->string('search')->toString();
 
-        //$sort = explode('.', $req->sort_by);
+        $query = Article::query()
+            ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
+            ->where('trash', 0);
 
-        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
-            ->where('trash', 0)
-            ->whereIn('status', ['publish', 'draft', 'unpublish'])
-            ->when($req->search, function ($q) use ($req) {
-                $q->where(function ($qq) use ($req) {
-                    $qq->where('title', 'like', '%' . $req->search . '%')
-                    ->orWhere('id', 'like', '%' . $req->search . '%');
-                });
-            })
-        ->orderBy('id', 'desc')
-        ->paginate($req->perpage);
+        // Status filter
+        if (!empty($status)) {
+            $query->where('status', $status);
+        } else {
+            $query->whereIn('status', ['publish', 'draft', 'unpublish']);
+        }
 
-        return response()->json($data, 200);
+        // Search filter
+        $query->when($search, function ($q) use ($search) {
+            $q->where(function ($qq) use ($search) {
+                $qq->where('title', 'like', "%{$search}%")
+                ->orWhere('id', 'like', "%{$search}%");
+            });
+        });
+
+        // Sorting & pagination
+        $articles = $query
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        return response()->json($articles);
     }
 
 
