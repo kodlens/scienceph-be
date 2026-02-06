@@ -4,7 +4,6 @@ import { Link, router, useForm } from '@inertiajs/react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  FilePptOutlined,
   UserOutlined, ProfileOutlined,
   FormOutlined,
   BarsOutlined,

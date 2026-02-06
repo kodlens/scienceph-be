@@ -1,385 +1,299 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { PageProps, User } from '@/types'
+import { useState } from 'react'
+import axios from 'axios'
 import { Head } from '@inertiajs/react'
-
 import {
-    FileAddOutlined, LikeOutlined,
-    DeleteOutlined, EditOutlined,
-    EyeInvisibleOutlined, EyeTwoTone,
-    QuestionCircleOutlined
-} from '@ant-design/icons';
-
+  FileAddOutlined,
+  EditOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+} from '@ant-design/icons'
 import {
-    Space, Table,
-    Pagination, Button, Modal,
-    Form, Input, Select, Checkbox,
-    App
-} from 'antd';
+  Table,
+  Space,
+  Pagination,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  App,
+} from 'antd'
+
+import AdminLayout from '@/Layouts/AdminLayout'
+import ChangePassword from './partials/ChangePassword'
+import { User } from '@/types'
+import { useQuery } from '@tanstack/react-query'
+
+const { Column } = Table
 
 
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import ChangePassword from './partials/ChangePassword';
-import AdminLayout from '@/Layouts/AdminLayout';
-import CardTitle from '@/Components/CardTitle';
 
-const { Column } = Table;
+const AdminUserIndex = () => {
+  const [form] = Form.useForm()
+  const { notification } = App.useApp()
 
+  const [open, setOpen] = useState(false)
+  const [id, setId] = useState<number>(0)
 
-const AdminUserIndex = ({ auth }: PageProps) => {
+  const [perPage, setPerPage] = useState(10)
+  const [page, setPage] = useState(1)
 
-    const [form] = Form.useForm();
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [search, setSearch] = useState<string>('')
 
-    const { notification } = App.useApp();
+  /* ===================== DATA ===================== */
 
-    const [data, setData] = useState<User[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [total, setTotal] = useState(0);
+  const { data, isFetching, refetch } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
 
-    const [open, setOpen] = useState(false); //for modal
-    const [passwordVisible, setPasswordVisible] = React.useState(false);
+      const params = [
+        `perpage=${perPage}`,
+        `page=${page}`,
+        `search=${search}`,
+      ].join('&')
 
-    const [perPage, setPerPage] = useState(10);
-    const [page, setPage] = useState(1);
-    const [search, setSearch] = useState('');
-    const [errors, setErrors] = useState<any>({});
-
-    const [id, setId] = useState(0);
-
-
-    interface PaginateResponse {
-        data: User[],
-        total: number;
+      const res = await axios.get(`/admin/get-users?${params}`)
+      return res.data
     }
 
-    const loadDataAsync = async () => {
+  })
 
-        setLoading(true)
-        const params = [
-            `perpage=${perPage}`,
-            `page=${page}`
-        ].join('&');
+  /* ===================== ACTIONS ===================== */
 
-        try {
-            const res = await axios.get<PaginateResponse>(`/admin/get-users?${params}`);
-            setData(res.data.data)
-            setTotal(res.data.total)
-            setLoading(false)
-        } catch (err) {
-            console.log(err)
-        }
+  const handleNew = () => {
+    setId(0)
+    setErrors({})
+    form.resetFields()
+    setOpen(true)
+  }
+
+  const handleEdit = async (userId: number) => {
+    setId(userId)
+    setErrors({})
+    setOpen(true)
+
+    const res = await axios.get<User>(`/admin/users/${userId}`)
+    form.setFieldsValue(res.data)
+  }
+
+  const handleDelete = async (userId: number) => {
+    const res = await axios.delete(`/admin/users/${userId}`)
+    if (res.data.status === 'deleted') {
+      notification.success({
+        message: 'Deleted',
+        description: 'User removed successfully',
+      })
+      refetch()
     }
+  }
 
-    useEffect(() => {
-        loadDataAsync()
-    }, [perPage, search, page])
+  /* ===================== SUBMIT ===================== */
 
+  const onFinish = async (values: User) => {
+    try {
+      if (id > 0) {
+        await axios.put(`/admin/users/${id}`, values)
+        notification.success({
+          message: 'Updated',
+          description: 'User updated successfully',
+        })
+      } else {
+        await axios.post('/admin/users', values)
+        notification.success({
+          message: 'Saved',
+          description: 'User created successfully',
+        })
+      }
 
-    const onPageChange = (index: number, perPage: number) => {
-        setPage(index)
-        setPerPage(perPage)
+      setOpen(false)
+      refetch()
+    } catch (err: any) {
+      if (err.response?.status === 422) {
+        setErrors(err.response.data.errors)
+      }
     }
+  }
 
+  /* ===================== UI ===================== */
 
-    const getUser = async (dataId: number) => {
-        try {
-            const response = await axios.get<User>(`/admin/users/${dataId}`);
-            form.setFields([
-                { name: 'username', value: response.data.username },
-                { name: 'lname', value: response.data.lname },
-                { name: 'fname', value: response.data.fname },
-                { name: 'mname', value: response.data.mname },
-                { name: 'email', value: response.data.email },
-                { name: 'sex', value: response.data.sex },
-                { name: 'role', value: response.data.role }
-            ]);
-        } catch (err) {
-        }
-    }
+  return (
+    <>
+      <Head title="User Management" />
 
-    const handClickNew = () => {
-        //router.visit('/');
-        setId(0)
-        setOpen(true)
-    }
-
-    const handleEditClick = (id: number) => {
-        setId(id);
-        setOpen(true);
-        getUser(id);
-    }
-
-    const handleDeleteClick = async (id: number) => {
-        const res = await axios.delete('/admin/users/{id}');
-        if (res.data.status === 'deleted') {
-            loadDataAsync()
-        }
-    }
-
-
-    const onFinish = async (values: User) => {
-
-        if (id > 0) {
-            try {
-                const res = await axios.put('/admin/users/' + id, values)
-                if (res.data.status === 'updated') {
-                    notification.success({ placement: 'bottomRight', message: 'Updated!', description: 'User successfully updated.' })
-                    setOpen(false)
-                    loadDataAsync()
-                }
-            } catch (err: any) {
-                if (err.response.status === 422) {
-
-                }
-            }
-        } else {
-            try {
-                const res = await axios.post('/admin/users', values)
-                if (res.data.status === 'saved') {
-                    notification.success({ placement: 'bottomRight', message: 'Saved!', description: 'User successfully saved.' })
-                    setOpen(false)
-                    loadDataAsync()
-                }
-            } catch (err: any) {
-                if (err.response.status === 422) {
-
-                }
-            }
-        }
-    }
-
-    return (
-        <>
-            <Head title="User Management"></Head>
-
-            <div className='flex mt-10 justify-center items-center'>
-                {/* card */}
-                <div className='p-6 w-full mx-2 bg-white shadow-sm rounded-md
-					sm:w-[640px]
-					md:w-[990px]'>
-                    {/* card header */}
-                    <CardTitle title="LIST OF USERS" />
-
-                    {/* card body */}
-                    <div>
-                        <Table dataSource={data}
-                            loading={loading}
-                            rowKey={(data) => data.id}
-                            pagination={false}>
-
-                            <Column title="Id" dataIndex="id" key="id" />
-                            <Column title="Username" dataIndex="username" key="username" />
-                            <Column title="Last Name" key="lname" dataIndex="lname" />
-                            <Column title="First Name" key="fname" dataIndex="fname" />
-                            <Column title="Middle Name" key="mname" dataIndex="mname" />
-                            <Column title="Email" dataIndex="email" key="email" />
-                            <Column title="Role" dataIndex="role" key="role" />
-                            {/* <Column title="Active" dataIndex="active" key="active" render={(_, active)=>(
-								active ? (
-									<span className='bg-green-600 font-bold text-white text-[10px] px-2 py-1 rounded-full'>YES</span>
-								) : (
-									<span className='bg-red-600 font-bold text-white text-[10px] px-2 py-1 rounded-full'>NO</span>
-								)
-							)}/> */}
-                            <Column title="Action" key="action"
-                                render={(_, data: User) => (
-                                    <Space size="small">
-                                        <Button shape="circle" icon={<EditOutlined />}
-                                            onClick={() => handleEditClick(data.id)} />
-                                        <ChangePassword data={data} onSuccess={loadDataAsync} />
-                                    </Space>
-                                )}
-                            />
-                        </Table>
-
-                        <Pagination className='mt-4'
-                            onChange={onPageChange}
-                            defaultCurrent={1}
-                            total={total} />
-
-                        <div className='flex flex-end mt-2'>
-                            <Button className='ml-auto'
-                                icon={<FileAddOutlined />}
-                                type="primary" onClick={handClickNew}>
-                                New
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-                {/* card */}
+      <div className="mt-10 flex justify-center">
+        <div className="w-full mx-4 max-w-6xl rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+          {/* Header */}
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-800">
+                User Management
+              </h1>
+              <p className="text-sm text-gray-500">
+                Manage system users and permissions
+              </p>
             </div>
 
-
-            {/* Modal */}
-            <Modal
-                open={open}
-                title="USER INFORMATION"
-                okText="Save"
-                cancelText="Cancel"
-                okButtonProps={{
-                    autoFocus: true,
-                    htmlType: "submit",
-                }}
-                onCancel={() => setOpen(false)}
-                destroyOnClose
-                modalRender={(dom) => (
-                    <Form
-                        layout="vertical"
-                        form={form}
-                        name="form_in_modal"
-                        autoComplete="off"
-                        initialValues={{
-                            username: "",
-                            lname: '',
-                            fname: '',
-                            mname: '',
-                            password: "",
-                            email: "",
-                            name: "",
-                            sex: "MALE",
-                            role: "USER",
-                            active: true,
-                        }}
-                        clearOnDestroy
-                        onFinish={(values) => onFinish(values)}
-                    >
-                        {dom}
-                    </Form>
-                )}
+            <Button
+              type="primary"
+              icon={<FileAddOutlined />}
+              onClick={handleNew}
             >
-                <Form.Item
-                    name="username"
-                    label="Username"
-                    validateStatus={errors.username ? "error" : ""}
-                    help={errors.username ? errors.username[0] : ""}
-                >
-                    <Input placeholder="Username" />
-                </Form.Item>
+              New User
+            </Button>
+          </div>
 
-                {id < 1 ? (
-                    <>
-                        <Form.Item
-                            name="password"
-                            label="Password"
-                            validateStatus={errors.password ? "error" : ""}
-                            help={errors.password ? errors.password[0] : ""}
-                        >
-                            <Input.Password
-                                iconRender={(visible) =>
-                                    visible ? (
-                                        <EyeTwoTone />
-                                    ) : (
-                                        <EyeInvisibleOutlined />
-                                    )
-                                }
-                                placeholder="Re-type Password"
-                            />
-                        </Form.Item>
+          <div className='my-4'>
+            <label htmlFor="">Search</label>
+            <Input.Search />
+          </div>
 
-                        <Form.Item
-                            name="password_confirmation"
-                            label="Re-type Password"
-                            validateStatus={
-                                errors.password_confirmation ? "error" : ""
-                            }
-                            help={
-                                errors.password_confirmation
-                                    ? errors.password_confirmation[0]
-                                    : ""
-                            }
-                        >
-                            <Input.Password
-                                iconRender={(visible) =>
-                                    visible ? (
-                                        <EyeTwoTone />
-                                    ) : (
-                                        <EyeInvisibleOutlined />
-                                    )
-                                }
-                                placeholder="Re-type Password"
-                            />
-                        </Form.Item>
-                    </>
-                ) : (
-                    ""
-                )}
+          {/* Table */}
+          <Table
+            bordered
+            size="middle"
+            rowKey="id"
+            loading={isFetching}
+            pagination={false}
+            dataSource={Array.isArray(data?.data) ? data?.data : []}
+            rowClassName={() => 'hover:bg-gray-50'}
+            locale={{
+              emptyText: isFetching ? 'Loading users...' : 'No users found',
+            }}
+          >
+            <Column title="ID" dataIndex="id" />
+            <Column title="Username" dataIndex="username" />
+            <Column title="Last Name" dataIndex="lname" />
+            <Column title="First Name" dataIndex="fname" />
+            <Column title="Middle Name" dataIndex="mname" />
+            <Column title="Email" dataIndex="email" />
+            <Column title="Role" dataIndex="role" />
 
-                <Form.Item
-                    name="lname"
-                    label="Last Name"
-                    validateStatus={errors.lname ? "error" : ""}
-                    help={errors.lname ? errors.lname[0] : ""}
-                >
-                    <Input placeholder="Last Name" />
-                </Form.Item>
+            <Column
+              title="Action"
+              render={(_, record: User) => (
+                <Space>
+                  <Button
+                    size="small"
+                    type="primary"
+                    icon={<EditOutlined />}
+                    onClick={() => handleEdit(record.id)}
+                  />
+                  <ChangePassword
+                    data={record}
+                    onSuccess={() => refetch()}
+                  />
+                </Space>
+              )}
+            />
+          </Table>
 
-                <Form.Item
-                    name="fname"
-                    label="First Name"
-                    validateStatus={errors.fname ? "error" : ""}
-                    help={errors.fname ? errors.fname[0] : ""}
-                >
-                    <Input placeholder="First Name" />
-                </Form.Item>
+          {/* Footer */}
+          <div className="mt-4 flex items-center justify-between">
+            <Pagination
+              current={page}
+              pageSize={perPage}
+              total={data?.total}
+              showSizeChanger
+              onChange={(p, ps) => {
+                setPage(p)
+                setPerPage(ps)
+              }}
+            />
 
-                <Form.Item
-                    name="mname"
-                    label="Middle Name"
-                    validateStatus={errors.mname ? "error" : ""}
-                    help={errors.mname ? errors.mname[0] : ""}
-                >
-                    <Input placeholder="FiMiddlerst Name" />
-                </Form.Item>
+            <span className="text-sm text-gray-500">
+              Total users: {data?.total || 0}
+            </span>
+          </div>
+        </div>
+      </div>
 
-                <Form.Item
-                    name="email"
-                    label="Email"
-                    validateStatus={errors.email ? "error" : ""}
-                    help={errors.email ? errors.email[0] : ""}
-                >
-                    <Input placeholder="Email" />
-                </Form.Item>
+      {/* MODAL */}
+      <Modal
+        open={open}
+        width={720}
+        title="User Information"
+        okText="Save"
+        cancelText="Cancel"
+        onCancel={() => setOpen(false)}
+        okButtonProps={{ htmlType: 'submit' }}
+        destroyOnHidden
+        modalRender={(dom) => (
+          <Form
+            form={form}
+            layout="vertical"
+            autoComplete="off"
+            onFinish={onFinish}
+            initialValues={{
+              sex: 'MALE',
+              role: 'USER',
+            }}
+          >
+            {dom}
+          </Form>
+        )}
+      >
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item name="username" label="Username">
+            <Input />
+          </Form.Item>
 
-                <div className="flex gap-4">
-                    <Form.Item
-                        name="sex"
-                        label="Sex"
-                        className="w-full"
-                        validateStatus={errors.sex ? "error" : ""}
-                        help={errors.sex ? errors.sex[0] : ""}
-                    >
-                        <Select
-                            options={[
-                                { value: "MALE", label: "MALE" },
-                                { value: "FEMALE", label: "FEMALE" },
-                            ]}
-                        />
-                    </Form.Item>
+          <Form.Item name="email" label="Email">
+            <Input />
+          </Form.Item>
 
-                    <Form.Item
-                        name="role"
-                        label="Role"
-                        className="w-full"
-                        validateStatus={errors.role ? "error" : ""}
-                        help={errors.role ? errors.role[0] : ""}
-                    >
-                        <Select
-                            options={[
-                                { value: "encoder", label: "ENCODER" },
-                                { value: "publisher", label: "PUBLISHER" },
-                                { value: "admin", label: "ADMINISTRATOR" },
-                            ]}
-                        />
-                    </Form.Item>
-                </div>
+          <Form.Item name="lname" label="Last Name">
+            <Input />
+          </Form.Item>
 
-            </Modal>
+          <Form.Item name="fname" label="First Name">
+            <Input />
+          </Form.Item>
 
+          <Form.Item name="mname" label="Middle Name">
+            <Input />
+          </Form.Item>
 
-        </>
-    )
+          <Form.Item name="role" label="Role">
+            <Select
+              options={[
+                { value: 'encoder', label: 'ENCODER' },
+                { value: 'publisher', label: 'PUBLISHER' },
+                { value: 'admin', label: 'ADMINISTRATOR' },
+              ]}
+            />
+          </Form.Item>
+        </div>
+
+        {id === 0 && (
+          <div className="mt-4 rounded-md bg-gray-50 p-4">
+            <p className="mb-2 text-sm font-medium text-gray-700">
+              Account Password
+            </p>
+
+            <Form.Item name="password" label="Password">
+              <Input.Password
+                iconRender={(v) => (v ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="password_confirmation"
+              label="Confirm Password"
+            >
+              <Input.Password
+                iconRender={(v) => (v ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              />
+            </Form.Item>
+          </div>
+        )}
+      </Modal>
+    </>
+  )
 }
 
-AdminUserIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+AdminUserIndex.layout = (page: any) => (
+  <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+)
 
-export default AdminUserIndex;
+export default AdminUserIndex

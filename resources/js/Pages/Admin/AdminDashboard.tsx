@@ -1,10 +1,9 @@
 import ArticleByQuarterCard from '@/Components/Reports/ArticleByQuarterCard';
 import ArticlesByStatusChart from '@/Components/Reports/ArticleByStatusChart';
 import PublicationTimelinessTable from '@/Components/Reports/PublicationTimelinessTable';
-import AdminLayout from '@/Layouts/AdminLayout'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types'
 import { Head } from '@inertiajs/react'
-import React, { PropsWithChildren, ReactNode } from 'react'
 
 
 
@@ -39,6 +38,6 @@ const AdminDashboard = ({ auth }: PageProps)  =>{
     )
 }
 
-AdminDashboard.layout = (page:any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+AdminDashboard.layout = (page:any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
 
 export default AdminDashboard;

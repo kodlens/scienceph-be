@@ -12,7 +12,7 @@ use Inertia\Response;
 class AdminSectionController extends Controller
 {
     public function index(){
-       
+
 
         return Inertia::render('Admin/Section/AdminSectionIndex');
     }
@@ -38,7 +38,7 @@ class AdminSectionController extends Controller
     }
 
     public function store(Request $req){
-    
+
         $req->validate([
             'section' => ['required', 'unique:sections'],
         ]);
@@ -54,9 +54,9 @@ class AdminSectionController extends Controller
     }
 
 
-  
+
     public function update(Request $req, $id){
-    
+
         $req->validate([
             'section' => ['required', 'unique:sections,section,' . $id . ',id'],
         ]);
@@ -65,7 +65,7 @@ class AdminSectionController extends Controller
         $data->section = ucfirst($req->section);
         $data->active = $req->active ? 1: 0;
         $data->save();
-        
+
         return response()->json([
             'status' => 'updated'
         ], 200);

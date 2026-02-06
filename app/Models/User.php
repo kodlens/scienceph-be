@@ -12,7 +12,6 @@ class User extends Authenticatable
     use HasFactory;
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'users';
     //protected $primaryKey = 'user_id';
     protected $fillable = [
         'username',
@@ -22,7 +21,8 @@ class User extends Authenticatable
         'sex',
         'email',
         'password',
-        'role'
+        'role',
+        'last_login'
     ];
 
     protected $hidden = [

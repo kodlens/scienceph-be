@@ -12,7 +12,7 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
     const [errors, setErrors] = useState<any>({})
     const [form] = Form.useForm();
     const { notification, } = App.useApp();
-        
+
     function onFinish(values: any): void {
         setLoading(true)
         axios.post('/admin/change-password/' + data.id, values)
@@ -34,8 +34,7 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
 
     return (
         <>
-            <Button shape="circle"
-                loading={loading}
+            <Button loading={loading}
                 onClick={()=> setOpen(true)}
             icon={<LockOutlined/>} />
 
@@ -72,9 +71,9 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
                         label="New Password"
                         validateStatus={errors.password ? 'error' : ''}
                         help={errors.password ? errors.password[0] : ''}
-                        
+
                     >
-						<Input.Password iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} 
+						<Input.Password iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
 							placeholder="New Password"/>
 					</Form.Item>
 
@@ -84,7 +83,7 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
 						validateStatus={errors.password_confirmation ? 'error' : ''}
 						help={errors.password_confirmation ? errors.password_confirmation[0] : ''}
 					>
-						<Input.Password iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} 
+						<Input.Password iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
 							placeholder="Re-type Password"/>
 					</Form.Item>
             </Modal>

@@ -18,7 +18,7 @@ class AdminMiddleware
     {
         $role = Auth::user()->role;
         //return redirect(RouteServiceProvider::HOME);
-        if(strtolower($role) == 'admin')
+        if(strtolower($role) == 'admin' || strtolower($role) == 'administrator')
             return $next($request);
 
         return abort(403);

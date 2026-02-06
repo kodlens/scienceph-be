@@ -13,7 +13,7 @@ export default function AuthenticatedLayout(
 
     <>
       <Layout>
-        {user.role.toLowerCase() === 'admin' && (
+        {user.role.toLowerCase() === 'admin' || user.role.toLowerCase() === 'administrator' && (
           <AdminLayout user={user} children={children}></AdminLayout>
         )}
 
