@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
 
         $role = $user->role;
 
-        if(strtolower($role) == 'admin')
+        if(strtolower($role) == 'admin' || strtolower($role) == 'admin')
             return redirect()->intended(RouteServiceProvider::ADMIN);
         else if(strtolower($role) == 'encoder')
             return redirect()->intended(RouteServiceProvider::ENCODER);

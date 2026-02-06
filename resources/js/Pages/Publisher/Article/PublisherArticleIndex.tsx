@@ -83,7 +83,7 @@ export default function EncoderPostIndex() {
               onKeyDown={handleKeyDown}
             />
 
-            <Button type="primary" onClick={() => refetch()}>
+            <Button className='mr-auto' type="primary" onClick={() => refetch()}>
               Search
             </Button>
           </div>

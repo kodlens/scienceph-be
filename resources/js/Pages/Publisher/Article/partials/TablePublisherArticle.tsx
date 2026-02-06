@@ -1,8 +1,7 @@
-import { encoderMenuItems } from '@/helper/encoderMenuItems'
 import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
 import { router } from '@inertiajs/react'
-import { Table, Dropdown, Button, Pagination, notification, App } from 'antd'
+import { Table, Dropdown, Button, Pagination, App } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
@@ -36,8 +35,6 @@ const TablePublisherArticle = (
       content: <ArticleView article={article} className={''} />,
     })
   }
-
-
 
   return (
     <>
