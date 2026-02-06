@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Auth;
-use App\Models\Post;
+use App\Models\Article;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 use Illuminate\Support\Facades\Storage;
@@ -17,14 +17,14 @@ use App\Rules\ValidateSlug;
 use App\Rules\ValidateTitle;
 use Illuminate\Support\Facades\DB;
 
-class AdminPostController extends Controller
+class AdminArticleController extends Controller
 {
 
     private $fileCustomPath = 'public/upfiles/'; //this is for delete, or checking if file is exist
 
     public function index()
     {
-        return Inertia::render('Admin/Post/AdminPostIndex');
+        return Inertia::render('Admin/Article/AdminArticleIndex');
     }
 
     public function getData(Request $req){
@@ -35,9 +35,8 @@ class AdminPostController extends Controller
         if($req->status != '' || $req->status != null){
             $status = $req->status;
         }
-        $data = Post::with(['subjects'])
-            ->where('trash', 0)
-            ->where('is_archive',  0);
+        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
+            ->where('trash', 0);
 
         if ($status != '') {
             $data = $data->where('status', $status);
@@ -52,7 +51,7 @@ class AdminPostController extends Controller
 
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
-        return Inertia::render('Admin/Post/AdminPostCreateEdit', [
+        return Inertia::render('Admin/Article/AdminArticleCreateEdit', [
             'id' => 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,

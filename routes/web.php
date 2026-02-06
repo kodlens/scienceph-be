@@ -57,48 +57,25 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
 
-    // Route::get('/admin/articles', [App\Http\Controllers\Admin\AdminArticleController::class, 'index'])->name('admin.articles.index');
-    // Route::get('/admin/articles/create', [App\Http\Controllers\Admin\AdminArticleController::class, 'create'])->name('admin.articles.create');
-    // Route::get('/admin/get-articles', [App\Http\Controllers\Admin\AdminArticleController::class, 'create'])->name('admin.articles.create');
-
     Route::resource('/sections', App\Http\Controllers\Admin\AdminSectionController::class)->names('admin.sections');
     Route::get('/get-sections', [App\Http\Controllers\Admin\AdminSectionController::class, 'getData'])->name('sections.get-data');
     Route::get('/load-sections', [App\Http\Controllers\Admin\AdminSectionController::class, 'loadData'])->name('sections.load');
 
-
     Route::resource('/categories', App\Http\Controllers\Admin\AdminCategoryController::class)->names('admin.categories');
     Route::get('/get-categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'getData'])->name('admin.categories-get-data');
 
+    Route::resource('/articles', App\Http\Controllers\Admin\AdminArticleController::class);
+    Route::get('/get-articles', [App\Http\Controllers\Admin\AdminArticleController::class, 'getData'])->name('admin.articles.getdata');
 
-    Route::resource('/authors', App\Http\Controllers\Admin\AdminAuthorController::class);
-    Route::get('/get-authors', [App\Http\Controllers\Admin\AdminAuthorController::class, 'getData'])->name('authors.getdata');
-    Route::get('/load-authors', [App\Http\Controllers\Admin\AdminAuthorController::class, 'loadData'])->name('authors.load');
-
-    Route::resource('/statuses', App\Http\Controllers\Admin\AdminStatusController::class);
-    Route::get('/get-statuses', [App\Http\Controllers\Admin\AdminStatusController::class, 'getData']);
-    Route::get('/load-statuses', [App\Http\Controllers\Admin\AdminStatusController::class, 'loadData']);
-
-    Route::resource('/quarters', App\Http\Controllers\Admin\AdminQuarterController::class);
-    Route::get('/get-quarters', [App\Http\Controllers\Admin\AdminQuarterController::class, 'getData']);
-    Route::get('/load-quarters', [App\Http\Controllers\Admin\AdminQuarterController::class, 'loadData']);
-
-
-    Route::resource('/posts', App\Http\Controllers\Admin\AdminPostController::class);
-    Route::get('/get-posts', [App\Http\Controllers\Admin\AdminPostController::class, 'getData'])->name('admin.posts.getdata');
-
-    Route::post('/temp-upload', [App\Http\Controllers\Admin\AdminPostController::class, 'tempUpload'])->name('posts.temp-upload');
-    Route::post('/temp-remove/{filename}', [App\Http\Controllers\Admin\AdminPostController::class, 'removeUpload'])->name('posts.temp-remove');
-    Route::post('/image-remove/{id}/{filename}', [App\Http\Controllers\Admin\AdminPostController::class, 'imageRemove'])->name('posts.image-remove');
-
-    Route::post('/posts-trash/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'trash'])->name('posts.trash');
-    Route::post('/posts-publish/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'publish'])->name('posts.published');
-    Route::post('/posts-archive/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'archive'])->name('posts.archived');
-    Route::post('/posts-draft/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'draft'])->name('posts.draft');
-    Route::post('/posts-pending/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'pending'])->name('posts.pending');
-    Route::post('/posts-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'submit'])->name('posts.submit-for-publishing');
-    Route::post('/posts-featured/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'featured'])->name('posts.featured');
-    Route::post('/posts-unfeatured/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'unfeatured'])->name('posts.unfeatured');
-    Route::post('/post-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminPostController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
+    Route::post('/articles-trash/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'trash'])->name('articles.trash');
+    Route::post('/articles-publish/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'publish'])->name('articles.published');
+    Route::post('/articles-archive/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'archive'])->name('articles.archived');
+    Route::post('/articles-draft/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'draft'])->name('articles.draft');
+    Route::post('/articles-pending/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'pending'])->name('articles.pending');
+    Route::post('/articles-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'submit'])->name('articles.submit-for-publishing');
+    Route::post('/articles-featured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'featured'])->name('articles.featured');
+    Route::post('/articles-unfeatured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'unfeatured'])->name('articles.unfeatured');
+    Route::post('/post-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
 
 
 

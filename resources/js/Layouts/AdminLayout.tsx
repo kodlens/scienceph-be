@@ -68,24 +68,24 @@ export default function AdminLayout(
         label: 'Posts',
         children: [
           {
-            key: 'admin.posts.index',
+            key: 'admin.articles.index',
             label: 'Posts/Articles',
-            onClick: () => router.visit('/admin/posts'),
+            onClick: () => router.visit('/admin/articles'),
           },
           {
-            key: 'admin.posts.create',
+            key: 'admin.articles.create',
             label: 'New Post/Article',
-            onClick: () => router.visit('/admin/posts/create'),
+            onClick: () => router.visit('/admin/articles/create'),
           },
           {
-            key: 'admin.posts.archive',
+            key: 'admin.articles.archive',
             label: 'Archives',
-            onClick: () => router.visit('/admin/post-archives'),
+            onClick: () => router.visit('/admin/articles-archives'),
           },
           {
-            key: 'admin.posts.trash',
+            key: 'admin.articles.trash',
             label: 'Trashes',
-            onClick: () => router.visit('/admin/post-trashes'),
+            onClick: () => router.visit('/admin/articles-trashes'),
           },
 
         ],
