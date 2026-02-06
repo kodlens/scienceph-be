@@ -17,9 +17,14 @@ class AdminUserController extends Controller
     }
 
     public function getData(Request $req){
+        $validate = $req->validate([
+            'search' => [ 'string', 'nullable'],
+        ]);
 
-        return User::where('username', 'like', $req->lname . '%')
-            ->where('lname', 'like', $req->lname . '%')
+        return User::where('username', 'like', $req->search . '%')
+            ->orWhere('lname', 'like', $req->search . '%')
+            ->orWhere('fname', 'like', $req->search . '%')
+            ->orderBy('id', 'desc')
             ->paginate($req->perpage);
     }
 
@@ -28,14 +33,14 @@ class AdminUserController extends Controller
     }
 
 
-    public function store(Request $req){ 
+    public function store(Request $req){
         $req->validate([
             'username' => ['required', 'string', 'unique:users'],
             'lname' => ['required', 'string'],
             'fname' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
-            'sex' => ['required', 'string'],
+            //'sex' => ['required', 'string'],
             'role' => ['required', 'string'],
         ]);
 
@@ -46,7 +51,7 @@ class AdminUserController extends Controller
             'fname' => $req->fname,
             'mname' => $req->mname,
             'email' => $req->email,
-            'sex' => strtoupper($req->sex),
+            //'sex' => strtoupper($req->sex),
             'role' => $req->role,
             'active' => $req->active ? 1 : 0,
         ]);
@@ -56,13 +61,13 @@ class AdminUserController extends Controller
         ], 200);
     }
 
-    public function update(Request $req, $id){ 
+    public function update(Request $req, $id){
         //return $req;
         $req->validate([
             'username' => ['required', 'string', 'unique:users,username,'. $id . ',id'],
             'lname' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,email,'. $id . ',id'],
-            'sex' => ['required', 'string'],
+            //'sex' => ['required', 'string'],
             'role' => ['required', 'string'],
         ]);
 
@@ -73,7 +78,7 @@ class AdminUserController extends Controller
                 'fname' => $req->fname,
                 'mname' => $req->mname,
                 'email' => $req->email,
-                'sex' => strtoupper($req->sex),
+               // 'sex' => strtoupper($req->sex),
                 'role' => $req->role,
             ]);
 

@@ -48,7 +48,7 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
                     htmlType: 'submit',
                 }}
                 onCancel={() => setOpen(false)}
-                destroyOnClose
+                destroyOnHidden
                 modalRender={(dom) => (
                     <Form
                         layout="vertical"

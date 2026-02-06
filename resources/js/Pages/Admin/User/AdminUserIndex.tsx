@@ -4,47 +4,42 @@ import { Head } from '@inertiajs/react'
 import {
   FileAddOutlined,
   EditOutlined,
-  EyeInvisibleOutlined,
-  EyeTwoTone,
+
 } from '@ant-design/icons'
 import {
   Table,
   Space,
   Pagination,
   Button,
-  Modal,
-  Form,
   Input,
-  Select,
   App,
+  Popconfirm,
 } from 'antd'
 
 import AdminLayout from '@/Layouts/AdminLayout'
 import ChangePassword from './partials/ChangePassword'
 import { User } from '@/types'
 import { useQuery } from '@tanstack/react-query'
+import { Trash } from 'lucide-react'
+import ModalCreateEditUser from './partials/ModalCreateEditUser'
 
 const { Column } = Table
 
 
 
 const AdminUserIndex = () => {
-  const [form] = Form.useForm()
   const { notification } = App.useApp()
 
   const [open, setOpen] = useState(false)
   const [id, setId] = useState<number>(0)
-
   const [perPage, setPerPage] = useState(10)
   const [page, setPage] = useState(1)
-
-  const [errors, setErrors] = useState<Record<string, string>>({})
   const [search, setSearch] = useState<string>('')
 
   /* ===================== DATA ===================== */
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ['users'],
+    queryKey: ['users', perPage, page, search],
     queryFn: async () => {
 
       const params = [
@@ -63,18 +58,12 @@ const AdminUserIndex = () => {
 
   const handleNew = () => {
     setId(0)
-    setErrors({})
-    form.resetFields()
     setOpen(true)
   }
 
   const handleEdit = async (userId: number) => {
     setId(userId)
-    setErrors({})
     setOpen(true)
-
-    const res = await axios.get<User>(`/admin/users/${userId}`)
-    form.setFieldsValue(res.data)
   }
 
   const handleDelete = async (userId: number) => {
@@ -88,32 +77,7 @@ const AdminUserIndex = () => {
     }
   }
 
-  /* ===================== SUBMIT ===================== */
 
-  const onFinish = async (values: User) => {
-    try {
-      if (id > 0) {
-        await axios.put(`/admin/users/${id}`, values)
-        notification.success({
-          message: 'Updated',
-          description: 'User updated successfully',
-        })
-      } else {
-        await axios.post('/admin/users', values)
-        notification.success({
-          message: 'Saved',
-          description: 'User created successfully',
-        })
-      }
-
-      setOpen(false)
-      refetch()
-    } catch (err: any) {
-      if (err.response?.status === 422) {
-        setErrors(err.response.data.errors)
-      }
-    }
-  }
 
   /* ===================== UI ===================== */
 
@@ -145,7 +109,11 @@ const AdminUserIndex = () => {
 
           <div className='my-4'>
             <label htmlFor="">Search</label>
-            <Input.Search />
+            <Input.Search onSearch={(v)=>{
+              setSearch(v)
+            }}
+            placeholder='Search Username, Last Name, First Name...'
+            />
           </div>
 
           {/* Table */}
@@ -183,6 +151,16 @@ const AdminUserIndex = () => {
                     data={record}
                     onSuccess={() => refetch()}
                   />
+
+                  <Popconfirm
+                    title="Delete User"
+                    description="Are you sure to delete this user?"
+                    onConfirm={()=>handleDelete(record.id)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button danger icon={<Trash size={15}/>}></Button>
+                  </Popconfirm>
                 </Space>
               )}
             />
@@ -208,86 +186,15 @@ const AdminUserIndex = () => {
         </div>
       </div>
 
-      {/* MODAL */}
-      <Modal
-        open={open}
-        width={720}
-        title="User Information"
-        okText="Save"
-        cancelText="Cancel"
-        onCancel={() => setOpen(false)}
-        okButtonProps={{ htmlType: 'submit' }}
-        destroyOnHidden
-        modalRender={(dom) => (
-          <Form
-            form={form}
-            layout="vertical"
-            autoComplete="off"
-            onFinish={onFinish}
-            initialValues={{
-              sex: 'MALE',
-              role: 'USER',
-            }}
-          >
-            {dom}
-          </Form>
-        )}
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <Form.Item name="username" label="Username">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="email" label="Email">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="lname" label="Last Name">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="fname" label="First Name">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="mname" label="Middle Name">
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="role" label="Role">
-            <Select
-              options={[
-                { value: 'encoder', label: 'ENCODER' },
-                { value: 'publisher', label: 'PUBLISHER' },
-                { value: 'admin', label: 'ADMINISTRATOR' },
-              ]}
-            />
-          </Form.Item>
-        </div>
-
-        {id === 0 && (
-          <div className="mt-4 rounded-md bg-gray-50 p-4">
-            <p className="mb-2 text-sm font-medium text-gray-700">
-              Account Password
-            </p>
-
-            <Form.Item name="password" label="Password">
-              <Input.Password
-                iconRender={(v) => (v ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="password_confirmation"
-              label="Confirm Password"
-            >
-              <Input.Password
-                iconRender={(v) => (v ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-              />
-            </Form.Item>
-          </div>
-        )}
-      </Modal>
+      <ModalCreateEditUser id={id} modalOpen={open}
+        onClose={()=>{
+          setOpen(false)
+          console.log('set to false');
+        }}
+        refetch={()=>{
+          refetch()
+        }}
+      />
     </>
   )
 }
