@@ -1,3 +1,4 @@
+import ArticleView from '@/Components/ArticleView'
 import { encoderMenuItems } from '@/helper/encoderMenuItems'
 import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
@@ -6,19 +7,18 @@ import { Table, Dropdown, Button, Pagination } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
-import ArticleView from './ArticleView'
 
 
 type Props = {
   data: { data: Article[], total: number }
   isFetching: boolean
   page: number
-  setPage: number
+  paginationPageChange: (page: number) => void
   refetch: () => void
   editUrl?: string
   trashUrl?: string
 }
-const TableArticle = ( { data, isFetching, refetch, page, setPage,
+const TableEncoderArticle = ( { data, isFetching, refetch, page, paginationPageChange,
   editUrl,
   trashUrl
  } : Props) => {
@@ -188,6 +188,7 @@ const TableArticle = ( { data, isFetching, refetch, page, setPage,
                         })
                       },
                       handleView: () => handleView(article),
+
                     }),
                   }}
                 >
@@ -207,8 +208,7 @@ const TableArticle = ( { data, isFetching, refetch, page, setPage,
               current={page}
               total={data?.total}
               onChange={(value) => {
-                console.log(value);
-
+                paginationPageChange(value)
               }}
             />
           </div>
@@ -217,4 +217,4 @@ const TableArticle = ( { data, isFetching, refetch, page, setPage,
   )
 }
 
-export default TableArticle
+export default TableEncoderArticle

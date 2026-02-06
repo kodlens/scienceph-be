@@ -12,7 +12,8 @@ import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 
-import TableArticle from '@/Components/TableArticle'
+import TableEncoderArticle from './partials/TableEncoderArticle'
+import { statusDropdownMenu } from '@/helper/statusMenu'
 
 export default function EncoderPostIndex() {
 
@@ -71,12 +72,7 @@ export default function EncoderPostIndex() {
               className="w-[180px]"
               defaultValue=""
               onChange={setStatus}
-              options={[
-                { label: 'All Status', value: '' },
-                { label: 'Draft', value: 'draft' },
-                // { label: 'Submitted', value: 'submit' },
-                { label: 'Published', value: 'publish' },
-              ]}
+              options={statusDropdownMenu('encoder')}
             />
 
             <Input
@@ -92,11 +88,14 @@ export default function EncoderPostIndex() {
             </Button>
           </div>
 
-          <TableArticle
+          <TableEncoderArticle
             data={data}
             isFetching={isFetching}
-            refetch={refetch} page={1}
-            setPage={10}
+            refetch={refetch}
+            page={page}
+            paginationPageChange={(p)=>{
+              setPage(p)
+            }}
             editUrl={`/encoder/articles`}
             trashUrl='/encoder/article-trash'         />
 

@@ -1,347 +1,124 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head, router } from "@inertiajs/react";
-
-
-
+import { Head, router } from '@inertiajs/react'
+import { FileAddOutlined } from '@ant-design/icons'
 import {
-  Space,
-  Table,
-  Pagination,
   Button,
   Input,
   Select,
-  Dropdown,
-  App
-} from "antd";
 
-import { KeyboardEvent, useCallback, useRef, useState } from "react";
-import axios from "axios";
+} from 'antd'
+import { KeyboardEvent, ReactNode, useState } from 'react'
+import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
+import Error404 from '@/Components/Error404'
 
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import TablePublisherArticle from './partials/TablePublisherArticle'
+import { statusDropdownMenu } from '@/helper/statusMenu'
 
-import { useQuery } from "@tanstack/react-query";
-import { dateFormat, truncate } from "@/helper/helperFunctions";
-import ModalUpdatePublishDate, { ModalUpdatePublishDateHandle } from "@/Components/ModalUpdatePublishDate";
-import { Article } from "@/types/article";
-import { publisherMenuItems } from "@/helper/publisherMenuItems";
-import ArticleView from "@/Components/ArticleView";
+export default function EncoderPostIndex() {
 
+  const [status, setStatus] = useState('')
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
 
-const { Column } = Table;
+  const perPage = 10
 
-
-export default function PublisherArticleIndex() {
-  const { modal } = App.useApp();
-
-  //const [form] = Form.useForm();
-
-  const [status, setStatus] = useState("");
-  const [perPage, setPerPage] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-
-  const modalRef = useRef<ModalUpdatePublishDateHandle>(null)
-
-  const { data, isFetching, refetch } = useQuery({
-    queryKey: ['posts', page, perPage],
+  const { data, isFetching, error, refetch } = useQuery({
+    queryKey: ['articles', { perPage, page, status }],
     queryFn: async () => {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        perpage: perPage.toString(),
-        search: search.toString(),
-        status: status.toString()
-      })
+      const params = [
+        `perpage=${perPage}`,
+        `search=${search}`,
+        `page=${page}`,
+        `status=${status}`,
+      ].join('&')
 
-      const res = await axios.get(`/publisher/get-articles?${params}`);
+      const res = await axios.get(`/publisher/get-articles?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
   })
 
-  const handleStatusChange = (value: string) => {
-    setStatus(value);
-    //loadAsync(search, perPage, page)
-  };
+  if (error) {
+    return <Error404 error={error} />
+  }
 
-  const handleEditClick = (id: number) => {
-    router.visit('/publisher/articles/' + id + '/edit');
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') refetch()
   }
 
 
-  const handleTrashClick = (id: number) => {
-    modal.confirm({
-      title: "Trash?",
-      content: "Are you sure you want to move to trash this post?",
-      onOk: async () => {
-        const res = await axios.post("/publisher/articles-trash/" + id);
-        if (res.data.status === "trashed") {
-          refetch()
-        }
-      },
-    });
-  };
-
-  const handleUnpublish = (id: number) => {
-    modal.confirm({
-      title: "Trash?",
-      content: "Are you sure you want to set this article as unpublished?",
-      onOk: async () => {
-        const res = await axios.post("/publisher/articles-unpublish/" + id);
-        if (res.data.status === "unpublish") {
-          refetch()
-        }
-      },
-    });
-  };
-
-   const handlePublish = (id: number) => {
-    modal.confirm({
-      title: "Trash?",
-      content: "Are you sure you want to set this article as published?",
-      onOk: async () => {
-        const res = await axios.post("/publisher/articles-publish/" + id);
-        if (res.data.status === "publish") {
-          refetch()
-        }
-      },
-    });
-  };
-
-
-  const handSearchClick = () => {
-    refetch()
-  };
-
-  const handleView = (article:Article) => {
-    modal.info({
-      width: 1024,
-      title: "Article Display",
-      content: <ArticleView article={article} className="" />,
-      onOk() { },
-    });
-  }
-
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Enter") handSearchClick();
-  }, [search, status]);
 
   return (
     <>
-      <Head title="POST/ARTICLE"></Head>
+      <Head title="Articles" />
 
-      <div className="flex justify-center items-center">
-        {/* card */}
-        <div
-          className="p-6 max-w-[1320px] overflow-auto mx-2 bg-white shadow-sm rounded-md
-					sm:w-[740px]
-					md:w-[1200px]"
-        >
-          {/* card header */}
-          <div className="font-bold text-lg mb-4">
-            LIST OF ARTICLES
+      <div className="flex justify-center px-4">
+        <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+
+          {/* ================= HEADER ================= */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-semibold text-slate-900">
+              Articles
+            </h1>
+            <p className="text-sm text-slate-500">
+              Manage, review, and publish science & technology articles
+            </p>
           </div>
 
-          {/* card body */}
-
-          <div className="flex gap-2 mb-2">
+          {/* ================= FILTERS ================= */}
+          <div className="flex flex-wrap items-center gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
             <Select
-              style={{
-                width: "200px",
-              }}
+              className="w-[180px]"
               defaultValue=""
-              onChange={handleStatusChange}
-              options={[
-                { label: "All", value: "" },
-                {
-                  label: "Submit for Publishing",
-                  value: "submit",
-                },
-                { label: "Return to author", value: "return" },
-              ]}
+              onChange={setStatus}
+              options={statusDropdownMenu('publisher')}
             />
 
             <Input
-              placeholder="Search Id / Title"
-              onKeyDown={handleKeyDown}
+              placeholder="Search by article title"
+              className="max-w-md"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <Button type="primary" onClick={handSearchClick}>
-              SEARCH
+
+            <Button type="primary" onClick={() => refetch()}>
+              Search
             </Button>
           </div>
 
-          <Table dataSource={data?.data}
-            loading={isFetching}
-            rowKey={(data: Article) => data.id}
-            pagination={false}
-            expandable={{
-              expandedRowRender: (article: Article) => (
-                <>
-                  <table className=''>
-                    <thead>
-                      <tr>
-                        <th className='text-left py-1 text-sm text-gray-500'>Category</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Section</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Author</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Modified At</th>
-                        <th className='text-left py-1 text-sm text-gray-500'>Encoded At</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{article?.category?.name}</td>
-                        <td>{article?.section?.name}</td>
-                        <td>{article?.author}</td>
-                        <td>
-                          {
-                            dateFormat(article?.modified_at ? article.modified_at.toString() : '')
-                          }
-                        </td>
-                        <td>
-                          {
-                            dateFormat(article?.encoded_at ? article.encoded_at.toString() : '')
-                          }
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div className='flex gap-4'>
-                    <div className='mt-4'>
-                      <span className='font-bold text-[.8rem] mr-4 text-gray-600'>ENCODED:</span>
-                      {article?.encoded_by && (
-                        <span>
-                          {article?.encoded_by?.lname}, {article?.encoded_by?.fname}
-                        </span>
-                      )}
-
-                    </div>
-
-                    <div className='mt-4'>
-                      <span className='font-bold text-[.8rem] mr-4 text-gray-600'>MODIFIED:</span>
-                      {article.modified_by && (
-                        <span>
-                          {article?.modified_by?.lname}, {article?.modified_by?.fname}
-                        </span>)}
-                    </div>
-                  </div>
-                </>
-              )
-            }}>
-            <Column title="Id" dataIndex="id" />
-            <Column title="Title" dataIndex="title" key="title" />
-            <Column title="Description"
-              key="description_text"
-              render={(_, article: Article) => (
-                <>
-                  <div>{article?.description_text ? truncate(article?.description_text, 15) : ''}</div>
-                  <div className='mt-4'>
-                    <span className='font-bold text-[.8rem] mr-4 text-gray-600'>PRESS RELEASE:</span>
-                    <span className={article?.is_press_release ? 'text-green-600 bg-green-100 px-2 py-1 rounded text-[.8rem]' : 'text-red-600 bg-red-100 px-2 py-1 rounded text-[.8rem]'}>
-                      {article?.is_press_release ? 'YES' : 'NO'}
-                    </span>
-                  </div>
-                </>
-              )}
-            />
-
-            <Column title="Publication Date"
-              dataIndex="publish_date"
-              key="publish_date"
-              render={(_, article) => (
-                <>
-                  {article.publish_date && dateFormat(article.publish_date)}
-                </>
-              )}
-            />
-
-            <Column title="Status" dataIndex="status" key="status" render={(status) => (
-
-              <div>
-                {status === 'submit' && (
-                  <div className='bg-green-300 font-bold text-center text-[10px] px-2 py-1 rounded-full'>
-                    SUBMIT FOR PUBLISHING
-                  </div>
-                )}
-                {status === 'publish' && (
-                  <div className='bg-green-200 font-bold text-center text-[10px] px-2 py-1 rounded-full'>
-                    PUBLISHED
-                  </div>
-                )}
-
-                {status === 'draft' && (
-                  <div className='bg-orange-200 font-bold text-center text-[10px] px-2 py-1 rounded-full'>
-                    DRAFT
-                  </div>
-                )}
-                {status === 'return' && (
-                  <div className='bg-red-200 font-bold text-center text-[10px] px-2 py-1 rounded-full'>
-                    RETURN TO ENCODER
-                  </div>
-                )}
-
-              </div>
-
-            )}
-            />
-
-            <Column
-              title="Date Created"
-              dataIndex="created_at"
-              key="created_at"
-              render={(created_at) => (
-                <>
-                  {created_at &&
-                    dateFormat(created_at)}
-                </>
-              )}
-            />
-
-            <Column title="Action" key="action"
-              render={(_, data: Article) => (
-                <Space size="small">
-                  <Dropdown trigger={['click']} menu={{
-                    items: publisherMenuItems(
-                      {
-                        handleEditClick: () => handleEditClick(data.id),
-                        handleTrashClick: () => handleTrashClick(data.id),
-                        handlePublish: () => handlePublish(data.id),
-                        handleUnpublish: () => handleUnpublish(data.id),
-                        handleView: () => handleView(data)
-                      })
-                  }} >
-                    <Space>
-                      <Button variant='outlined'>...</Button>
-                    </Space>
-                  </Dropdown>
-                </Space>
-              )}
-            />
-          </Table>
-
-          <Pagination
-            className="mt-4"
-            onChange={(page, pageSize) => {
-              setPerPage(pageSize)
-              setPage(page)
-              refetch()
+          <TablePublisherArticle
+            data={data}
+            isFetching={isFetching}
+            refetch={refetch}
+            paginationPageChange={(v) => {
+              console.log(v);
+              setPage(v)
             }}
-            defaultCurrent={1}
-            total={data?.total}
+            page={page}
           />
 
+          {/* ================= ACTION ================= */}
+          <div className="flex justify-end mb-4">
+            <Button
+              icon={<FileAddOutlined />}
+              type="primary"
+              onClick={() => router.visit('/encoder/articles/create')}
+            >
+              New Article
+            </Button>
+          </div>
+
+
         </div>
-        {/* card */}
-
-
-        {/* component in updateing date using modal */}
-        <ModalUpdatePublishDate
-          uri="/publisher/post-set-publish-date"
-          ref={modalRef}
-          onRefresh={() => refetch()} />
       </div>
     </>
-  );
+  )
 }
 
-PublisherArticleIndex.layout = (page: any) => <Authenticated user={page.props.auth.user}>{page}</Authenticated>
+EncoderPostIndex.layout = (page: ReactNode) => (
+  <AuthenticatedLayout user={(page as any).props.auth.user}>
+    {page}
+  </AuthenticatedLayout>
+)
