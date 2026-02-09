@@ -69,6 +69,7 @@ export interface CreateEditProps {
   authors: AuthorApi,
   agencies: Agency[],
   regions: Region[],
+  regionalOffices: RegionalOffice[],
   tags: string[],
   uri: string
 }

@@ -17,6 +17,7 @@ const EncoderArticleCreateEdit = ({
   authors,
   agencies,
   regions,
+  regionalOffices,
   tags
 }: CreateEditProps) => {
 
@@ -49,6 +50,7 @@ const EncoderArticleCreateEdit = ({
               authors={authors}
               agencies={agencies}
               regions={regions}
+              regionalOffices={regionalOffices}
               tags={tags}
             />
 

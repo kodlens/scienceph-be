@@ -63,10 +63,10 @@ class EncoderArticleController extends ArticleController
         $sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
+        $regionalOffices = $fetcher->getRegionalOffices();
         $regions = $fetcher->getRegions();
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-
 
         return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
             'id', 0,
@@ -75,6 +75,7 @@ class EncoderArticleController extends ArticleController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
+            'regionalOffices' => $regionalOffices,
             'categories' => $categories,
             'sections' => $sections,
             'authors' => $authors
@@ -93,9 +94,9 @@ class EncoderArticleController extends ArticleController
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
+        $regionalOffices = $fetcher->getRegionalOffices();
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-
         $article = Article::find($id);
 
 
@@ -106,6 +107,7 @@ class EncoderArticleController extends ArticleController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
+            'regionalOffices' => $regionalOffices,
             'categories' => $categories,
             'sections' => $sections,
             'authors' => $authors

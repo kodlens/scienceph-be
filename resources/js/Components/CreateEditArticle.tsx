@@ -18,6 +18,7 @@ const CreateEditArticle = ({
   categories,
   agencies,
   regions,
+  regionalOffices,
   authors,
   tags,
   uri
@@ -46,6 +47,7 @@ const CreateEditArticle = ({
         { name: "section", value: article.section_id },
         { name: "agency", value: article.agency },
         { name: "region", value: article.region },
+        { name: "regional_office", value: article.regional_office },
         { name: "author", value: article.author },
         { name: "is_publish", value: article.is_publish },
         { name: "tags", value: article.tags ? article.tags.split(',') : [] },
@@ -123,7 +125,8 @@ const CreateEditArticle = ({
         section: 1,
         status: 'draft',
         region: null,
-        agency: 'DOST-STII',
+        regional_office: null,
+        agency: null,
         author: '',
         is_publish: 0,
         is_press_release: 0,
@@ -133,9 +136,9 @@ const CreateEditArticle = ({
       }}
     >
 
-      <div className="flex lg:flex-row-reverse flex-col-reverse gap-4">
+      <div className="flex flex-col-reverse gap-4">
 
-        <div className="w-full lg:w-1/3">
+        <div className="w-full">
           <Form.Item
             name="title"
             label="Title"
@@ -154,30 +157,33 @@ const CreateEditArticle = ({
             <Input disabled placeholder="Slug" />
           </Form.Item>
 
-          <Form.Item
-            name="category"
-            label="Select Category"
-            className="w-full"
-            validateStatus={errors.category ? "error" : ""}
-            help={errors.category ? errors.category[0] : ""}
-          >
-            <Select
-              options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }
-              allowClear
-              placeholder="Select Category"
-            />
-          </Form.Item>
+          <div className="flex flex-col md:gap-4 md:flex-row">
+            <Form.Item
+              name="category"
+              label="Select Category"
+              className="w-full"
+              validateStatus={errors.category ? "error" : ""}
+              help={errors.category ? errors.category[0] : ""}
+            >
+              <Select
+                options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }
+                allowClear
+                placeholder="Select Category"
+              />
+            </Form.Item>
 
-          <Form.Item
-            name="section"
-            label="Select Section"
-            className="w-full"
-            validateStatus={errors.section ? "error" : ""}
-            help={errors.section ? errors.section[0] : ""}
-          >
-            {/* <SelectSection sections={sections} errors={errors} /> */}
-            <Select options={sections ? sections.map(section => ({ value: Number(section.id), label: section.name })) : [] }  allowClear/>
-          </Form.Item>
+            <Form.Item
+              name="section"
+              label="Select Section"
+              className="w-full"
+              validateStatus={errors.section ? "error" : ""}
+              help={errors.section ? errors.section[0] : ""}
+            >
+              {/* <SelectSection sections={sections} errors={errors} /> */}
+              <Select options={sections ? sections.map(section => ({ value: Number(section.id), label: section.name })) : [] }  allowClear/>
+            </Form.Item>
+
+          </div>
 
 
           <Form.Item
@@ -190,20 +196,7 @@ const CreateEditArticle = ({
             <AuthorAutoComplete authors={authors} />
           </Form.Item>
 
-          <Form.Item
-            name="status"
-            className="w-full"
-            label="Select Status"
-            validateStatus={
-              errors.status ? "error" : ""
-            }
-            help={errors.status ? errors.status[0] : ""}
-          >
-            <Select
-              options={statusDropdownMenu((auth.user as User).role)}
-            >
-            </Select>
-          </Form.Item>
+
 
 
           <Form.Item
@@ -216,34 +209,37 @@ const CreateEditArticle = ({
             <Input placeholder="Source URL" />
           </Form.Item>
 
-          <Form.Item
-            name="agency"
-            label="Select Agency"
-            className="w-full"
-            validateStatus={errors.agency ? "error" : ""}
-            help={errors.agency ? errors.agency[0] : ""}
-          >
-            <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/>
-          </Form.Item>
+
+          <div className="flex flex-col md:gap-4 md:flex-row">
+            <Form.Item
+              name="agency"
+              label="Select Agency"
+              className="w-full"
+              validateStatus={errors.agency ? "error" : ""}
+              help={errors.agency ? errors.agency[0] : ""}
+            >
+              <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/>
+            </Form.Item>
+
+            <Form.Item
+              name="region"
+              label="Select Region"
+              className="w-full"
+              validateStatus={errors.region ? "error" : ""}
+              help={errors.region ? errors.region[0] : ""}
+            >
+              <Select options={regions ? regions.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
+            </Form.Item>
+          </div>
 
           <Form.Item
-            name="region"
-            label="Select Region"
+            name="regional_office"
+            label="Select Region Office"
             className="w-full"
-            validateStatus={errors.region ? "error" : ""}
-            help={errors.region ? errors.region[0] : ""}
+            validateStatus={errors.regional_office ? "error" : ""}
+            help={errors.regional_office ? errors.regional_office[0] : ""}
           >
-            <Select options={regions ? regions.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
-          </Form.Item>
-
-          <Form.Item
-            name="publish_date"
-            label="Publish Date"
-            className="w-full"
-            validateStatus={errors.publish_date ? "error" : ""}
-            help={errors.publish_date ? errors.publish_date[0] : ""}
-          >
-            <DatePicker className="w-full" placeholder="Publish Date" />
+            <Select options={regionalOffices ? regionalOffices.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
           </Form.Item>
 
           <Form.Item
@@ -261,6 +257,35 @@ const CreateEditArticle = ({
               options={tags.map(item => ({ value: item, label: item }))}
             />
           </Form.Item>
+
+
+          <div className="flex flex-col md:gap-4 md:flex-row">
+            <Form.Item
+              name="status"
+              className="w-full"
+              label="Select Status"
+              validateStatus={
+                errors.status ? "error" : ""
+              }
+              help={errors.status ? errors.status[0] : ""}
+            >
+              <Select
+                options={statusDropdownMenu((auth.user as User).role)}
+              >
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="publish_date"
+              label="Publish Date"
+              className="w-full"
+              validateStatus={errors.publish_date ? "error" : ""}
+              help={errors.publish_date ? errors.publish_date[0] : ""}
+            >
+              <DatePicker className="w-full" placeholder="Publish Date" />
+            </Form.Item>
+          </div>
+
+
 
            <Form.Item
             name="is_press_release"
@@ -317,7 +342,7 @@ const CreateEditArticle = ({
 
 
         {/* CKEditor */}
-        <div className="w-full lg:w-2/3">
+        <div className="w-full">
 
           {/* EDITOR CK WYSIWYG */}
           <div className="min-h-[300px] ">

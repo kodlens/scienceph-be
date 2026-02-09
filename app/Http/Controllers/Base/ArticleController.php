@@ -83,6 +83,7 @@ class ArticleController extends Controller
                     'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
+                    'regional_office' => $req->regional_office,
                     'tags' => $tagsString,
                     'source_url' => $req->source_url,
                     'status' => $req->status,
@@ -162,6 +163,7 @@ class ArticleController extends Controller
         $data->modified_at = now();
         $data->agency = $req->agency ? $req->agency : null;
         $data->region = $req->region ? $req->region : null;
+        $data->regional_office = $req->regional_office ? $req->regional_office : null;
         //$data->tags = $tagsString;
         $data->source_url = $req->source_url;
         $data->status = $req->status;
@@ -259,7 +261,8 @@ class ArticleController extends Controller
                 $data->save();
 
 
-                $info = Information::updateOrCreate([
+                $info = Information::updateOrCreate(['source_id' => $data->id],
+                [
                     'source_id' => $data->id,
                     'title' => $data->title,
                     'description' => $data->description,
@@ -272,8 +275,7 @@ class ArticleController extends Controller
                     'content_type' => 'blog',
                     'region' => $data->region,
                     'is_publish' => 1,
-                ],
-                ['source_id' => $data->id]);
+                ]);
 
 
             });

@@ -5,7 +5,7 @@ use App\Models\Category;
 use App\Models\Region;
 use App\Models\Agency;
 use App\Models\Article;
-
+use App\Models\RegionalOffice;
 
 class Fetcher {
 
@@ -20,8 +20,18 @@ public function getSections() {
         return $data;
     }
 
-     public function getRegions(){
+    public function getRegions(){
         $data = Region::where('active', 1)
+        ->orderBy('order_no', 'asc')
+        ->get();
+        return $data;
+
+    }
+
+
+
+    public function getRegionalOffices(){
+        $data = RegionalOffice::where('active', 1)
         ->orderBy('order_no', 'asc')
         ->get();
         return $data;
