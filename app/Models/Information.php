@@ -4,26 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Info extends Model
+class Information extends Model
 {
     //
 
-    protected $primaryKey = 'information_id';
+    protected $primaryKey = 'id';
+    protected $table = 'informations';
 
     protected $fillable = [
-        'article_id',
+        'source_id',
         'title',
         'description',
+        'description_text',
         'alias',
         'url',
         'agency_code',
-
-
-        'content',
-        'clean_content',
-
-
-
         'url',
         'source',
         'agency',

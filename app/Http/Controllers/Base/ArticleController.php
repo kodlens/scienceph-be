@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
+use App\Models\Information;
 
 
 class ArticleController extends Controller
@@ -70,7 +71,7 @@ class ArticleController extends Controller
                 $user = Auth::user();
                 $name = $user->lname . ',' . $user->fname;
 
-                $post = Article::create([
+                $data = Article::create([
                     'title' => $req->title,
                     'alias' => Str::slug($req->title),
                     'description' => $modifiedHtml,
@@ -91,6 +92,7 @@ class ArticleController extends Controller
                     'record_trail' => (new RecordTrail())
                         ->recordTrail('', 'insert', $user->id, $name),
                 ]);
+
             });
 
             return response()->json([
@@ -245,29 +247,78 @@ class ArticleController extends Controller
     }
 
         public function publish($id){
-        $user = Auth::user();
 
-        $data = Article::find($id);
-        $data->status = 'publish'; //submit-for-publishing (static)
-        $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
-        $data->save();
+        try {
+            DB::transaction(function () use ($id) {
+                // Database operations here
+                $user = Auth::user();
 
-        return response()->json([
-            'status' => 'publish'
-        ], 200);
+                $data = Article::find($id);
+                $data->status = 'publish'; //submit-for-publishing (static)
+                $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+                $data->save();
 
+
+                $info = Information::updateOrCreate([
+                    'source_id' => $data->id,
+                    'title' => $data->title,
+                    'description' => $data->description,
+                    'description_text' => $data->description_text,
+                    'alias' => $data->alias,
+                    'agency_code' => 'DOST-STII',
+                    'tags' => $data->tags,
+                    'source' => 'scienceph',
+                    'source_url' => 'https://www.science.ph',
+                    'content_type' => 'blog',
+                    'region' => $data->region,
+                    'is_publish' => 1,
+                ],
+                ['source_id' => $data->id]);
+
+
+            });
+
+            return response()->json([
+                'status' => 'publish'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function draft($id){
-        $user = Auth::user();
-        $data = Article::find($id);
-        $data->status = 'draft';
-        $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
-        $data->save();
 
-        return response()->json([
-            'status' => 'draft'
-        ], 200);
+        try {
+            DB::transaction(function () use ($id) {
+                $user = Auth::user();
+                $data = Article::find($id);
+                $data->status = 'draft';
+                $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+                $data->save();
+
+                $infoExists = Information::where('alias', $data->alias)->exists();
+                if($infoExists){
+                    Information::where('alias', $data->alias)->update([
+                        'is_publish' => 0
+                    ]);
+                }
+
+            });
+
+            return response()->json([
+                'status' => 'draft'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+
     }
 
 
