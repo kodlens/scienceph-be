@@ -258,15 +258,15 @@ class ArticleController extends Controller
 
     }
 
-    public function unpublish($id){
+    public function draft($id){
         $user = Auth::user();
         $data = Article::find($id);
-        $data->status = 'unpublish';
-        $data->record_trail = $data->record_trail . 'unpublish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+        $data->status = 'draft';
+        $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
         $data->save();
 
         return response()->json([
-            'status' => 'unpublish'
+            'status' => 'draft'
         ], 200);
     }
 

@@ -5,8 +5,8 @@ import { Table, Dropdown, Button, Pagination, App } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
-import { publisherMenuItems } from '@/helper/publisherMenuItems'
 import ArticleView from '@/Components/ArticleView'
+import { adminMenuItems } from '@/helper/adminMenuItems'
 
 
 type Props = {
@@ -115,20 +115,25 @@ const TableAdminArticle = (
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Encoded By:</span>
-                <span
+                { article.encoded_by ? (
+                  <span
                   className={`px-2 py-0.5 rounded-full font-medium `}
                 >
                   {article.encoded_by.fname} {article.encoded_by.lname}
                 </span>
+                ):null}
+
               </div>
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Modified By:</span>
-                <span
-                  className={`px-2 py-0.5 rounded-full font-medium `}
-                >
-                  {article.modified_by ? article.modified_by.fname : ''} {article.modified_by ? article.modified_by.lname : ''}
-                </span>
+                { article.modified_by ? (
+                  <span
+                    className={`px-2 py-0.5 rounded-full font-medium `}
+                  >
+                    {article.modified_by ? article.modified_by.fname : ''} {article.modified_by ? article.modified_by.lname : ''}
+                  </span>
+                ): null}
               </div>
 
             </div>
@@ -168,7 +173,7 @@ const TableAdminArticle = (
             <Dropdown
               trigger={['click']}
               menu={{
-                items: publisherMenuItems({
+                items: adminMenuItems({
                   article,
                   handleEditClick: () =>
                     router.visit(`/admin/articles/${article.id}/edit`),
@@ -191,7 +196,7 @@ const TableAdminArticle = (
                       refetch()
                     })
                   },
-                  handleUnpublish: async () => {
+                  handleDraft: async () => {
                     await axios.post(`/publisher/articles-unpublish/${article.id}`).then(() => {
                        notification.success({
                         message: 'Article has been unpublished and returned to draft.',

@@ -8,14 +8,14 @@ export const publisherMenuItems = (
     handleEditClick,
     handleTrashClick,
     handlePublish,
-    handleUnpublish,
+    handleDraft,
     handleView
   }:
   {
     handleEditClick: () => void,
     handleTrashClick: () => void,
     handlePublish: () => void,
-    handleUnpublish: () => void,
+    handleDraft: () => void,
     handleView: () => void,
     article: Article
   }
@@ -43,11 +43,11 @@ export const publisherMenuItems = (
       onClick: () => handlePublish()
     },
     {
-      label: 'Unpublish',
+      label: 'Draft',
       disabled: article.status === 'unpublish',
       key: 'encoder.articles.unpublish',
       icon: <StopOutlined />,
-      onClick: () => handleUnpublish()
+      onClick: () => handleDraft()
     },
     {
       label: 'View',

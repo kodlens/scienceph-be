@@ -115,20 +115,25 @@ const TablePublisherArticle = (
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Encoded By:</span>
-                <span
+                { article.encoded_by ? (
+                  <span
                   className={`px-2 py-0.5 rounded-full font-medium `}
                 >
                   {article.encoded_by.fname} {article.encoded_by.lname}
                 </span>
+                ):null}
+
               </div>
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Modified By:</span>
-                <span
-                  className={`px-2 py-0.5 rounded-full font-medium `}
-                >
-                  {article.modified_by ? article.modified_by.fname : ''} {article.modified_by ? article.modified_by.lname : ''}
-                </span>
+                { article.modified_by ? (
+                  <span
+                    className={`px-2 py-0.5 rounded-full font-medium `}
+                  >
+                    {article.modified_by ? article.modified_by.fname : ''} {article.modified_by ? article.modified_by.lname : ''}
+                  </span>
+                ): null}
               </div>
 
             </div>
@@ -191,8 +196,8 @@ const TablePublisherArticle = (
                       refetch()
                     })
                   },
-                  handleUnpublish: async () => {
-                    await axios.post(`/publisher/articles-unpublish/${article.id}`).then(() => {
+                  handleDraft: async () => {
+                    await axios.post(`/publisher/articles-draft/${article.id}`).then(() => {
                        notification.success({
                         message: 'Article has been unpublished and returned to draft.',
                       })

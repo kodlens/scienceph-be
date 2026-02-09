@@ -130,7 +130,7 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
 
 
     Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
-    Route::post('/articles-unpublish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'unpublish'])->name('publisher.articles.unpublish');
+    Route::post('/articles-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');
     //Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
     Route::post('/articles-trash/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'trash'])->name('publisher.articles.trash');
 

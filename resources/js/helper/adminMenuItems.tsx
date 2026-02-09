@@ -4,10 +4,18 @@ import { EditOutlined } from "@ant-design/icons";
 export const adminMenuItems = (
   {
     handleEditClick,
+    handleTrashClick,
+    handleView,
+    handlePublish,
+    handleDraft,
     article
   }:
   {
-    handleEditClick: (id: number) => void,
+    handleEditClick: () => void,
+    handleTrashClick: () => void,
+    handleView: () => void,
+    handlePublish: () => void,
+    handleDraft: () => void,
     article: Article
   }
 ) => {
@@ -16,7 +24,7 @@ export const adminMenuItems = (
             label: 'Edit',
             key: 'admin.articles.edit',
             icon: <EditOutlined />,
-            onClick: () => handleEditClick(article.id),
+            onClick: () => handleEditClick(),
         },
     ]
 }
