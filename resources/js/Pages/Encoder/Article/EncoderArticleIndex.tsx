@@ -66,33 +66,31 @@ export default function EncoderPostIndex() {
           </div>
 
           {/* ================= FILTERS ================= */}
-          <div className="flex flex-col gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <div className="flex flex-col md:flex-row gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
 
-            <div className="flex gap-4">
-              <Select
-                className="w-[180px]"
-                value={status}
-                onChange={(v) =>
-                  setStatus(v)
-                }
-                options={statusDropdownMenu('encoder')}
+            <Select
+              className="w-[180px]"
+              value={status}
+              onChange={(v) =>
+                setStatus(v)
+              }
+              options={statusDropdownMenu('encoder')}
 
-              />
+            />
 
-              <Input
-                placeholder="Search by article title"
-                className="w-full"
-                value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-                onKeyDown={(e)=>{
-                  if(e.key === 'Enter')
-                    refetch()
-                }}
-                allowClear
-              />
-            </div>
+            <Input
+              placeholder="Search by article title"
+              className="w-full"
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              onKeyDown={(e)=>{
+                if(e.key === 'Enter')
+                  refetch()
+              }}
+              allowClear
+            />
 
             <Button className="ml-auto" type="primary" onClick={()=> refetch()}>
               Search
@@ -100,17 +98,19 @@ export default function EncoderPostIndex() {
           </div>
 
 
+          <div className='overflow-auto'>
+            <TableEncoderArticle
+              data={data}
+              isFetching={isFetching}
+              refetch={refetch}
+              page={page}
+              paginationPageChange={(p)=>{
+                setPage(p)
+              }}
+              editUrl={`/encoder/articles`}
+              trashUrl='/encoder/article-trash' />
 
-          <TableEncoderArticle
-            data={data}
-            isFetching={isFetching}
-            refetch={refetch}
-            page={page}
-            paginationPageChange={(p)=>{
-              setPage(p)
-            }}
-            editUrl={`/encoder/articles`}
-            trashUrl='/encoder/article-trash'         />
+          </div>
 
           {/* ================= ACTION ================= */}
           <div className="flex justify-end mb-4">
