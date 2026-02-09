@@ -6,7 +6,7 @@ import {
   Select,
 
 } from 'antd'
-import { KeyboardEvent, ReactNode, useState } from 'react'
+import {  ReactNode, useState } from 'react'
 import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
@@ -17,18 +17,22 @@ import { statusDropdownMenu } from '@/helper/statusMenu'
 
 export default function EncoderPostIndex() {
 
-  const [status, setStatus] = useState('')
-  const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
 
+  const [page, setPage] = useState(1)
   const perPage = 10
+
+  const [search, setSearch] = useState('')
+  const [status, setStatus] = useState('')
+
+
 
   const { data, isFetching, error, refetch } = useQuery({
     queryKey: ['articles', { perPage, page, status }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
-        `search=${search}`,
+        `title=${search ? search : ''}`,
+        `status=${status ? status : ''}`,
         `page=${page}`,
         `status=${status}`,
       ].join('&')
@@ -42,11 +46,6 @@ export default function EncoderPostIndex() {
   if (error) {
     return <Error404 error={error} />
   }
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') refetch()
-  }
-
 
 
   return (
@@ -67,26 +66,40 @@ export default function EncoderPostIndex() {
           </div>
 
           {/* ================= FILTERS ================= */}
-          <div className="flex flex-wrap items-center gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
-            <Select
-              className="w-[180px]"
-              defaultValue=""
-              onChange={setStatus}
-              options={statusDropdownMenu('encoder')}
-            />
+          <div className="flex flex-col gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
 
-            <Input
-              placeholder="Search by article title"
-              className="max-w-md"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
+            <div className="flex gap-4">
+              <Select
+                className="w-[180px]"
+                value={status}
+                onChange={(v) =>
+                  setStatus(v)
+                }
+                options={statusDropdownMenu('encoder')}
 
-            <Button type="primary" onClick={() => refetch()}>
+              />
+
+              <Input
+                placeholder="Search by article title"
+                className="w-full"
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                onKeyDown={(e)=>{
+                  if(e.key === 'Enter')
+                    refetch()
+                }}
+                allowClear
+              />
+            </div>
+
+            <Button className="ml-auto" type="primary" onClick={()=> refetch()}>
               Search
             </Button>
           </div>
+
+
 
           <TableEncoderArticle
             data={data}

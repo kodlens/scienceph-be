@@ -1,0 +1,79 @@
+import { statusDropdownMenu } from "@/helper/statusMenu"
+import { Select, Input, Button } from "antd"
+
+type Filters = {
+  search: string
+  encoder: string
+  modifier: string
+  status: string
+}
+
+type Props = {
+  filters: Filters
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>
+  handleKeyDown: (e: KeyboardEvent) => void
+  refetch: () => void
+}
+
+const SearchFilter = ({
+  filters,
+  setFilters,
+  handleKeyDown,
+  refetch,
+}: Props) => {
+  return (
+    <div className="flex flex-col gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
+
+      <div className="flex gap-4">
+        <Select
+          className="w-[180px]"
+          value={filters.status}
+          onChange={(v) =>
+            setFilters((prev) => ({ ...prev, status: v }))
+          }
+          options={statusDropdownMenu('encoder')}
+        />
+
+        <Input
+          placeholder="Search by article title"
+          className="w-full"
+          value={filters.search}
+          onChange={(e) =>
+            setFilters((prev) => ({ ...prev, search: e.target.value }))
+          }
+          allowClear
+        />
+      </div>
+
+      <div className="flex gap-4">
+        <Input
+          placeholder="Search by encoder name"
+          className="w-full"
+          value={filters.encoder}
+          onChange={(e) =>
+            setFilters((prev) => ({ ...prev, encoder: e.target.value }))
+          }
+          allowClear
+
+        />
+
+        <Input
+          placeholder="Search by modifier name"
+          className="w-full"
+          value={filters.modifier}
+          onChange={(e) =>
+            setFilters((prev) => ({ ...prev, modifier: e.target.value }))
+          }
+          allowClear
+
+        />
+      </div>
+
+      <Button className="ml-auto" type="primary" onClick={refetch}>
+        Search
+      </Button>
+    </div>
+  )
+}
+
+export default SearchFilter

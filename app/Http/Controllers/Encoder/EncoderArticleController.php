@@ -47,7 +47,7 @@ class EncoderArticleController extends ArticleController
             $data->where('status', $req->status);
         }
 
-        $data->where('title', 'like', '%'.$req->search.'%');
+        $data->where('title', 'like', '%'.$req->title.'%');
 
         return $data
             ->orderBy('id', 'desc')

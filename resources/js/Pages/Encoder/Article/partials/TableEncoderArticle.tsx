@@ -3,8 +3,7 @@ import { encoderMenuItems } from '@/helper/encoderMenuItems'
 import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
 import { router } from '@inertiajs/react'
-import { Table, Dropdown, Button, Pagination } from 'antd'
-import modal from 'antd/es/modal'
+import { Table, Dropdown, Button, Pagination, App } from 'antd'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
 
@@ -22,6 +21,8 @@ const TableEncoderArticle = ( { data, isFetching, refetch, page, paginationPageC
   editUrl,
   trashUrl
  } : Props) => {
+
+  const { modal } = App.useApp()
 
   const statusStyles: Record<string, string> = {
     submit: 'bg-blue-100 text-blue-700',
