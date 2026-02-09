@@ -13,22 +13,26 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import TablePublisherArticle from './partials/TablePublisherArticle'
-import { statusDropdownMenu } from '@/helper/statusMenu'
+import SearchFilter from '@/Components/SearchFilter'
 
 export default function EncoderPostIndex() {
 
-  const [status, setStatus] = useState('')
   const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
 
   const perPage = 10
 
+  const [filters, setFilters] = useState({
+    status: '',
+    title: '',
+    encoder: '',
+    modifier: ''
+  })
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['articles', { perPage, page, status }],
+    queryKey: ['articles',  perPage, page, filters.status ],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
-        `search=${search}`,
+        `title=${filters.title ? filters.title : ''}`,
         `page=${page}`,
         `status=${status}`,
       ].join('&')
@@ -67,26 +71,10 @@ export default function EncoderPostIndex() {
           </div>
 
           {/* ================= FILTERS ================= */}
-          <div className="flex flex-wrap items-center gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
-            <Select
-              className="w-[180px]"
-              defaultValue=""
-              onChange={setStatus}
-              options={statusDropdownMenu('publisher')}
-            />
+          <SearchFilter
+            filters={filters}
+          />
 
-            <Input
-              placeholder="Search by article title"
-              className="max-w-md"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-
-            <Button className='mr-auto' type="primary" onClick={() => refetch()}>
-              Search
-            </Button>
-          </div>
 
           <TablePublisherArticle
             data={data}

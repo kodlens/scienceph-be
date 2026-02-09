@@ -2,7 +2,7 @@ import { statusDropdownMenu } from "@/helper/statusMenu"
 import { Select, Input, Button } from "antd"
 
 type Filters = {
-  search: string
+  title: string
   encoder: string
   modifier: string
   status: string
@@ -32,12 +32,13 @@ const SearchFilter = ({
             setFilters((prev) => ({ ...prev, status: v }))
           }
           options={statusDropdownMenu('encoder')}
+          handleKeyDown={()=>handleKeyDown}
         />
 
         <Input
           placeholder="Search by article title"
           className="w-full"
-          value={filters.search}
+          value={filters.title}
           onChange={(e) =>
             setFilters((prev) => ({ ...prev, search: e.target.value }))
           }
