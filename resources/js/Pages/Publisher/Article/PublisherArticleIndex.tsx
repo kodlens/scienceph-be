@@ -2,11 +2,9 @@ import { Head, router } from '@inertiajs/react'
 import { FileAddOutlined } from '@ant-design/icons'
 import {
   Button,
-  Input,
-  Select,
 
 } from 'antd'
-import { KeyboardEvent, ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
@@ -33,8 +31,10 @@ export default function EncoderPostIndex() {
       const params = [
         `perpage=${perPage}`,
         `title=${filters.title ? filters.title : ''}`,
+        `status=${filters.status ? filters.status : ''}`,
+        `encoder=${filters.encoder ? filters.encoder : ''}`,
+        `modifier=${filters.modifier ? filters.modifier : ''}`,
         `page=${page}`,
-        `status=${status}`,
       ].join('&')
 
       const res = await axios.get(`/publisher/get-articles?${params}`)
@@ -47,9 +47,6 @@ export default function EncoderPostIndex() {
     return <Error404 error={error} />
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') refetch()
-  }
 
 
 
@@ -73,6 +70,9 @@ export default function EncoderPostIndex() {
           {/* ================= FILTERS ================= */}
           <SearchFilter
             filters={filters}
+            setFilters={setFilters}
+            refetch={refetch}
+
           />
 
 

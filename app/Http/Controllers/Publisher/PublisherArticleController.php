@@ -33,7 +33,7 @@ class PublisherArticleController extends ArticleController
     {
         $perPage = $request->integer('perpage', 10);
         $status  = $request->string('status')->toString();
-        $search  = $request->string('search')->toString();
+        $title  = $request->string('title')->toString();
 
         $query = Article::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
@@ -46,11 +46,27 @@ class PublisherArticleController extends ArticleController
             $query->whereIn('status', ['publish', 'draft', 'unpublish']);
         }
 
+        if(!empty($request->encoder)){
+            $query->whereHas('encodedBy', function($q) use ($request){
+                $q->where('lname', $request->encoder)
+                ->orWhere('fname', $request->encoder);
+            });
+        }
+
+        if(!empty($request->modifier)){
+            $query->whereHas('modifiedBy', function($q) use ($request){
+                $q->where('lname', $request->modifier)
+                ->orWhere('fname', $request->modifier);
+            });
+        }
+
+
+
         // Search filter
-        $query->when($search, function ($q) use ($search) {
-            $q->where(function ($qq) use ($search) {
-                $qq->where('title', 'like', "%{$search}%")
-                ->orWhere('id', 'like', "%{$search}%");
+        $query->when($title, function ($q) use ($title) {
+            $q->where(function ($qq) use ($title) {
+                $qq->where('title', 'like', "%{$title}%")
+                ->orWhere('id', 'like', "%{$title}%");
             });
         });
 

@@ -11,14 +11,12 @@ type Filters = {
 type Props = {
   filters: Filters
   setFilters: React.Dispatch<React.SetStateAction<Filters>>
-  handleKeyDown: (e: KeyboardEvent) => void
   refetch: () => void
 }
 
 const SearchFilter = ({
   filters,
   setFilters,
-  handleKeyDown,
   refetch,
 }: Props) => {
   return (
@@ -31,8 +29,7 @@ const SearchFilter = ({
           onChange={(v) =>
             setFilters((prev) => ({ ...prev, status: v }))
           }
-          options={statusDropdownMenu('encoder')}
-          handleKeyDown={()=>handleKeyDown}
+          options={statusDropdownMenu('publisher')}
         />
 
         <Input
@@ -40,9 +37,13 @@ const SearchFilter = ({
           className="w-full"
           value={filters.title}
           onChange={(e) =>
-            setFilters((prev) => ({ ...prev, search: e.target.value }))
+            setFilters((prev) => ({ ...prev, title: e.target.value }))
           }
           allowClear
+          onKeyDown={(e)=> {
+            if(e.key === 'Enter')
+              refetch()
+          }}
         />
       </div>
 
@@ -55,6 +56,10 @@ const SearchFilter = ({
             setFilters((prev) => ({ ...prev, encoder: e.target.value }))
           }
           allowClear
+          onKeyDown={(e)=> {
+            if(e.key === 'Enter')
+              refetch()
+          }}
 
         />
 
@@ -66,6 +71,11 @@ const SearchFilter = ({
             setFilters((prev) => ({ ...prev, modifier: e.target.value }))
           }
           allowClear
+          onKeyDown={(e)=> {
+            if(e.key === 'Enter')
+              refetch()
+          }}
+
 
         />
       </div>
