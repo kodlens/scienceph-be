@@ -101,7 +101,8 @@ export default function EncoderLayout(
           <PanelSideBarLogo />
           <ConfigProvider theme={{
             token: {
-              colorText: 'white'
+              colorText: 'white',
+              colorBgBase: '#084c7f',
             }
           }}>
             <Menu

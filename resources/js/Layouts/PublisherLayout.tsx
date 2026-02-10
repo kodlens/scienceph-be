@@ -10,7 +10,7 @@ import {
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { LogOut } from 'lucide-react';
+import { DatabaseZap, LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 
@@ -60,7 +60,7 @@ export default function PublisherLayout(
           {
             key: 'publisher.trash-articles.index',
             label: 'Trash Post/Article',
-            icon: <PlusOutlined  />,
+            icon: <DatabaseZap size={15} />,
             onClick: () => router.visit('/publisher/trash-articles'),
           },
         ],

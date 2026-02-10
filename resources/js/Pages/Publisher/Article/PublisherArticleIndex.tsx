@@ -58,13 +58,25 @@ export default function EncoderPostIndex() {
         <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
 
           {/* ================= HEADER ================= */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Articles
-            </h1>
-            <p className="text-sm text-slate-500">
-              Manage, review, and publish science & technology articles
-            </p>
+          <div className="mb-6 flex items-center">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">
+                Articles
+              </h1>
+              <p className="text-sm text-slate-500">
+                Manage, review, and publish science & technology articles
+              </p>
+            </div>
+
+            <Button
+              className='ml-auto'
+              icon={<FileAddOutlined />}
+              type="primary"
+              onClick={() => router.visit('/publisher/articles/create')}
+            >
+              New Article
+            </Button>
+
           </div>
 
           {/* ================= FILTERS ================= */}
@@ -89,13 +101,7 @@ export default function EncoderPostIndex() {
 
           {/* ================= ACTION ================= */}
           <div className="flex justify-end mb-4">
-            <Button
-              icon={<FileAddOutlined />}
-              type="primary"
-              onClick={() => router.visit('/encoder/articles/create')}
-            >
-              New Article
-            </Button>
+
           </div>
 
 
