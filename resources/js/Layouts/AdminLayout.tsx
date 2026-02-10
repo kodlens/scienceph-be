@@ -7,12 +7,13 @@ import {
   UserOutlined, ProfileOutlined,
   FormOutlined,
   BarsOutlined,
-  DashboardOutlined
+  DashboardOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { LogOut } from 'lucide-react';
+import { DatabaseZap, LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -44,80 +45,71 @@ export default function AdminLayout(
       label: 'Dashboard',
       onClick: () => router.visit('/admin/dashboard')
     },
-      {
-        key: 'admin.subjects',
-        icon: <ProfileOutlined />,
-        label: 'Subjects',
-        onClick: () => router.visit('/admin/subjects')
+    {
+      key: 'admin.categories',
+      icon: <ProfileOutlined />,
+      label: 'Categores',
+      onClick: () => router.visit('/admin/categories')
 
-      },
-      {
-        key: 'admin.subject-headings',
-        icon: <BarsOutlined />,
-        label: 'Subject Headings',
-        onClick: () => router.visit('/admin/subject-headings')
-      },
-      {
-        type: 'divider',
-      },
+    },
+    {
+      key: 'admin.sections',
+      icon: <BarsOutlined />,
+      label: 'Sections',
+      onClick: () => router.visit('/admin/sections')
+    },
+    {
+      key: 'admin.regions',
+      icon: <BarsOutlined />,
+      label: 'Regions',
+      onClick: () => router.visit('/admin/regions')
+    },
+    {
+      key: 'admin.regional-offices',
+      icon: <BarsOutlined />,
+      label: 'Regional Offices',
+      onClick: () => router.visit('/admin/regional-offices')
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'admin.articles',
+      icon: <FormOutlined />,
+      label: 'Articles',
+      children: [
+        {
+          key: 'admin.articles.index',
+          label: 'Articles',
+          icon: <FormOutlined />,
+          onClick: () => router.visit('/admin/articles'),
+        },
+        {
+          key: 'admin.articles.create',
+          label: 'New Post/Article',
+          icon: <PlusOutlined  />,
+          onClick: () => router.visit('/admin/articles/create'),
+        },
 
+        {
+          key: 'admin.articles.trash',
+          label: 'Trash Post/Article',
+          icon: <DatabaseZap size={15} />,
+          onClick: () => router.visit('/admin/article-trashes'),
+        },
 
-      {
-        key: 'admin.posts',
-        icon: <FormOutlined />,
-        label: 'Posts',
-        children: [
-          {
-            key: 'admin.articles.index',
-            label: 'Posts/Articles',
-            onClick: () => router.visit('/admin/articles'),
-          },
-          {
-            key: 'admin.articles.create',
-            label: 'New Post/Article',
-            onClick: () => router.visit('/admin/articles/create'),
-          },
-          {
-            key: 'admin.articles.archive',
-            label: 'Archives',
-            onClick: () => router.visit('/admin/articles-archives'),
-          },
-          {
-            key: 'admin.articles.trash',
-            label: 'Trashes',
-            onClick: () => router.visit('/admin/articles-trashes'),
-          },
+      ],
+    },
+    {
+      type: 'divider'
+    },
 
-        ],
-      },
-      {
-        type: 'divider'
-      },
-
-      // {
-      //     key: 'roles.index',
-      //     icon: <IdcardOutlined />,
-      //     label: 'Roles',
-      //     onClick: ()=> router.visit('/admin/roles')
-      // },
-      // {
-      //     key: 'permissions.index',
-      //     icon: <HddOutlined />,
-      //     label: 'Permissions',
-      //     onClick: ()=> router.visit('/admin/permissions')
-      // },
-      // {
-      //     key: 'role-has-permissions.index',
-      //     icon: <FileJpgOutlined />,
-      //     label: 'Role Permissions',
-      //     onClick: ()=> router.visit('/admin/role-has-permissions')
-      // },
-      {
-        key: 'admin.users',
-        icon: <UserOutlined />,
-        label: 'Users',
-        onClick: () => router.visit('/admin/users')
-      });
+    {
+      key: 'admin.users',
+      icon: <UserOutlined />,
+      label: 'Users',
+      onClick: () => router.visit('/admin/users')
+    });
 
     // if (paramPermissions.includes('sections.index')) {
     // 	items.push(
@@ -190,7 +182,7 @@ export default function AdminLayout(
                 color: 'white',
               }}
               defaultSelectedKeys={[`${route().current()?.split('.')?.slice(0, -1).join('.')}`]}
-              defaultOpenKeys={['admin.posts']}
+              defaultOpenKeys={['admin.articles']}
               items={
                 navigationItems()
               }
