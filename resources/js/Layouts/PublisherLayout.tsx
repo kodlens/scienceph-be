@@ -57,6 +57,12 @@ export default function PublisherLayout(
             icon: <PlusOutlined  />,
             onClick: () => router.visit('/publisher/articles/create'),
           },
+          {
+            key: 'publisher.trash-articles.index',
+            label: 'Trash Post/Article',
+            icon: <PlusOutlined  />,
+            onClick: () => router.visit('/publisher/trash-articles'),
+          },
         ],
       },
       // {

@@ -15,6 +15,7 @@ const PublisherArticleCreateEdit = ({
   authors,
   agencies,
   regions,
+  regionalOffices,
   tags
 }: CreateEditProps) => {
 
@@ -47,8 +48,7 @@ const PublisherArticleCreateEdit = ({
               authors={authors}
               agencies={agencies}
               regions={regions}
-              tags={tags}
-            />
+              tags={tags} regionalOffices={regionalOffices}            />
 
           </div>
           {/* end input card */}

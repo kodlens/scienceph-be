@@ -129,6 +129,12 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/get-articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'getData'])->name('publisher.articles.get-data');
 
 
+
+
+    Route::get('/trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'index'])->name('publisher.trash-articles.index');
+    Route::get('/get-trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'getData'])->name('publisher.trash-articles.get-data');
+
+
     Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
     Route::post('/articles-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');
     //Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');

@@ -89,6 +89,7 @@ class PublisherArticleController extends ArticleController
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
+        $regionalOffices = $fetcher->getRegionalOffices();
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
@@ -101,6 +102,7 @@ class PublisherArticleController extends ArticleController
             'agencies' => $agencies,
             'regions' => $regions,
             'categories' => $categories,
+            'regionalOffices' => $regionalOffices,
             'sections' => $sections,
             'authors' => $authors
         ]);
@@ -118,6 +120,8 @@ class PublisherArticleController extends ArticleController
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
+        $regionalOffices = $fetcher->getRegionalOffices();
+
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
@@ -131,6 +135,7 @@ class PublisherArticleController extends ArticleController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
+            'regionalOffices' => $regionalOffices,
             'categories' => $categories,
             'sections' => $sections,
             'authors' => $authors

@@ -238,10 +238,17 @@ class ArticleController extends Controller
     {
         $user = Auth::user();
         $data = Article::find($id);
+        $data->status = 'trash';
         $data->trash = 1;
         $name = $user->lname . ',' . $user->fname;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'trash', $user->id, $name);
         $data->save();
+
+        //remove to info table
+        Information::where('source_id', $id)
+            ->update([
+                'is_publish' => 0,
+            ]);
 
         return response()->json([
             'status' => 'trashed',
@@ -298,6 +305,7 @@ class ArticleController extends Controller
                 $user = Auth::user();
                 $data = Article::find($id);
                 $data->status = 'draft';
+                $data->trash = 0;
                 $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
 
