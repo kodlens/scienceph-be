@@ -1,5 +1,5 @@
 import { Article } from "@/types/article";
-import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
+import {  EditOutlined } from "@ant-design/icons";
 import { Eye } from "lucide-react";
 
 export const publisherTrashMenuItem = (
