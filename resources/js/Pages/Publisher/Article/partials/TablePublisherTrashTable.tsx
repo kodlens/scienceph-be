@@ -1,11 +1,9 @@
 import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
-import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
-import { publisherMenuItems } from '@/helper/publisherMenuItems'
 import ArticleView from '@/Components/ArticleView'
 import { publisherTrashMenuItem } from '@/helper/publisherTrashMenuItem'
 
