@@ -89,7 +89,7 @@ const ModalCreateEditUser = ({ id, modalOpen, onClose, refetch }: Props) => {
             onFinish={onFinish}
             initialValues={{
               sex: 'MALE',
-              role: 'USER',
+              role: null,
             }}
           >
             {dom}

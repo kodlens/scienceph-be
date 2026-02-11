@@ -1,7 +1,7 @@
 import { dateFormat, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
 import { router } from '@inertiajs/react'
-import { Table, Dropdown, Button, Pagination, App } from 'antd'
+import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
@@ -197,14 +197,17 @@ const TableAdminArticle = (
                     })
                   },
                   handleDraft: async () => {
-                    await axios.post(`/publisher/articles-unpublish/${article.id}`).then(() => {
+                    await axios.post(`/publisher/articles-draft/${article.id}`).then(() => {
                        notification.success({
-                        message: 'Article has been unpublished and returned to draft.',
+                        message: 'Article has been returned to draft.',
                       })
                       refetch()
                     })
                   },
-                }),
+                  handleDelete: () => {
+
+                  }
+                }) as MenuProps['items'],
               }}
             >
               <Button size="small" type="text">

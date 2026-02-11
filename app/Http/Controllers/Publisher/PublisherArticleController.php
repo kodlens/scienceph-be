@@ -142,9 +142,6 @@ class PublisherArticleController extends ArticleController
         ]);
     }
 
-
-
-
     public function postReturnToEncoder($id){
         $user = Auth::user();
         $data = Post::find($id);

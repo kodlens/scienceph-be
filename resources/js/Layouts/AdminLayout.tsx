@@ -90,7 +90,6 @@ export default function AdminLayout(
           icon: <PlusOutlined  />,
           onClick: () => router.visit('/admin/articles/create'),
         },
-
         {
           key: 'admin.articles.trash',
           label: 'Trash Post/Article',

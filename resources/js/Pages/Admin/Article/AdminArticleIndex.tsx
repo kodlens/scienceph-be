@@ -18,6 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { statusDropdownMenu } from '@/helper/statusMenu';
 import TableAdminArticle from './partials/TableAdminArticle';
+import { Article } from '@/types/article';
 
 const AdminArticleIndex = () => {
 
@@ -136,8 +137,8 @@ const AdminArticleIndex = () => {
     e.currentTarget.src = '/img/no-img.png';
   }
 
-  function onFinishSetPublishDate(values: any): void {
-    axios.post(`/admin/post-set-publish-date/${values.post_id}`, {
+  function onFinishSetPublishDate(values: Article): void {
+    axios.post(`/admin/post-set-publish-date/${values.id}`, {
       publication_date: values.publish_date
     })
       .then((response) => {
@@ -174,13 +175,24 @@ const AdminArticleIndex = () => {
         <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
 
           {/* ================= HEADER ================= */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Articles
-            </h1>
-            <p className="text-sm text-slate-500">
-              Manage, review, and publish science & technology articles
-            </p>
+          <div className="mb-6 flex items-center">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">
+                Articles
+              </h1>
+              <p className="text-sm text-slate-500">
+                Manage, review, and publish science & technology articles
+              </p>
+            </div>
+
+             <Button
+              className='ml-auto'
+                icon={<FileAddOutlined />}
+                type="primary"
+                onClick={() => router.visit('/admin/articles/create')}
+              >
+                New Article
+              </Button>
           </div>
 
           {/* ================= FILTERS ================= */}
@@ -214,17 +226,6 @@ const AdminArticleIndex = () => {
               setPage(p)
             }}
           />
-
-          {/* ================= ACTION ================= */}
-          <div className="flex justify-end mb-4">
-            <Button
-              icon={<FileAddOutlined />}
-              type="primary"
-              onClick={() => router.visit('/encoder/articles/create')}
-            >
-              New Article
-            </Button>
-          </div>
 
 
         </div>
