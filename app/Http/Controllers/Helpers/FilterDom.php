@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Storage;
 
 class FilterDom
 {
-    private $fileCustomPath = 'public/upfiles/'; // <--filepath for remove images from content
+    private $fileCustomPath = 'public/appnews/'; // <--filepath for remove images from content
 
-    private $uploadPath = 'storage/upfiles'; // this is the upload path
+    private $uploadPath = 'storage/appnews'; // this is the upload path
 
     public function __construct()
     {
