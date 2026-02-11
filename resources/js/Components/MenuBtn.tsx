@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react'
-import React, { useState } from 'react'
+import  { useState } from 'react'
 
 export default function MenuBtn() {
 
@@ -7,7 +7,7 @@ export default function MenuBtn() {
 
     const  user:any = usePage().props;
 
-    
+
     return (
         <>
             <div className="flex items-center relative right-0">
@@ -36,10 +36,10 @@ export default function MenuBtn() {
 
             {/* <!-- sidebar --> */}
             <div className={`sidebar ${showingNavigationDropdown ? 'active' : '0'}`}>
-                
+
                 { user.auth.user ? (
                         <div className="sidebar_content">
-                            <Link method="post" href={route('logout')} 
+                            <Link method="post" href={route('logout')}
                                 as="button"
                                 className="text-gray-400 transition-all hover:tracking-[2px]">
                                 <i className="bx bx-log-in"></i>
@@ -86,14 +86,14 @@ export default function MenuBtn() {
                     </div>
 
                     <div className="sidebar_links"></div>
-                    
-                  
-                    
-                    
+
+
+
+
 
                 </div>
             </div>
-            
+
         </>
     )
 }

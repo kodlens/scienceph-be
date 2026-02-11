@@ -1,21 +1,16 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout'
-import { PageProps, User, Status } from '@/types'
-import { Head, router } from '@inertiajs/react'
+import { PageProps } from '@/types'
+import { Head } from '@inertiajs/react'
 
 import {
-  FileAddOutlined, DropboxOutlined,
-  DownOutlined,
-  DeleteOutlined, EditOutlined,
-  EyeOutlined, UserOutlined,
-  ProjectOutlined, DeliveredProcedureOutlined, PaperClipOutlined,
-  PicRightOutlined
+
+  EyeOutlined,
 } from '@ant-design/icons';
 
 import {
-  Card, Space, Table,
-  Pagination, Button, Modal,
-  Form, Input, Select, Checkbox,
-  notification,
+  Space, Table,
+  Pagination, Button,
+  Input,
   Dropdown,
   MenuProps,
   App
@@ -34,29 +29,28 @@ interface PostResponse {
   total: number;
 }
 
-interface Option {
-  label: string;
-  value: string;
-}
+// interface Option {
+//   label: string;
+//   value: string;
+// }
 
 
 import dayjs from 'dayjs';
-import { AnyObject } from 'antd/es/_util/type';
-import { Post } from '@/types/article';
+import { Article } from '@/types/article';
+import { truncate } from '@/helper/helperFunctions';
 
 const dateFormat = (item: Date): string => {
   return dayjs(item).format('MMM-DD-YYYY')
 }
 
 export default function TrashIndex(
-  { auth, statuses, permissions }:
+  { auth}:
     PageProps) {
 
   const { modal } = App.useApp();
 
-  const [form] = Form.useForm();
 
-  const [data, setData] = useState<Post[]>([]);
+  const [data, setData] = useState<Article[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -65,9 +59,8 @@ export default function TrashIndex(
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
 
-  const [errors, setErrors] = useState<any>({});
 
-  const createMenuItems = (data: Post) => {
+  const createMenuItems = (data: Article) => {
 
     const items: MenuProps['items'] = [];
 
@@ -124,6 +117,8 @@ export default function TrashIndex(
     page: number
   ) => {
 
+    setLoading(true)
+
     const params = [
       `perpage=${perPage}`,
       `search=${search}`,
@@ -131,11 +126,14 @@ export default function TrashIndex(
       `status=${status}`
     ].join('&');
     try {
-      const res = await axios.get<PostResponse>(`/panel/get-trashes?${params}`);
+      const res = await axios.get<PostResponse>(`/admin/get-trashes?${params}`);
       setData(res.data.data)
       setTotal(res.data.total)
+      setLoading(false)
+
     } catch (err) {
       console.log(err)
+      setLoading(false)
     }
   }
 
@@ -155,40 +153,6 @@ export default function TrashIndex(
 
 
 
-  //truncate display content on table
-  const truncate = (text: string, limit: number) => {
-    if (text.length > 0) {
-      const words = text.split(' ');
-      if (words.length > limit) {
-        return words.slice(0, limit).join(' ') + '...';
-      }
-      return text;
-    } else {
-      return ''
-    }
-  }
-
-
-  const handClickNew = () => {
-    router.visit('/panel/posts/create');
-  }
-  const handleEditClick = (id: number) => {
-    router.visit('/panel/posts/' + id + '/edit');
-  }
-  const handleTrashClick = (id: number) => {
-    modal.confirm({
-      title: 'Trash?',
-      content: 'Are you sure you want to move to trash this post?',
-      onOk: async () => {
-        const res = await axios.post('/panel/posts-trash/' + id);
-        if (res.data.status === 'trashed') {
-          loadAsync(search, perPage, page);
-        }
-      }
-    })
-  }
-
-
   const handSearchClick = () => {
     loadAsync(search, perPage, page);
   }
@@ -203,9 +167,9 @@ export default function TrashIndex(
     e.currentTarget.src = '/img/no-img.png';
   }
 
-  const bgColor = (color: string) => {
+  // const bgColor = (color: string) => {
 
-  }
+  // }
 
 
   return (
@@ -326,7 +290,7 @@ export default function TrashIndex(
 
               )} />
               <Column title="Action" key="action"
-                render={(_, data: Post) => (
+                render={(_, data: Article) => (
                   <Space size="small">
                     <Dropdown.Button menu={{ items: createMenuItems(data) }} type='primary'>
                       Options

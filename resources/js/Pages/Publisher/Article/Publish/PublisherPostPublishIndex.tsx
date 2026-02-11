@@ -1,6 +1,5 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout'
-import { PageProps, User, Status } from '@/types'
-import { Head, router } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
 
 import { MinusSquareOutlined,
 	EyeOutlined, EnterOutlined
@@ -16,8 +15,8 @@ import {  Space, Table,
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import axios from 'axios';
 import dayjs from 'dayjs';
-import ArticleView from '@/Components/Post/ArticleView';
-import { Post } from '@/types/article';
+import { Article } from '@/types/article';
+import ArticleView from '@/Components/ArticleView';
 
 const { Column } = Table;
 
@@ -32,13 +31,11 @@ const dateFormat = (item:Date):string=> {
 	return dayjs(item).format('MMM-DD-YYYY')
 }
 
-export default function PublisherPostPublishIndex(
-	{  auth, statuses, permissions } :
-	PageProps) {
+export default function PublisherPostPublishIndex() {
 
 	const { modal } = App.useApp();
 
-    const [data, setData] = useState<Post[]>([]);
+    const [data, setData] = useState<Article[]>([]);
 
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
@@ -47,7 +44,7 @@ export default function PublisherPostPublishIndex(
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
 
-	const createMenuItems = (post:Post) => {
+	const createMenuItems = (post:Article) => {
 
 		const items: MenuProps['items'] = [];
 
@@ -55,13 +52,14 @@ export default function PublisherPostPublishIndex(
 		items.push({
 			label: 'View',
 			key: 'publisher.posts-publish',
-			icon: <EyeOutlined />,
+      icon: <EyeOutlined />,
+
 			onClick: () => {
 				modal.info({
 					width: 1024,
 					title: 'Article Display',
 					content: (
-						<ArticleView post={post} className=''/>
+						<ArticleView article={post} className=''/>
 					),
 				onOk() {},
 				});
@@ -70,6 +68,7 @@ export default function PublisherPostPublishIndex(
 			label: 'Return to Author',
 			key: 'publisher.posts-return',
 			icon: <EnterOutlined />,
+
 			onClick: () => {
 				setLoading(true)
 				axios.post('/publisher/posts-return-to-author/' + post.id).then(res=>{
@@ -287,7 +286,7 @@ export default function PublisherPostPublishIndex(
 
 							)}/>
 							<Column title="Action" key="action"
-								render={(_, data: Post) => (
+								render={(_, data: Article) => (
 									<Space size="small">
 										<Dropdown.Button menu={{items: createMenuItems(data) }} type='primary'>
 											Options

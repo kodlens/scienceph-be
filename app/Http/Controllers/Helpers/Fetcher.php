@@ -39,9 +39,12 @@ public function getSections() {
     }
 
      public function getAgencies(){
-        $data = Agency::where('active', 1)->get();
+        //$data = Agency::where('active', 1)->get();
+        $data = Article::distinct('agency')
+            ->select('agency')
+            ->orderBy('agency', 'asc')
+            ->get();
         return $data;
-
     }
 
     public function getAuthorsAutocomplete(){

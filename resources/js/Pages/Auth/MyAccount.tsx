@@ -2,7 +2,7 @@ import { App, Button, Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
 import { SaveOutlined } from "@ant-design/icons";
 import { PageProps } from "@/types";
-import { Head, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import axios from "axios";
 
 export default function MyAccount({ auth }: PageProps) {
@@ -25,9 +25,11 @@ export default function MyAccount({ auth }: PageProps) {
   }, [])
 
   const submit = (values: any) => {
-    console.log('submit', values);
+    setLoading(true)
     axios.patch('/my-account-update', values).then(res => {
       if (res.data.status === "updated") {
+        setLoading(false)
+
         modal.success({
           title: "Updated!",
           content: <div>Your account successfully updated.</div>,
@@ -37,6 +39,8 @@ export default function MyAccount({ auth }: PageProps) {
         });
       }
     }).catch(err => {
+      setLoading(false)
+
       if (err.response.status === 422) {
         setErrors(err.response.data.errors)
       }

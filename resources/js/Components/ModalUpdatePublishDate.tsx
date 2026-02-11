@@ -1,6 +1,6 @@
-import { App, DatePicker, Form, Input, Modal, notification } from 'antd';
+import { DatePicker, Form, Input, Modal, notification } from 'antd';
 import axios from 'axios';
-import React, { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 
 interface Props {
     uri:string;
@@ -18,7 +18,7 @@ const ModalUpdatePublishDate = forwardRef<ModalUpdatePublishDateHandle, Props>((
     const [errors, setErrors] = useState<any>({});
     const [loading, setLoading] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const { modal } = App.useApp();
+    //const { modal } = App.useApp();
 
     useImperativeHandle(ref, () => ({
         openModal: async (id: number) => {

@@ -1,5 +1,5 @@
-import { App, Button, Checkbox, Form, Input, Modal } from 'antd'
-import React, { useState } from 'react'
+import { App, Button,  Form, Input, Modal } from 'antd'
+import { useState } from 'react'
 
 import { EyeTwoTone, EyeInvisibleOutlined, LockOutlined } from '@ant-design/icons';
 import { User } from '@/types';

@@ -1,13 +1,13 @@
-import { FormInstance, Select } from 'antd'
+import { Select } from 'antd'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-type Props = {
-  form: FormInstance
-  value?: string;
-  onChange?: (value: string) => void
-}
-const SelectTags = ( {form }:Props ) => {
+// type Props = {
+//   form: FormInstance
+//   value?: string;
+//   onChange?: (value: string) => void
+// }
+const SelectTags = (  ) => {
 
   const [tags, setTags] = useState<string[]>([])
   const [loading,setLoading] = useState<boolean>(false)

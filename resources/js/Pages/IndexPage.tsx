@@ -1,13 +1,7 @@
 /* ===========================================
-
-
 This is the index page, or the start page ('/')
-
-
 ==============================================*/
-
 import { Head } from '@inertiajs/react'
-import React from 'react'
 
 const IndexPage = () => {
   return (

@@ -9,6 +9,7 @@ import { router } from "@inertiajs/react";
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AuthorAutoComplete from "./AuthorAutoComplete";
+import AgencyAutoComplete from "./AgencyAutoComplete";
 const CreateEditArticle = ({
   id,
   auth,
@@ -213,12 +214,13 @@ const CreateEditArticle = ({
           <div className="flex flex-col md:gap-4 md:flex-row">
             <Form.Item
               name="agency"
-              label="Select Agency"
+              label="Agency"
               className="w-full"
               validateStatus={errors.agency ? "error" : ""}
               help={errors.agency ? errors.agency[0] : ""}
             >
-              <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/>
+              {/* <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/> */}
+              <AgencyAutoComplete agencies={agencies} />
             </Form.Item>
 
             <Form.Item

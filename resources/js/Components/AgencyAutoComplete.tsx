@@ -1,4 +1,5 @@
-import { Author } from '@/types'
+
+import { Agency } from '@/types/agency'
 import { AutoComplete } from 'antd'
 import { useState } from 'react'
 
@@ -7,7 +8,7 @@ import { useState } from 'react'
 
 type Props = {
   //options: AutoCompleteOption[]
-  authors: Author[]
+  agencies: Agency[]
   value?: string
   onChange?: (value: string) => void
 }
@@ -15,9 +16,9 @@ type Props = {
 type AutoCompleteOption = {
   value: string
 }
-export default function AuthorAutoComplete({
+export default function AgencyAutoComplete({
   onChange,
-  authors,
+  agencies,
   value }:
   Props
 ) {
@@ -31,13 +32,13 @@ export default function AuthorAutoComplete({
       return
     }
 
-    const filtered = authors
-      .filter(author =>
-        author.author?.toLowerCase().includes(value.toLowerCase())
+    const filtered = agencies
+      .filter(item =>
+        item.code?.toLowerCase().includes(value.toLowerCase())
       )
-      .filter(author => author.author !== undefined)
-      .map(author => ({
-        value: author.author as string, // ✅ required by AntD
+      .filter(item => item.code !== undefined)
+      .map(item => ({
+        value: item.code as string, // ✅ required by AntD
       }))
 
     setFilteredOptions(filtered)

@@ -1,6 +1,5 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout'
-import { PageProps, User, Status } from '@/types'
-import { Head, router } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
 
 import { MinusSquareOutlined, EnterOutlined,
 	EyeOutlined } from '@ant-design/icons';
@@ -25,27 +24,23 @@ interface PostResponse {
 	total: number;
 }
 
-interface Option {
-	label: string;
-	value: string;
-  }
-
-
+// interface Option {
+// 	label: string;
+// 	value: string;
+//   }
 import dayjs from 'dayjs';
-import ArticleView from '@/Components/Post/ArticleView';
-import { Post } from '@/types/article';
+import { Article } from '@/types/article';
+import ArticleView from '@/Components/ArticleView';
 
 const dateFormat = (item:Date):string=> {
 	return dayjs(item).format('MMM-DD-YYYY')
 }
 
-export default function PublisherPostUnpublishIndex(
-	{  auth, permissions } :
-	PageProps) {
+export default function PublisherPostUnpublishIndex() {
 
 	const { modal } = App.useApp();
 
-    const [data, setData] = useState<Post[]>([]);
+    const [data, setData] = useState<Article[]>([]);
 
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
@@ -54,7 +49,7 @@ export default function PublisherPostUnpublishIndex(
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
 
-	const createMenuItems = (post:Post) => {
+	const createMenuItems = (post:Article) => {
 
 		const items: MenuProps['items'] = [];
 
@@ -68,7 +63,7 @@ export default function PublisherPostUnpublishIndex(
 					width: 1024,
 					title: 'Article Display',
 					content: (
-						<ArticleView post={post} className=''/>
+						<ArticleView article={post} className=''/>
 					),
 				onOk() {},
 				});
@@ -294,7 +289,7 @@ export default function PublisherPostUnpublishIndex(
 
 							)}/>
 							<Column title="Action" key="action"
-								render={(_, data: Post) => (
+								render={(_, data: Article) => (
 									<Space size="small">
 										<Dropdown.Button menu={{items: createMenuItems(data) }} type='primary'>
 											Options

@@ -11,13 +11,13 @@ import axios from 'axios';
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }: { mustVerifyEmail: boolean, status?: string, className?: string }) {
     const user = usePage<PageProps>().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
     });
-    
+
     const [loading, setLoading] = useState(false)
-    const [modal, setModal] = useState(false)
+    //const [modal, setModal] = useState(false)
 
     const submit: FormEventHandler = (e) => {
         setLoading(true)
@@ -28,7 +28,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             //res.data
             if(res.data.status === 'saved'){
                 setLoading(false)
-                setModal(false)
+                //setModal(false)
 
                 alert('saved')
             }
