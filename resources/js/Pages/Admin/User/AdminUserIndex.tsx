@@ -14,6 +14,7 @@ import {
   Input,
   App,
   Popconfirm,
+  Form,
 } from 'antd'
 
 import AdminLayout from '@/Layouts/AdminLayout'
@@ -28,10 +29,13 @@ const { Column } = Table
 
 
 const AdminUserIndex = () => {
+
+  const [form] = Form.useForm();
+
   const { notification } = App.useApp()
 
   const [open, setOpen] = useState(false)
-  const [id, setId] = useState<number>(0)
+  const [user, setUser] = useState<User>()
   const [perPage, setPerPage] = useState(10)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState<string>('')
@@ -57,12 +61,12 @@ const AdminUserIndex = () => {
   /* ===================== ACTIONS ===================== */
 
   const handleNew = () => {
-    setId(0)
+    setUser(undefined)
     setOpen(true)
   }
 
-  const handleEdit = async (userId: number) => {
-    setId(userId)
+  const handleEdit = async (record: User) => {
+    setUser(record)
     setOpen(true)
   }
 
@@ -136,7 +140,23 @@ const AdminUserIndex = () => {
             <Column title="Middle Name" dataIndex="mname" />
             <Column title="Email" dataIndex="email" />
             <Column title="Role" dataIndex="role" />
-
+            <Column
+              title="OJT"
+              dataIndex="is_ojt"
+              key="is_ojt"
+              align="center"
+              render={(is_ojt) => (
+                <span
+                  className={`inline-flex items-center justify-center min-w-[60px] px-3 py-1 text-xs font-semibold rounded-full
+                    ${is_ojt
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red-700'
+                    }`}
+                >
+                  {is_ojt ? 'YES' : 'NO'}
+                </span>
+              )}
+            />
             <Column
               title="Action"
               render={(_, record: User) => (
@@ -145,7 +165,7 @@ const AdminUserIndex = () => {
                     size="small"
                     type="primary"
                     icon={<EditOutlined />}
-                    onClick={() => handleEdit(record.id)}
+                    onClick={() => handleEdit(record)}
                   />
                   <ChangePassword
                     data={record}
@@ -186,10 +206,11 @@ const AdminUserIndex = () => {
         </div>
       </div>
 
-      <ModalCreateEditUser id={id} modalOpen={open}
+      <ModalCreateEditUser user={user} modalOpen={open}
+        form={form}
         onClose={()=>{
           setOpen(false)
-          console.log('set to false');
+          //console.log('set to false');
         }}
         refetch={()=>{
           refetch()

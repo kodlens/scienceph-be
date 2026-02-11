@@ -9,7 +9,8 @@ export interface User {
     mname: string;
     email: string;
     email_verified_at: string;
-    active: boolean;
+    active: boolean | number;
+    is_ojt: boolean | number;
 	  role: string;
 }
 

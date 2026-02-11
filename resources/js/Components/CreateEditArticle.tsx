@@ -289,7 +289,7 @@ const CreateEditArticle = ({
 
 
 
-           <Form.Item
+          <Form.Item
             name="is_press_release"
             valuePropName="checked"
             className="w-full"

@@ -53,6 +53,7 @@ class AdminUserController extends Controller
             'email' => $req->email,
             //'sex' => strtoupper($req->sex),
             'role' => $req->role,
+            'is_ojt' =>$req->is_ojt ? 1 : 0,
             'active' => $req->active ? 1 : 0,
         ]);
 
@@ -80,6 +81,7 @@ class AdminUserController extends Controller
                 'email' => $req->email,
                // 'sex' => strtoupper($req->sex),
                 'role' => $req->role,
+                'is_ojt' =>$req->is_ojt ? 1 : 0,
             ]);
 
         return response()->json([
