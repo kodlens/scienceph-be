@@ -15,9 +15,9 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { statusDropdownMenu } from '@/helper/statusMenu';
-import TableAdminArticle from './partials/TableAdminArticle';
+import TableAdminOjtArticles from './partials/TableAdminOjtArticles';
 
-const AdminArticleIndex = () => {
+const AdminOjtArticleIndex = () => {
 
 
   //const [perPage, setPerPage] = useState(10);
@@ -41,7 +41,7 @@ const AdminArticleIndex = () => {
         `status=${status}`
       ].join('&');
 
-      const res = await axios.get(`/admin/get-articles?${params}`);
+      const res = await axios.get(`/admin/get-ojt-articles?${params}`);
       return res.data;
     },
   });
@@ -173,7 +173,7 @@ const AdminArticleIndex = () => {
           <div className="mb-6 flex items-center">
             <div>
               <h1 className="text-2xl font-semibold text-slate-900">
-                Science & Technology Articles
+                Science & Technology Articles (OJT)
               </h1>
               <p className="text-sm text-slate-500">
                 Manage, review, and publish science & technology articles
@@ -212,7 +212,7 @@ const AdminArticleIndex = () => {
             </Button>
           </div>
 
-          <TableAdminArticle
+          <TableAdminOjtArticles
             data={data}
             isFetching={isFetching}
             refetch={refetch}
@@ -229,7 +229,7 @@ const AdminArticleIndex = () => {
   )
 }
 
-AdminArticleIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
-export default AdminArticleIndex;
+AdminOjtArticleIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+export default AdminOjtArticleIndex;
 
 

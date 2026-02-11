@@ -40,10 +40,13 @@ public function getSections() {
 
      public function getAgencies(){
         //$data = Agency::where('active', 1)->get();
-        $data = Article::distinct('agency')
+        $data = Article::distinct()
             ->select('agency')
+            ->whereNotNull('agency')       // remove null
+            ->where('agency', '!=', '')    // remove empty strings
             ->orderBy('agency', 'asc')
             ->get();
+
         return $data;
     }
 

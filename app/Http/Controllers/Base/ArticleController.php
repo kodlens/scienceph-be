@@ -89,6 +89,7 @@ class ArticleController extends Controller
                     'status' => $req->status,
                     'publish_date' => $dateFormated,
                     'is_publish' => 0,
+                    'is_ojt' => $user->is_ojt,
                     'is_press_release' => $req->is_press_release ? 1 : 0,
                     'record_trail' => (new RecordTrail())
                         ->recordTrail('', 'insert', $user->id, $name),
@@ -164,11 +165,15 @@ class ArticleController extends Controller
         $data->agency = $req->agency ? $req->agency : null;
         $data->region = $req->region ? $req->region : null;
         $data->regional_office = $req->regional_office ? $req->regional_office : null;
-        //$data->tags = $tagsString;
         $data->source_url = $req->source_url;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;
         $data->tags = $tagsString;
+
+        if($user->role === 'encoder'){
+            $data->is_ojt = $user->is_ojt;
+        }
+
         $data->is_press_release = $req->is_press_release ? 1 : 0;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
         $data->save();

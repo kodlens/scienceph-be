@@ -34,7 +34,7 @@ const AdminArticleCreateEdit = ({
           <div className="bg-white p-6 mx-2 md:max-w-7xl w-full" >
 
             <div className="font-bold text-lg pb-2 mb-2 border-b">
-              ADD/EDIT POST
+              ADD/EDIT ARTICLE
             </div>
 
             <CreateEditArticle

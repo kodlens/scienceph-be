@@ -37,7 +37,8 @@ class PublisherArticleController extends ArticleController
 
         $query = Article::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
-            ->where('trash', 0);
+            ->where('trash', 0)
+            ->where('is_ojt', 0);
 
         // Status filter
         if (!empty($status)) {

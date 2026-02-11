@@ -1,6 +1,7 @@
 export const statusDropdownMenu = (role:string) => {
   switch (role.toLowerCase()) {
     case 'admin':
+    case 'administrator':
       return [
         { value: '', label: 'All Status' },
         { value: 'draft', label: 'Draft' },

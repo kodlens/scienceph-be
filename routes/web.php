@@ -93,7 +93,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::get('/get-post-featured', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'getData']);
     Route::post('/post-featured-update-order-no', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'postFeaturedUpdateOrderNo']);
 
-
+    Route::resource('/ojt-articles', App\Http\Controllers\Admin\AdminOjtArticleController::class);
+    Route::get('/get-ojt-articles', [App\Http\Controllers\Admin\AdminOjtArticleController::class, 'getData'])->name('admin.ojt-articles.getdata');
 
     Route::resource('/users', App\Http\Controllers\Admin\AdminUserController::class);
     Route::get('/get-users', [App\Http\Controllers\Admin\AdminUserController::class, 'getData'])->name('users.getdata');

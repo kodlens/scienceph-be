@@ -1,7 +1,7 @@
 
 import { Agency } from '@/types/agency'
 import { AutoComplete } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 
@@ -34,16 +34,15 @@ export default function AgencyAutoComplete({
 
     const filtered = agencies
       .filter(item =>
-        item.code?.toLowerCase().includes(value.toLowerCase())
+        item.agency?.toLowerCase().includes(value.toLowerCase())
       )
-      .filter(item => item.code !== undefined)
+      .filter(item => item.agency !== undefined)
       .map(item => ({
-        value: item.code as string, // ✅ required by AntD
+        value: item.agency as string, // ✅ required by AntD
       }))
 
     setFilteredOptions(filtered)
   }
-
 
   // const handleSelect = (value: string) => {
   //   form.setFieldsValue({

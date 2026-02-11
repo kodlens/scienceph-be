@@ -28,7 +28,6 @@ const ModalCreateEditUser = ({ user, modalOpen, onClose, refetch, form }: Props)
     }else{
       form.resetFields()
     }
-
   }, [modalOpen])
 
   /* ===================== SUBMIT ===================== */

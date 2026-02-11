@@ -79,16 +79,22 @@ export default function AdminLayout(
       label: 'Articles',
       children: [
         {
+          key: 'admin.articles.create',
+          label: 'New Post/Article',
+          icon: <PlusOutlined  />,
+          onClick: () => router.visit('/admin/articles/create'),
+        },
+        {
           key: 'admin.articles.index',
           label: 'Articles',
           icon: <FormOutlined />,
           onClick: () => router.visit('/admin/articles'),
         },
         {
-          key: 'admin.articles.create',
-          label: 'New Post/Article',
-          icon: <PlusOutlined  />,
-          onClick: () => router.visit('/admin/articles/create'),
+          key: 'admin.ojt-articles.index',
+          label: 'OJT Entry Articles',
+          icon: <FormOutlined />,
+          onClick: () => router.visit('/admin/ojt-articles'),
         },
         {
           key: 'admin.articles.trash',
@@ -109,42 +115,6 @@ export default function AdminLayout(
       label: 'Users',
       onClick: () => router.visit('/admin/users')
     });
-
-    // if (paramPermissions.includes('sections.index')) {
-    // 	items.push(
-    //     );
-    // }
-
-    // if (paramPermissions.includes('categories.index')) {
-    // 	items.push( );
-    // }
-
-    // if (paramPermissions.includes('posts.index')) {
-    // 	items.push();
-    // }
-
-    // if (paramPermissions.includes('trashes.index')) {
-    // 	items.push();
-    // }
-
-
-    // if (paramPermissions.includes('roles.index')) {
-    // 	items.push();
-    // }
-
-    // if (paramPermissions.includes('permissions.index')) {
-    // 	items.push(
-    //     );
-    // }
-    // if (paramPermissions.includes('role-has-permissions.index')) {
-    // 	items.push(
-    //     );
-    // }
-
-    // if (paramPermissions.includes('users.index')) {
-    // 	items.push(
-    //     ;
-    // }
 
     return items;
   }
@@ -221,7 +191,7 @@ export default function AdminLayout(
             style={{
               margin: 0,
               padding: 0,
-              height: '100vh',
+              height: 'calc(100vh - 64px)', // 100vh',
               background: "#dce6ec",
               overflow: 'auto',
               borderRadius: 0,
