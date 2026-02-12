@@ -265,13 +265,14 @@ const CreateEditArticle = ({
             <Form.Item
               name="status"
               className="w-full"
-              label="Select Status"
+              label="Status (Read Only)"
               validateStatus={
                 errors.status ? "error" : ""
               }
               help={errors.status ? errors.status[0] : ""}
             >
               <Select
+                disabled
                 options={statusDropdownMenu((auth.user as User).role)}
               >
               </Select>
