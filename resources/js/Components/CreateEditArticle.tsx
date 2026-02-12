@@ -137,26 +137,74 @@ const CreateEditArticle = ({
       }}
     >
 
-      <div className="flex flex-col-reverse gap-4">
+      <Form.Item
+        name="title"
+        label="Title"
+        validateStatus={errors.title ? "error" : ""}
+        help={errors.title ? errors.title[0] : ""}
+      >
+        <Input placeholder="Title" />
+      </Form.Item>
+
+      <Form.Item
+        name="slug"
+        label="Slug (Read Only)"
+        validateStatus={errors.slug ? "error" : ""}
+        help={errors.slug ? errors.slug[0] : ""}
+      >
+        <Input disabled placeholder="Slug" />
+      </Form.Item>
+
+      <div className="flex flex-col md:flex-row gap-4">
+
+        <Form.Item
+          name="author"
+          label="Author Name"
+          className="w-full"
+          validateStatus={errors.author ? "error" : ""}
+          help={errors.author ? errors.author[0] : ""}
+        >
+          <AuthorAutoComplete authors={authors} />
+        </Form.Item>
+
+        <Form.Item
+          name="publish_date"
+          label="Publish Date"
+          className="w-full"
+          validateStatus={errors.publish_date ? "error" : ""}
+          help={errors.publish_date ? errors.publish_date[0] : ""}
+        >
+          <DatePicker className="w-full" placeholder="Publish Date" />
+        </Form.Item>
+      </div>
+
+      {/* CKEditor */}
+      <div className="w-full">
+
+        {/* EDITOR CK WYSIWYG */}
+        <div className="min-h-[300px] ">
+          <Form.Item
+            label="Write your content here"
+            name="description"
+            className="prose-lg !max-w-none"
+            validateStatus={
+              errors.description ? "error" : ""
+            }
+            help={
+              errors.description
+                ? errors.description[0]
+                : ""
+            }
+          >
+            <Ckeditor post={article || undefined} form={form} ckLicense={ckLicense} />
+          </Form.Item>
+        </div>
+
+      </div>
+      <div className="flex gap-4">
 
         <div className="w-full">
-          <Form.Item
-            name="title"
-            label="Title"
-            validateStatus={errors.title ? "error" : ""}
-            help={errors.title ? errors.title[0] : ""}
-          >
-            <Input placeholder="Title" />
-          </Form.Item>
 
-          <Form.Item
-            name="slug"
-            label="Slug (Read Only)"
-            validateStatus={errors.slug ? "error" : ""}
-            help={errors.slug ? errors.slug[0] : ""}
-          >
-            <Input disabled placeholder="Slug" />
-          </Form.Item>
 
           <div className="flex flex-col md:gap-4 md:flex-row">
             <Form.Item
@@ -185,20 +233,6 @@ const CreateEditArticle = ({
             </Form.Item>
 
           </div>
-
-
-          <Form.Item
-            name="author"
-            label="Author Name"
-            className="w-full"
-            validateStatus={errors.author ? "error" : ""}
-            help={errors.author ? errors.author[0] : ""}
-          >
-            <AuthorAutoComplete authors={authors} />
-          </Form.Item>
-
-
-
 
           <Form.Item
             name="source_url"
@@ -260,8 +294,7 @@ const CreateEditArticle = ({
             />
           </Form.Item>
 
-
-          <div className="flex flex-col md:gap-4 md:flex-row">
+          {/* <div className="flex flex-col md:gap-4 md:flex-row">
             <Form.Item
               name="status"
               className="w-full"
@@ -277,18 +310,8 @@ const CreateEditArticle = ({
               >
               </Select>
             </Form.Item>
-            <Form.Item
-              name="publish_date"
-              label="Publish Date"
-              className="w-full"
-              validateStatus={errors.publish_date ? "error" : ""}
-              help={errors.publish_date ? errors.publish_date[0] : ""}
-            >
-              <DatePicker className="w-full" placeholder="Publish Date" />
-            </Form.Item>
-          </div>
 
-
+          </div> */}
 
           <Form.Item
             name="is_press_release"
@@ -339,34 +362,11 @@ const CreateEditArticle = ({
               BACK
             </Button>
           </div>
-
         </div>
 
 
 
-        {/* CKEditor */}
-        <div className="w-full">
 
-          {/* EDITOR CK WYSIWYG */}
-          <div className="min-h-[300px] ">
-            <Form.Item
-              label="Write your content here"
-              name="description"
-              className="prose-lg !max-w-none"
-              validateStatus={
-                errors.description ? "error" : ""
-              }
-              help={
-                errors.description
-                  ? errors.description[0]
-                  : ""
-              }
-            >
-              <Ckeditor post={article || undefined} form={form} ckLicense={ckLicense} />
-            </Form.Item>
-          </div>
-
-        </div>
 
       </div>
       {/* flex contaner */}

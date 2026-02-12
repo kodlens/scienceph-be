@@ -24,11 +24,11 @@ class ArticleController extends Controller
     {
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
-            'author' => ['required', 'string', 'nullable'],
+            'author' => ['string', 'nullable'],
             'description' => ['required'],
             'category' => ['required'],
             'section' => ['required'],
-            'publish_date' => ['required'],
+            //'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',
         ]);
@@ -116,9 +116,10 @@ class ArticleController extends Controller
         $req->validate([
             'title' => ['required', 'unique:articles,title,' . $id . ',id'],
             'description' => ['required', 'string'],
+            'author' => ['string', 'nullable'],
             'category' => ['required'],
             'section' => ['required'],
-            'publish_date' => ['required'],
+            //'publish_date' => ['required'],
         ]);
 
 
