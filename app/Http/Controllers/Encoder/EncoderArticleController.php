@@ -69,7 +69,7 @@ class EncoderArticleController extends ArticleController
         $authors = $fetcher->getAuthorsAutocomplete();
 
         return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
-            'id', 0,
+            'id' => 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
             'tags' => $tags,

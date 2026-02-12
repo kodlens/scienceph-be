@@ -1,4 +1,3 @@
-import { statusDropdownMenu } from "@/helper/statusMenu";
 import { CreateEditProps, User } from "@/types";
 import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
@@ -10,6 +9,8 @@ import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AuthorAutoComplete from "./AuthorAutoComplete";
 import AgencyAutoComplete from "./AgencyAutoComplete";
+import { statusDropdownMenu } from "@/helper/statusMenu";
+import InputTitleWithValidation from "./InputTitleWithValidation";
 const CreateEditArticle = ({
   id,
   auth,
@@ -58,7 +59,6 @@ const CreateEditArticle = ({
 
     } catch (err) { }
   };
-
 
 
   const submit = (values: Article) => {
@@ -137,14 +137,7 @@ const CreateEditArticle = ({
       }}
     >
 
-      <Form.Item
-        name="title"
-        label="Title"
-        validateStatus={errors.title ? "error" : ""}
-        help={errors.title ? errors.title[0] : ""}
-      >
-        <Input placeholder="Title" />
-      </Form.Item>
+      <InputTitleWithValidation id={id} errors={errors} setErrors={setErrors}/>
 
       <Form.Item
         name="slug"
@@ -294,7 +287,7 @@ const CreateEditArticle = ({
             />
           </Form.Item>
 
-          {/* <div className="flex flex-col md:gap-4 md:flex-row">
+          <div className="flex flex-col md:gap-4 md:flex-row">
             <Form.Item
               name="status"
               className="w-full"
@@ -311,7 +304,7 @@ const CreateEditArticle = ({
               </Select>
             </Form.Item>
 
-          </div> */}
+          </div>
 
           <Form.Item
             name="is_press_release"

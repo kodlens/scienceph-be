@@ -40,6 +40,11 @@ Route::get('/get-tags', [App\Http\Controllers\OpenController::class, 'getTags'])
 
 Route::middleware('auth')->group(function () {
 
+
+
+    Route::post('/article/validate-title/{id}', [App\Http\Controllers\Validation\InputTitleController::class, 'inputTitle']);
+
+
     Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index']);
     Route::patch('/my-account-update', [App\Http\Controllers\Auth\MyAccountController::class, 'update']);
 

@@ -64,7 +64,7 @@ const TableEncoderArticle = ( { data, isFetching, refetch, page, paginationPageC
                     </div>
                     <div>
                       <div className="text-slate-500">Author</div>
-                      <div className="font-medium">{article.author}</div>
+                      <div className="font-medium">{article.author ?? ''}</div>
                     </div>
                     <div>
                       <div className="text-slate-500">Modified</div>
@@ -167,7 +167,7 @@ const TableEncoderArticle = ( { data, isFetching, refetch, page, paginationPageC
                     statusStyles[status] ?? 'bg-slate-100'
                   }`}
                 >
-                  {status.toUpperCase()}
+                  {status?.toUpperCase()}
                 </span>
               )}
             />
