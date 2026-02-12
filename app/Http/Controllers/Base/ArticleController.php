@@ -89,7 +89,7 @@ class ArticleController extends Controller
                     'status' => $req->status,
                     'publish_date' => $dateFormated,
                     'is_publish' => 0,
-                    'is_ojt' => $user->is_ojt,
+                    'is_ojt' => $user->role === 'encoder' ? $user->is_ojt : 0,
                     'is_press_release' => $req->is_press_release ? 1 : 0,
                     'record_trail' => (new RecordTrail())
                         ->recordTrail('', 'insert', $user->id, $name),
