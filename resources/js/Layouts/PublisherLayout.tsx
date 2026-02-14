@@ -4,7 +4,6 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined, FormOutlined, LockOutlined,
-  PlusOutlined,
   MenuOutlined
 } from '@ant-design/icons';
 
@@ -50,12 +49,6 @@ export default function PublisherLayout(
             label: 'Articles',
             icon: <FormOutlined />,
             onClick: () => router.visit('/publisher/articles'),
-          },
-          {
-            key: 'publisher.articles.create',
-            label: 'New Post/Article',
-            icon: <PlusOutlined  />,
-            onClick: () => router.visit('/publisher/articles/create'),
           },
           {
             key: 'publisher.trash-articles.index',

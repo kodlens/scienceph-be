@@ -281,7 +281,7 @@ class ArticleController extends Controller
                     'description' => $data->description,
                     'description_text' => $data->description_text,
                     'alias' => $data->alias,
-                    'agency_code' => 'DOST-STII',
+                    'agency_code' => $req->agency,
                     'tags' => $data->tags,
                     'source' => 'scienceph',
                     'source_url' => 'https://www.science.ph',

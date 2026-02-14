@@ -24,7 +24,9 @@ export const truncate = (text: string, limit: number) => {
     }
 };
 
-export const formatNumber = (value: number) => {
-    return new Intl.NumberFormat("en-US").format(value)
+export const formatNumber = (value?: number | null) => {
+  if (typeof value !== "number" || isNaN(value)) {
+    return "0"
+  }
+  return new Intl.NumberFormat("en-US").format(value)
 }
-

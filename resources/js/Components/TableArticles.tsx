@@ -1,4 +1,4 @@
-import { dateFormat, truncate } from '@/helper/helperFunctions'
+import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
 import { Article } from '@/types/article'
 import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
@@ -241,7 +241,7 @@ const TableArticles = (
       </Table>
 
       {/* ================= PAGINATION ================= */}
-      <div className="mt-6 mb-4 flex justify-end">
+      <div className="mt-6 mb-4 flex justify-between">
         <Pagination
           size="small"
           current={page}
@@ -250,6 +250,11 @@ const TableArticles = (
             paginationPageChange(value)
           }}
         />
+
+        <div className="flex items-center gap-2 text-gray-700 font-medium">
+          <span>Total:</span>
+          <span className="font-bold text-gray-900">{formatNumber(data?.total)}</span>
+        </div>
       </div>
 
     </>

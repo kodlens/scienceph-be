@@ -31,13 +31,6 @@ export default function ArticleView({ article, className }: {article:Article, cl
 
             <div className='mt-4 ck ck-content relative' dangerouslySetInnerHTML={{ __html: article.description ?? ''}}></div>
 
-
-            {/* <div className='border-t py-4 my-6'>
-                <div className="w-[300px] text-justify">
-                    <div className="font-bold">{post.author.firstname} {post.author.lastname }</div>
-                    <div>{post.author.bio}</div>
-                </div>
-            </div> */}
         </div>
     )
 }

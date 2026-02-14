@@ -77,7 +77,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource('/categories', App\Http\Controllers\Admin\AdminCategoryController::class)->names('admin.categories');
     Route::get('/get-categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'getData'])->name('admin.categories-get-data');
 
-    Route::resource('/articles', App\Http\Controllers\Admin\AdminArticleController::class);
+    Route::resource('/articles', App\Http\Controllers\Admin\AdminArticleController::class)->names('admin.articles');
     Route::get('/get-articles', [App\Http\Controllers\Admin\AdminArticleController::class, 'getData'])->name('admin.articles.getdata');
 
     Route::post('/article-trash/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'trash'])->name('article.trash');
@@ -91,8 +91,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     //Route::post('/article-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
 
 
-    Route::resource('/article-trashes', App\Http\Controllers\Admin\AdminTrashController::class);
-    Route::get('/get-article-trashes', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('trashes.get-data');
+    Route::resource('/trash-articles', App\Http\Controllers\Admin\AdminTrashController::class)->names('admin.trash-articles');
+    Route::get('/get-trash-articles', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('trashes.get-data');
 
     // ARCHIVES CONTORLLER AND LOGICS
     //Route::resource('/post-archives', App\Http\Controllers\Admin\AdminPostArchiveController::class);
@@ -102,8 +102,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     // Route::get('/get-post-featured', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'getData']);
     // Route::post('/post-featured-update-order-no', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'postFeaturedUpdateOrderNo']);
 
-    Route::resource('/ojt-articles', App\Http\Controllers\Admin\AdminOjtArticleController::class);
+    Route::resource('/ojt-articles', App\Http\Controllers\Admin\AdminOjtArticleController::class)->names('admin.ojt-articles');
     Route::get('/get-ojt-articles', [App\Http\Controllers\Admin\AdminOjtArticleController::class, 'getData'])->name('admin.ojt-articles.getdata');
+
+
 
     Route::resource('/users', App\Http\Controllers\Admin\AdminUserController::class);
     Route::get('/get-users', [App\Http\Controllers\Admin\AdminUserController::class, 'getData'])->name('users.getdata');

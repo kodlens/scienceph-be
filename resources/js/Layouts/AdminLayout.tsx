@@ -7,8 +7,7 @@ import {
   UserOutlined, ProfileOutlined,
   FormOutlined,
   BarsOutlined,
-  DashboardOutlined,
-  PlusOutlined
+  DashboardOutlined
 } from '@ant-design/icons';
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
@@ -74,33 +73,27 @@ export default function AdminLayout(
       type: 'divider',
     },
     {
-      key: 'admin.articles',
+      key: 'articles',
       icon: <FormOutlined />,
       label: 'Articles',
       children: [
         {
-          key: 'admin.articles.create',
-          label: 'New Post/Article',
-          icon: <PlusOutlined  />,
-          onClick: () => router.visit('/admin/articles/create'),
-        },
-        {
-          key: 'admin.articles.index',
+          key: 'admin.articles',
           label: 'Articles',
           icon: <FormOutlined />,
           onClick: () => router.visit('/admin/articles'),
         },
         {
-          key: 'admin.ojt-articles.index',
+          key: 'admin.ojt-articles',
           label: 'OJT Entry Articles',
           icon: <UserPen size={15}/>,
           onClick: () => router.visit('/admin/ojt-articles'),
         },
         {
-          key: 'admin.articles.trash',
+          key: 'admin.trash-articles',
           label: 'Trash Post/Article',
           icon: <DatabaseZap size={15} />,
-          onClick: () => router.visit('/admin/article-trashes'),
+          onClick: () => router.visit('/admin/trash-articles'),
         },
 
       ],
@@ -119,6 +112,7 @@ export default function AdminLayout(
     return items;
   }
 
+  console.log(`${route().current()?.split('.')?.slice(0, -1).join('.')}`);
 
   return (
     <>
@@ -151,7 +145,7 @@ export default function AdminLayout(
                 color: 'white',
               }}
               defaultSelectedKeys={[`${route().current()?.split('.')?.slice(0, -1).join('.')}`]}
-              defaultOpenKeys={['admin.articles']}
+              defaultOpenKeys={['articles']}
               items={
                 navigationItems()
               }

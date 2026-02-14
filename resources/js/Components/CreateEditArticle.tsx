@@ -261,7 +261,9 @@ const CreateEditArticle = ({
             </Form.Item>
           </div>
 
-          <Form.Item
+
+          {/* Remove temporarily, discussed with team */}
+          {/* <Form.Item
             name="regional_office"
             label="Select Region Office"
             className="w-full"
@@ -269,7 +271,7 @@ const CreateEditArticle = ({
             help={errors.regional_office ? errors.regional_office[0] : ""}
           >
             <Select options={regionalOffices ? regionalOffices.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             name="tags"

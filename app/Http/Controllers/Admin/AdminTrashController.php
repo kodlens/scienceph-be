@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Post;
+use App\Models\Article;
 use Inertia\Inertia;
 use Inertia\Response;
 use Auth;
@@ -18,48 +18,46 @@ class AdminTrashController extends Controller
         return Inertia::render('Admin/Trash/TrashIndex');
     }
 
+   //get trash list
     public function getData(Request $req){
 
-        $sort = explode('.', $req->sort_by);
+        $perPage = $req->integer('perpage', 10);
+        $status  = $req->string('status')->toString();
+        $title  = $req->string('title')->toString();
 
-        $data = Post::with('subjects');
+        $query = Article::query()
+            ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
+            ->where('trash', 1);
 
-        if (!empty($req->search)) {
-            $data->where('title', 'like', '%' . $req->search . '%');
+        if(!empty($req->encoder)){
+            $query->whereHas('encodedBy', function($q) use ($req){
+                $q->where('lname', $req->encoder)
+                ->orWhere('fname', $req->encoder);
+            });
         }
 
-        /** for the meantime, author and publisher and admin can access this
-         * roles that created aside from these roles name is not allowed to get data here
-        */
-        $user = Auth::user();
-
-       //AUTHOR
-        if(strtolower($user->role) === 'author'){
-
-            return $data->where('author_id', $user->id)
-                ->where('trash', 1)
-                ->orderBy('id', 'desc')
-                ->paginate($req->perpage);
+        if(!empty($req->modifier)){
+            $query->whereHas('modifiedBy', function($q) use ($req){
+                $q->where('lname', $req->modifier)
+                ->orWhere('fname', $req->modifier);
+            });
         }
 
-         //PUBLISHER
-         if(strtolower($user->role) === 'publisher'){
 
-            return $data->whereIn('status_id', ['7', '6', '2', '8'])
-                ->where('trash', 1)
-                ->orderBy('id', 'desc')
-                ->paginate($req->perpage);
-        }
 
-        //PUBLISHER AND ADMIN
-        if(strtolower($user->role) === 'admin'){
+        // Search filter
+        $query->when($title, function ($q) use ($title) {
+            $q->where(function ($qq) use ($title) {
+                $qq->where('title', 'like', "%{$title}%")
+                ->orWhere('id', 'like', "%{$title}%");
+            });
+        });
 
-            return $data
-                ->orderBy('id', 'desc')
-                ->paginate($req->perpage);
-        }
+        // Sorting & pagination
+        $articles = $query
+            ->orderByDesc('id')
+            ->paginate($perPage);
 
-        return [];
+        return response()->json($articles);
     }
-
 }

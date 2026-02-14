@@ -83,18 +83,6 @@ export default function EncoderPostIndex() {
             refetch={refetch}
           />
 
-
-          {/* <TablePublisherArticle
-            data={data}
-            isFetching={isFetching}
-            refetch={refetch}
-            paginationPageChange={(v) => {
-              console.log(v);
-              setPage(v)
-            }}
-            page={page}
-          /> */}
-
            <TableArticles
             routePrefix='publisher'
             data={data}
