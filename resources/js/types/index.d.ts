@@ -165,3 +165,38 @@ export interface Dostv {
     created_at:Date;
     updated_at:Date;
 }
+
+
+// AI generated (vibe coding :)
+export interface DashboardStats {
+    total: number
+    published: number
+    draft: number
+    trashed: number
+    press: number
+    total_views: number
+    this_month: number
+}
+
+export interface RecentArticle {
+    id: number
+    title: string
+    status: string
+    publish_date: string | null
+    created_at: string
+}
+
+export interface TopArticle {
+    id: number
+    title: string
+    hits: number
+    publish_date: string
+}
+
+export interface MonthlyData {
+    id: number
+    title: string
+    hits: number
+    publish_date: string
+}
+

@@ -1,47 +1,85 @@
-import ArticleByQuarterCard from "@/Components/Reports/ArticleByQuarterCard";
-import ArticlesByStatusChart from "@/Components/Reports/ArticleByStatusChart";
-import PublicationTimelinessTable from "@/Components/Reports/PublicationTimelinessTable";
-import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PageProps } from "@/types";
-import { Head } from "@inertiajs/react";
-import { ReactNode } from "react";
+import { useEffect, useState } from "react"
+import axios from "axios"
 
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
+import { DashboardStats, RecentArticle, TopArticle } from "@/types"
+import StatCard from "@/Components/StatCard"
+import TableSection from "@/Components/TableSection"
+import Loader from "@/Components/Loader"
 
-export default function PublisherDashboard({ auth }: PageProps) {
-  console.log(auth);
+const PublisherDashboard = () => {
 
-  const fullName = `${auth.user.lname} ${auth.user.mname ?? ''} ${auth.user.lname}`.trim();
+    const [stats, setStats] = useState<DashboardStats | null>(null)
+    const [recent, setRecent] = useState<RecentArticle[]>([])
+    const [topArticles, setTopArticles] = useState<TopArticle[]>([])
+    const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-  return (
-    <>
-      <Head title="Dashboard" />
+    const fetchData = async () => {
+        try {
+            const [statsRes, recentRes, topRes] = await Promise.all([
+                axios.get<DashboardStats>("/dashboard/stats"),
+                axios.get<RecentArticle[]>("/dashboard/recent"),
+                axios.get<TopArticle[]>("/dashboard/top-articles"),
+            ])
 
-      <div className="py-6 px-4 sm:px-6 lg:px-8 space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-800">Publisher Dashboard</h1>
-          <p className="text-gray-600">Welcome, {fullName}</p>
+            setStats(statsRes.data)
+            setRecent(recentRes.data)
+            setTopArticles(topRes.data)
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    if (loading) return <div className="flex items-center justify-center h-screen">
+      <Loader />
+    </div>
+
+    return (
+        <div className="p-6 space-y-6">
+
+            {/* Stat Cards */}
+            <div className="grid lg:grid-cols-2 xl:grid-cols-5 gap-4">
+                <StatCard title="Total Articles" value={stats?.total} />
+                <StatCard title="Published" value={stats?.published} />
+                <StatCard title="Draft" value={stats?.draft} />
+                <StatCard title="Trashed" value={stats?.trashed} />
+                <StatCard title="Total Views" value={stats?.total_views} />
+            </div>
+
+            {/* Second Row */}
+            <div className="grid grid-cols-2 gap-4">
+                <StatCard title="Articles This Month" value={stats?.this_month} />
+                <StatCard title="Press Releases" value={stats?.press} />
+            </div>
+
+            {/* Recent Articles */}
+            <TableSection
+                title="Recent Articles"
+                data={recent}
+                type="recent"
+            />
+
+            {/* Top Viewed */}
+            <TableSection
+                title="Top Viewed Articles"
+                data={topArticles}
+                type="top"
+            />
+
         </div>
-
-        <div className="bg-white rounded-2xl shadow p-6">
-          <h2 className="text-xl font-medium text-gray-700 mb-4">Quarterly Publication Report</h2>
-          <ArticleByQuarterCard />
-        </div>
-
-        <div className="bg-white rounded-2xl shadow p-6">
-          <ArticlesByStatusChart />
-        </div>
-
-        <div className="bg-white rounded-2xl shadow p-6">
-          <PublicationTimelinessTable />
-        </div>
-      </div>
-    </>
-  );
+    )
 }
 
-PublisherDashboard.layout = (page: ReactNode) => (
-  <Authenticated user={(page as any).props.auth.user}>
-    {page}
-  </Authenticated>
-);
+
+
+
+PublisherDashboard.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+
+export default PublisherDashboard;

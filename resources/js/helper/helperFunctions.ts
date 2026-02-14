@@ -24,3 +24,7 @@ export const truncate = (text: string, limit: number) => {
     }
 };
 
+export const formatNumber = (value: number) => {
+    return new Intl.NumberFormat("en-US").format(value)
+}
+

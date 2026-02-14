@@ -51,6 +51,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'index']);
     Route::post('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'changePassword']);
 
+    //common report for dashboard, only authenticated can access this route
+    Route::get('/dashboard/stats', [App\Http\Controllers\DashboardController::class, 'stats']);
+    Route::get('/dashboard/recent', [App\Http\Controllers\DashboardController::class, 'recent']);
+    Route::get('/dashboard/monthly', [App\Http\Controllers\DashboardController::class, 'monthly']);
+    Route::get('/dashboard/top-articles', [App\Http\Controllers\DashboardController::class, 'topArticles']);
+
+
 });
 
 

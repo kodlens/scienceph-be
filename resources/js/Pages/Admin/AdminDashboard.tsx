@@ -1,43 +1,99 @@
-import ArticleByQuarterCard from '@/Components/Reports/ArticleByQuarterCard';
-import ArticlesByStatusChart from '@/Components/Reports/ArticleByStatusChart';
-import PublicationTimelinessTable from '@/Components/Reports/PublicationTimelinessTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types'
-import { Head } from '@inertiajs/react'
+import { DashboardStats, MonthlyData, PageProps, TopArticle } from '@/types'
+
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 
 
-const AdminDashboard = ({ auth }: PageProps)  =>{
-    const fullName = `${auth.user.fname} ${auth.user.mname ?? ''} ${auth.user.lname}`.trim();
-    return (
-        <>
+const AdminDashboard = () => {
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [monthly, setMonthly] = useState<MonthlyData[]>([])
+  const [topArticles, setTopArticles] = useState<TopArticle[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
-            <Head title="Dashboard"/>
-            <div className="py-6 px-4 sm:px-6 lg:px-8 space-y-6">
-                <div>
-                    <h1 className="text-2xl font-semibold text-gray-800">Publisher Dashboard</h1>
-                    <p className="text-gray-600">Welcome, { fullName } </p>
-                </div>
+  useEffect(() => {
+    fetchDashboard()
+  }, [])
 
-                <div className="bg-white rounded-2xl shadow p-6">
-                    <h2 className="text-xl font-medium text-gray-700 mb-4">Quarterly Publication Report</h2>
-                    <ArticleByQuarterCard />
-                </div>
+  const fetchDashboard = async () => {
+    try {
+      const [statsRes, monthlyRes, topRes] = await Promise.all([
+        axios.get<DashboardStats>("/dashboard/stats"),
+        axios.get<MonthlyData[]>("/dashboard/monthly"),
+        axios.get<TopArticle[]>("/dashboard/top-articles"),
+      ])
 
-                <div className="bg-white rounded-2xl shadow p-6">
-                    <ArticlesByStatusChart />
-                </div>
+      setStats(statsRes.data)
+      setMonthly(monthlyRes.data)
+      setTopArticles(topRes.data)
 
-                <div className="bg-white rounded-2xl shadow p-6">
-                    <PublicationTimelinessTable />
-                </div>
+    } catch (error) {
+      console.error("Dashboard error:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-            </div>
+  if (loading) {
+    return <div className="p-6">Loading dashboard...</div>
+  }
 
-        </>
-    )
+  return (
+    <div className="p-6 space-y-6">
+
+      {/* Stats Section */}
+      <div className="grid grid-cols-4 gap-4">
+        <StatCard title="Total Articles" value={stats?.total} />
+        <StatCard title="Published" value={stats?.published} />
+        <StatCard title="Draft" value={stats?.draft} />
+        <StatCard title="Total Views" value={stats?.total_views} />
+      </div>
+
+      {/* Top Articles Table */}
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-4">
+          Top Viewed Articles
+        </h2>
+
+        <table className="w-full text-sm">
+          <thead className="border-b">
+            <tr>
+              <th className="text-left py-2">Title</th>
+              <th className="text-left py-2">Views</th>
+              <th className="text-left py-2">Publish Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {topArticles.map(article => (
+              <tr key={article.id} className="border-b">
+                <td className="py-2">{article.title}</td>
+                <td className="py-2">{article.hits}</td>
+                <td className="py-2">{article.publish_date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  )
 }
 
-AdminDashboard.layout = (page:any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+interface StatCardProps {
+  title: string
+  value?: number
+}
+
+const StatCard = ({ title, value = 0 }: StatCardProps) => {
+  return (
+    <div className="bg-white p-4 rounded shadow">
+      <p className="text-gray-500 text-sm">{title}</p>
+      <h2 className="text-2xl font-bold">{value}</h2>
+    </div>
+  )
+}
+
+AdminDashboard.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
 
 export default AdminDashboard;
