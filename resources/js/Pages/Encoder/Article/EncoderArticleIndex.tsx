@@ -11,8 +11,6 @@ import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
-
-import TableEncoderArticle from './partials/TableEncoderArticle'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableArticles'
 

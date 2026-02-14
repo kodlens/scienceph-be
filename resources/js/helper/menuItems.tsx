@@ -10,7 +10,8 @@ export const menuItems = (
     handlePublish,
     handleDraft,
     handleDelete,
-    article
+    article,
+    prefix
   }:
   {
     handleEditClick?: () => void,
@@ -19,7 +20,8 @@ export const menuItems = (
     handlePublish?: () => void,
     handleDraft?: () => void,
     handleDelete?: () => void
-    article?: Article
+    article?: Article,
+    prefix: string
   }
 ) => {
   const items = []
@@ -27,7 +29,7 @@ export const menuItems = (
   if(handleEditClick){
     items.push({
       label: 'Edit',
-      key: 'admin.articles.edit',
+      key: `${prefix}.articles.edit`,
       disabled: article?.status === 'publish',
       icon: <EditOutlined />,
       onClick: () => handleEditClick(),
@@ -37,7 +39,7 @@ export const menuItems = (
   if(handleTrashClick){
     items.push({
       label: 'Trash',
-      key: 'admin.articles.trash',
+      key: `${prefix}.articles.trash`,
       disabled: article?.status === 'publish',
       icon: <DeleteOutlined />,
       onClick: () => handleTrashClick()
@@ -47,7 +49,7 @@ export const menuItems = (
   if(handlePublish){
     items.push({
       label: 'Publish',
-      key: 'admin.articles.publish',
+      key: `${prefix}.articles.publish`,
       disabled: article?.status === 'publish',
       icon: <GlobalOutlined />,
       onClick: () => handlePublish()
@@ -58,7 +60,7 @@ export const menuItems = (
     items.push({
       label: 'Draft',
       disabled: article?.status === 'draft',
-      key: 'admin.articles.draft',
+      key: `${prefix}.articles.draft`,
       icon: <StopOutlined />,
       onClick: () => handleDraft()
     })
@@ -67,7 +69,7 @@ export const menuItems = (
   if(handleView){
     items.push({
       label: 'View',
-      key: 'admin.articles.view',
+      key: `${prefix}.articles.view`,
       icon: <Eye size={15} />,
       onClick: () => handleView()
     })
@@ -81,7 +83,7 @@ export const menuItems = (
       },
       {
       label: 'Delete',
-      key: 'admin.articles.delete',
+      key: `${prefix}.articles.delete`,
       disabled: article?.status === 'publish',
       icon: <DeleteOutlined />,
       onClick: () => handleDelete()

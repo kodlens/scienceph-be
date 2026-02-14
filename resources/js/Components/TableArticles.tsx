@@ -187,6 +187,7 @@ const TableArticles = (
               menu={{
                 items: menuItems({
                   article,
+                  prefix: routePrefix,
                   handleEditClick: showEdit ? () =>
                     router.visit(`/${routePrefix}/articles/${article.id}/edit`)
                   : undefined,
