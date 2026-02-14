@@ -15,7 +15,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { statusDropdownMenu } from '@/helper/statusMenu';
-import TableAdminArticle from './partials/TableAdminArticle';
+import TableArticles from '@/Components/TableArticles';
 
 const AdminArticleIndex = () => {
 
@@ -212,7 +212,7 @@ const AdminArticleIndex = () => {
             </Button>
           </div>
 
-          <TableAdminArticle
+          <TableArticles
             data={data}
             isFetching={isFetching}
             refetch={refetch}
@@ -220,6 +220,12 @@ const AdminArticleIndex = () => {
             paginationPageChange={(p)=>{
               setPage(p)
             }}
+            showDelete={true}
+            showEdit={true}
+            showTrash={true}
+            showPublish={true}
+            showDraft={true}
+            showView={true}
           />
 
 
