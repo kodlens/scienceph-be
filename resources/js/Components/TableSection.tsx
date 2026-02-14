@@ -21,7 +21,7 @@ interface TableProps {
 const TableSection = ({ title, data, type }: TableProps) => {
     const getStatusStyle = (status: string) => {
         switch (status.toLowerCase()) {
-            case "published":
+            case "publish":
                 return "bg-green-100 text-green-700"
             case "draft":
                 return "bg-yellow-100 text-yellow-700"

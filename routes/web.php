@@ -56,7 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/recent', [App\Http\Controllers\DashboardController::class, 'recent']);
     Route::get('/dashboard/monthly', [App\Http\Controllers\DashboardController::class, 'monthly']);
     Route::get('/dashboard/top-articles', [App\Http\Controllers\DashboardController::class, 'topArticles']);
-
+    Route::get('/dashboard/top-last-six-months', [App\Http\Controllers\DashboardController::class, 'topLastSixMonths']);
+    Route::get('/dashboard/articles-last-six-months', [App\Http\Controllers\DashboardController::class, 'articlesLastSixMonths']);
 
 });
 

@@ -50,4 +50,36 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
     }
+
+    public function topLastSixMonths()
+    {
+        return Article::select('id', 'title', 'hits', 'publish_date')
+            ->where('is_publish', 1)
+            ->where('publish_date', '>=', Carbon::now()->subMonths(6))
+            ->orderByDesc('hits')
+            ->limit(5)
+            ->get();
+    }
+
+
+    public function articlesLastSixMonths()
+    {
+        $startDate = Carbon::now()->subMonths(5)->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
+
+        $results = Article::select(
+                DB::raw("YEAR(publish_date) as year"),
+                DB::raw("MONTH(publish_date) as month"),
+                DB::raw("COUNT(*) as total")
+            )
+            ->where('is_publish', 1)
+            ->whereBetween('publish_date', [$startDate, $endDate])
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+
+        return response()->json($results);
+    }
+
 }
