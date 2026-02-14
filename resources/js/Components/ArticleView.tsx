@@ -1,3 +1,4 @@
+import { dateFormat } from "@/helper/helperFunctions";
 import { Article } from "@/types/article";
 
 
@@ -13,10 +14,19 @@ export default function ArticleView({ article, className }: {article:Article, cl
 
             {/* <div className='mt-4 font-bold text-blue-900 text-lg'>{post.category.title}</div> */}
             <div className="font-bold text-2xl">{article.title}</div>
-            <div className="font-bold mt-2">AUTHOR:
-                <span className='ml-2'>
-                    { article.author }
-                </span>
+            <div className=" mt-2">
+
+              <div className="ml-2 font-normal">
+                 <span className="font-bold">AUTHOR:</span> {article.author}
+                {article.publish_date && (
+                  <>
+                    &nbsp;
+                    |<span className="ml-2 text-gray-500">
+                      {dateFormat(article.publish_date as string)}
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
             <div className='mt-4 ck ck-content relative' dangerouslySetInnerHTML={{ __html: article.description ?? ''}}></div>

@@ -1,9 +1,5 @@
-import { Head, router } from '@inertiajs/react'
-import { FileAddOutlined } from '@ant-design/icons'
-import {
-  Button,
+import { Head } from '@inertiajs/react'
 
-} from 'antd'
 import { ReactNode, useState } from 'react'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
@@ -11,7 +7,8 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
-import TablePublisherTrashTable from '../partials/TablePublisherTrashTable'
+import TableArticles from '@/Components/TableArticles'
+import { Trash } from 'lucide-react'
 
 export default function TrashArticleIndex() {
 
@@ -47,9 +44,6 @@ export default function TrashArticleIndex() {
     return <Error404 error={error} />
   }
 
-
-
-
   return (
     <>
       <Head title="Articles" />
@@ -58,13 +52,15 @@ export default function TrashArticleIndex() {
         <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
 
           {/* ================= HEADER ================= */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Trash Articles
-            </h1>
-            <p className="text-sm text-slate-500">
-              Manage, review, and publish science & technology articles
-            </p>
+          <div className="mb-6 flex items-center">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">
+                <span className='flex gap-2 items-center'><Trash className='text-red-500'/>Trash Articles</span>
+              </h1>
+              <p className="text-sm text-slate-500">
+                Manage, review, and publish science & technology articles
+              </p>
+            </div>
           </div>
 
           {/* ================= FILTERS ================= */}
@@ -72,11 +68,11 @@ export default function TrashArticleIndex() {
             filters={filters}
             setFilters={setFilters}
             refetch={refetch}
-
           />
 
 
-          <TablePublisherTrashTable
+           <TableArticles
+            routePrefix='publisher'
             data={data}
             isFetching={isFetching}
             refetch={refetch}
@@ -85,17 +81,17 @@ export default function TrashArticleIndex() {
               setPage(v)
             }}
             page={page}
+            showDelete={false}
+            showEdit={false}
+            showPublish={false}
+            showDraft={true}
+            showView={true}
+            showTrash={false}
           />
 
           {/* ================= ACTION ================= */}
           <div className="flex justify-end mb-4">
-            <Button
-              icon={<FileAddOutlined />}
-              type="primary"
-              onClick={() => router.visit('/publisher/articles/create')}
-            >
-              New Article
-            </Button>
+
           </div>
 
 
