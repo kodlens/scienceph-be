@@ -80,31 +80,27 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource('/articles', App\Http\Controllers\Admin\AdminArticleController::class);
     Route::get('/get-articles', [App\Http\Controllers\Admin\AdminArticleController::class, 'getData'])->name('admin.articles.getdata');
 
-    Route::post('/articles-trash/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'trash'])->name('articles.trash');
-    Route::post('/articles-publish/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'publish'])->name('articles.published');
-    Route::post('/articles-archive/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'archive'])->name('articles.archived');
-    Route::post('/articles-draft/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'draft'])->name('articles.draft');
-    Route::post('/articles-pending/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'pending'])->name('articles.pending');
-    Route::post('/articles-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'submit'])->name('articles.submit-for-publishing');
-    Route::post('/articles-featured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'featured'])->name('articles.featured');
-    Route::post('/articles-unfeatured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'unfeatured'])->name('articles.unfeatured');
-    Route::post('/post-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
+    Route::post('/article-trash/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'trash'])->name('article.trash');
+    Route::post('/article-publish/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'publish'])->name('article.published');
+    //Route::post('/article-archive/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'archive'])->name('article.archived');
+    Route::post('/article-draft/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'draft'])->name('article.draft');
+    //Route::post('/article-pending/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'pending'])->name('article.pending');
+    //Route::post('/article-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'submit'])->name('article.submit-for-publishing');
+    //Route::post('/article-featured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'featured'])->name('article.featured');
+    //Route::post('/article-unfeatured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'unfeatured'])->name('article.unfeatured');
+    //Route::post('/article-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
 
 
-
-    Route::resource('/post-trashes', App\Http\Controllers\Admin\AdminTrashController::class);
-    Route::get('/get-post-trashes', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('trashes.get-data');
+    Route::resource('/article-trashes', App\Http\Controllers\Admin\AdminTrashController::class);
+    Route::get('/get-article-trashes', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('trashes.get-data');
 
     // ARCHIVES CONTORLLER AND LOGICS
-    Route::resource('/post-archives', App\Http\Controllers\Admin\AdminPostArchiveController::class);
-
-    Route::post('/post-unarchive/{id}', [App\Http\Controllers\Admin\AdminPostArchiveController::class, 'unArchive'])->name('admin.post-archives.get-data');
-    Route::get('/get-post-archives', [App\Http\Controllers\Admin\AdminPostArchiveController::class, 'getData'])->name('admin.post-archives.get-data');
-
-
-    Route::resource('/post-featured', App\Http\Controllers\Admin\AdminPostFeaturedController::class);
-    Route::get('/get-post-featured', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'getData']);
-    Route::post('/post-featured-update-order-no', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'postFeaturedUpdateOrderNo']);
+    //Route::resource('/post-archives', App\Http\Controllers\Admin\AdminPostArchiveController::class);
+    // Route::post('/post-unarchive/{id}', [App\Http\Controllers\Admin\AdminPostArchiveController::class, 'unArchive'])->name('admin.post-archives.get-data');
+    // Route::get('/get-post-archives', [App\Http\Controllers\Admin\AdminPostArchiveController::class, 'getData'])->name('admin.post-archives.get-data');
+    // Route::resource('/post-featured', App\Http\Controllers\Admin\AdminPostFeaturedController::class);
+    // Route::get('/get-post-featured', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'getData']);
+    // Route::post('/post-featured-update-order-no', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'postFeaturedUpdateOrderNo']);
 
     Route::resource('/ojt-articles', App\Http\Controllers\Admin\AdminOjtArticleController::class);
     Route::get('/get-ojt-articles', [App\Http\Controllers\Admin\AdminOjtArticleController::class, 'getData'])->name('admin.ojt-articles.getdata');
@@ -115,14 +111,14 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::post('/change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
 
 
-    Route::resource('/roles', App\Http\Controllers\Admin\AdminRoleController::class);
-    Route::get('/get-roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'getData'])->name('roles.getdata');
+    // Route::resource('/roles', App\Http\Controllers\Admin\AdminRoleController::class);
+    // Route::get('/get-roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'getData'])->name('roles.getdata');
 
-    Route::resource('/permissions', App\Http\Controllers\Admin\AdminPermissionController::class);
-    Route::get('/get-permissions', [App\Http\Controllers\Admin\AdminPermissionController::class, 'getData'])->name('permissions.getdata');
+    // Route::resource('/permissions', App\Http\Controllers\Admin\AdminPermissionController::class);
+    // Route::get('/get-permissions', [App\Http\Controllers\Admin\AdminPermissionController::class, 'getData'])->name('permissions.getdata');
 
-    Route::resource('/role-has-permissions', App\Http\Controllers\Admin\AdminRoleHasPermissionController::class);
-    Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
+    // Route::resource('/role-has-permissions', App\Http\Controllers\Admin\AdminRoleHasPermissionController::class);
+    // Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
 
 });
 
@@ -149,10 +145,10 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/get-trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'getData'])->name('publisher.trash-articles.get-data');
 
 
-    Route::post('/articles-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
-    Route::post('/articles-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');
+    Route::post('/article-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
+    Route::post('/article-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');
     //Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
-    Route::post('/articles-trash/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'trash'])->name('publisher.articles.trash');
+    Route::post('/article-trash/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'trash'])->name('publisher.articles.trash');
 
     // Route::get('/post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'index']);
     // Route::get('/get-post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'getData'])->name('author.post-publish-get-data');

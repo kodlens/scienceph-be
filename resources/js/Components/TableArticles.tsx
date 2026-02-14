@@ -211,7 +211,7 @@ const TableArticles = (
                     })
                   } : undefined,
                   handleDraft: showDraft ? async () => {
-                    await axios.post(`/${routePrefix}}/article-draft/${article.id}`).then(() => {
+                    await axios.post(`/${routePrefix}/article-draft/${article.id}`).then(() => {
                        notification.success({
                         message: 'Article has been returned to draft.',
                       })
