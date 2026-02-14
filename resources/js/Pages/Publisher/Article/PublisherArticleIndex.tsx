@@ -12,6 +12,7 @@ import Error404 from '@/Components/Error404'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import TablePublisherArticle from './partials/TablePublisherArticle'
 import SearchFilter from '@/Components/SearchFilter'
+import TableArticles from '@/Components/TableArticles'
 
 export default function EncoderPostIndex() {
 
@@ -88,7 +89,7 @@ export default function EncoderPostIndex() {
           />
 
 
-          <TablePublisherArticle
+          {/* <TablePublisherArticle
             data={data}
             isFetching={isFetching}
             refetch={refetch}
@@ -97,6 +98,23 @@ export default function EncoderPostIndex() {
               setPage(v)
             }}
             page={page}
+          /> */}
+
+           <TableArticles
+            data={data}
+            isFetching={isFetching}
+            refetch={refetch}
+            paginationPageChange={(v) => {
+              console.log(v);
+              setPage(v)
+            }}
+            page={page}
+            showDelete={false}
+            showEdit={true}
+            showPublish={true}
+            showDraft={true}
+            showView={true}
+            showTrash={true}
           />
 
           {/* ================= ACTION ================= */}
