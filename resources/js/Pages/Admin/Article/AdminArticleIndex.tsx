@@ -213,6 +213,7 @@ const AdminArticleIndex = () => {
           </div>
 
           <TableArticles
+            routePrefix='admin'
             data={data}
             isFetching={isFetching}
             refetch={refetch}

@@ -14,6 +14,7 @@ import Error404 from '@/Components/Error404'
 
 import TableEncoderArticle from './partials/TableEncoderArticle'
 import { statusDropdownMenu } from '@/helper/statusMenu'
+import TableArticles from '@/Components/TableArticles'
 
 export default function EncoderPostIndex() {
 
@@ -111,7 +112,7 @@ export default function EncoderPostIndex() {
 
 
           <div className='overflow-auto'>
-            <TableEncoderArticle
+            {/* <TableEncoderArticle
               data={data}
               isFetching={isFetching}
               refetch={refetch}
@@ -120,7 +121,25 @@ export default function EncoderPostIndex() {
                 setPage(p)
               }}
               editUrl={`/encoder/articles`}
-              trashUrl='/encoder/article-trash' />
+              trashUrl='/encoder/article-trash' /> */}
+
+              <TableArticles
+                routePrefix='encoder'
+                data={data}
+                isFetching={isFetching}
+                refetch={refetch}
+                paginationPageChange={(v) => {
+                  console.log(v);
+                  setPage(v)
+                }}
+                page={page}
+                showDelete={false}
+                showEdit={true}
+                showPublish={false}
+                showDraft={false}
+                showView={true}
+                showTrash={false}
+              />
 
           </div>
 

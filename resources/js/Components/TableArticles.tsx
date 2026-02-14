@@ -11,6 +11,7 @@ import { menuItems } from '@/helper/menuItems'
 
 
 type Props = {
+  routePrefix: string
   data: { data: Article[], total: number }
   isFetching: boolean
   page: number
@@ -27,7 +28,7 @@ type Props = {
 
 }
 const TableArticles = (
-  { data, isFetching, refetch, page, paginationPageChange,
+  { routePrefix, data, isFetching, refetch, page, paginationPageChange,
     showEdit, showTrash, showView, showPublish, showDraft, showDelete
 }: Props) => {
 
@@ -187,21 +188,21 @@ const TableArticles = (
                 items: menuItems({
                   article,
                   handleEditClick: showEdit ? () =>
-                    router.visit(`/admin/articles/${article.id}/edit`)
+                    router.visit(`/${routePrefix}/articles/${article.id}/edit`)
                   : undefined,
                   handleTrashClick: showTrash ? async () => {
                     modal.confirm({
                       title: 'Move to Trash?',
                       content: 'This article will be moved to trash.',
                       onOk: async () => {
-                        await axios.post(`/admin/articles-trash/${article.id}`)
+                        await axios.post(`/${routePrefix}/article-trash/${article.id}`)
                         refetch()
                       },
                     })
                   } : undefined,
                   handleView: showView ? () => handleView(article) : undefined,
                   handlePublish: showPublish ? async () => {
-                    await axios.post(`/admin/articles-publish/${article.id}`).then(() => {
+                    await axios.post(`/${routePrefix}/article-publish/${article.id}`).then(() => {
                        notification.success({
                         message: 'Article has been published.',
                       })
@@ -209,7 +210,7 @@ const TableArticles = (
                     })
                   } : undefined,
                   handleDraft: showDraft ? async () => {
-                    await axios.post(`/publisher/articles-draft/${article.id}`).then(() => {
+                    await axios.post(`/${routePrefix}}/article-draft/${article.id}`).then(() => {
                        notification.success({
                         message: 'Article has been returned to draft.',
                       })
@@ -221,7 +222,7 @@ const TableArticles = (
                       title: 'Delete Article?',
                       content: 'This article will be permanently deleted.',
                       onOk: async () => {
-                        await axios.delete(`/admin/articles/${article.id}`)
+                        await axios.delete(`/${routePrefix}/articles/${article.id}`)
                         refetch()
                       },
                     })

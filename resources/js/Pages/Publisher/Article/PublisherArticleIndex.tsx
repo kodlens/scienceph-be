@@ -10,7 +10,6 @@ import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import TablePublisherArticle from './partials/TablePublisherArticle'
 import SearchFilter from '@/Components/SearchFilter'
 import TableArticles from '@/Components/TableArticles'
 
@@ -101,6 +100,7 @@ export default function EncoderPostIndex() {
           /> */}
 
            <TableArticles
+            routePrefix='publisher'
             data={data}
             isFetching={isFetching}
             refetch={refetch}
