@@ -13,7 +13,7 @@ import {
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, LogOut } from 'lucide-react';
+import { DatabaseZap, LogOut, UserPen } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -93,7 +93,7 @@ export default function AdminLayout(
         {
           key: 'admin.ojt-articles.index',
           label: 'OJT Entry Articles',
-          icon: <FormOutlined />,
+          icon: <UserPen size={15}/>,
           onClick: () => router.visit('/admin/ojt-articles'),
         },
         {

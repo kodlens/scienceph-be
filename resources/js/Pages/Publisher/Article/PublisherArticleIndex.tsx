@@ -47,9 +47,6 @@ export default function EncoderPostIndex() {
     return <Error404 error={error} />
   }
 
-
-
-
   return (
     <>
       <Head title="Articles" />
@@ -84,7 +81,6 @@ export default function EncoderPostIndex() {
             filters={filters}
             setFilters={setFilters}
             refetch={refetch}
-
           />
 
 
