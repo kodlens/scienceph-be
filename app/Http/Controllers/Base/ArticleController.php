@@ -83,7 +83,7 @@ class ArticleController extends Controller
                     'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
-                    'regional_office' => $req->regional_office,
+                    //'regional_office' => $req->regional_office, //remove for the meantime as discussed last meeting
                     'tags' => $tagsString,
                     'source_url' => $req->source_url,
                     'status' => $req->status,
@@ -165,7 +165,7 @@ class ArticleController extends Controller
         $data->modified_at = now();
         $data->agency = $req->agency ? $req->agency : null;
         $data->region = $req->region ? $req->region : null;
-        $data->regional_office = $req->regional_office ? $req->regional_office : null;
+        //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
         $data->source_url = $req->source_url;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;

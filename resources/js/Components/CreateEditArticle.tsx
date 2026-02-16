@@ -20,7 +20,7 @@ const CreateEditArticle = ({
   categories,
   agencies,
   regions,
-  regionalOffices,
+  //regionalOffices,
   authors,
   tags,
   uri
