@@ -176,21 +176,7 @@ class PublisherArticleController extends ArticleController
     //     ], 200);
     // }
 
-    public function setPublishDate(Request $req, $id){
-        $validated = $req->validate([
-            'publish_date' => ['required']
-        ]);
 
-        $dateFormatted = date('Y-m-d', strtotime($req->publish_date));
-        //return $dateFormatted;
-        $data = Post::find($id);
-        $data->publication_date = $dateFormatted;
-        $data->save();
-
-        return response()->json([
-            'status' => 'updated'
-        ], 200);
-    }
 
 
 

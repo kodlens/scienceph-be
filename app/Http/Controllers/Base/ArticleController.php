@@ -261,7 +261,7 @@ class ArticleController extends Controller
         ], 200);
     }
 
-        public function publish($id){
+    public function publish($id){
 
         try {
             DB::transaction(function () use ($id) {
@@ -281,7 +281,7 @@ class ArticleController extends Controller
                     'description' => $data->description,
                     'description_text' => $data->description_text,
                     'alias' => $data->alias,
-                    'agency_code' => $req->agency,
+                    'agency_code' => $data->agency,
                     'tags' => $data->tags,
                     'source' => 'scienceph',
                     'source_url' => 'https://www.science.ph',
@@ -336,6 +336,7 @@ class ArticleController extends Controller
 
 
     }
+
 
 
 
