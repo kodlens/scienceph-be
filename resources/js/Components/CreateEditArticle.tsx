@@ -31,6 +31,10 @@ const CreateEditArticle = ({
   const [loading, setLoading] = useState<boolean>(false);
   const { message, modal } = App.useApp();
 
+  const role = auth.user?.role ? auth.user?.role.toLowerCase() : '';
+
+
+
   useEffect(() => {
     if (id > 0) {
       getData();
@@ -60,6 +64,17 @@ const CreateEditArticle = ({
     } catch (err) { }
   };
 
+
+  const handleSubmitAndPublish = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        submit({ ...values, is_publish: true, status: 'publish' });
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  }
 
   const submit = (values: Article) => {
     setLoading(true)
@@ -345,6 +360,20 @@ const CreateEditArticle = ({
                 Save Post/Article
               </Button>
             </ConfigProvider>
+
+            { role === 'administrator' || role === 'publisher' && (
+               <Button
+                  className="ml-2"
+                  type="primary"
+                  onClick={handleSubmitAndPublish}
+                  icon={<ProjectOutlined />}
+                  loading={loading}
+                >
+                  Save and Publish
+                </Button>
+              )
+            }
+
 
             <Button
               danger

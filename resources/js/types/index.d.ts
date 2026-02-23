@@ -62,7 +62,7 @@ export interface CategoryArticles {
 
 export interface CreateEditProps {
   id: number,
-  auth: PageProps,
+  auth: AuthProps,
   article: Article,
   ckLicense: string,
   sections: Section[],
@@ -73,6 +73,11 @@ export interface CreateEditProps {
   regionalOffices: RegionalOffice[],
   tags: string[],
   uri: string
+}
+
+export interface AuthProps {
+  user: User,
+  csrf_token: string
 }
 
 export interface Template {

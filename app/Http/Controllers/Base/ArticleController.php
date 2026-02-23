@@ -167,6 +167,7 @@ class ArticleController extends Controller
         $data->region = $req->region ? $req->region : null;
         //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
         $data->source_url = $req->source_url;
+        $data->is_publish = $req->status === 'publish' ? 1 : 0;
         $data->status = $req->status;
         $data->publish_date = $dateFormated;
         $data->tags = $tagsString;
@@ -311,6 +312,7 @@ class ArticleController extends Controller
                 $user = Auth::user();
                 $data = Article::find($id);
                 $data->status = 'draft';
+                $data->is_publish = 0;
                 $data->trash = 0;
                 $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
