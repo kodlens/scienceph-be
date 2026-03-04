@@ -15,9 +15,12 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/load-categories', [\App\Http\Controllers\Api\CategoryController::class, 'loadCategories']);
 
-//ARTICLES
+/* ============================
+    ARTICLES
+============================= */
 Route::get('/load-latest-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadLatestArticles']);
 Route::get('/load-popular-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadPopularArticles']);
+Route::get('/get-article/{slug}', [\App\Http\Controllers\Api\ArticleController::class, 'getArticle']);
 
 
 

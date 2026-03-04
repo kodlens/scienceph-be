@@ -48,8 +48,10 @@ class ArticleController extends Controller
 
         $data = Article::where('status', 'publish')
             ->with('category')
-            ->orderBy('hits', 'desc')
+
             ->whereDate('publish_date', '>=', $monthsAgo)
+            ->where('description', 'NOT LIKE', '%<img src%')
+            ->orderBy('hits', 'desc')
             ->take(6)
             ->get([
                 'id',
@@ -68,10 +70,10 @@ class ArticleController extends Controller
 
 
 
-    public function loadArticle($slug){
-        return Info::where('alias', $slug)
-            ->select('id', 'title', 'description', 'description_text', 'alias as slug',
-                'publish_date')
+    public function getArticle($slug){
+        return Article::where('alias', $slug)
+            ->select('id', 'title', 'description', 'description_text', 'alias as slug', 'category_id', 'author', 'publish_date', 'is_press_release')
+            ->with('category')
             ->first();
     }
 
