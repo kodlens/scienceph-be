@@ -1,14 +1,73 @@
 <?php
+/* ============================
+    CODED: ETIENNE WAYNE AMPZ
+    COMPANY: DOST-STII
+    MARCH 04, 2026
+
+    SCIENCEPH BACKEND API
+ ============================= */
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Info;
+use App\Models\Article;
 use Illuminate\Support\Facades\DB;
+use \Carbon\Carbon;
 
 class ArticleController extends Controller
 {
+
+    /* ============================
+    Load latest articles with description containing images
+    This is for the latest articles on the welcome main page
+    ============================= */
+    public function loadLatestArticles()
+    {
+        $latestNews = Article::where('status', 'publish')
+            ->where('description', 'like', '%'. '<img src' . '%')
+            ->orderBy('publish_date', 'desc')
+            ->take(11)
+            ->get([
+                'id',
+                'title',
+                'alias as slug',
+                'description',
+                'description_text',
+                'author',
+                'publish_date',
+                'is_press_release'
+            ]);
+
+        return response()->json($latestNews);
+    }
+
+    public function loadPopularArticles() {
+        $monthsAgo = Carbon::now()->subMonths(3);
+
+        $data = Article::where('status', 'publish')
+            ->with('category')
+            ->orderBy('hits', 'desc')
+            ->whereDate('publish_date', '>=', $monthsAgo)
+            ->take(6)
+            ->get([
+                'id',
+                'title',
+                'alias as slug',
+                'description',
+                'description_text',
+                'author',
+                'publish_date',
+                'is_press_release',
+                'category_id'
+            ]);
+
+        return response()->json($data);
+    }
+
+
+
     public function loadArticle($slug){
         return Info::where('alias', $slug)
             ->select('id', 'title', 'description', 'description_text', 'alias as slug',

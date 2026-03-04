@@ -12,6 +12,16 @@ Route::get('/user', function (Request $request) {
 /* ============================
     Search route
 ============================= */
+
+Route::get('/load-categories', [\App\Http\Controllers\Api\CategoryController::class, 'loadCategories']);
+
+//ARTICLES
+Route::get('/load-latest-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadLatestArticles']);
+Route::get('/load-popular-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadPopularArticles']);
+
+
+
+
 Route::get('/search/latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
 Route::get('/search/others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
 
