@@ -106,8 +106,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     // Route::get('/get-post-featured', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'getData']);
     // Route::post('/post-featured-update-order-no', [App\Http\Controllers\Admin\AdminPostFeaturedController::class, 'postFeaturedUpdateOrderNo']);
 
-    Route::resource('/ojt-articles', App\Http\Controllers\Admin\AdminOjtArticleController::class)->names('admin.ojt-articles');
-    Route::get('/get-ojt-articles', [App\Http\Controllers\Admin\AdminOjtArticleController::class, 'getData'])->name('admin.ojt-articles.getdata');
+    Route::resource('/ojt-materials', App\Http\Controllers\Admin\AdminOjtMaterialController::class)->names('admin.ojt-materials');
+    Route::get('/get-ojt-materials', [App\Http\Controllers\Admin\AdminOjtMaterialController::class, 'getData'])->name('admin.ojt-materials.getdata');
 
 
 

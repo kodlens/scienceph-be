@@ -6,20 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Article;
+use App\Models\Material;
 use Illuminate\Http\JsonResponse;
 
-class AdminOjtArticleController extends Controller
+class AdminOjtMaterialController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Admin/OjtArticle/AdminOjtArticleIndex');
+        return Inertia::render('Admin/OjtMaterial/AdminOjtMaterialIndex');
     }
 
 
     public function getData(Request $req): JsonResponse
     {
-        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
+        $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
             ->where('is_ojt', 1)
             ->when($req->filled('status'), function ($query) use ($req) {

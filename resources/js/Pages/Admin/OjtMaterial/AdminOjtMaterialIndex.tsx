@@ -1,11 +1,8 @@
 
-import {  Head, router } from '@inertiajs/react'
+import {  Head } from '@inertiajs/react'
 
-import {
-  Button,
-} from 'antd';
+import { ProfileOutlined, TeamOutlined } from '@ant-design/icons';
 
-import { FileAddOutlined, AppstoreOutlined, ProfileOutlined } from '@ant-design/icons';
 
 import { useState } from 'react'
 import axios from 'axios';
@@ -15,7 +12,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TableArticles from '@/Components/TableArticles';
 import SearchFilter from '@/Components/SearchFilter';
 
-const AdminMaterialIndex = () => {
+const AdminOjtMaterialIndex = () => {
 
 
   //const [perPage, setPerPage] = useState(10);
@@ -31,7 +28,7 @@ const AdminMaterialIndex = () => {
     })
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ['articles', page, perPage, filters.status],
+    queryKey: ['materials', page, perPage, filters.status],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -42,14 +39,14 @@ const AdminMaterialIndex = () => {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/admin/get-materials?${params}`);
+      const res = await axios.get(`/admin/get-ojt-materials?${params}`);
       return res.data;
     },
   });
 
   return (
     <>
-      <Head title="Articles" />
+      <Head title="Materials" />
 
       <div className="flex justify-center px-4 py-8">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -60,7 +57,7 @@ const AdminMaterialIndex = () => {
 
             <div className='relative flex flex-wrap items-start gap-4'>
               <div className='inline-flex h-12 w-12 items-center justify-center rounded-xl border border-sky-200 bg-white text-sky-600 shadow-sm'>
-                <AppstoreOutlined className='text-xl' />
+                <TeamOutlined className='text-xl' />
               </div>
 
               <div>
@@ -68,68 +65,55 @@ const AdminMaterialIndex = () => {
                   Admin Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Science & Technology Articles
+                  OJT Encoded Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
-                  Review submissions, manage publication status, and keep materials up to date.
+                  Track and manage science and technology materials encoded by OJT users.
                 </p>
+
               </div>
 
-              <div className='ml-auto flex items-center gap-3'>
-                <div className='rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-right shadow-sm'>
-                  <p className='text-[11px] uppercase tracking-wide text-slate-500'>Total Records</p>
-                  <p className='text-2xl font-semibold leading-none text-slate-900'>{data?.total ?? 0}</p>
-                </div>
+              <div className='ml-auto rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-right shadow-sm'>
+                <p className='text-[11px] uppercase tracking-wide text-slate-500'>Total Records</p>
+                <p className='text-2xl font-semibold leading-none text-slate-900'>{data?.total ?? 0}</p>
               </div>
             </div>
           </div>
           <div className='p-6'>
             <div className='mb-4 flex items-center gap-2 text-sm text-slate-500'>
               <ProfileOutlined />
-              <div>Use filters below, then click search to refresh the article list.</div>
-
-                <Button
-                  className='h-11 ml-auto'
-                  icon={<FileAddOutlined />}
-                  type="primary"
-                  onClick={() => router.visit('/admin/articles/create')}
-                >
-                  New Article
-                </Button>
-
+              <span>Apply filters and click search to refresh the OJT materials list.</span>
             </div>
 
-            {/* ================= FILTERS ================= */}
-            <SearchFilter
-              filters={filters}
-              setFilters={setFilters}
-              refetch={refetch}
-            />
+          {/* ================= FILTERS ================= */}
+          <SearchFilter
+            filters={filters}
+            setFilters={setFilters}
+            refetch={refetch}
+          />
 
-            <TableArticles
-              routePrefix='admin'
-              data={data}
-              isFetching={isFetching}
-              refetch={refetch}
-              page={page}
-              paginationPageChange={(p)=>{
-                setPage(p)
-              }}
-              showDelete={true}
-              showEdit={true}
-              showTrash={true}
-              showPublish={true}
-              showDraft={true}
-              showView={true}
-            />
+          <TableArticles
+            routePrefix='admin'
+            data={data}
+            isFetching={isFetching}
+            refetch={refetch}
+            page={page}
+            paginationPageChange={(p)=>{
+              setPage(p)
+            }}
+            showDelete={true}
+            showEdit={true}
+            showTrash={true}
+            showPublish={true}
+            showDraft={true}
+            showView={true}
+          />
           </div>
-
-
         </div>
       </div>
     </>
   )
 }
 
-AdminMaterialIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
-export default AdminMaterialIndex;
+AdminOjtMaterialIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+export default AdminOjtMaterialIndex;
