@@ -37,7 +37,7 @@ const AdminOjtArticleIndex = () => {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/admin/get-articles?${params}`);
+      const res = await axios.get(`/admin/get-ojt-articles?${params}`);
       return res.data;
     },
   });
