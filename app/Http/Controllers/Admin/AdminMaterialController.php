@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Auth;
-use App\Models\Article;
+use App\Models\Material;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 use Illuminate\Support\Facades\Storage;
@@ -38,7 +38,7 @@ class AdminMaterialController extends MaterialController
         if($req->status != '' || $req->status != null){
             $status = $req->status;
         }
-        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
+        $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0);
 
         if ($status != '') {
@@ -65,7 +65,7 @@ class AdminMaterialController extends MaterialController
         $authors = $fetcher->getAuthorsAutocomplete();
 
 
-        return Inertia::render('Admin/Article/AdminArticleCreateEdit', [
+        return Inertia::render('Admin/Material/AdminMaterialCreateEdit', [
             'id', 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
@@ -83,6 +83,7 @@ class AdminMaterialController extends MaterialController
 
 
     public function edit($id){
+
         $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
         $fetcher = new Fetcher();
@@ -96,10 +97,10 @@ class AdminMaterialController extends MaterialController
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
-        $article = Article::find($id);
+        $article = Material::find($id);
 
 
-        return Inertia::render('Admin/Article/AdminArticleCreateEdit', [
+        return Inertia::render('Admin/Material/AdminMaterialCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
             'article' => $article,

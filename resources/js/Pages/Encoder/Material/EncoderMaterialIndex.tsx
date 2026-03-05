@@ -46,7 +46,6 @@ export default function EncoderMaterialIndex() {
     return <Error404 error={error} />
   }
 
-
   return (
     <>
       <Head title="Articles" />
@@ -86,7 +85,6 @@ export default function EncoderMaterialIndex() {
                 setStatus(v)
               }
               options={statusDropdownMenu('encoder')}
-
             />
 
             <Input

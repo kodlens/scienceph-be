@@ -12,7 +12,7 @@ import {
 
 import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, LogOut, UserPen } from 'lucide-react';
+import { DatabaseZap, LandPlot, LogOut, UserPen } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -59,7 +59,7 @@ export default function AdminLayout(
     },
     {
       key: 'admin.regions',
-      icon: <BarsOutlined />,
+      icon: <LandPlot size={15} />,
       label: 'Regions',
       onClick: () => router.visit('/admin/regions')
     },

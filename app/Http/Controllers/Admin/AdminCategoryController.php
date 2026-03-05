@@ -14,9 +14,9 @@ use Illuminate\Support\Str;
 class AdminCategoryController extends Controller
 {
     //
-    
+
     public function index(){
-       
+
         return Inertia::render('Admin/Category/AdminCategoryIndex');
     }
 
@@ -26,29 +26,25 @@ class AdminCategoryController extends Controller
     }
 
 
-
     public function getData(Request $req){
         $sort = explode('.', $req->sort_by);
 
-        $data = Category::where('title', 'like', $req->search . '%')
+        $data = Category::where('name', 'like', $req->search . '%')
             ->orderBy($sort[0], $sort[1])
             ->paginate($req->perpage);
-
-        // $data = Category::where('title', 'like', $req->title . '%')
-        //     ->get();
 
         return $data;
     }
 
     public function store(Request $req){
-    
+
         $req->validate([
-            'title' => ['required', 'unique:categories'],
+            'name' => ['required', 'unique:categories'],
         ]);
 
         Category::create([
-            'title' => ucfirst($req->title),
-            'slug' => Str::slug($req->title),
+            'name' => ucfirst($req->name),
+            'slug' => Str::slug($req->name),
             'description' => $req->description,
             'active' => $req->active ? 1: 0
         ]);
@@ -59,20 +55,20 @@ class AdminCategoryController extends Controller
     }
 
 
-  
+
     public function update(Request $req, $id){
-    
+
         $req->validate([
-            'title' => ['required', 'unique:categories,title,' . $id . ',id'],
+            'name' => ['required', 'unique:categories,name,' . $id . ',id'],
         ]);
 
         $data = Category::find($id);
-        $data->title = ucfirst($req->title);
-        $data->slug = Str::slug($req->title);
+        $data->name = strtoupper($req->name);
+        $data->slug = Str::slug($req->name);
         $data->description = $req->description;
         $data->active = $req->active ? 1: 0;
         $data->save();
-        
+
         return response()->json([
             'status' => 'updated'
         ], 200);

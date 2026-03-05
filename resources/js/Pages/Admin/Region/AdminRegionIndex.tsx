@@ -7,7 +7,6 @@ import {
   SearchOutlined,
   TagsOutlined,
   AppstoreOutlined,
-  CloseCircleFilled,
   CloseCircleOutlined
 } from '@ant-design/icons';
 
@@ -27,7 +26,7 @@ import { Category } from '@/types/category';
 const { Column } = Table;
 const { Search } = Input;
 
-const AdminCategoryIndex = () => {
+const AdminRegionIndex = () => {
 
   const [form] = Form.useForm();
 
@@ -63,7 +62,7 @@ const AdminCategoryIndex = () => {
     ].join('&');
 
     try {
-      const res = await axios.get<CategoryResponse>(`/admin/get-categories?${params}`);
+      const res = await axios.get<CategoryResponse>(`/admin/get-regions?${params}`);
       setData(res.data.data)
       setTotal(res.data.total)
       setLoading(false)
@@ -85,7 +84,7 @@ const AdminCategoryIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Category>(`/admin/categories/${id}`);
+      const res = await axios.get<Category>(`/admin/regions/${id}`);
       form.setFields([
         { name: 'name', value: res.data.name },
         { name: 'description', value: res.data.description },
@@ -111,11 +110,11 @@ const AdminCategoryIndex = () => {
   }
 
   const handleDeleteClick = async (id: number) => {
-    const res = await axios.delete('/admin/categories/' + id);
+    const res = await axios.delete('/admin/regions/' + id);
     if (res.data.status === 'deleted') {
       notification.success({
         message: 'Deleted!',
-        description: 'Category successfully deleted.',
+        description: 'Region successfully deleted.',
         placement: 'topRight'
       })
       loadAsync()
@@ -126,11 +125,11 @@ const AdminCategoryIndex = () => {
 
     if (id > 0) {
       try {
-        const res = await axios.put('/admin/categories/' + id, values)
+        const res = await axios.put('/admin/regions/' + id, values)
         if (res.data.status === 'updated') {
           notification.success({
             message: 'Updated!',
-            description: 'Category successfully updated.',
+            description: 'Region successfully updated.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -143,11 +142,11 @@ const AdminCategoryIndex = () => {
       }
     } else {
       try {
-        const res = await axios.post('/admin/categories', values)
+        const res = await axios.post('/admin/regions', values)
         if (res.data.status === 'saved') {
-          notification.info({
+          notification.success({
             message: 'Saved!',
-            description: 'Category successfully save.',
+            description: 'Region successfully saved.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -166,7 +165,7 @@ const AdminCategoryIndex = () => {
 
   return (
     <>
-      <Head title="Category Management"></Head>
+      <Head title="Region Management"></Head>
 
       <div className='flex justify-center px-4 py-8'>
 
@@ -187,25 +186,18 @@ const AdminCategoryIndex = () => {
                   Admin Panel
                 </p>
                 <h1 className='mt-1 text-2xl font-semibold leading-tight text-slate-900'>
-                  Category Management
+                  Region Management
                 </h1>
                 <p className='mt-1 text-sm text-slate-600'>
-                  Create and maintain article categories and visibility status.
+                  Create and maintain regions.
                 </p>
 
-                <div className='mt-3 flex flex-wrap gap-2'>
-                  <span className='rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-medium text-sky-700'>
-                    Content Taxonomy
-                  </span>
-                  <span className='rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700'>
-                    {total} Categories
-                  </span>
-                </div>
+
               </div>
 
               <div className='ml-auto rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm'>
                 <p className='text-[11px] uppercase tracking-wide text-slate-500'>Total Records</p>
-                <p className='text-2xl font-semibold leading-none text-slate-900'>{total}</p>
+                <p className='text-2xl font-semibold leading-none text-slate-900 text-right'>{total}</p>
               </div>
             </div>
           </div>
@@ -227,7 +219,7 @@ const AdminCategoryIndex = () => {
                 type="primary"
                 size='large'
                 onClick={handClickNew}>
-                New Category
+                New Region
               </Button>
             </div>
             <Table dataSource={data}
@@ -238,7 +230,7 @@ const AdminCategoryIndex = () => {
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
 
               <Column title="Id" dataIndex="id" width={80} />
-              <Column title="Category" dataIndex="name" key="name" />
+              <Column title="Region" dataIndex="name" key="name" />
               <Column title="Description" dataIndex="description" key="description" />
               <Column title="Slug" dataIndex="slug" key="slug" />
               <Column title="Active" dataIndex="active" key="active" render={(active) => (
@@ -255,11 +247,11 @@ const AdminCategoryIndex = () => {
                   <Space size="small">
 
                     <Button
-                      title='Edit category'
+                      title='Edit region'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete category'
+                      title='Delete region'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -299,7 +291,7 @@ const AdminCategoryIndex = () => {
       {/* Modal with Cancel and Save button*/}
       <Modal
         open={open}
-        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Category' : 'Create Category'}</span>}
+        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Region' : 'Create Region'}</span>}
         okText="Save"
         okButtonProps={{
           icon: <FileAddOutlined />,
@@ -333,11 +325,11 @@ const AdminCategoryIndex = () => {
       >
         <Form.Item
           name="name"
-          label="Category"
+          label="Region Name"
           validateStatus={errors.name ? 'error' : ''}
           help={errors.name ? errors.name[0] : ''}
         >
-          <Input placeholder="Category name" />
+          <Input placeholder="Region name" />
         </Form.Item>
 
         <Form.Item
@@ -362,5 +354,5 @@ const AdminCategoryIndex = () => {
   )
 }
 
-AdminCategoryIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
-export default AdminCategoryIndex;
+AdminRegionIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+export default AdminRegionIndex;
