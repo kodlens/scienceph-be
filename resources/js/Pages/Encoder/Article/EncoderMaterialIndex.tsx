@@ -14,7 +14,7 @@ import Error404 from '@/Components/Error404'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableArticles'
 
-export default function EncoderPostIndex() {
+export default function EncoderMaterialIndex() {
 
 
   const [page, setPage] = useState(1)
@@ -36,7 +36,7 @@ export default function EncoderPostIndex() {
         `status=${status}`,
       ].join('&')
 
-      const res = await axios.get(`/encoder/get-articles?${params}`)
+      const res = await axios.get(`/encoder/get-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -159,7 +159,7 @@ export default function EncoderPostIndex() {
   )
 }
 
-EncoderPostIndex.layout = (page: ReactNode) => (
+EncoderMaterialIndex.layout = (page: ReactNode) => (
   <EncoderLayout user={(page as any).props.auth.user}>
     {page}
   </EncoderLayout>

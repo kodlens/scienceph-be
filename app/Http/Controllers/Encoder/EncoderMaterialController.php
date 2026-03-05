@@ -23,7 +23,7 @@ use App\Http\Controllers\Helpers\Fetcher; // <--extending the Fetch
 use App\Http\Controllers\Base\ArticleController;
 
 
-class EncoderArticleController extends ArticleController
+class EncoderMaterialController extends ArticleController
 {
 
 

@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class Material extends Model
 {
     use HasFactory;
 
-
-    protected $table = 'articles';
+    protected $table = 'materials';
 
     protected $fillable = [
         'title',
@@ -18,7 +17,7 @@ class Article extends Model
         'alias',
         'description',
         'description_text',
-        'section_id',
+        'material_id',
         'category_id',
         'author',
         'content_type',
@@ -43,8 +42,6 @@ class Article extends Model
     ];
 
 
-
-
     public function section(){
         return $this->belongsTo(Section::class);
     }
@@ -62,5 +59,6 @@ class Article extends Model
         return $this->belongsTo(User::class, 'modified_by_id')
             ->select('id', 'lname', 'fname', 'mname', 'sex', 'agency_code');
     }
+
 
 }

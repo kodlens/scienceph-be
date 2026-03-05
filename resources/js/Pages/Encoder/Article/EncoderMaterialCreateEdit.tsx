@@ -4,10 +4,10 @@ import { Head } from "@inertiajs/react";
 
 import { CreateEditProps } from "@/types";
 import EncoderLayout from "@/Layouts/EncoderLayout";
-import CreateEditArticle from "@/Components/CreateEditArticle";
+import CreateEditMaterial from "@/Components/CreateEditArticle";
 
 
-const EncoderArticleCreateEdit = ({
+const EncoderMaterialCreateEdit = ({
   id,
   auth,
   article,
@@ -39,7 +39,7 @@ const EncoderArticleCreateEdit = ({
               ADD/EDIT POST
             </div>
 
-            <CreateEditArticle
+            <CreateEditMaterial
               id={id}
               auth={auth}
               article={article}
@@ -64,9 +64,9 @@ const EncoderArticleCreateEdit = ({
   );
 }
 
-export default EncoderArticleCreateEdit;
+export default EncoderMaterialCreateEdit;
 
-EncoderArticleCreateEdit.layout = (page: ReactNode) => (
+EncoderMaterialCreateEdit.layout = (page: ReactNode) => (
   <EncoderLayout user={(page as any).props.auth.user}>
     {page}
   </EncoderLayout>

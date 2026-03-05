@@ -11,7 +11,7 @@ import AuthorAutoComplete from "./AuthorAutoComplete";
 import AgencyAutoComplete from "./AgencyAutoComplete";
 import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
-const CreateEditArticle = ({
+const CreateEditMaterial = ({
   id,
   auth,
   article,
@@ -400,4 +400,4 @@ const CreateEditArticle = ({
   );
 };
 
-export default CreateEditArticle;
+export default CreateEditMaterial;

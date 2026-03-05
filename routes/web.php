@@ -167,28 +167,28 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Encoder\EncoderDashboardController::class, 'index'])->name('encoder.dashboard.index');
 
-    Route::get('/articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'index'])->name('encoder.articles.index');
-    Route::get('/articles/create', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'create'])->name('encoder.articles.create');
-    Route::post('/articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'store'])->name('encoder.articles.store');
-    Route::get('/articles/{id}/edit', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'edit'])->name('encoder.articles.edit');
-    Route::patch('/articles/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'update'])->name('encoder.articles.update');
+    Route::get('/materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'index'])->name('encoder.materials.index');
+    Route::get('/materials/create', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'create'])->name('encoder.materials.create');
+    Route::post('/materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'store'])->name('encoder.materials.store');
+    Route::get('/materials/{id}/edit', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'edit'])->name('encoder.materials.edit');
+    Route::patch('/materials/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'update'])->name('encoder.materials.update');
     //Route::get('/posts/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'show'])->name('author.post-show');
-    Route::delete('/articles/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'destroy'])->name('encoder.articles.destroy');
+    Route::delete('/materials/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'destroy'])->name('encoder.materials.destroy');
 
     //Route::resource('/posts', App\Http\Controllers\Encoder\EncoderArticleController::class);
-    Route::get('/get-articles', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'getData'])->name('encoder.articles.get-data');
+    Route::get('/get-materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'getData'])->name('encoder.materials.get-data');
 
-    Route::post('/article-trash/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'trash'])->name('encoder.articles.trash');
+    Route::post('/material-trash/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'trash'])->name('encoder.materials.trash');
     //   Route::post('/temp-upload', [App\Http\Controllers\Author\AuthorPostController::class, 'tempUpload'])->name('posts.temp-upload');
     //   Route::post('/temp-remove/{filename}', [App\Http\Controllers\Author\AuthorPostController::class, 'removeUpload'])->name('posts.temp-remove');
     //   Route::post('/image-remove/{id}/{filename}', [App\Http\Controllers\Author\AuthorPostController::class, 'imageRemove'])->name('posts.image-remove');
 
     //   Route::post('/posts-published/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPublished'])->name('posts.published');
     //   Route::post('/posts-archived/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postArchived'])->name('posts.archived');
-        Route::post('/article-draft/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'postDraft'])->name('encoder.articles.draft');
+        Route::post('/material-draft/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postDraft'])->name('encoder.articles.draft');
     //   Route::post('/posts-pending/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPending'])->name('posts.pending');
 
-    Route::post('/article-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderArticleController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
+    Route::post('/material-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
 
   //   //Route::get('/get-posts-comments/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'getComments'])->name('posts.get-comments');
 

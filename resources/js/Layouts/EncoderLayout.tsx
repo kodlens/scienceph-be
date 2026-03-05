@@ -36,19 +36,19 @@ export default function EncoderLayout(
         onClick: () => router.visit('/encoder/dashboard')
       },
       {
-        key: 'encoder.articles',
+        key: 'encoder.materials',
         icon: <FormOutlined />,
         label: 'Articles',
         children: [
           {
-            key: 'encoder.articles.index',
-            label: 'Articles',
-            onClick: () => router.visit('/encoder/articles'),
+            key: 'encoder.materials.index',
+            label: 'Materials',
+            onClick: () => router.visit('/encoder/materials'),
           },
           {
-            key: 'encoder.articles.create',
-            label: 'New Post/Article',
-            onClick: () => router.visit('/encoder/articles/create'),
+            key: 'encoder.materials.create',
+            label: 'New Post/Material',
+            onClick: () => router.visit('/encoder/materials/create'),
           },
 
         ],
