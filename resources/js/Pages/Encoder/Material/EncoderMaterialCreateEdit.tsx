@@ -4,7 +4,7 @@ import { Head } from "@inertiajs/react";
 
 import { CreateEditProps } from "@/types";
 import EncoderLayout from "@/Layouts/EncoderLayout";
-import CreateEditMaterial from "@/Components/CreateEditArticle";
+import CreateEditMaterial from "@/Components/CreateEditMaterial";
 
 
 const EncoderMaterialCreateEdit = ({

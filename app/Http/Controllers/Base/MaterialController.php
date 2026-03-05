@@ -37,7 +37,6 @@ class MaterialController extends Controller
 
             DB::transaction(function () use ($req) {
 
-
                 /* ==============================
                     Convert base64 images → files and rewrite HTML
                 ============================== */

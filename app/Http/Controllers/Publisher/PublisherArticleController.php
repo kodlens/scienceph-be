@@ -19,9 +19,9 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Article;
 use App\Http\Controllers\Helpers\RecordTrail;
 use App\Http\Controllers\Helpers\Fetcher;
-use App\Http\Controllers\Base\ArticleController;
+use App\Http\Controllers\Base\MaterialController;
 
-class PublisherArticleController extends ArticleController
+class PublisherArticleController extends MaterialController
 {
 
     public function index()

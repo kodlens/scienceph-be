@@ -15,7 +15,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TableArticles from '@/Components/TableArticles';
 import SearchFilter from '@/Components/SearchFilter';
 
-const AdminArticleIndex = () => {
+const AdminMaterialIndex = () => {
 
 
   //const [perPage, setPerPage] = useState(10);
@@ -106,7 +106,7 @@ const AdminArticleIndex = () => {
   )
 }
 
-AdminArticleIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
-export default AdminArticleIndex;
+AdminMaterialIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+export default AdminMaterialIndex;
 
 

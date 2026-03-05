@@ -58,7 +58,7 @@ export default function EncoderMaterialIndex() {
           <div className="mb-6 flex items-center">
             <div>
               <h1 className="text-2xl font-semibold text-slate-900">
-                Articles
+                Materials
               </h1>
               <p className="text-sm text-slate-500">
                 Manage, review, and publish science & technology articles
@@ -69,9 +69,9 @@ export default function EncoderMaterialIndex() {
               className='ml-auto'
               icon={<FileAddOutlined />}
               type="primary"
-              onClick={() => router.visit('/encoder/articles/create')}
+              onClick={() => router.visit('/encoder/materials/create')}
             >
-              New Article
+              New Material
             </Button>
 
           </div>
@@ -90,7 +90,7 @@ export default function EncoderMaterialIndex() {
             />
 
             <Input
-              placeholder="Search by article title"
+              placeholder="Search by material title"
               className="w-full"
               value={search}
               onChange={(e) =>
@@ -110,34 +110,24 @@ export default function EncoderMaterialIndex() {
 
 
           <div className='overflow-auto'>
-            {/* <TableEncoderArticle
+
+            <TableArticles
+              routePrefix='encoder'
               data={data}
               isFetching={isFetching}
               refetch={refetch}
-              page={page}
-              paginationPageChange={(p)=>{
-                setPage(p)
+              paginationPageChange={(v) => {
+                console.log(v);
+                setPage(v)
               }}
-              editUrl={`/encoder/articles`}
-              trashUrl='/encoder/article-trash' /> */}
-
-              <TableArticles
-                routePrefix='encoder'
-                data={data}
-                isFetching={isFetching}
-                refetch={refetch}
-                paginationPageChange={(v) => {
-                  console.log(v);
-                  setPage(v)
-                }}
-                page={page}
-                showDelete={false}
-                showEdit={true}
-                showPublish={false}
-                showDraft={false}
-                showView={true}
-                showTrash={false}
-              />
+              page={page}
+              showDelete={false}
+              showEdit={true}
+              showPublish={false}
+              showDraft={false}
+              showView={true}
+              showTrash={false}
+            />
 
           </div>
 
@@ -146,9 +136,9 @@ export default function EncoderMaterialIndex() {
             <Button
               icon={<FileAddOutlined />}
               type="primary"
-              onClick={() => router.visit('/encoder/articles/create')}
+              onClick={() => router.visit('/encoder/materials/create')}
             >
-              New Article
+              New Material
             </Button>
           </div>
 

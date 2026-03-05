@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 import { CreateEditProps } from "@/types";
-import CreateEditArticle from "@/Components/CreateEditArticle";
+import CreateEditArticle from "@/Components/CreateEditMaterial";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 

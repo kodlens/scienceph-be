@@ -16,18 +16,18 @@ use App\Models\User;
 use App\Rules\ValidateSlug;
 use App\Rules\ValidateTitle;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Base\ArticleController;
+use App\Http\Controllers\Base\MaterialController;
 use App\Http\Controllers\Helpers\Fetcher;
 use Illuminate\Http\JsonResponse;
 
-class AdminArticleController extends ArticleController
+class AdminMaterialController extends MaterialController
 {
 
     private $fileCustomPath = 'public/upfiles/'; //this is for delete, or checking if file is exist
 
     public function index()
     {
-        return Inertia::render('Admin/Article/AdminArticleIndex');
+        return Inertia::render('Admin/Material/AdminMaterialIndex');
     }
 
     public function getData(Request $req){
