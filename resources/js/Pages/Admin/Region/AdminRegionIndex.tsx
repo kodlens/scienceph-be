@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Category } from '@/types/category';
+import { Region } from '@/types/region';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -84,7 +85,7 @@ const AdminRegionIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Category>(`/admin/regions/${id}`);
+      const res = await axios.get<Region>(`/admin/regions/${id}`);
       form.setFields([
         { name: 'name', value: res.data.name },
         { name: 'description', value: res.data.description },

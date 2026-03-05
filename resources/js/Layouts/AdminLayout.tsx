@@ -47,53 +47,53 @@ export default function AdminLayout(
     {
       key: 'admin.categories',
       icon: <ProfileOutlined />,
-      label: 'Categores',
+      label: 'Categories',
       onClick: () => router.visit('/admin/categories')
 
     },
-    {
-      key: 'admin.sections',
-      icon: <BarsOutlined />,
-      label: 'Sections',
-      onClick: () => router.visit('/admin/sections')
-    },
+    // {
+    //   key: 'admin.sections',
+    //   icon: <BarsOutlined />,
+    //   label: 'Sections',
+    //   onClick: () => router.visit('/admin/sections')
+    // },
     {
       key: 'admin.regions',
       icon: <LandPlot size={15} />,
       label: 'Regions',
       onClick: () => router.visit('/admin/regions')
     },
-    {
-      key: 'admin.regional-offices',
-      icon: <BarsOutlined />,
-      label: 'Regional Offices',
-      onClick: () => router.visit('/admin/regional-offices')
-    },
+    // {
+    //   key: 'admin.regional-offices',
+    //   icon: <BarsOutlined />,
+    //   label: 'Regional Offices',
+    //   onClick: () => router.visit('/admin/regional-offices')
+    // },
     {
       type: 'divider',
     },
     {
-      key: 'articles',
+      key: 'materials',
       icon: <FormOutlined />,
       label: 'Articles',
       children: [
         {
-          key: 'admin.articles',
-          label: 'Articles',
+          key: 'admin.materials',
+          label: 'Materials',
           icon: <FormOutlined />,
-          onClick: () => router.visit('/admin/articles'),
+          onClick: () => router.visit('/admin/materials'),
         },
         {
-          key: 'admin.ojt-articles',
-          label: 'OJT Entry Articles',
+          key: 'admin.ojt-materials',
+          label: 'OJT Entry Materials',
           icon: <UserPen size={15}/>,
-          onClick: () => router.visit('/admin/ojt-articles'),
+          onClick: () => router.visit('/admin/ojt-materials'),
         },
         {
           key: 'admin.trash-articles',
           label: 'Trash Post/Article',
           icon: <DatabaseZap size={15} />,
-          onClick: () => router.visit('/admin/trash-articles'),
+          onClick: () => router.visit('/admin/trash-materials'),
         },
 
       ],

@@ -57,7 +57,7 @@ class AdminRegionController extends Controller
 
         $data = Region::find($id);
         $data->name = strtoupper($req->name);
-        $data->slug = Str::slug($req->name);
+        // $data->slug = Str::slug($req->name);
         $data->description = $req->description;
         $data->active = $req->active ? 1: 0;
         $data->save();
