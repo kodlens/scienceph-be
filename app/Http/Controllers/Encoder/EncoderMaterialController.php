@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Encoder;
 
 use App\Http\Controllers\Controller;
-use App\Models\Article;
+use App\Models\Material;
 
 use App\Models\User;
 use App\Rules\ValidateSlug;
@@ -17,19 +17,18 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 
-use App\Http\Controllers\OpenController; // <--extending the open controller
 use App\Http\Controllers\Helpers\Fetcher; // <--extending the Fetch
 
-use App\Http\Controllers\Base\ArticleController;
+use App\Http\Controllers\Base\MaterialController;
 
 
-class EncoderMaterialController extends ArticleController
+class EncoderMaterialController extends MaterialController
 {
 
 
     public function index()
     {
-        return Inertia::render('Encoder/Article/EncoderArticleIndex');
+        return Inertia::render('Encoder/Material/EncoderMaterialIndex');
     }
 
     public function getData(Request $req)
@@ -39,7 +38,7 @@ class EncoderMaterialController extends ArticleController
 
         $userId = Auth::user()->id;
 
-        $data = Article::with(['section', 'category', 'encodedBy', 'modifiedBy'])
+        $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
             ->where('encoded_by_id', $userId);
 
@@ -68,7 +67,7 @@ class EncoderMaterialController extends ArticleController
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
-        return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
+        return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
             'id' => 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
@@ -97,13 +96,13 @@ class EncoderMaterialController extends ArticleController
         $regionalOffices = $fetcher->getRegionalOffices();
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-        $article = Article::find($id);
+        $material = Material::find($id);
 
 
-        return Inertia::render('Encoder/Article/EncoderArticleCreateEdit', [
+        return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
-            'article' => $article,
+            'material' => $material,
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
@@ -149,7 +148,7 @@ class EncoderMaterialController extends ArticleController
         if (Storage::exists('public/featured_images/'.$fileName)) {
             Storage::delete('public/featured_images/'.$fileName);
 
-            Article::where('featured_image', $fileName)
+            Material::where('featured_image', $fileName)
                 ->update([
                     'featured_image' => null,
                 ]);
@@ -167,7 +166,7 @@ class EncoderMaterialController extends ArticleController
     public function postDraft($id)
     {
         $user = Auth::user();
-        $data = Article::find($id);
+        $data = Material::find($id);
         $data->status = 'draft'; // submit-for-publishing (static)
         $data->trash = 0; // be sure to set 0 the trash if draft
         $name = $user->lname . ',' . $user->fname;
@@ -184,7 +183,7 @@ class EncoderMaterialController extends ArticleController
         $user = Auth::user();
         $name = $user->lname . ',' . $user->fname;
 
-        $data = Article::find($id);
+        $data = Material::find($id);
         // $data->status_id = 3; //submit-for-publishing (static)
         $data->status = 'archive'; // submit-for-publishing (static)
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'archive', $user->id, $name);
@@ -200,7 +199,7 @@ class EncoderMaterialController extends ArticleController
         $user = Auth::user();
         $name = $user->lname . ',' . $user->fname;
 
-        $data = Article::find($id);
+        $data = Material::find($id);
         $data->status = 'submit'; // submit-for-publishing (static)
         // $data->status_id = 7; //submit-for-publishing (static)
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'submit', $user->id, $name);

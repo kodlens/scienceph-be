@@ -38,7 +38,7 @@ export default function EncoderLayout(
       {
         key: 'encoder.materials',
         icon: <FormOutlined />,
-        label: 'Articles',
+        label: 'Materials',
         children: [
           {
             key: 'encoder.materials.index',
@@ -111,7 +111,7 @@ export default function EncoderLayout(
                 background: "#084c7f",
                 color: 'white',
               }}
-              defaultOpenKeys={['encoder.articles']}
+              defaultOpenKeys={['encoder.materials']}
               defaultSelectedKeys={[`${route().current()}`]}
               items={
                 navigationItems()

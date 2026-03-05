@@ -80,3 +80,6 @@ Notes
     Roles (Publisher, Encoder,)
     (adviser, student, writer, desgner, editor)
 
+    Change database structure
+    Articles -> Materials
+

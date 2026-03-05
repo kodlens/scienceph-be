@@ -190,13 +190,6 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::post('/material-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
 
-  //   //Route::get('/get-posts-comments/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'getComments'])->name('posts.get-comments');
-
-  //   Route::get('/post-publish', [App\Http\Controllers\Author\AuthorPostPublishController::class, 'index']);
-  //   Route::get('/get-post-publish', [App\Http\Controllers\Author\AuthorPostPublishController::class, 'getData'])->name('author.post-trash-get-data');
-
-  //   Route::get('/post-trashes', [App\Http\Controllers\Author\AuthorPostTrashController::class, 'index']);
-  //   Route::get('/get-post-trashes', [App\Http\Controllers\Author\AuthorPostTrashController::class, 'getData'])->name('author.post-trash-get-data');
 
 });
 /** END AUTHOR */

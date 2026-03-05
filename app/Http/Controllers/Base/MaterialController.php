@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Base;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Article;
+use App\Models\Material;
 use App\Models\User;
 use App\Rules\ValidateSlug;
 use App\Rules\ValidateTitle;
@@ -17,7 +17,7 @@ use App\Http\Controllers\Helpers\RecordTrail;
 use App\Models\Information;
 
 
-class ArticleController extends Controller
+class MaterialController extends Controller
 {
     //
     public function store(Request $req)
@@ -71,7 +71,7 @@ class ArticleController extends Controller
                 $user = Auth::user();
                 $name = $user->lname . ',' . $user->fname;
 
-                $data = Article::create([
+                $data = Material::create([
                     'title' => $req->title,
                     'alias' => Str::slug($req->title),
                     'description' => $modifiedHtml,
@@ -114,7 +114,7 @@ class ArticleController extends Controller
         //return $req;
 
         $req->validate([
-            'title' => ['required', 'unique:articles,title,' . $id . ',id'],
+            'title' => ['required', 'unique:materials,title,' . $id . ',id'],
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
             'category' => ['required'],
@@ -152,8 +152,7 @@ class ArticleController extends Controller
         $user = Auth::user();
         $name = $user->lname . ',' . $user->fname;
 
-        //update data in table articles
-        $data = Article::find($id);
+        $data = Material::find($id);
         $data->title = $req->title;
         $data->alias = Str::slug($req->title);
         $data->description = $modifiedHtml;
@@ -208,7 +207,7 @@ class ArticleController extends Controller
     {
         $user = Auth::user();
 
-        $data = Article::find($id);
+        $data = Material::find($id);
 
         if (! $data->description) {
             return response()->json([
@@ -230,7 +229,7 @@ class ArticleController extends Controller
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $name);
         $data->save();
 
-        Article::destroy($id);
+        Material::destroy($id);
 
 
         return response()->json([
@@ -244,7 +243,7 @@ class ArticleController extends Controller
     public function trash($id)
     {
         $user = Auth::user();
-        $data = Article::find($id);
+        $data = Material::find($id);
         $data->status = 'trash';
         $data->trash = 1;
         $name = $user->lname . ',' . $user->fname;
@@ -252,10 +251,10 @@ class ArticleController extends Controller
         $data->save();
 
         //remove to info table
-        Information::where('source_id', $id)
-            ->update([
-                'is_publish' => 0,
-            ]);
+        // Information::where('source_id', $id)
+        //     ->update([
+        //         'is_publish' => 0,
+        //     ]);
 
         return response()->json([
             'status' => 'trashed',
@@ -269,29 +268,27 @@ class ArticleController extends Controller
                 // Database operations here
                 $user = Auth::user();
 
-                $data = Article::find($id);
+                $data = Material::find($id);
                 $data->status = 'publish'; //submit-for-publishing (static)
                 $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
 
 
-                $info = Information::updateOrCreate(['source_id' => $data->id],
-                [
-                    'source_id' => $data->id,
-                    'title' => $data->title,
-                    'description' => $data->description,
-                    'description_text' => $data->description_text,
-                    'alias' => $data->alias,
-                    'agency_code' => $data->agency,
-                    'tags' => $data->tags,
-                    'source' => 'scienceph',
-                    'source_url' => 'https://www.science.ph',
-                    'content_type' => 'blog',
-                    'region' => $data->region,
-                    'is_publish' => 1,
-                ]);
-
-
+                // $info = Information::updateOrCreate(['source_id' => $data->id],
+                // [
+                //     'source_id' => $data->id,
+                //     'title' => $data->title,
+                //     'description' => $data->description,
+                //     'description_text' => $data->description_text,
+                //     'alias' => $data->alias,
+                //     'agency_code' => $data->agency,
+                //     'tags' => $data->tags,
+                //     'source' => 'scienceph',
+                //     'source_url' => 'https://www.science.ph',
+                //     'content_type' => 'blog',
+                //     'region' => $data->region,
+                //     'is_publish' => 1,
+                // ]);
             });
 
             return response()->json([
@@ -310,19 +307,19 @@ class ArticleController extends Controller
         try {
             DB::transaction(function () use ($id) {
                 $user = Auth::user();
-                $data = Article::find($id);
+                $data = Material::find($id);
                 $data->status = 'draft';
                 $data->is_publish = 0;
                 $data->trash = 0;
                 $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
 
-                $infoExists = Information::where('alias', $data->alias)->exists();
-                if($infoExists){
-                    Information::where('alias', $data->alias)->update([
-                        'is_publish' => 0
-                    ]);
-                }
+                // $infoExists = Information::where('alias', $data->alias)->exists();
+                // if($infoExists){
+                //     Information::where('alias', $data->alias)->update([
+                //         'is_publish' => 0
+                //     ]);
+                // }
 
             });
 

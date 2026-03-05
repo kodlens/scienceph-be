@@ -4,7 +4,7 @@ use App\Models\Section;
 use App\Models\Category;
 use App\Models\Region;
 use App\Models\Agency;
-use App\Models\Article;
+use App\Models\Material;
 use App\Models\RegionalOffice;
 
 class Fetcher {
@@ -40,7 +40,7 @@ public function getSections() {
 
      public function getAgencies(){
         //$data = Agency::where('active', 1)->get();
-        $data = Article::distinct()
+        $data = Material::distinct()
             ->select('agency')
             ->whereNotNull('agency')       // remove null
             ->where('agency', '!=', '')    // remove empty strings
@@ -51,7 +51,7 @@ public function getSections() {
     }
 
     public function getAuthorsAutocomplete(){
-            $data = Article::distinct('author')
+            $data = Material::distinct('author')
             ->select('author')
             ->orderBy('author', 'asc')
             ->get();
@@ -62,7 +62,7 @@ public function getSections() {
 
 
     public function getTags(){
-        $data = Article::distinct('tags')
+        $data = Material::distinct('tags')
             ->select('tags')
             ->orderBy('tags', 'asc')
             ->get();
