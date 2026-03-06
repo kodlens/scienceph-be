@@ -128,7 +128,7 @@ const Classifier = ( { form, errors } : PageProps) => {
         className="mt-4"
         validateStatus={errors.subjects ? "error" : ""}
         help={errors.subjects ? errors.subjects[0] : ""}>
-        {data.length > 0 && (
+        {newData.length > 0 && (
           <div>
             <h3 className='my-2'>AI Classification Results:</h3>
             <Table
@@ -153,7 +153,7 @@ const Classifier = ( { form, errors } : PageProps) => {
                   title: "Subject Heading",
                   dataIndex: "subject_heading",
                   key: "subject_heading",
-                  width: 120,
+                  width: 200,
                 },
                 {
                   title: "Score",

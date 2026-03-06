@@ -1,21 +1,26 @@
 import { useMemo, useState, PropsWithChildren, ReactNode } from 'react';
-import { Link, router, useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { User } from '@/types';
 
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   HomeOutlined,
-  FormOutlined, UserOutlined, LockOutlined
+  FormOutlined, UserOutlined, LockOutlined, DownOutlined
 } from '@ant-design/icons';
 
-import { Button, ConfigProvider, Layout, Menu, MenuProps } from 'antd';
+import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
 import { LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
-  background: 'linear-gradient(180deg, #084c7f 0%, #06385d 100%)',
+  background: `
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.24), transparent 42%),
+    radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.18), transparent 38%),
+    linear-gradient(180deg, #0f3e57 0%, #0a2f45 48%, #07293d 100%)
+  `,
+  borderRight: '1px solid rgba(148, 210, 228, 0.22)',
 };
 
 export default function EncoderLayout(
@@ -80,6 +85,18 @@ export default function EncoderLayout(
       ? currentRoute
       : 'encoder.materials.index')
     : currentRoute;
+  const userInitials = `${user?.fname?.[0] ?? ''}${user?.lname?.[0] ?? ''}`.toUpperCase();
+  const fullName = `${user?.lname ?? ''}, ${user?.fname ?? ''}`.trim();
+  const compactName = `${user?.lname ?? ''}, ${user?.fname?.[0] ?? ''}.`.trim();
+  const pageTitle = currentRoute === 'encoder.dashboard.index'
+    ? 'Dashboard'
+    : currentRoute.startsWith('encoder.materials')
+      ? 'Materials'
+      : currentRoute === 'my-account.index'
+        ? 'My Account'
+        : currentRoute === 'change-password.index'
+          ? 'Change Password'
+          : 'Encoder Panel';
 
 
   return (
@@ -94,22 +111,37 @@ export default function EncoderLayout(
             if (!broken) setOpenKeys(['encoder.materials']);
           }}
           collapsed={collapsed} width={260}>
-          <PanelSideBarLogo />
+          <div className='border-b border-cyan-100/20 pb-3'>
+            <PanelSideBarLogo />
+            {!collapsed && (
+              <div className='mx-4 mt-1 rounded-xl border border-cyan-100/20 bg-white/10 px-3 py-2 text-cyan-50 backdrop-blur-[1px]'>
+                <p className='text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-100/90'>Encoder Workspace</p>
+                <div className='mt-1 flex items-center gap-2'>
+                  <div className='inline-flex h-7 w-7 items-center justify-center rounded-full border border-cyan-100/35 bg-cyan-200/20 text-[11px] font-semibold'>
+                    {userInitials || 'EN'}
+                  </div>
+                  <p className='truncate text-xs text-cyan-50/90'>{user.lname}, {user.fname}</p>
+                </div>
+              </div>
+            )}
+          </div>
           <ConfigProvider theme={{
             token: {
-              colorText: 'white',
-              colorBgBase: '#084c7f',
-              colorBgContainer: '#084c7f',
+              colorText: '#e6f7ff',
+              colorBgBase: '#0f3e57',
+              colorBgContainer: '#0f3e57',
             },
             components: {
               Menu: {
                 itemBg: 'transparent',
-                itemColor: 'rgba(255,255,255,0.88)',
+                itemColor: 'rgba(230,247,255,0.86)',
                 itemHoverColor: '#ffffff',
-                itemHoverBg: 'rgba(255,255,255,0.14)',
+                itemHoverBg: 'rgba(103, 232, 249, 0.16)',
                 itemSelectedColor: '#ffffff',
-                itemSelectedBg: 'rgba(255,255,255,0.22)',
+                itemSelectedBg: 'rgba(20, 184, 166, 0.34)',
                 subMenuItemBg: 'transparent',
+                itemBorderRadius: 10,
+                iconSize: 15,
               },
             }
           }}>
@@ -117,8 +149,10 @@ export default function EncoderLayout(
               mode="inline"
               style={{
                 background: 'transparent',
-                color: 'white',
+                color: '#e6f7ff',
                 borderInlineEnd: 0,
+                paddingInline: 8,
+                paddingTop: 8,
               }}
               selectedKeys={[selectedMenuKey]}
               openKeys={collapsed ? [] : openKeys}
@@ -130,27 +164,53 @@ export default function EncoderLayout(
         </Sider>
         <Layout>
           <Header
-            className='border'
+            className='border-b border-slate-200'
             style={{ padding: 0, background: 'white' }}
           >
-            <div className='flex items-center'>
-              <Button
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                  fontSize: '16px',
-                  width: 64,
-                  height: 64,
-                }}
-              />
+            <div className='flex h-16 items-center justify-between px-3'>
+              <div className='flex items-center gap-3'>
+                <Button
+                  type="text"
+                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: '16px',
+                    width: 42,
+                    height: 42,
+                  }}
+                />
+                <div className='h-7 w-px bg-slate-200' />
+                <div className='leading-tight'>
+                  <p className='text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500'>Encoder Workspace</p>
+                  <p className='text-sm font-semibold text-slate-800'>{pageTitle}</p>
+                </div>
+              </div>
 
-
-              <div className='ml-auto mr-4 flex items-center gap-4'>
-                <Link href=''>{user.lname} {user.fname[0]}.</Link>
-                 <Button className='' danger onClick={handleLogout}>
-                  <LogOut size={15} />
-                </Button>
+              <div className='flex items-center'>
+                <Dropdown
+                  trigger={['click']}
+                  menu={{
+                    items: [
+                      {
+                        key: 'logout',
+                        danger: true,
+                        icon: <LogOut size={14} />,
+                        label: 'Logout',
+                        onClick: handleLogout,
+                      },
+                    ],
+                  }}
+                >
+                  <button
+                    type='button'
+                    className='inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 hover:bg-slate-50'
+                    title={fullName}
+                  >
+                    <Avatar size="small" style={{ backgroundColor: '#0f766e' }}>{userInitials || 'EN'}</Avatar>
+                    <span className='max-w-[140px] truncate font-medium lg:max-w-[190px]'>{compactName}</span>
+                    <DownOutlined className='text-xs text-slate-500' />
+                  </button>
+                </Dropdown>
               </div>
 
             </div>
@@ -165,7 +225,7 @@ export default function EncoderLayout(
               borderRadius: 0,
             }}
           >
-            <main className='py-4'>{children}</main>
+            <main className='py-8 px-4'>{children}</main>
           </Content>
         </Layout>
       </Layout>

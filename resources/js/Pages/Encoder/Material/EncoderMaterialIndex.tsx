@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react'
-import { FileAddOutlined } from '@ant-design/icons'
+import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
 import {
   Button,
   Input,
@@ -20,20 +20,25 @@ export default function EncoderMaterialIndex() {
   const [page, setPage] = useState(1)
   const perPage = 10
 
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState('')
+  const [filters, setFilters] = useState({
+    status: '',
+    title: '',
+  })
+  const [appliedFilters, setAppliedFilters] = useState({
+    status: '',
+    title: '',
+  })
 
 
 
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['articles', { perPage, page, status }],
+    queryKey: ['encoder-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
-        `title=${search ? search : ''}`,
-        `status=${status ? status : ''}`,
+        `title=${appliedFilters.title ? appliedFilters.title : ''}`,
+        `status=${appliedFilters.status ? appliedFilters.status : ''}`,
         `page=${page}`,
-        `status=${status}`,
       ].join('&')
 
       const res = await axios.get(`/encoder/get-materials?${params}`)
@@ -41,6 +46,26 @@ export default function EncoderMaterialIndex() {
     },
     refetchOnWindowFocus: false,
   })
+
+  const applyFilters = () => {
+    setPage(1)
+    setAppliedFilters({
+      title: filters.title.trim(),
+      status: filters.status,
+    })
+  }
+
+  const clearFilters = () => {
+    setPage(1)
+    setFilters({
+      title: '',
+      status: '',
+    })
+    setAppliedFilters({
+      title: '',
+      status: '',
+    })
+  }
 
   if (error) {
     return <Error404 error={error} />
@@ -50,39 +75,62 @@ export default function EncoderMaterialIndex() {
     <>
       <Head title="Articles" />
 
-      <div className="flex justify-center px-4">
-        <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+      <div className="flex justify-center">
+        <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
 
           {/* ================= HEADER ================= */}
-          <div className="mb-6 flex items-center">
-            <div>
-              <h1 className="text-2xl font-semibold text-slate-900">
-                Materials
-              </h1>
-              <p className="text-sm text-slate-500">
-                Manage, review, and publish science & technology articles
-              </p>
+          <div className='relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sky-50 via-white to-cyan-50 px-6 py-6'>
+            <div className='pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-cyan-100/60 blur-2xl' />
+            <div className='pointer-events-none absolute -left-8 -bottom-14 h-36 w-36 rounded-full bg-sky-100/70 blur-2xl' />
+
+            <div className='relative flex flex-wrap items-start gap-4'>
+              <div className='inline-flex h-12 w-12 items-center justify-center rounded-xl border border-sky-200 bg-white text-sky-600 shadow-sm'>
+                <ProfileOutlined className='text-xl' />
+              </div>
+
+              <div>
+                <p className='text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-700'>
+                  Encoder Panel
+                </p>
+                <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
+                  Materials
+                </h1>
+                <p className="mt-1 text-sm text-slate-600">
+                  Manage and update your encoded science and technology materials.
+                </p>
+              </div>
+
+              <div className='ml-auto rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-right shadow-sm'>
+                <p className='text-[11px] uppercase tracking-wide text-slate-500'>Total Records</p>
+                <p className='text-2xl font-semibold leading-none text-slate-900'>{data?.total ?? 0}</p>
+              </div>
+
+            </div>
+          </div>
+          <div className='p-6'>
+            <div className='mb-4 flex items-center gap-2 text-sm text-slate-500'>
+              <FilterOutlined />
+              <div>Use filters then click Search to refresh the materials list.</div>
+
+              <Button
+                className='ml-auto'
+                icon={<FileAddOutlined />}
+                type="primary"
+                onClick={() => router.visit('/encoder/materials/create')}
+              >
+                New Material
+              </Button>
+
             </div>
 
-            <Button
-              className='ml-auto'
-              icon={<FileAddOutlined />}
-              type="primary"
-              onClick={() => router.visit('/encoder/materials/create')}
-            >
-              New Material
-            </Button>
-
-          </div>
-
           {/* ================= FILTERS ================= */}
-          <div className="flex flex-col md:flex-row gap-3 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
 
             <Select
               className="w-[180px]"
-              value={status}
+              value={filters.status}
               onChange={(v) =>
-                setStatus(v)
+                setFilters((prev) => ({ ...prev, status: v }))
               }
               options={statusDropdownMenu('encoder')}
             />
@@ -90,19 +138,23 @@ export default function EncoderMaterialIndex() {
             <Input
               placeholder="Search by material title"
               className="w-full"
-              value={search}
+              value={filters.title}
+              prefix={<SearchOutlined className='text-slate-400' />}
               onChange={(e) =>
-                setSearch(e.target.value)
+                setFilters((prev) => ({ ...prev, title: e.target.value }))
               }
               onKeyDown={(e)=>{
                 if(e.key === 'Enter')
-                  refetch()
+                  applyFilters()
               }}
               allowClear
             />
 
-            <Button className="ml-auto" type="primary" onClick={()=> refetch()}>
+            <Button className="ml-auto" type="primary" onClick={applyFilters}>
               Search
+            </Button>
+            <Button onClick={clearFilters}>
+              Clear
             </Button>
           </div>
 
@@ -115,7 +167,6 @@ export default function EncoderMaterialIndex() {
               isFetching={isFetching}
               refetch={refetch}
               paginationPageChange={(v) => {
-                console.log(v);
                 setPage(v)
               }}
               page={page}
@@ -128,16 +179,6 @@ export default function EncoderMaterialIndex() {
             />
 
           </div>
-
-          {/* ================= ACTION ================= */}
-          <div className="flex justify-end mb-4">
-            <Button
-              icon={<FileAddOutlined />}
-              type="primary"
-              onClick={() => router.visit('/encoder/materials/create')}
-            >
-              New Material
-            </Button>
           </div>
 
 
