@@ -59,7 +59,6 @@ class EncoderMaterialController extends MaterialController
         //$openController = new OpenController();
         $fetcher = new Fetcher();
 
-        $sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regionalOffices = $fetcher->getRegionalOffices();
@@ -70,13 +69,12 @@ class EncoderMaterialController extends MaterialController
         return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
             'id' => 0,
             'ckLicense' => $CK_LICENSE,
-            'post' => null,
+            'material' => null,
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
             'categories' => $categories,
-            'sections' => $sections,
             'authors' => $authors
         ]);
     }

@@ -11,12 +11,12 @@ import AuthorAutoComplete from "./AuthorAutoComplete";
 import AgencyAutoComplete from "./AgencyAutoComplete";
 import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
+import Classifier from "./Classifier";
 const CreateEditMaterial = ({
   id,
   auth,
-  article,
+  material,
   ckLicense,
-  sections,
   categories,
   agencies,
   regions,
@@ -44,21 +44,21 @@ const CreateEditMaterial = ({
   const getData = () => {
     try {
       form.setFields([
-        { name: "title", value: article.title },
-        { name: "slug", value: article.alias },
-        { name: "description", value: article.description },
-        { name: "status", value: article.status ? article.status : 'draft' },
-        { name: "source_url", value: article.source_url },
-        { name: "category", value: article.category_id },
-        // { name: "section", value: article.section_id },
-        { name: "agency", value: article.agency },
-        { name: "region", value: article.region },
-        { name: "regional_office", value: article.regional_office },
-        { name: "author", value: article.author },
-        { name: "is_publish", value: article.is_publish },
-        { name: "tags", value: article.tags ? article.tags.split(',') : [] },
-        { name: "is_press_release", value: article.is_press_release && article.is_press_release > 0 ? true : false },
-        { name: "publish_date", value: article.publish_date ? dayjs(article.publish_date) : null },
+        { name: "title", value: material.title },
+        { name: "slug", value: material.alias },
+        { name: "description", value: material.description },
+        { name: "status", value: material.status ? material.status : 'draft' },
+        { name: "source_url", value: material.source_url },
+        { name: "category", value: material.category_id },
+        // { name: "section", value: material.section_id },
+        { name: "agency", value: material.agency },
+        { name: "region", value: material.region },
+        { name: "regional_office", value: material.regional_office },
+        { name: "author", value: material.author },
+        { name: "is_publish", value: material.is_publish },
+        { name: "tags", value: material.tags ? material.tags.split(',') : [] },
+        { name: "is_press_release", value: material.is_press_release && material.is_press_release > 0 ? true : false },
+        { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
 
     } catch (err) { }
@@ -204,12 +204,16 @@ const CreateEditMaterial = ({
                 : ""
             }
           >
-            <Ckeditor post={article || undefined} form={form} ckLicense={ckLicense} />
+            <Ckeditor post={material || undefined} form={form} ckLicense={ckLicense} />
           </Form.Item>
         </div>
 
       </div>
-      <div className="flex gap-4">
+
+      <Classifier form={form} errors={errors} />
+
+
+      <div className="flex mt-4 gap-4">
 
         <div className="w-full">
 

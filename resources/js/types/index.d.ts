@@ -63,7 +63,7 @@ export interface CategoryArticles {
 export interface CreateEditProps {
   id: number,
   auth: AuthProps,
-  article: Article,
+  material: Material,
   ckLicense: string,
   sections: Section[],
   categories: Category[],
