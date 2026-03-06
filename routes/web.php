@@ -142,14 +142,13 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Publisher\PublisherDashboardController::class, 'index'])->name('publisher.dashboard.index');
 
-    Route::get('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'index'])->name('publisher.articles.index');
-    Route::get('/articles/create', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'create'])->name('publisher.articles.create');
-    Route::post('/articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'store'])->name('publisher.articles.store');
-    Route::get('/articles/{id}/edit', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'edit'])->name('publisher.articles.edit');
-    Route::patch('/articles/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'update'])->name('publisher.articles.update');;
+    Route::get('/materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'index'])->name('publisher.materials.index');
+    Route::get('/materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'store'])->name('publisher.materials.store');
+    Route::get('/materials/{id}/edit', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'edit'])->name('publisher.materials.edit');
+    Route::patch('/materials/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'update'])->name('publisher.materials.update');
 
 
-    Route::get('/get-articles', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'getData'])->name('publisher.articles.get-data');
+    Route::get('/get-materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'getData'])->name('publisher.materials.get-data');
 
 
 

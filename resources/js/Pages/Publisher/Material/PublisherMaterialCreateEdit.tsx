@@ -5,10 +5,10 @@ import CreateEditArticle from "@/Components/CreateEditMaterial";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 
-const PublisherArticleCreateEdit = ({
+const PublisherMaterialCreateEdit = ({
   id,
   auth,
-  article,
+  material,
   ckLicense,
   sections,
   categories,
@@ -40,7 +40,7 @@ const PublisherArticleCreateEdit = ({
             <CreateEditArticle
               id={id}
               auth={auth}
-              article={article}
+              material={material}
               ckLicense={ckLicense}
               sections={sections}
               categories={categories}
@@ -60,9 +60,9 @@ const PublisherArticleCreateEdit = ({
   );
 }
 
-export default PublisherArticleCreateEdit;
+export default PublisherMaterialCreateEdit;
 
-PublisherArticleCreateEdit.layout = (page: ReactNode) => (
+PublisherMaterialCreateEdit.layout = (page: ReactNode) => (
   <AuthenticatedLayout user={(page as any).props.auth.user}>
     {page}
   </AuthenticatedLayout>

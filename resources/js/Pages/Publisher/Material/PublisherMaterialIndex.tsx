@@ -13,7 +13,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
 import TableArticles from '@/Components/TableArticles'
 
-export default function EncoderPostIndex() {
+export default function PublisherMaterialIndex() {
 
   const [page, setPage] = useState(1)
 
@@ -113,7 +113,7 @@ export default function EncoderPostIndex() {
   )
 }
 
-EncoderPostIndex.layout = (page: ReactNode) => (
+PublisherMaterialIndex.layout = (page: ReactNode) => (
   <AuthenticatedLayout user={(page as any).props.auth.user}>
     {page}
   </AuthenticatedLayout>

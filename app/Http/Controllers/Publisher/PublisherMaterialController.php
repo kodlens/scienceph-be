@@ -21,12 +21,12 @@ use App\Http\Controllers\Helpers\RecordTrail;
 use App\Http\Controllers\Helpers\Fetcher;
 use App\Http\Controllers\Base\MaterialController;
 
-class PublisherArticleController extends MaterialController
+class PublisherMaterialController extends MaterialController
 {
 
     public function index()
     {
-        return Inertia::render('Publisher/Article/PublisherArticleIndex');
+        return Inertia::render('Publisher/Material/PublisherMaterialIndex');
     }
 
     public function getData(Request $request): JsonResponse
@@ -95,8 +95,8 @@ class PublisherArticleController extends MaterialController
         $authors = $fetcher->getAuthorsAutocomplete();
 
 
-        return Inertia::render('Publisher/Article/PublisherArticleCreateEdit', [
-            'id', 0,
+        return Inertia::render('Publisher/Material/PublisherMaterialCreateEdit', [
+            'id' => 0,
             'ckLicense' => $CK_LICENSE,
             'post' => null,
             'tags' => $tags,
