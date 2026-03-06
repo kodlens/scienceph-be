@@ -6,7 +6,7 @@ import { ListPlus } from 'lucide-react';
 type PageProps = {
   onSelectSubjectHeading: (record: SubjectHeading) => void
 }
-const ModalSubjectHeadings = ( {onSelectSubjectHeading } : PageProps) => {
+const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [subjectHeadings, setSubjectHeadings] = React.useState<SubjectHeading[]>([]);

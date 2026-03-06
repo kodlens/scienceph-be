@@ -6,6 +6,7 @@ import type { Key } from 'react';
 
 import { BrushCleaning } from 'lucide-react';
 import ModalSubjectHeadings from './ModalSubjectHeading';
+import { table } from 'node:console';
 
 
 type PageProps = {
@@ -25,7 +26,9 @@ const Classifier = ( { form, errors } : PageProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { notification } = App.useApp();
   const [data, setData] = useState<ClassifierProps[]>([]);
+  const [tableData, setTableData] = useState<ClassifierProps[]>([]);
   const [newData, setNewData] = useState<ClassifierProps[]>([]);
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
 
@@ -104,8 +107,8 @@ const Classifier = ( { form, errors } : PageProps) => {
   }, [selectedRowKeys]);
 
   useEffect(() => {
-    console.log('newData updated:', newData);
-  }, [newData]);
+    console.log('new data updated:', setNewData);
+  }, [setNewData]);
 
 
 
@@ -173,6 +176,7 @@ const Classifier = ( { form, errors } : PageProps) => {
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
 
           const existsInData = newData.find(item => item.id === record.id);
+
           if(existsInData) {
             notification.warning({
               message: "Already Exists",
@@ -191,6 +195,9 @@ const Classifier = ( { form, errors } : PageProps) => {
             analysis: "Manually added"
           }];
           setNewData(newSelected);
+
+          console.log(newSelected);
+
           //setSelectedRowKeys(newSelected.map(item => item.subject_heading_id));
         }} />
 
