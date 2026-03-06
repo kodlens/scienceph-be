@@ -50,7 +50,7 @@ const CreateEditMaterial = ({
         { name: "status", value: article.status ? article.status : 'draft' },
         { name: "source_url", value: article.source_url },
         { name: "category", value: article.category_id },
-        { name: "section", value: article.section_id },
+        // { name: "section", value: article.section_id },
         { name: "agency", value: article.agency },
         { name: "region", value: article.region },
         { name: "regional_office", value: article.regional_office },
@@ -227,17 +227,6 @@ const CreateEditMaterial = ({
                 allowClear
                 placeholder="Select Category"
               />
-            </Form.Item>
-
-            <Form.Item
-              name="section"
-              label="Select Section"
-              className="w-full"
-              validateStatus={errors.section ? "error" : ""}
-              help={errors.section ? errors.section[0] : ""}
-            >
-              {/* <SelectSection sections={sections} errors={errors} /> */}
-              <Select options={sections ? sections.map(section => ({ value: Number(section.id), label: section.name })) : [] }  allowClear/>
             </Form.Item>
 
           </div>

@@ -1,4 +1,4 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
+import { useMemo, useState, PropsWithChildren, ReactNode } from 'react';
 import { Link, router, useForm } from '@inertiajs/react';
 import { User } from '@/types';
 
@@ -14,28 +14,30 @@ import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
 import { LogOut } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
+const siderStyle: React.CSSProperties = {
+  background: 'linear-gradient(180deg, #084c7f 0%, #06385d 100%)',
+};
 
 export default function EncoderLayout(
   { user, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
 
   const { post } = useForm();
   const [collapsed, setCollapsed] = useState(false);
+  const [openKeys, setOpenKeys] = useState<string[]>(['encoder.materials']);
 
   const handleLogout = () => {
     post(route('logout'));
   }
 
   type MenuItem = Required<MenuProps>['items'][number];
-  const navigationItems = () => {
-    //dynamic rendering is disabled for the meantime :(
-    const items: MenuItem[] = [];
-    items.push({
+  const navigationItems = useMemo<MenuItem[]>(() => ([
+    {
         key: 'encoder.dashboard.index',
         icon: <HomeOutlined />,
         label: 'Dashboard',
         onClick: () => router.visit('/encoder/dashboard')
-      },
-      {
+    },
+    {
         key: 'encoder.materials',
         icon: <FormOutlined />,
         label: 'Materials',
@@ -52,42 +54,32 @@ export default function EncoderLayout(
           },
 
         ],
-      },
-      // {
-      //     key: 'posts.publish',
-      //     icon: <CreditCardOutlined />,
-      //     label: 'Published',
-      //     onClick: ()=> router.visit('/encoder/post-publish')
-      // },
-      // {
-      //     key: 'trashes.index',
-      //     icon: <DeleteOutlined />,
-      //     label: 'Trashes',
-      //     onClick: ()=> router.visit('/encoder/post-trashes')
-
-      // },
-      {
-        type: 'divider'
-      },
-      {
+    },
+    {
+      type: 'divider'
+    },
+    {
         key: 'my-account.index',
         icon: <UserOutlined />,
         label: 'My Account',
         onClick: () => router.visit('/my-account')
 
-      },
-      {
+    },
+    {
         key: 'change-password.index',
         icon: <LockOutlined />,
         label: 'Change Password',
         onClick: () => router.visit('/change-password')
 
-      },
-    );
+    },
+  ]), []);
 
-
-    return items;
-  }
+  const currentRoute = `${route().current() ?? ''}`;
+  const selectedMenuKey = currentRoute.startsWith('encoder.materials.')
+    ? (currentRoute === 'encoder.materials.index' || currentRoute === 'encoder.materials.create'
+      ? currentRoute
+      : 'encoder.materials.index')
+    : currentRoute;
 
 
   return (
@@ -95,27 +87,43 @@ export default function EncoderLayout(
     <>
       <Layout>
         <Sider trigger={null} collapsible
+          style={siderStyle}
           breakpoint='md'
-          onBreakpoint={(b) => setCollapsed(b)}
-          collapsed={collapsed} width={300} style={{ background: "#084c7f" }}>
+          onBreakpoint={(broken) => {
+            setCollapsed(broken);
+            if (!broken) setOpenKeys(['encoder.materials']);
+          }}
+          collapsed={collapsed} width={260}>
           <PanelSideBarLogo />
           <ConfigProvider theme={{
             token: {
               colorText: 'white',
               colorBgBase: '#084c7f',
+              colorBgContainer: '#084c7f',
+            },
+            components: {
+              Menu: {
+                itemBg: 'transparent',
+                itemColor: 'rgba(255,255,255,0.88)',
+                itemHoverColor: '#ffffff',
+                itemHoverBg: 'rgba(255,255,255,0.14)',
+                itemSelectedColor: '#ffffff',
+                itemSelectedBg: 'rgba(255,255,255,0.22)',
+                subMenuItemBg: 'transparent',
+              },
             }
           }}>
             <Menu
               mode="inline"
               style={{
-                background: "#084c7f",
+                background: 'transparent',
                 color: 'white',
+                borderInlineEnd: 0,
               }}
-              defaultOpenKeys={['encoder.materials']}
-              defaultSelectedKeys={[`${route().current()}`]}
-              items={
-                navigationItems()
-              }
+              selectedKeys={[selectedMenuKey]}
+              openKeys={collapsed ? [] : openKeys}
+              onOpenChange={(keys) => setOpenKeys(keys as string[])}
+              items={navigationItems}
             />
 
           </ConfigProvider>
