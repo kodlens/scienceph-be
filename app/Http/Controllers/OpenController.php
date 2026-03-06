@@ -6,13 +6,42 @@ use Illuminate\Http\Request;
 use App\Models\Section;
 use App\Models\Category;
 use App\Models\Agency;
-use App\Models\Article;
+use App\Models\Material;
 use App\Models\Region;
+use App\Models\Subject;
+use App\Models\SubjectHeading;
 use Illuminate\Http\JsonResponse;
 
 
 class OpenController extends Controller
 {
+
+    public function getSubjects(){
+        $subjects = Subject::where('active', 1)->with('subject_headings')->get();
+        return response()->json($subjects);
+    }
+
+    public function getSubjectHeadingsWithParams($subjectId){
+        $subjectHeadings = Subject::find($subjectId)->subject_headings()->where('active', 1)->get();
+        return response()->json($subjectHeadings);
+    }
+
+
+    public function getSubjectHeadings(Request $req){
+
+        if($req->has('search') && $req->search != ''){
+            $data = SubjectHeading::where('active', 1)
+            ->where('subject_heading', 'like', '%'.$req->search.'%')
+            ->get();
+            return response()->json($data);
+        } else {
+
+            $data = SubjectHeading::where('active', 1)->get();
+            return response()->json($data);
+        }
+    }
+
+
     public function getSections() : JsonResponse{
         $data = Section::where('active', 1)->get();
         return response()->json($data);

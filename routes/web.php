@@ -59,6 +59,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/top-last-six-months', [App\Http\Controllers\DashboardController::class, 'topLastSixMonths']);
     Route::get('/dashboard/articles-last-six-months', [App\Http\Controllers\DashboardController::class, 'articlesLastSixMonths']);
 
+
+
+    Route::get('/get-subjects', [App\Http\Controllers\OpenController::class, 'getSubjects'])->name('open.subjects');
+    Route::get('/get-subject-headings/{subjectId}', [App\Http\Controllers\OpenController::class, 'getSubjectHeadingsWithParams'])->name('open.subject-headings-with-params');
+    Route::get('/get-subject-headings', [App\Http\Controllers\OpenController::class, 'getSubjectHeadings'])->name('open.subject-headings');
+
+
 });
 
 
