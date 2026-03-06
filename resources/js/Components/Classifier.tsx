@@ -78,7 +78,7 @@ const Classifier = ( { form, errors } : PageProps) => {
     if (data.length > 0) {
       const matchedHeadings = data.map(item => {
         const matched = subjectHeadings.find(heading => heading.id === item.id);
-        console.log('matched', matched);
+        //console.log('matched', matched);
 
         return matched ? { ...item, subject_heading: matched?.subject_heading } : item;
       });
