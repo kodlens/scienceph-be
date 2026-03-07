@@ -1,4 +1,5 @@
 import { Article } from "@/types/article";
+import { Material } from "@/types/material";
 import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
 import { Eye } from "lucide-react";
 
@@ -10,7 +11,7 @@ export const menuItems = (
     handlePublish,
     handleDraft,
     handleDelete,
-    article,
+    material,
     prefix
   }:
   {
@@ -20,7 +21,7 @@ export const menuItems = (
     handlePublish?: () => void,
     handleDraft?: () => void,
     handleDelete?: () => void
-    article?: Article,
+    material?: Material,
     prefix: string
   }
 ) => {
@@ -29,8 +30,8 @@ export const menuItems = (
   if(handleEditClick){
     items.push({
       label: 'Edit',
-      key: `${prefix}.articles.edit`,
-      disabled: article?.status === 'publish',
+      key: `${prefix}.materials.edit`,
+      disabled: material?.status === 'publish',
       icon: <EditOutlined />,
       onClick: () => handleEditClick(),
     })
@@ -39,8 +40,8 @@ export const menuItems = (
   if(handleTrashClick){
     items.push({
       label: 'Trash',
-      key: `${prefix}.articles.trash`,
-      disabled: article?.status === 'publish',
+      key: `${prefix}.materials.trash`,
+      disabled: material?.status === 'publish',
       icon: <DeleteOutlined />,
       onClick: () => handleTrashClick()
     })
@@ -49,8 +50,8 @@ export const menuItems = (
   if(handlePublish){
     items.push({
       label: 'Publish',
-      key: `${prefix}.articles.publish`,
-      disabled: article?.status === 'publish',
+      key: `${prefix}.materials.publish`,
+      disabled: material?.status === 'publish',
       icon: <GlobalOutlined />,
       onClick: () => handlePublish()
     })
@@ -59,8 +60,8 @@ export const menuItems = (
   if(handleDraft) {
     items.push({
       label: 'Draft',
-      disabled: article?.status === 'draft',
-      key: `${prefix}.articles.draft`,
+      disabled: material?.status === 'draft',
+      key: `${prefix}.materials.draft`,
       icon: <StopOutlined />,
       onClick: () => handleDraft()
     })
@@ -69,7 +70,7 @@ export const menuItems = (
   if(handleView){
     items.push({
       label: 'View',
-      key: `${prefix}.articles.view`,
+      key: `${prefix}.materials.view`,
       icon: <Eye size={15} />,
       onClick: () => handleView()
     })
@@ -83,8 +84,8 @@ export const menuItems = (
       },
       {
       label: 'Delete',
-      key: `${prefix}.articles.delete`,
-      disabled: article?.status === 'publish',
+      key: `${prefix}.materials.delete`,
+      disabled: material?.status === 'publish',
       icon: <DeleteOutlined />,
       onClick: () => handleDelete()
     })

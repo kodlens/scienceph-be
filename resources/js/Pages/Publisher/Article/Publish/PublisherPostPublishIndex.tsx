@@ -16,7 +16,7 @@ import React, { KeyboardEvent, useEffect, useState } from 'react'
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { Article } from '@/types/article';
-import ArticleView from '@/Components/ArticleView';
+import ArticleView from '@/Components/MaterialView';
 
 const { Column } = Table;
 

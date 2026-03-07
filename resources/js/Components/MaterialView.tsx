@@ -1,8 +1,8 @@
 import { dateFormat } from "@/helper/helperFunctions";
-import { Article } from "@/types/article";
+import { Material } from "@/types/material";
 
 
-export default function ArticleView({ article, className }: {article:Article, className:string } ) {
+export default function MaterialView({ material, className }: {material:Material, className:string } ) {
   return (
         <div className={`${className}`}>
             <hr />
@@ -13,23 +13,23 @@ export default function ArticleView({ article, className }: {article:Article, cl
             {/* <div className='italic text-center'>{post.image_caption}</div> */}
 
             {/* <div className='mt-4 font-bold text-blue-900 text-lg'>{post.category.title}</div> */}
-            <div className="font-bold text-2xl">{article.title}</div>
+            <div className="font-bold text-2xl">{material.title}</div>
             <div className=" mt-2">
 
               <div className="ml-2 font-normal">
-                 <span className="font-bold">AUTHOR:</span> {article.author}
-                {article.publish_date && (
+                 <span className="font-bold">AUTHOR:</span> {material.author}
+                {material.publish_date && (
                   <>
                     &nbsp;
                     |<span className="ml-2 text-gray-500">
-                      {dateFormat(article.publish_date as string)}
+                      {dateFormat(material.publish_date as string)}
                     </span>
                   </>
                 )}
               </div>
             </div>
 
-            <div className='mt-4 ck ck-content relative' dangerouslySetInnerHTML={{ __html: article.description ?? ''}}></div>
+            <div className='mt-4 ck ck-content relative' dangerouslySetInnerHTML={{ __html: material.description ?? ''}}></div>
 
         </div>
     )

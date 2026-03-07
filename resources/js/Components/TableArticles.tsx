@@ -1,18 +1,17 @@
 import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
-import { Article } from '@/types/article'
 import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
 import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
-import ArticleView from '@/Components/ArticleView'
 //import { adminMenuItems } from '@/helper/adminMenuItems'
 import { menuItems } from '@/helper/menuItems'
-
+import { Material } from '@/types/material'
+import MaterialView from './MaterialView'
 
 type Props = {
   routePrefix: string
-  data: { data: Article[], total: number }
+  data: { data: Material[], total: number }
   isFetching: boolean
   page: number
   paginationPageChange: (page: number) => void
@@ -24,7 +23,7 @@ type Props = {
   showPublish?: boolean
   showDraft?: boolean
   showView?: boolean
-  extraActions?: (article: Article) => MenuProps['items']
+  extraActions?: (material: Material) => MenuProps['items']
 
 }
 const TableMaterials = (
@@ -40,11 +39,11 @@ const TableMaterials = (
     draft: 'bg-slate-100 text-slate-700',
     return: 'bg-red-100 text-red-700',
   }
-  const handleView = (article: Article) => {
+  const handleView = (material: Material) => {
     modal.info({
       width: 1024,
-      title: 'Article Preview',
-      content: <ArticleView article={article} className={''} />,
+      title: 'Material Preview',
+      content: <MaterialView material={material} className={''} />,
     })
   }
 
@@ -56,31 +55,31 @@ const TableMaterials = (
         bordered
         loading={isFetching}
         dataSource={data?.data}
-        rowKey={(row: Article) => row.id}
+        rowKey={(row: Material) => row.id}
         pagination={false}
         expandable={{
-          expandedRowRender: (article: Article) => (
+          expandedRowRender: (material: Material) => (
             <div className="bg-slate-50 p-4 rounded-md border border-slate-200">
               <div className="grid md:grid-cols-5 gap-4 text-sm">
                 <div>
                   <div className="text-slate-500">Category</div>
-                  <div className="font-medium">{article.category?.name}</div>
+                  <div className="font-medium">{material.category?.name}</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Section</div>
-                  <div className="font-medium">{article.section?.name}</div>
+                  <div className="font-medium">{material.section?.name}</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Author</div>
-                  <div className="font-medium">{article.author}</div>
+                  <div className="font-medium">{material.author}</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Modified</div>
-                  <div>{dateFormat(article.modified_at?.toString() ?? '')}</div>
+                  <div>{dateFormat(material.modified_at?.toString() ?? '')}</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Encoded</div>
-                  <div>{dateFormat(article.encoded_at?.toString() ?? '')}</div>
+                  <div>{dateFormat(material.encoded_at?.toString() ?? '')}</div>
                 </div>
               </div>
             </div>
@@ -104,34 +103,34 @@ const TableMaterials = (
 
         {/* SUMMARY */}
         <Column
-          title="Article"
-          render={(_, article: Article) => (
+          title="Material Details"
+          render={(_, material: Material) => (
             <div className="space-y-2">
               <p className="text-sm text-slate-600">
-                {article.description_text
-                  ? truncate(article.description_text, 14)
+                {material.description_text
+                  ? truncate(material.description_text, 14)
                   : '—'}
               </p>
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Press Release:</span>
                 <span
-                  className={`px-2 py-0.5 rounded-full font-medium ${article.is_press_release
+                  className={`px-2 py-0.5 rounded-full font-medium ${material.is_press_release
                       ? 'bg-green-100 text-green-700'
                       : 'bg-slate-100 text-slate-600'
                     }`}
                 >
-                  {article.is_press_release ? 'Yes' : 'No'}
+                  {material.is_press_release ? 'Yes' : 'No'}
                 </span>
               </div>
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Encoded By:</span>
-                { article.encoded_by ? (
+                { material.encoded_by ? (
                   <span
                   className={`px-2 py-0.5 rounded-full font-medium `}
                 >
-                  {article.encoded_by.fname} {article.encoded_by.lname}
+                  {material.encoded_by.fname} {material.encoded_by.lname}
                 </span>
                 ):null}
 
@@ -139,11 +138,11 @@ const TableMaterials = (
 
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Modified By:</span>
-                { article.modified_by ? (
+                { material.modified_by ? (
                   <span
                     className={`px-2 py-0.5 rounded-full font-medium `}
                   >
-                    {article.modified_by ? article.modified_by.fname : ''} {article.modified_by ? article.modified_by.lname : ''}
+                    {material.modified_by ? material.modified_by.fname : ''} {material.modified_by ? material.modified_by.lname : ''}
                   </span>
                 ): null}
               </div>
@@ -155,10 +154,10 @@ const TableMaterials = (
         {/* PUBLICATION DATE */}
         <Column
           title="Publication Date"
-          render={(_, article: Article) => (
+          render={(_, material: Material) => (
             <span className="text-sm text-slate-700">
-              {article.publish_date
-                ? dateFormat(article.publish_date.toString())
+              {material.publish_date
+                ? dateFormat(material.publish_date.toString())
                 : '—'}
             </span>
           )}
@@ -181,29 +180,29 @@ const TableMaterials = (
         {/* ACTION */}
         <Column
           title="Action"
-          render={(_, article: Article) => (
+          render={(_, material: Material) => (
             <Dropdown
               trigger={['click']}
               menu={{
                 items: menuItems({
-                  article,
+                  material,
                   prefix: routePrefix,
                   handleEditClick: showEdit ? () =>
-                    router.visit(`/${routePrefix}/materials/${article.id}/edit`)
+                    router.visit(`/${routePrefix}/materials/${material.id}/edit`)
                   : undefined,
                   handleTrashClick: showTrash ? async () => {
                     modal.confirm({
                       title: 'Move to Trash?',
                       content: 'This article will be moved to trash.',
                       onOk: async () => {
-                        await axios.post(`/${routePrefix}/material-trash/${article.id}`)
+                        await axios.post(`/${routePrefix}/material-trash/${material.id}`)
                         refetch()
                       },
                     })
                   } : undefined,
-                  handleView: showView ? () => handleView(article) : undefined,
+                  handleView: showView ? () => handleView(material) : undefined,
                   handlePublish: showPublish ? async () => {
-                    await axios.post(`/${routePrefix}/material-publish/${article.id}`).then(() => {
+                    await axios.post(`/${routePrefix}/material-publish/${material.id}`).then(() => {
                        notification.success({
                         message: 'Material has been published.',
                       })
@@ -211,7 +210,7 @@ const TableMaterials = (
                     })
                   } : undefined,
                   handleDraft: showDraft ? async () => {
-                    await axios.post(`/${routePrefix}/material-draft/${article.id}`).then(() => {
+                    await axios.post(`/${routePrefix}/material-draft/${material.id}`).then(() => {
                        notification.success({
                         message: 'Material has been returned to draft.',
                       })
@@ -223,7 +222,7 @@ const TableMaterials = (
                       title: 'Delete Material?',
                       content: 'This material will be permanently deleted.',
                       onOk: async () => {
-                        await axios.delete(`/${routePrefix}/materials/${article.id}`)
+                        await axios.delete(`/${routePrefix}/materials/${material.id}`)
                         refetch()
                       },
                     })

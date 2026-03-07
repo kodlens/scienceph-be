@@ -30,7 +30,7 @@ interface PostResponse {
 //   }
 import dayjs from 'dayjs';
 import { Article } from '@/types/article';
-import ArticleView from '@/Components/ArticleView';
+import ArticleView from '@/Components/MaterialView';
 
 const dateFormat = (item:Date):string=> {
 	return dayjs(item).format('MMM-DD-YYYY')
