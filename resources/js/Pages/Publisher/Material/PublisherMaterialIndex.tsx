@@ -11,7 +11,7 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
-import TableMaterials from '@/Components/TableArticles'
+import TableMaterials from '@/Components/TableMaterials'
 
 export default function PublisherMaterialIndex() {
 

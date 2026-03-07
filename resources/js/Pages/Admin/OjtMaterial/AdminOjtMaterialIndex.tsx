@@ -9,7 +9,7 @@ import axios from 'axios';
 
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import TableArticles from '@/Components/TableArticles';
+import TableArticles from '@/Components/TableMaterials';
 import SearchFilter from '@/Components/SearchFilter';
 
 const AdminOjtMaterialIndex = () => {

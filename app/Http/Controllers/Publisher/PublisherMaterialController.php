@@ -26,7 +26,6 @@ class PublisherMaterialController extends MaterialController
 
     public function index()
     {
-        return 'test';
         return Inertia::render('Publisher/Material/PublisherMaterialIndex');
     }
 

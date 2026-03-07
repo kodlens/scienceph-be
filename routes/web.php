@@ -143,20 +143,21 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Publisher\PublisherDashboardController::class, 'index'])->name('publisher.dashboard.index');
 
     Route::get('/materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'index'])->name('publisher.materials.index');
-    Route::get('/materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'store'])->name('publisher.materials.store');
+    Route::get('/materials/create', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'create'])->name('publisher.materials.create');
+    Route::post('/materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'store'])->name('publisher.materials.store');
     Route::get('/materials/{id}/edit', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'edit'])->name('publisher.materials.edit');
     Route::patch('/materials/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'update'])->name('publisher.materials.update');
 
 
     Route::get('/get-materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'getData'])->name('publisher.materials.get-data');
 
-    Route::get('/trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'index'])->name('publisher.trash-articles.index');
-    Route::get('/get-trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'getData'])->name('publisher.trash-articles.get-data');
+    Route::get('/trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'index'])->name('publisher.trash-materials.index');
+    Route::get('/get-trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'getData'])->name('publisher.trash-materials.get-data');
 
-    Route::post('/article-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
-    Route::post('/article-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');
-    //Route::post('/articles-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'postReturnToEncoder'])->name('publisher.articles.return-to-encoder');
-    Route::post('/article-trash/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'trash'])->name('publisher.articles.trash');
+    Route::post('/material-publish/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'publish'])->name('publisher.materials.publish');
+    Route::post('/material-draft/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'draft'])->name('publisher.materials.draft');
+    //Route::post('/materials-return-to-encoder/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'postReturnToEncoder'])->name('publisher.materials.return-to-encoder');
+    Route::post('/material-trash/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'trash'])->name('publisher.materials.trash');
 
     // Route::get('/post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'index']);
     // Route::get('/get-post-publish', [App\Http\Controllers\Publisher\PublisherPostPublishController::class, 'getData'])->name('author.post-publish-get-data');

@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Article;
+use App\Models\Material;
 
-class PublisherTrashArticleController extends Controller
+class PublisherTrashMaterialController extends Controller
 {
     //
 
 
     public function index(){
-        return Inertia::render('Publisher/Article/Trash/TrashArticleIndex');
+        return Inertia::render('Publisher/Material/Trash/TrashMaterialIndex');
     }
 
     //get trash list
@@ -24,7 +24,7 @@ class PublisherTrashArticleController extends Controller
         $status  = $req->string('status')->toString();
         $title  = $req->string('title')->toString();
 
-        $query = Article::query()
+        $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 1);
 

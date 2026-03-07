@@ -7,10 +7,11 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
-import TableArticles from '@/Components/TableArticles'
-import { Trash } from 'lucide-react'
 
-export default function TrashArticleIndex() {
+import { Trash } from 'lucide-react'
+import TableMaterials from '@/Components/TableMaterials'
+
+export default function TrashMaterialIndex() {
 
   const [page, setPage] = useState(1)
 
@@ -34,7 +35,7 @@ export default function TrashArticleIndex() {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/publisher/get-trash-articles?${params}`)
+      const res = await axios.get(`/publisher/get-trash-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -55,10 +56,10 @@ export default function TrashArticleIndex() {
           <div className="mb-6 flex items-center">
             <div>
               <h1 className="text-2xl font-semibold text-slate-900">
-                <span className='flex gap-2 items-center'><Trash className='text-red-500'/>Trash Articles</span>
+                <span className='flex gap-2 items-center'><Trash className='text-red-500'/>Trash Materials</span>
               </h1>
               <p className="text-sm text-slate-500">
-                Manage, review, and publish science & technology articles
+                Manage, review, and publish science & technology materials
               </p>
             </div>
           </div>
@@ -71,7 +72,7 @@ export default function TrashArticleIndex() {
           />
 
 
-           <TableArticles
+           <TableMaterials
             routePrefix='publisher'
             data={data}
             isFetching={isFetching}
@@ -101,7 +102,7 @@ export default function TrashArticleIndex() {
   )
 }
 
-TrashArticleIndex.layout = (page: ReactNode) => (
+TrashMaterialIndex.layout = (page: ReactNode) => (
   <AuthenticatedLayout user={(page as any).props.auth.user}>
     {page}
   </AuthenticatedLayout>

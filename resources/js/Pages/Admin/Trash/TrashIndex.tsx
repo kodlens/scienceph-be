@@ -7,7 +7,7 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
-import TableArticles from '@/Components/TableArticles'
+import TableArticles from '@/Components/TableMaterials'
 import { Trash } from 'lucide-react'
 
 export default function TrashIndex() {
