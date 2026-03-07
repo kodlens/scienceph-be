@@ -11,7 +11,7 @@ import Error404 from '@/Components/Error404'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import SearchFilter from '@/Components/SearchFilter'
-import TableArticles from '@/Components/TableArticles'
+import TableMaterials from '@/Components/TableArticles'
 
 export default function PublisherMaterialIndex() {
 
@@ -37,7 +37,7 @@ export default function PublisherMaterialIndex() {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/publisher/get-articles?${params}`)
+      const res = await axios.get(`/publisher/get-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -49,7 +49,7 @@ export default function PublisherMaterialIndex() {
 
   return (
     <>
-      <Head title="Articles" />
+      <Head title="Materials" />
 
       <div className="flex justify-center px-4">
         <div className="w-full max-w-[1300px] bg-white rounded-lg shadow-sm border border-slate-200 p-6">
@@ -58,10 +58,10 @@ export default function PublisherMaterialIndex() {
           <div className="mb-6 flex items-center">
             <div>
               <h1 className="text-2xl font-semibold text-slate-900">
-                Articles
+                Materials
               </h1>
               <p className="text-sm text-slate-500">
-                Manage, review, and publish science & technology articles
+                Manage, review, and publish science & technology materials
               </p>
             </div>
 
@@ -69,9 +69,9 @@ export default function PublisherMaterialIndex() {
               className='ml-auto'
               icon={<FileAddOutlined />}
               type="primary"
-              onClick={() => router.visit('/publisher/articles/create')}
+              onClick={() => router.visit('/publisher/materials/create')}
             >
-              New Article
+              New Material
             </Button>
 
           </div>
@@ -83,7 +83,7 @@ export default function PublisherMaterialIndex() {
             refetch={refetch}
           />
 
-           <TableArticles
+           <TableMaterials
             routePrefix='publisher'
             data={data}
             isFetching={isFetching}

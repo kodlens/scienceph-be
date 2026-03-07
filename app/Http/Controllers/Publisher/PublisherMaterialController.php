@@ -16,7 +16,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use Illuminate\Http\JsonResponse;
-use App\Models\Article;
+use App\Models\Material;
 use App\Http\Controllers\Helpers\RecordTrail;
 use App\Http\Controllers\Helpers\Fetcher;
 use App\Http\Controllers\Base\MaterialController;
@@ -26,6 +26,7 @@ class PublisherMaterialController extends MaterialController
 
     public function index()
     {
+        return 'test';
         return Inertia::render('Publisher/Material/PublisherMaterialIndex');
     }
 
@@ -35,7 +36,7 @@ class PublisherMaterialController extends MaterialController
         $status  = $request->string('status')->toString();
         $title  = $request->string('title')->toString();
 
-        $query = Article::query()
+        $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
             ->where('is_ojt', 0);
@@ -86,7 +87,7 @@ class PublisherMaterialController extends MaterialController
         //$openController = new OpenController();
         $fetcher = new Fetcher();
 
-        $sections = $fetcher->getSections();
+        //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
@@ -98,13 +99,13 @@ class PublisherMaterialController extends MaterialController
         return Inertia::render('Publisher/Material/PublisherMaterialCreateEdit', [
             'id' => 0,
             'ckLicense' => $CK_LICENSE,
-            'post' => null,
+            'material' => null,
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
             'categories' => $categories,
             'regionalOffices' => $regionalOffices,
-            'sections' => $sections,
+            //'sections' => $sections,
             'authors' => $authors
         ]);
     }
@@ -117,7 +118,7 @@ class PublisherMaterialController extends MaterialController
 
         $fetcher = new Fetcher();
 
-        $sections = $fetcher->getSections();
+        //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
@@ -129,16 +130,16 @@ class PublisherMaterialController extends MaterialController
         $article = Article::find($id);
 
 
-        return Inertia::render('Publisher/Article/PublisherArticleCreateEdit', [
+        return Inertia::render('Publisher/Material/PublisherMaterialCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
-            'article' => $article,
+            'material' => $material,
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
             'categories' => $categories,
-            'sections' => $sections,
+            //'sections' => $sections,
             'authors' => $authors
         ]);
     }

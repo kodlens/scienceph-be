@@ -150,12 +150,8 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
 
     Route::get('/get-materials', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'getData'])->name('publisher.materials.get-data');
 
-
-
-
     Route::get('/trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'index'])->name('publisher.trash-articles.index');
     Route::get('/get-trash-articles', [App\Http\Controllers\Publisher\PublisherTrashArticleController::class, 'getData'])->name('publisher.trash-articles.get-data');
-
 
     Route::post('/article-publish/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'publish'])->name('publisher.articles.publish');
     Route::post('/article-draft/{id}', [App\Http\Controllers\Publisher\PublisherArticleController::class, 'draft'])->name('publisher.articles.unpublish');

@@ -27,7 +27,7 @@ export default function PublisherLayout(
 
   const { post } = useForm();
   const [collapsed, setCollapsed] = useState(false);
-  const [openKeys, setOpenKeys] = useState<string[]>(['publisher.articles']);
+  const [openKeys, setOpenKeys] = useState<string[]>(['publisher.materials']);
 
   const handleLogout = () => {
     post(route('logout'));
@@ -113,7 +113,7 @@ export default function PublisherLayout(
           breakpoint='md'
           onBreakpoint={(broken) => {
             setCollapsed(broken);
-            if (!broken) setOpenKeys(['publisher.articles']);
+            if (!broken) setOpenKeys(['publisher.materials']);
           }}
           collapsed={collapsed} width={260}>
           <div className='border-b border-cyan-100/20 pb-3'>
