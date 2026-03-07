@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Article;
+use App\Models\Material;
 use Inertia\Inertia;
 use Inertia\Response;
 use Auth;
@@ -25,7 +25,7 @@ class AdminTrashController extends Controller
         $status  = $req->string('status')->toString();
         $title  = $req->string('title')->toString();
 
-        $query = Article::query()
+        $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 1);
 
@@ -42,8 +42,6 @@ class AdminTrashController extends Controller
                 ->orWhere('fname', $req->modifier);
             });
         }
-
-
 
         // Search filter
         $query->when($title, function ($q) use ($title) {
