@@ -1,6 +1,6 @@
 import { App, Button, Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
-import { SaveOutlined } from "@ant-design/icons";
+import { ProfileOutlined, SaveOutlined } from "@ant-design/icons";
 import { PageProps } from "@/types";
 import { router } from "@inertiajs/react";
 import axios from "axios";
@@ -49,76 +49,93 @@ export default function MyAccount({ auth }: PageProps) {
 
 
   return (
+    <div className="flex justify-center">
+      <div className="w-full max-w-[980px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-cyan-50 via-white to-teal-50 px-6 py-6">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-cyan-100/60 blur-2xl" />
+          <div className="pointer-events-none absolute -left-8 -bottom-14 h-36 w-36 rounded-full bg-teal-100/70 blur-2xl" />
+          <div className="relative flex items-start gap-4">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-200 bg-white text-cyan-600 shadow-sm">
+              <ProfileOutlined className="text-xl" />
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cyan-700">Account Settings</p>
+              <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">My Account</h1>
+              <p className="mt-1 text-sm text-slate-600">Keep your personal information up to date.</p>
+            </div>
+          </div>
+        </div>
 
-    <div className="w-[450px] bg-white p-6 mx-auto">
-      <Form form={form} layout="vertical"
-        onFinish={submit}
-        autoComplete='off'
-        initialValues={{
-          username: '',
-          lname: '',
-          fname: '',
-          mname: '',
-          sex: '',
-        }}>
+        <div className="p-6">
+          <Form form={form} layout="vertical"
+            onFinish={submit}
+            autoComplete='off'
+            initialValues={{
+              username: '',
+              lname: '',
+              fname: '',
+              mname: '',
+              sex: '',
+            }}>
 
-        <Form.Item label="USERNAME"
-          name="username"
-          validateStatus={errors?.username ? 'error' : ''}
-          help={errors?.username ? errors?.username[0] : ''}
-        >
-          <Input placeholder="Username" disabled size="large" />
-        </Form.Item>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Form.Item label="Username"
+                name="username"
+                validateStatus={errors?.username ? 'error' : ''}
+                help={errors?.username ? errors?.username[0] : ''}
+              >
+                <Input placeholder="Username" disabled size="large" />
+              </Form.Item>
 
-        <Form.Item label="LAST NAME" name="lname"
-          validateStatus={errors?.lname ? 'error' : ''}
-          help={errors?.lname ? errors?.lname[0] : ''}
-        >
-          <Input placeholder="Last Name" size="large" />
-        </Form.Item>
+              <Form.Item name="sex"
+                label="Sex"
+                validateStatus={errors.sex ? "error" : ""}
+                help={errors.sex ? errors.sex[0] : ""}
+              >
+                <Select size="large">
+                  <Select.Option value="MALE">MALE</Select.Option>
+                  <Select.Option value="FEMALE">FEMALE</Select.Option>
+                </Select>
+              </Form.Item>
+            </div>
 
-        <Form.Item label="FIRST NAME" name="fname"
-          validateStatus={errors?.fname ? 'error' : ''}
-          help={errors?.fname ? errors?.fname[0] : ''}
-        >
-          <Input placeholder="First Name" size="large" />
-        </Form.Item>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Form.Item label="Last Name" name="lname"
+                validateStatus={errors?.lname ? 'error' : ''}
+                help={errors?.lname ? errors?.lname[0] : ''}
+              >
+                <Input placeholder="Last Name" size="large" />
+              </Form.Item>
 
-        <Form.Item label="MIDDLE NAME" name="mname"
-          validateStatus={errors?.mname ? 'error' : ''}
-          help={errors?.mname ? errors?.mname[0] : ''}
-        >
-          <Input placeholder="Middle name" size="large" />
-        </Form.Item>
+              <Form.Item label="First Name" name="fname"
+                validateStatus={errors?.fname ? 'error' : ''}
+                help={errors?.fname ? errors?.fname[0] : ''}
+              >
+                <Input placeholder="First Name" size="large" />
+              </Form.Item>
+            </div>
 
-        <Form.Item name="sex" className="w-full"
-          label="SEX"
-          validateStatus={
-            errors.sex ? "error" : ""
-          }
-          help={
-            errors.sex ? errors.sex[0] : ""
-          }
-        >
-          <Select>
-            <Select.Option value="MALE">
-              MALE
-            </Select.Option>
-            <Select.Option value="FEMALE">
-              FEMALE
-            </Select.Option>
-          </Select>
-        </Form.Item>
+            <Form.Item label="Middle Name" name="mname"
+              validateStatus={errors?.mname ? 'error' : ''}
+              help={errors?.mname ? errors?.mname[0] : ''}
+            >
+              <Input placeholder="Middle Name" size="large" />
+            </Form.Item>
 
-        <Button
-          htmlType="submit"
-          className='w-full'
-          type="primary"
-          icon={<SaveOutlined />} size='large' loading={loading}>
-          Save
-        </Button>
+            <div className="mt-2 flex justify-end">
+              <Button
+                htmlType="submit"
+                type="primary"
+                icon={<SaveOutlined />}
+                size='large'
+                loading={loading}>
+                Save Changes
+              </Button>
+            </div>
 
-      </Form>
+          </Form>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import PublisherLayout from "@/Layouts/PublisherLayout";
 import { Head } from "@inertiajs/react";
 
 import ChangePassword from "../Auth/ChangePassword";
@@ -9,10 +9,9 @@ export default function PublisherChangePassword(  ) {
 
         <>
             <Head title="Change Password"></Head>
-            <Head title="My Account"></Head>
             <ChangePassword></ChangePassword>
         </>
     )
 }
 
-PublisherChangePassword.layout = (page:any) => <Authenticated user={page.props.auth.user}>{page}</Authenticated>
+PublisherChangePassword.layout = (page:any) => <PublisherLayout user={page.props.auth.user}>{page}</PublisherLayout>

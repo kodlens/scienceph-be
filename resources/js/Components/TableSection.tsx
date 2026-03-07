@@ -74,7 +74,7 @@ const TableSection = ({ title, data, type }: TableProps) => {
                                 )}
 
                                 {type === "top" && "hits" in item && (
-                                    <td className="py-3">
+                                    <td className="py-3 w-[150px]">
                                         <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
                                             {formatNumber(item.hits)} views
                                         </span>

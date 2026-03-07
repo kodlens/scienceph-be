@@ -1,7 +1,7 @@
 import { PageProps } from "@/types";
 import { Head } from "@inertiajs/react";
 import MyAccount from "../Auth/MyAccount";
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import PublisherLayout from "@/Layouts/PublisherLayout";
 
 export default function PublisherMyAccount( {auth} : PageProps ) {
 
@@ -9,10 +9,10 @@ export default function PublisherMyAccount( {auth} : PageProps ) {
 
         <>
             <Head title="My Account"></Head>
-            <MyAccount auth={auth} categories={[]} permissions={[]} statuses={[]}></MyAccount>
+            <MyAccount auth={auth}></MyAccount>
         </>
     )
 }
 
 
-PublisherMyAccount.layout = (page:any) => <Authenticated user={page.props.auth.user}>{page}</Authenticated>
+PublisherMyAccount.layout = (page:any) => <PublisherLayout user={page.props.auth.user}>{page}</PublisherLayout>

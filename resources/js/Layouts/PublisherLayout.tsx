@@ -230,7 +230,7 @@ export default function PublisherLayout(
               borderRadius: 0,
             }}
           >
-            <main className='py-4'>{children}</main>
+            <main className='py-6 px-4'>{children}</main>
           </Content>
         </Layout>
       </Layout>
