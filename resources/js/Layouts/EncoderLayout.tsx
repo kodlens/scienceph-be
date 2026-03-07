@@ -156,6 +156,7 @@ export default function EncoderLayout(
               }}
               selectedKeys={[selectedMenuKey]}
               openKeys={collapsed ? [] : openKeys}
+              defaultOpenKeys={['encoder.materials']}
               onOpenChange={(keys) => setOpenKeys(keys as string[])}
               items={navigationItems}
             />

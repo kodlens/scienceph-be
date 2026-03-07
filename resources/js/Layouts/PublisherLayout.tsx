@@ -83,11 +83,13 @@ export default function PublisherLayout(
   ]), []);
 
   const currentRoute = `${route().current() ?? ''}`;
+
   const selectedMenuKey = currentRoute.startsWith('publisher.materials.')
     ? 'publisher.materials.index'
     : currentRoute.startsWith('publisher.trash-materials')
       ? 'publisher.trash-materials.index'
       : currentRoute;
+
   const userInitials = `${user?.fname?.[0] ?? ''}${user?.lname?.[0] ?? ''}`.toUpperCase();
   const fullName = `${user?.lname ?? ''}, ${user?.fname ?? ''}`.trim();
   const compactName = `${user?.lname ?? ''}, ${user?.fname?.[0] ?? ''}.`.trim();
@@ -160,6 +162,7 @@ export default function PublisherLayout(
               selectedKeys={[selectedMenuKey]}
               openKeys={collapsed ? [] : openKeys}
               onOpenChange={(keys) => setOpenKeys(keys as string[])}
+              defaultOpenKeys={['publisher.materials']}
               items={navigationItems}
             />
 

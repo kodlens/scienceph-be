@@ -45,11 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/article/validate-title/{id}', [App\Http\Controllers\Validation\InputTitleController::class, 'inputTitle']);
 
 
-    Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index']);
-    Route::patch('/my-account-update', [App\Http\Controllers\Auth\MyAccountController::class, 'update']);
+    Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index'])->name('my-account.index');
+    Route::patch('/my-account-update', [App\Http\Controllers\Auth\MyAccountController::class, 'update'])->name('my-account.update');
 
-    Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'index']);
-    Route::post('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'changePassword']);
+    Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'index'])->name('change-password.index');
+    Route::post('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class, 'changePassword'])->name('change-password.store');
 
     //common report for dashboard, only authenticated can access this route
     Route::get('/dashboard/stats', [App\Http\Controllers\DashboardController::class, 'stats']);
