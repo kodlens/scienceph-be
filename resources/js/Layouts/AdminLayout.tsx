@@ -16,7 +16,12 @@ import { DatabaseZap, LandPlot, LogOut, UserPen } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
-  background: 'linear-gradient(180deg, #084c7f 0%, #06385d 100%)',
+  background: `
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.24), transparent 42%),
+    radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.18), transparent 38%),
+    linear-gradient(180deg, #1e3a8a 0%, #1e2a68 48%, #16224f 100%)
+  `,
+  borderRight: '1px solid rgba(191, 219, 254, 0.24)',
 };
 
 export default function AdminLayout(
@@ -34,6 +39,29 @@ export default function AdminLayout(
   type MenuItem = Required<MenuProps>['items'][number];
 
   const currentMenuKey = `${route().current()?.split('.')?.slice(0, -1).join('.')}`;
+  const currentRoute = `${route().current() ?? ''}`;
+  const userInitials = `${user?.fname?.[0] ?? ''}${user?.lname?.[0] ?? ''}`.toUpperCase();
+  const fullName = `${user?.lname ?? ''}, ${user?.fname ?? ''}`.trim();
+  const compactName = `${user?.lname ?? ''}, ${user?.fname?.[0] ?? ''}.`.trim();
+  const pageTitle = currentMenuKey === 'admin.dashboard'
+    ? 'Dashboard'
+    : currentMenuKey === 'admin.categories'
+      ? 'Categories'
+      : currentMenuKey === 'admin.regions'
+        ? 'Regions'
+        : currentMenuKey === 'admin.materials'
+          ? 'Materials'
+          : currentMenuKey === 'admin.ojt-materials'
+            ? 'OJT Entry Materials'
+            : currentMenuKey === 'admin.trash-articles'
+              ? 'Trash Materials'
+              : currentMenuKey === 'admin.users'
+                ? 'Users'
+                : currentRoute.startsWith('my-account')
+                  ? 'My Account'
+                  : currentRoute.startsWith('change-password')
+                    ? 'Change Password'
+                    : 'Admin Panel';
 
   const navigationItems = useMemo<MenuItem[]>(() => ([
     {
@@ -107,23 +135,38 @@ export default function AdminLayout(
             setCollapsed(broken)
             if (!broken) setOpenKeys(['materials'])
           }}>
-          <PanelSideBarLogo />
+          <div className='border-b border-blue-100/25 pb-3'>
+            <PanelSideBarLogo />
+            {!collapsed && (
+              <div className='mx-4 mt-1 rounded-xl border border-blue-100/25 bg-white/10 px-3 py-2 text-blue-50 backdrop-blur-[1px]'>
+                <p className='text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-100/90'>Admin Workspace</p>
+                <div className='mt-1 flex items-center gap-2'>
+                  <div className='inline-flex h-7 w-7 items-center justify-center rounded-full border border-blue-100/35 bg-blue-200/20 text-[11px] font-semibold'>
+                    {userInitials || 'AD'}
+                  </div>
+                  <p className='truncate text-xs text-blue-50/90'>{user.lname}, {user.fname}</p>
+                </div>
+              </div>
+            )}
+          </div>
           <ConfigProvider
             theme={{
               token: {
-                colorText: 'white',
-                colorBgBase: '#084c7f',
-                colorBgContainer: '#084c7f',
+                colorText: '#eff6ff',
+                colorBgBase: '#1e3a8a',
+                colorBgContainer: '#1e3a8a',
               },
               components: {
                 Menu: {
                   itemBg: 'transparent',
-                  itemColor: 'rgba(255,255,255,0.88)',
+                  itemColor: 'rgba(239,246,255,0.86)',
                   itemHoverColor: '#ffffff',
-                  itemHoverBg: 'rgba(255,255,255,0.14)',
+                  itemHoverBg: 'rgba(96, 165, 250, 0.18)',
                   itemSelectedColor: '#ffffff',
-                  itemSelectedBg: 'rgba(255,255,255,0.22)',
+                  itemSelectedBg: 'rgba(37, 99, 235, 0.42)',
                   subMenuItemBg: 'transparent',
+                  itemBorderRadius: 10,
+                  iconSize: 15,
                 },
               }
             }}
@@ -132,8 +175,10 @@ export default function AdminLayout(
               mode="inline"
               style={{
                 background: 'transparent',
-                color: 'white',
+                color: '#eff6ff',
                 borderInlineEnd: 0,
+                paddingInline: 8,
+                paddingTop: 8,
               }}
               selectedKeys={[currentMenuKey]}
               openKeys={collapsed ? [] : openKeys}
@@ -149,19 +194,26 @@ export default function AdminLayout(
             className='border-b border-slate-200'
             style={{ padding: 0, background: 'white' }}
           >
-            <div className='flex items-center'>
-              <Button
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                aria-label="Toggle sidebar"
-                style={{
-                  fontSize: '16px',
-                  width: 64,
-                  height: 64,
-                }}
-              />
-              <div className='ml-auto mr-4 flex items-center gap-3'>
+            <div className='flex h-16 items-center justify-between px-3'>
+              <div className='flex items-center gap-3'>
+                <Button
+                  type="text"
+                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                  onClick={() => setCollapsed(!collapsed)}
+                  aria-label="Toggle sidebar"
+                  style={{
+                    fontSize: '16px',
+                    width: 42,
+                    height: 42,
+                  }}
+                />
+                <div className='h-7 w-px bg-slate-200' />
+                <div className='leading-tight'>
+                  <p className='text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500'>Admin Workspace</p>
+                  <p className='text-sm font-semibold text-slate-800'>{pageTitle}</p>
+                </div>
+              </div>
+              <div className='flex items-center'>
                 <Dropdown
                   trigger={['click']}
                   menu={{
@@ -178,10 +230,11 @@ export default function AdminLayout(
                 >
                   <button
                     type='button'
-                    className='inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50'
+                    className='inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 hover:bg-slate-50'
+                    title={fullName}
                   >
-                    <Avatar size="small" icon={<UserOutlined />} />
-                    <span className='font-medium'>{user.lname}, {user.fname}</span>
+                    <Avatar size="small" style={{ backgroundColor: '#1d4ed8' }}>{userInitials || 'AD'}</Avatar>
+                    <span className='max-w-[140px] truncate font-medium lg:max-w-[190px]'>{compactName}</span>
                     <DownOutlined className='text-xs text-slate-500' />
                   </button>
                 </Dropdown>
