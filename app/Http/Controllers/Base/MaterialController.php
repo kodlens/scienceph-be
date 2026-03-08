@@ -74,7 +74,6 @@ class MaterialController extends Controller
                     'alias' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
-                    'section_id' => $req->section,
                     'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->id,
@@ -116,7 +115,6 @@ class MaterialController extends Controller
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
             'category' => ['required'],
-            'section' => ['required'],
             //'publish_date' => ['required'],
         ]);
 
@@ -155,7 +153,6 @@ class MaterialController extends Controller
         $data->alias = Str::slug($req->title);
         $data->description = $modifiedHtml;
         $data->description_text = $content;
-        $data->section_id = $req->section;
         $data->category_id = $req->category;
         $data->author = $req->author;
         $data->modified_by_id = $user->id;
