@@ -12,20 +12,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Article;
+use App\Models\Material;
 use Illuminate\Support\Facades\DB;
 use \Carbon\Carbon;
 
-class ArticleController extends Controller
+class MaterialController extends Controller
 {
 
     /* ============================
     Load latest articles with description containing images
     This is for the latest articles on the welcome main page
     ============================= */
-    public function loadLatestArticles()
+    public function loadLatestMaterials()
     {
-        $latestNews = Article::where('status', 'publish')
+        $latestNews = Material::where('status', 'publish')
             ->where('description', 'like', '%'. '<img src' . '%')
             ->orderBy('publish_date', 'desc')
             ->take(11)
@@ -43,10 +43,10 @@ class ArticleController extends Controller
         return response()->json($latestNews);
     }
 
-    public function loadPopularArticles() {
+    public function loadPopularMaterials() {
         $monthsAgo = Carbon::now()->subMonths(3);
 
-        $data = Article::where('status', 'publish')
+        $data = Material::where('status', 'publish')
             ->with('category')
 
             ->whereDate('publish_date', '>=', $monthsAgo)
@@ -70,21 +70,21 @@ class ArticleController extends Controller
 
 
 
-    public function getArticle($slug){
-        return Article::where('alias', $slug)
+    public function getMaterial($slug){
+        return Material::where('alias', $slug)
             ->select('id', 'title', 'description', 'description_text', 'alias as slug', 'category_id', 'author', 'publish_date', 'is_press_release')
             ->with('category')
             ->first();
     }
 
-    public function articlesBySubject(Request $req){
+    public function materialsBySubject(Request $req){
 
         $search = $req->search;
         $subject = $req->subject;
 
         // ===== GET RELATED SUBJECTS =====
         $subjects = DB::table('info_subject_headings as a')
-            ->join('infos as b', 'a.info_id', '=', 'b.id')
+            ->join('materials as b', 'a.info_id', '=', 'b.id')
             ->join('subject_headings as c', 'a.subject_heading_id', '=', 'c.id')
             ->join('subjects as d', 'c.subject_id', '=', 'd.id')
             ->select(
@@ -114,20 +114,20 @@ class ArticleController extends Controller
             return $subjects;
     }
 
-    public function loadRelatedArticle($slug) {
+    public function loadRelatedMaterial($slug) {
 
-        $info = Info::where('alias', $slug)->first();
+        $info = Material::where('alias', $slug)->first();
 
-        $relatedArticles = Info::select('id', 'title', 'alias as slug', 'description_text', 'publish_date')
+        $relatedMaterials = Material::select('id', 'title', 'alias as slug', 'description_text', 'publish_date')
             ->selectRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
             ->whereRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
-            ->where('id', '!=', $info->id)  // exclude current article
+            ->where('id', '!=', $info->id)  // exclude current material
             ->orderByDesc('publish_date')
             ->orderByDesc('relevance')
             ->limit(10)
             ->get();
 
 
-        return $relatedArticles;
+        return $relatedMaterials;
     }
 }

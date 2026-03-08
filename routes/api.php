@@ -16,17 +16,17 @@ Route::get('/user', function (Request $request) {
 Route::get('/load-categories', [\App\Http\Controllers\Api\CategoryController::class, 'loadCategories']);
 
 /* ============================
-    ARTICLES
+    MATERIALS
 ============================= */
-Route::get('/load-latest-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadLatestArticles']);
-Route::get('/load-popular-articles', [\App\Http\Controllers\Api\ArticleController::class, 'loadPopularArticles']);
-Route::get('/get-article/{slug}', [\App\Http\Controllers\Api\ArticleController::class, 'getArticle']);
+Route::get('/load-latest-materials', [\App\Http\Controllers\Api\MaterialController::class, 'loadLatestMaterials']);
+Route::get('/load-popular-materials', [\App\Http\Controllers\Api\MaterialController::class, 'loadPopularMaterials']);
+Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'getMaterial']);
 
 
 
 
-Route::get('/search/latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
-Route::get('/search/others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
+Route::get('/search-latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
+Route::get('/search-others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
 
 /* ============================
     Sidebar subject and subject headings search
@@ -75,10 +75,12 @@ This route is for by subject headings label
 
 
 
+//load broad classes with subject headings (subject with subject headings)
+Route::get('/load-broad-classes', [\App\Http\Controllers\Api\SubjectController::class, 'loadSubjects']);
 
-Route::get('/load-subjects', [\App\Http\Controllers\Api\SubjectController::class, 'loadSubjects']);
-Route::get('/load-article/{slug}', [\App\Http\Controllers\Api\ArticleController::class, 'loadArticle']);
-Route::get('/load-related-article/{title}', [\App\Http\Controllers\Api\ArticleController::class, 'loadRelatedArticle']);
+
+Route::get('/load-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'loadMaterial']);
+Route::get('/load-related-material/{title}', [\App\Http\Controllers\Api\MaterialController::class, 'loadRelatedMaterial']);
 
 //Route::get('/subjects/{subjectSlug}', [\App\Http\Controllers\Api\SubjectArticleController::class, 'loadArticle']);
-Route::get('/subject/articles-by-subject', [\App\Http\Controllers\Api\ArticleController::class, 'articlesBySubject']);
+Route::get('/subject/materials-by-subject', [\App\Http\Controllers\Api\MaterialController::class, 'materialsBySubject']);

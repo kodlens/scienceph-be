@@ -2,6 +2,7 @@ export interface Subject {
   id: number;
   slug: string;
   subject: string;
+  subject_heading:SubjectHeading[];
   active: number;
   // Add other subject properties as needed
 }
