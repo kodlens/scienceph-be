@@ -27,7 +27,6 @@ class MaterialController extends Controller
             'author' => ['string', 'nullable'],
             'description' => ['required'],
             'category' => ['required'],
-            'section' => ['required'],
             //'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',

@@ -14,7 +14,7 @@ class ValidateSlug implements ValidationRule
     public function __construct($id) {
         $this->id = $id;
     }
-    
+
     /**
      * Run the validation rule.
      *
@@ -22,17 +22,17 @@ class ValidateSlug implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $post = DB::table('posts')->where('slug', $value)->first();
+        $material = DB::table('materials')->where('slug', $value)->first();
         if($this->id > 0){
-            $post = $post->where('id', '!=', $this->id);
+            $material = $material->where('id', '!=', $this->id);
         }
         // valid and pass
-        if ($post === null) {
+        if ($material === null) {
             return; // Validation passes
         }
 
-        // If the post exists, check the 'trash' column
-        if ($post->trash != 1) {
+        // If the material exists, check the 'trash' column
+        if ($material->trash != 1) {
             // If the slug exist but not marked as trash, validation fails
             $fail('The slug already exists and is in use.');
         }

@@ -5,7 +5,7 @@ namespace App\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\DB;
-use App\Models\Article;
+use App\Models\Material;
 
 class ValidateTitle implements ValidationRule
 {
@@ -24,20 +24,20 @@ class ValidateTitle implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
 
-        $article = Article::where('title', $value);
+        $material = Material::where('title', $value);
 
         if($this->id > 0){
-            $article = $article->where('id', '!=', $this->id);
+            $material = $material->where('id', '!=', $this->id);
         }
 
-        $article = $article->first();
+        $material = $material->first();
 
-        if ($article === null) {
+        if ($material === null) {
             return; // Validation passes
         }
 
         // If the post exists, check the 'trash' column
-        if ($article->trash != 1) {
+        if ($material->trash != 1) {
             // If the title is not marked as trash, validation fails
 
             $fail('The title already exists from rule.');
