@@ -13,9 +13,12 @@ type PageProps = {
   form: FormInstance
   errors: Record<string, string[]>
 }
-
-type ClassifierProps = {
-  id?: number,
+type DataProps = {
+  id: number,
+  score: number,
+  analysis: string
+}
+type NewDataProps = {
   subject_heading_id: number,
   subject_heading?: string,
   score: number,
@@ -25,9 +28,9 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const { notification } = App.useApp();
-  const [data, setData] = useState<ClassifierProps[]>([]);
-  const [tableData, setTableData] = useState<ClassifierProps[]>([]);
-  const [newData, setNewData] = useState<ClassifierProps[]>([]);
+  const [data, setData] = useState<DataProps[]>([]);
+
+  const [newData, setNewData] = useState<NewDataProps[]>([]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
@@ -76,11 +79,16 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   useEffect(() => {
     if (data.length > 0) {
-      const matchedHeadings = data.map(item => {
-        const matched = subjectHeadings.find(heading => heading.id === item.id);
+      const matchedHeadings = data.map(datum => {
+        const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
         //console.log('matched', matched);
 
-        return matched ? { ...item, subject_heading: matched?.subject_heading } : item;
+        return {
+          subject_heading_id: datum.id,
+          subject_heading: matched?.subject_heading || "",
+          score: datum.score,
+          analysis: datum.analysis
+        };
       });
 
       setNewData(matchedHeadings);
@@ -132,7 +140,7 @@ const Classifier = ( { form, errors } : PageProps) => {
         className="mt-4"
         validateStatus={errors.subjects ? "error" : ""}
         help={errors.subjects ? errors.subjects[0] : ""}>
-        {newData.length > 0 && (
+        {data.length > 0 && (
           <div>
             <h3 className='my-2'>AI Classification Results:</h3>
             <Table
@@ -179,7 +187,7 @@ const Classifier = ( { form, errors } : PageProps) => {
       <div className='flex gap-2'>
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
 
-          const existsInData = newData.find(item => item.id === record.id);
+          const existsInData = data.find(item => item.id === record.id);
 
           if(existsInData) {
             notification.warning({
@@ -191,14 +199,14 @@ const Classifier = ( { form, errors } : PageProps) => {
             return;
           }
 
-          const newSelected = [...newData, {
+          const newSelected = [...data, {
             id: record.id,
             subject_heading_id: record.id,
             subject_heading: record.subject_heading,
             score: 1,
             analysis: "Manually added"
           }];
-          setNewData(newSelected);
+          setData(newSelected);
 
           console.log(newSelected);
 
