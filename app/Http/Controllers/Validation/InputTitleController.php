@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Validation;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Article;
+use App\Models\Material;
 
 class InputTitleController extends Controller
 {
-    public function inputTitle(Request $request, $id)
+    public function inputMaterial(Request $request, $id)
     {
-        $exists = Article::where('title', $request->title)
+        $exists = Material::where('title', $request->title)
             ->where('id', '!=', $id)
             ->exists();
 

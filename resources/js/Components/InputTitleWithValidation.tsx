@@ -3,20 +3,18 @@ import axios from 'axios'
 import { useState } from 'react'
 
 type Props = {
-  errors: Record<string, string>
-  setErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>
+  errors: Record<string, string[]>
+  setErrors: React.Dispatch<React.SetStateAction<Record<string, string[]>>>
   id:number
 }
 const InputTitleWithValidation = ({ id, errors, setErrors }: Props) => {
   const [loading, setLoading] = useState(false);
   const handleInputBlur = (value:string) => {
     setLoading(true)
-    axios.post(`/article/validate-title/${id}?title=${value}`).then(()=> {
+    axios.post(`/material/validate-title/${id}?title=${value}`).then(()=> {
       setLoading(false)
 
-      setErrors({
-        title: ''
-      })
+      setErrors({})
     }).catch(err=> {
       setLoading(false)
 

@@ -1,5 +1,5 @@
 import { SubjectHeading } from '@/types/subject';
-import { App, Button, Form, FormInstance, Table } from 'antd';
+import { App, Button, Form, FormInstance, Input, Table } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import type { Key } from 'react';
@@ -46,7 +46,7 @@ const Classifier = ( { form, errors } : PageProps) => {
       return;
     }
 
-    axios.post("/classify-article", { content: content }).then((res) => {
+    axios.post("/classify-content", { content: content }).then((res) => {
       if (res.data.results.length === 0) {
         notification.info({
           message: "No Relevant Subject Headings",
@@ -82,6 +82,7 @@ const Classifier = ( { form, errors } : PageProps) => {
 
         return matched ? { ...item, subject_heading: matched?.subject_heading } : item;
       });
+
       setNewData(matchedHeadings);
     } else {
       setNewData([]);
@@ -91,6 +92,9 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   useEffect(() => {
     if (selectedRowKeys.length > 0) {
+
+      console.log('update row selected row keys', selectedRowKeys);
+
       const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
       form.setFieldValue("subjects", selectedHeadings.map(item => { return {
         subject_heading_id: item.subject_heading_id,
@@ -107,8 +111,9 @@ const Classifier = ( { form, errors } : PageProps) => {
   }, [selectedRowKeys]);
 
   useEffect(() => {
-    console.log('new data updated:', setNewData);
-  }, [setNewData]);
+    console.log('new data updated:', newData);
+
+  }, [newData]);
 
 
 
@@ -124,7 +129,6 @@ const Classifier = ( { form, errors } : PageProps) => {
       </Button>
 
       <Form.Item
-        //name="subjects"
         className="mt-4"
         validateStatus={errors.subjects ? "error" : ""}
         help={errors.subjects ? errors.subjects[0] : ""}>

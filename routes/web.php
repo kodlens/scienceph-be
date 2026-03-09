@@ -41,8 +41,10 @@ Route::get('/get-tags', [App\Http\Controllers\OpenController::class, 'getTags'])
 Route::middleware('auth')->group(function () {
 
 
+    Route::post('/classify-content', [App\Http\Controllers\Base\ClassifyController::class, 'classify']);
 
-    Route::post('/article/validate-title/{id}', [App\Http\Controllers\Validation\InputTitleController::class, 'inputTitle']);
+
+    Route::post('/material/validate-title/{id}', [App\Http\Controllers\Validation\InputTitleController::class, 'inputMaterial']);
 
 
     Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index'])->name('my-account.index');

@@ -27,7 +27,7 @@ const CreateEditMaterial = ({
 }: CreateEditProps) => {
 
   const [form] = Form.useForm();
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const { message, modal } = App.useApp();
 
