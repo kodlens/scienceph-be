@@ -1,12 +1,11 @@
 import { SubjectHeading } from '@/types/subject';
-import { App, Button, Form, FormInstance, Input, Table } from 'antd';
+import { App, Button, Form, FormInstance, Table } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import type { Key } from 'react';
 
 import { BrushCleaning } from 'lucide-react';
 import ModalSubjectHeadings from './ModalSubjectHeading';
-import { table } from 'node:console';
 
 
 type PageProps = {
