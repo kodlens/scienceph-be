@@ -147,6 +147,7 @@ const CreateEditMaterial = ({
         is_publish: 0,
         is_press_release: 0,
         source_url: '',
+        subjects: [],
         publish_date: null,
         tags: null
       }}

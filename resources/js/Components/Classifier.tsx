@@ -1,5 +1,5 @@
 import { SubjectHeading } from '@/types/subject';
-import { App, Button, Form, FormInstance, Table } from 'antd';
+import { App, Button, Form, FormInstance, Input, Table } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import type { Key } from 'react';
@@ -12,12 +12,12 @@ type PageProps = {
   form: FormInstance
   errors: Record<string, string[]>
 }
-type DataProps = {
+type AIResult = {
   id: number,
   score: number,
   analysis: string
 }
-type NewDataProps = {
+type NewAIResult = {
   subject_heading_id: number,
   subject_heading?: string,
   score: number,
@@ -27,9 +27,9 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const { notification } = App.useApp();
-  const [data, setData] = useState<DataProps[]>([]);
+  const [data, setData] = useState<AIResult[]>([]);
 
-  const [newData, setNewData] = useState<NewDataProps[]>([]);
+  const [newData, setNewData] = useState<NewAIResult[]>([]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
@@ -99,9 +99,6 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   useEffect(() => {
     if (selectedRowKeys.length > 0) {
-
-      console.log('update row selected row keys', selectedRowKeys);
-
       const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
       form.setFieldValue("subjects", selectedHeadings.map(item => { return {
         subject_heading_id: item.subject_heading_id,
@@ -118,10 +115,9 @@ const Classifier = ( { form, errors } : PageProps) => {
   }, [selectedRowKeys]);
 
   useEffect(() => {
-    console.log('new data updated:', newData);
+    form.setFieldValue("subjects", newData)
 
   }, [newData]);
-
 
 
   return (
@@ -134,54 +130,55 @@ const Classifier = ( { form, errors } : PageProps) => {
         }}>
         Classify Information
       </Button>
+      <div>
+        <h3 className='my-2'>AI Classification Results:</h3>
+        <Form.Item
+          className="mt-4"
+          validateStatus={errors.subjects ? "error" : ""}
+          help={errors.subjects ? errors.subjects[0] : ""}>
+          {data.length > 0 && (
 
-      <Form.Item
-        className="mt-4"
-        validateStatus={errors.subjects ? "error" : ""}
-        help={errors.subjects ? errors.subjects[0] : ""}>
-        {data.length > 0 && (
-          <div>
-            <h3 className='my-2'>AI Classification Results:</h3>
-            <Table
-              rowKey="id"
-              dataSource={newData}
-              pagination={false}
-              size="small"
-              rowSelection={{
-                selectedRowKeys,
-                onChange: (newSelectedRowKeys) => {
-                  setSelectedRowKeys(newSelectedRowKeys);
-                },
-              }}
-              columns={[
-                {
-                  title: "Id",
-                  dataIndex: "id",
-                  key: "id",
-                  width: 120,
-                },
-                {
-                  title: "Subject Heading",
-                  dataIndex: "subject_heading",
-                  key: "subject_heading",
-                  width: 200,
-                },
-                {
-                  title: "Score",
-                  dataIndex: "score",
-                  key: "score",
-                  width: 120,
-                },
-                {
-                  title: "Analysis",
-                  dataIndex: "analysis",
-                  key: "analysis",
-                },
-              ]}
-            />
-          </div>
-        )}
-      </Form.Item>
+              <Table
+                rowKey="id"
+                dataSource={newData}
+                pagination={false}
+                size="small"
+                rowSelection={{
+                  selectedRowKeys,
+                  onChange: (newSelectedRowKeys) => {
+                    setSelectedRowKeys(newSelectedRowKeys);
+                  },
+                }}
+                columns={[
+                  {
+                    title: "Id",
+                    dataIndex: "subject_heading_id",
+                    key: "subject_heading_id",
+                    width: 120,
+                  },
+                  {
+                    title: "Subject Heading",
+                    dataIndex: "subject_heading",
+                    key: "subject_heading",
+                    width: 200,
+                  },
+                  {
+                    title: "Score",
+                    dataIndex: "score",
+                    key: "score",
+                    width: 120,
+                  },
+                  {
+                    title: "Analysis",
+                    dataIndex: "analysis",
+                    key: "analysis",
+                  },
+                ]}
+              />
+
+          )}
+        </Form.Item>
+       </div>
 
       <div className='flex gap-2'>
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
@@ -219,6 +216,11 @@ const Classifier = ( { form, errors } : PageProps) => {
         >
           Remove
         </Button>
+
+        <Form.Item name="subjects" hidden>
+          <Input />
+        </Form.Item>
+
 
       </div>
 
