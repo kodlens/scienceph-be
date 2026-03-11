@@ -87,6 +87,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
       console.log('for update', subjH);
       setNewData(subjH)
+      //tiwasunon
     }
 
   }, [form])
