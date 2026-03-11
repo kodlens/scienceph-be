@@ -75,6 +75,7 @@ class MaterialController extends Controller
                     'alias' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
+                    'filter_type' => $req->filter_type,
                     'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->id,
@@ -154,6 +155,7 @@ class MaterialController extends Controller
         $data->alias = Str::slug($req->title);
         $data->description = $modifiedHtml;
         $data->description_text = $content;
+        $data->filter_type = $req->filter_type;
         $data->category_id = $req->category;
         $data->author = $req->author;
         $data->modified_by_id = $user->id;

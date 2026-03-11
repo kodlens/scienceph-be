@@ -17,7 +17,7 @@ class Material extends Model
         'alias',
         'description',
         'description_text',
-        'material_id',
+        'filter_type',
         'category_id',
         'author',
         'content_type',
