@@ -9,6 +9,7 @@ import ModalSubjectHeadings from './ModalSubjectHeading';
 
 
 type PageProps = {
+  id:number;
   form: FormInstance
   errors: Record<string, string[]>
 }
@@ -23,7 +24,7 @@ type NewSubjectResult = {
   score: number,
   analysis: string
 }
-const Classifier = ( { form, errors } : PageProps) => {
+const Classifier = ( { form, errors, id } : PageProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const { notification } = App.useApp();
@@ -33,6 +34,7 @@ const Classifier = ( { form, errors } : PageProps) => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
+
 
   const handleClassification = () => {
     setLoading(true)
@@ -76,6 +78,19 @@ const Classifier = ( { form, errors } : PageProps) => {
     loadSubjectHeadings();
   }, []);
 
+  //load data if edit mode
+  useEffect(() => {
+    if(id > 0){
+      //form.setFieldValue('subject_headings', form.getFieldValue('subject_headings'))
+
+      const subjH = form.getFieldValue('subject_headings');
+
+      console.log('for update', subjH);
+      setNewData(subjH)
+    }
+
+  }, [form])
+
   useEffect(() => {
     if (data.length > 0) {
       const matchedHeadings = data.map(datum => {
@@ -113,6 +128,10 @@ const Classifier = ( { form, errors } : PageProps) => {
   }, [selectedRowKeys]);
 
   useEffect(() => {
+    if(id> 0){
+      console.log('for update new data', newData);
+
+    }
     form.setFieldValue("subject_headings", newData)
 
   }, [newData]);

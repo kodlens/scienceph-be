@@ -63,7 +63,7 @@ const CreateEditMaterial = ({
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
 
-      console.log('material.subject_headings', material.subject_headings);
+      //console.log('material.subject_headings', material.subject_headings);
 
     } catch (err) { }
   };
@@ -151,7 +151,7 @@ const CreateEditMaterial = ({
         is_publish: 0,
         is_press_release: 0,
         source_url: '',
-        subjects: [],
+        subject_headings: [],
         publish_date: null,
         tags: null
       }}
@@ -215,7 +215,7 @@ const CreateEditMaterial = ({
 
       </div>
 
-      <Classifier form={form} errors={errors} />
+      <Classifier form={form} errors={errors} id={id}/>
 
 
       <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
