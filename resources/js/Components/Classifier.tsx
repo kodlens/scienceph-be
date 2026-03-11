@@ -100,22 +100,20 @@ const Classifier = ( { form, errors } : PageProps) => {
   useEffect(() => {
     if (selectedRowKeys.length > 0) {
       const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
-      form.setFieldValue("subjects", selectedHeadings.map(item => { return {
+      form.setFieldValue("subject_headings", selectedHeadings.map(item => { return {
         subject_heading_id: item.subject_heading_id,
         subject_heading: item.subject_heading,
         score: item.score,
         analysis: item.analysis
       } }));
     } else {
-      form.setFieldValue("subjects", []);
+      form.setFieldValue("subject_headings", []);
     }
-
-    //console.log('update selectedRowKeys:', form.getFieldValue("subjects"));
 
   }, [selectedRowKeys]);
 
   useEffect(() => {
-    form.setFieldValue("subjects", newData)
+    form.setFieldValue("subject_headings", newData)
 
   }, [newData]);
 
@@ -134,8 +132,8 @@ const Classifier = ( { form, errors } : PageProps) => {
         <h3 className='my-2'>AI Classification Results:</h3>
         <Form.Item
           className="mt-4"
-          validateStatus={errors.subjects ? "error" : ""}
-          help={errors.subjects ? errors.subjects[0] : ""}>
+          validateStatus={errors.subject_headings ? "error" : ""}
+          help={errors.subject_headings ? errors.subject_headings[0] : ""}>
           {data.length > 0 && (
 
               <Table
@@ -217,7 +215,7 @@ const Classifier = ( { form, errors } : PageProps) => {
           Remove
         </Button>
 
-        <Form.Item name="subjects" hidden>
+        <Form.Item name="subject_headings" hidden>
           <Input />
         </Form.Item>
 

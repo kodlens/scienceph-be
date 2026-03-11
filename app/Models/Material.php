@@ -46,6 +46,22 @@ class Material extends Model
         return $this->belongsTo(Section::class);
     }
 
+    public function subject_headings(){
+        return $this->hasMany(MaterialSubjectHeading::class)
+            ->leftJoin('subject_headings', 'subject_heading_id', 'subject_headings.id')
+            ->join('subjects', 'subject_id', 'subjects.id')
+            ->select(
+                'material_subject_headings.material_id as material_id',
+                'subject_headings.id as subject_heading_id',
+                'subjects.id as subject_id',
+                'subjects.subject as subject',
+                'subjects.slug as subject_slug',
+                'subject_headings.subject_heading as subject_heading',
+                'subject_headings.slug as sh_slug'
+
+            );
+    }///tiwason
+
     public function category(){
         return $this->belongsTo(Category::class);
     }

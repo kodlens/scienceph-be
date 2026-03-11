@@ -9,6 +9,8 @@ class SubjectHeading extends Model
 {
     use HasFactory;
 
+    protected $table = 'subject_headings';
+
     protected $fillable = [
         'subject_id',
         'subject_heading',

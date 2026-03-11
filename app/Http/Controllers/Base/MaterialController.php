@@ -22,12 +22,12 @@ class MaterialController extends Controller
     //
     public function store(Request $req)
     {
-        return $req;
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['string', 'nullable'],
             'description' => ['required'],
             'category' => ['required'],
+            'filter_type' => ['required', 'string', 'max:50'],
             //'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',
@@ -117,6 +117,7 @@ class MaterialController extends Controller
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
             'category' => ['required'],
+            'filter_type' => ['required', 'string', 'max:50'],
             //'publish_date' => ['required'],
         ]);
 

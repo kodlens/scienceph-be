@@ -49,8 +49,10 @@ const CreateEditMaterial = ({
         { name: "description", value: material.description },
         { name: "status", value: material.status ? material.status : 'draft' },
         { name: "source_url", value: material.source_url },
+        { name: "filter_type", value: material.filter_type },
         { name: "category", value: material.category_id },
         // { name: "section", value: material.section_id },
+        { name: "subject_headings", value: material.subject_headings },
         { name: "agency", value: material.agency },
         { name: "region", value: material.region },
         { name: "regional_office", value: material.regional_office },
@@ -60,6 +62,8 @@ const CreateEditMaterial = ({
         { name: "is_press_release", value: material.is_press_release && material.is_press_release > 0 ? true : false },
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
+
+      console.log('material.subject_headings', material.subject_headings);
 
     } catch (err) { }
   };
