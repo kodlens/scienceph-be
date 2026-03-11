@@ -17,7 +17,7 @@ type AIResult = {
   score: number,
   analysis: string
 }
-type NewAIResult = {
+type NewSubjectResult = {
   subject_heading_id: number,
   subject_heading?: string,
   score: number,
@@ -29,7 +29,7 @@ const Classifier = ( { form, errors } : PageProps) => {
   const { notification } = App.useApp();
   const [data, setData] = useState<AIResult[]>([]);
 
-  const [newData, setNewData] = useState<NewAIResult[]>([]);
+  const [newData, setNewData] = useState<NewSubjectResult[]>([]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
@@ -139,7 +139,7 @@ const Classifier = ( { form, errors } : PageProps) => {
           {data.length > 0 && (
 
               <Table
-                rowKey="id"
+                rowKey="subject_heading_id"
                 dataSource={newData}
                 pagination={false}
                 size="small"

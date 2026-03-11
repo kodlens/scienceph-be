@@ -214,179 +214,177 @@ const CreateEditMaterial = ({
       <Classifier form={form} errors={errors} />
 
 
-      <div className="flex mt-4 gap-4">
+      <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
+        <Form.Item
+          name="category"
+          label="Select Category"
+          className="w-full"
+          validateStatus={errors.category ? "error" : ""}
+          help={errors.category ? errors.category[0] : ""}
+        >
+          <Select
+            options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }
+            allowClear
+            placeholder="Select Category"
+          />
+        </Form.Item>
 
-        <div className="w-full">
-
-
-          <div className="flex flex-col md:gap-4 md:flex-row">
-            <Form.Item
-              name="category"
-              label="Select Category"
-              className="w-full"
-              validateStatus={errors.category ? "error" : ""}
-              help={errors.category ? errors.category[0] : ""}
-            >
-              <Select
-                options={categories ? categories.map(cat => ({ value: Number(cat.id), label: cat.name })) : [] }
-                allowClear
-                placeholder="Select Category"
-              />
-            </Form.Item>
-
-          </div>
-
-          <Form.Item
-            name="source_url"
-            label="Source URL"
-            className="w-full"
-            validateStatus={errors.source_url ? "error" : ""}
-            help={errors.source_url ? errors.source_url[0] : ""}
-          >
-            <Input placeholder="Source URL" />
-          </Form.Item>
-
-
-          <div className="flex flex-col md:gap-4 md:flex-row">
-            <Form.Item
-              name="agency"
-              label="Agency"
-              className="w-full"
-              validateStatus={errors.agency ? "error" : ""}
-              help={errors.agency ? errors.agency[0] : ""}
-            >
-              {/* <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/> */}
-              <AgencyAutoComplete agencies={agencies} />
-            </Form.Item>
-
-            <Form.Item
-              name="region"
-              label="Select Region"
-              className="w-full"
-              validateStatus={errors.region ? "error" : ""}
-              help={errors.region ? errors.region[0] : ""}
-            >
-              <Select options={regions ? regions.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
-            </Form.Item>
-          </div>
-
-
-          {/* Remove temporarily, discussed with team */}
-          {/* <Form.Item
-            name="regional_office"
-            label="Select Region Office"
-            className="w-full"
-            validateStatus={errors.regional_office ? "error" : ""}
-            help={errors.regional_office ? errors.regional_office[0] : ""}
-          >
-            <Select options={regionalOffices ? regionalOffices.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
-          </Form.Item> */}
-
-          <Form.Item
-            name="tags"
-            label="Tags"
-            className="w-full"
-            validateStatus={errors.tags ? "error" : ""}
-            help={errors.tags ? errors.tags[0] : ""}
-          >
-            <Select
-              loading={loading}
-              mode="tags"
-              style={{ width: '100%' }}
-              placeholder="Tags Mode"
-              options={tags.map(item => ({ value: item, label: item }))}
-            />
-          </Form.Item>
-
-          <div className="flex flex-col md:gap-4 md:flex-row">
-            <Form.Item
-              name="status"
-              className="w-full"
-              label="Status (Read Only)"
-              validateStatus={
-                errors.status ? "error" : ""
-              }
-              help={errors.status ? errors.status[0] : ""}
-            >
-              <Select
-                disabled
-                options={statusDropdownMenu((auth.user as User).role)}
-              >
-              </Select>
-            </Form.Item>
-
-          </div>
-
-          <Form.Item
-            name="is_press_release"
-            valuePropName="checked"
-            className="w-full"
-            validateStatus={errors.is_press_release ? "error" : ""}
-            help={errors.is_press_release ? errors.is_press_release[0] : ""}
-          >
-            <Checkbox>PRESS RELEASE</Checkbox>
-          </Form.Item>
-
-          <div className="flex mb-4 mt-6">
-            <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    defaultBg: 'green',
-                    defaultColor: 'white',
-                    defaultHoverBorderColor: 'green',
-
-                    defaultActiveColor: 'white',
-                    defaultActiveBorderColor: '#1a8c12',
-                    defaultActiveBg: '#1a8c12',
-
-                    defaultHoverBg: '#379b30',
-                    defaultHoverColor: 'white',
-                  }
-                }
-              }}>
-              <Button
-                className="ml-2"
-                htmlType="submit"
-                icon={<ProjectOutlined />}
-                loading={loading}
-              >
-                Save Post/Article
-              </Button>
-            </ConfigProvider>
-
-            { role === 'administrator' || role === 'publisher' && (
-               <Button
-                  className="ml-2"
-                  type="primary"
-                  onClick={handleSubmitAndPublish}
-                  icon={<ProjectOutlined />}
-                  loading={loading}
-                >
-                  Save and Publish
-                </Button>
-              )
-            }
-
-
-            <Button
-              danger
-              onClick={() => history.back()}
-              className="ml-auto"
-              icon={<ArrowLeftOutlined />}
-              loading={loading}
-              type="primary"
-            >
-              BACK
-            </Button>
-          </div>
-        </div>
-
-
-
-
+        <Form.Item
+          name="filter_type"
+          label="Select Filter Type"
+          className="w-full"
+          validateStatus={errors.filter_type ? "error" : ""}
+          help={errors.filter_type ? errors.filter_type[0] : ""}
+        >
+          <Select
+            options={[
+              { value: 'text', label: 'Text/Content' },
+              { value: 'videos', label: 'Videos' },
+              { value: 'images', label: 'Images' },
+            ]}
+            allowClear
+            placeholder="Select Filter Type"
+          />
+        </Form.Item>
 
       </div>
+
+
+
+      <Form.Item
+        name="source_url"
+        label="Source URL"
+        className="w-full"
+        validateStatus={errors.source_url ? "error" : ""}
+        help={errors.source_url ? errors.source_url[0] : ""}
+      >
+        <Input placeholder="Source URL" />
+      </Form.Item>
+
+      <div className="flex flex-col md:gap-4 md:flex-row">
+        <Form.Item
+          name="agency"
+          label="Agency"
+          className="w-full"
+          validateStatus={errors.agency ? "error" : ""}
+          help={errors.agency ? errors.agency[0] : ""}
+        >
+          {/* <Select options={agencies ? agencies.map(item => ({ value: item.code, label: item.code })) : [] }  allowClear/> */}
+          <AgencyAutoComplete agencies={agencies} />
+        </Form.Item>
+
+        <Form.Item
+          name="region"
+          label="Select Region"
+          className="w-full"
+          validateStatus={errors.region ? "error" : ""}
+          help={errors.region ? errors.region[0] : ""}
+        >
+          <Select options={regions ? regions.map(item => ({ value: item.name, label: item.name })) : [] }  allowClear/>
+        </Form.Item>
+      </div>
+
+      <Form.Item
+        name="tags"
+        label="Tags"
+        className="w-full"
+        validateStatus={errors.tags ? "error" : ""}
+        help={errors.tags ? errors.tags[0] : ""}
+      >
+        <Select
+          loading={loading}
+          mode="tags"
+          style={{ width: '100%' }}
+          placeholder="Tags Mode"
+          options={tags.map(item => ({ value: item, label: item }))}
+        />
+      </Form.Item>
+
+      <div className="flex flex-col md:gap-4 md:flex-row">
+        <Form.Item
+          name="status"
+          className="w-full"
+          label="Status (Read Only)"
+          validateStatus={
+            errors.status ? "error" : ""
+          }
+          help={errors.status ? errors.status[0] : ""}
+        >
+          <Select
+            disabled
+            options={statusDropdownMenu((auth.user as User).role)}
+          >
+          </Select>
+        </Form.Item>
+
+      </div>
+
+      <Form.Item
+        name="is_press_release"
+        valuePropName="checked"
+        className="w-full"
+        validateStatus={errors.is_press_release ? "error" : ""}
+        help={errors.is_press_release ? errors.is_press_release[0] : ""}
+      >
+        <Checkbox>PRESS RELEASE</Checkbox>
+      </Form.Item>
+
+      <div className="flex mb-4 mt-6">
+        <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                defaultBg: 'green',
+                defaultColor: 'white',
+                defaultHoverBorderColor: 'green',
+
+                defaultActiveColor: 'white',
+                defaultActiveBorderColor: '#1a8c12',
+                defaultActiveBg: '#1a8c12',
+
+                defaultHoverBg: '#379b30',
+                defaultHoverColor: 'white',
+              }
+            }
+          }}>
+          <Button
+            className="ml-2"
+            htmlType="submit"
+            icon={<ProjectOutlined />}
+            loading={loading}
+          >
+            Save Post/Article
+          </Button>
+        </ConfigProvider>
+
+        { role === 'administrator' || role === 'publisher' && (
+            <Button
+              className="ml-2"
+              type="primary"
+              onClick={handleSubmitAndPublish}
+              icon={<ProjectOutlined />}
+              loading={loading}
+            >
+              Save and Publish
+            </Button>
+          )
+        }
+
+
+        <Button
+          danger
+          onClick={() => history.back()}
+          className="ml-auto"
+          icon={<ArrowLeftOutlined />}
+          loading={loading}
+          type="primary"
+        >
+          BACK
+        </Button>
+      </div>
+
+
+
       {/* flex contaner */}
 
 
