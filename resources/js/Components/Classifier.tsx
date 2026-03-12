@@ -82,18 +82,17 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   useEffect(() => {
     if(id > 0){
       //form.setFieldValue('subject_headings', form.getFieldValue('subject_headings'))
-
       const subjH = form.getFieldValue('subject_headings');
-
-      console.log('for update', subjH);
       setNewData(subjH)
-      //tiwasunon
+      //put ang ina!!!!
     }
-
-  }, [form])
+  }, [form, id])
 
   useEffect(() => {
+
     if (data.length > 0) {
+
+      console.log('useEffect for data');
       const matchedHeadings = data.map(datum => {
         const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
         //console.log('matched', matched);
@@ -106,15 +105,16 @@ const Classifier = ( { form, errors, id } : PageProps) => {
         };
       });
 
-      setNewData(matchedHeadings);
-    } else {
-      setNewData([]);
+      setNewData([...newData, ...matchedHeadings]);
     }
   }, [data]);
 
 
   useEffect(() => {
+
     if (selectedRowKeys.length > 0) {
+      console.log('useEffect for selectedRowKeys');
+
       const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
       form.setFieldValue("subject_headings", selectedHeadings.map(item => { return {
         subject_heading_id: item.subject_heading_id,
@@ -130,10 +130,9 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
   useEffect(() => {
     if(id> 0){
-      console.log('for update new data', newData);
-
+      console.log('change newData', newData);
+      //form.setFieldValue("subject_headings", newData)
     }
-    form.setFieldValue("subject_headings", newData)
 
   }, [newData]);
 

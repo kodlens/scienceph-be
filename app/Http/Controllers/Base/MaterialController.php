@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers\Base;
 
+/*==================
+Coded by: Eshen
+Date: March 03, 2026
+DOST-STII
+Base controller for Materials
+
+===================*/
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
