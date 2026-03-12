@@ -155,7 +155,6 @@ const Classifier = ( { form, errors, id } : PageProps) => {
           validateStatus={errors.subject_headings ? "error" : ""}
           help={errors.subject_headings ? errors.subject_headings[0] : ""}>
 
-
           <Table
             rowKey="subject_heading_id"
             dataSource={newData}
