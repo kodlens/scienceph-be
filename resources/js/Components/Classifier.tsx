@@ -147,55 +147,55 @@ const Classifier = ( { form, errors, id } : PageProps) => {
         }}>
         Classify Information
       </Button>
+
       <div>
         <h3 className='my-2'>AI Classification Results:</h3>
         <Form.Item
           className="mt-4"
           validateStatus={errors.subject_headings ? "error" : ""}
           help={errors.subject_headings ? errors.subject_headings[0] : ""}>
-          {data.length > 0 && (
 
-              <Table
-                rowKey="subject_heading_id"
-                dataSource={newData}
-                pagination={false}
-                size="small"
-                rowSelection={{
-                  selectedRowKeys,
-                  onChange: (newSelectedRowKeys) => {
-                    setSelectedRowKeys(newSelectedRowKeys);
-                  },
-                }}
-                columns={[
-                  {
-                    title: "Id",
-                    dataIndex: "subject_heading_id",
-                    key: "subject_heading_id",
-                    width: 120,
-                  },
-                  {
-                    title: "Subject Heading",
-                    dataIndex: "subject_heading",
-                    key: "subject_heading",
-                    width: 200,
-                  },
-                  {
-                    title: "Score",
-                    dataIndex: "score",
-                    key: "score",
-                    width: 120,
-                  },
-                  {
-                    title: "Analysis",
-                    dataIndex: "analysis",
-                    key: "analysis",
-                  },
-                ]}
-              />
 
-          )}
+          <Table
+            rowKey="subject_heading_id"
+            dataSource={newData}
+            pagination={false}
+            size="small"
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (newSelectedRowKeys) => {
+                setSelectedRowKeys(newSelectedRowKeys);
+              },
+            }}
+            columns={[
+              {
+                title: "Id",
+                dataIndex: "subject_heading_id",
+                key: "subject_heading_id",
+                width: 120,
+              },
+              {
+                title: "Subject Heading",
+                dataIndex: "subject_heading",
+                key: "subject_heading",
+                width: 200,
+              },
+              {
+                title: "Score",
+                dataIndex: "score",
+                key: "score",
+                width: 120,
+              },
+              {
+                title: "Analysis",
+                dataIndex: "analysis",
+                key: "analysis",
+              },
+            ]}
+          />
         </Form.Item>
        </div>
+
 
       <div className='flex gap-2'>
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
