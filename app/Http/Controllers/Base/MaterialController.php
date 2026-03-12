@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Helpers\FilterDom;
 use App\Http\Controllers\Helpers\RecordTrail;
 use App\Models\Information;
+use App\Models\MaterialSubjectHeading;
 
 
 class MaterialController extends Controller
@@ -28,6 +29,7 @@ class MaterialController extends Controller
             'description' => ['required'],
             'category' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
+            'subject_headings' => ['nullable', 'array']
             //'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',
@@ -94,7 +96,22 @@ class MaterialController extends Controller
                         ->recordTrail('', 'insert', $user->id, $name),
                 ]);
 
+
+                $subjectHeadings = [];
+                foreach ($req->input('subject_headings', []) as $item) {
+                    $subjectHeadings[] = [
+                        'material_id' => $data['id'],
+                        'subject_heading_id' => $item['subject_heading_id'],
+                        'score' => $item['score'],
+                        'analysis' => $item['analysis'],
+                    ];
+                }
+
+                MaterialSubjectHeading::insert($subjectHeadings);
+
             });
+
+
 
             return response()->json([
                 'status' => 'saved',
@@ -122,79 +139,95 @@ class MaterialController extends Controller
         ]);
 
 
-        $filterDom = new FilterDom();
-        $modifiedHtml = $filterDom->filterDOM($req->description);
+        try {
+            DB::transaction(function () use ($req) {
+                // Database operations here
 
-        /* ==============================
-            Clean HTML → plain text
-        ============================== */
-        $content = $filterDom->htmlToPlainText($req->description);
+                $filterDom = new FilterDom();
+                $modifiedHtml = $filterDom->filterDOM($req->description);
 
-        $dateFormated = $req->publish_date
-            ? date('Y-m-d', strtotime($req->publish_date))
-            : null;
+                /* ==============================
+                    Clean HTML → plain text
+                ============================== */
+                $content = $filterDom->htmlToPlainText($req->description);
 
-        //convert tags to string
-        $tagsString = null;
-        if(isset($req->tags)){
+                $dateFormated = $req->publish_date
+                    ? date('Y-m-d', strtotime($req->publish_date))
+                    : null;
 
-            foreach($req->tags as $key => $tag){
-                if($key == 0){
-                    $tagsString = $tag;
-                }else{
-                    $tagsString = $tagsString . ',' .$tag;
+                //convert tags to string
+                $tagsString = null;
+                if(isset($req->tags)){
+
+                    foreach($req->tags as $key => $tag){
+                        if($key == 0){
+                            $tagsString = $tag;
+                        }else{
+                            $tagsString = $tagsString . ',' .$tag;
+                        }
+                    }
                 }
-            }
+
+                //call user for record trail
+                $user = Auth::user();
+                $name = $user->lname . ',' . $user->fname;
+
+                $data = Material::find($id);
+                $data->title = $req->title;
+                $data->alias = Str::slug($req->title);
+                $data->description = $modifiedHtml;
+                $data->description_text = $content;
+                $data->filter_type = $req->filter_type;
+                $data->category_id = $req->category;
+                $data->author = $req->author;
+                $data->modified_by_id = $user->id;
+                $data->modified_at = now();
+                $data->agency = $req->agency ? $req->agency : null;
+                $data->region = $req->region ? $req->region : null;
+                //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
+                $data->source_url = $req->source_url;
+                $data->is_publish = $req->status === 'publish' ? 1 : 0;
+                $data->status = $req->status;
+                $data->publish_date = $dateFormated;
+                $data->tags = $tagsString;
+
+                if($user->role === 'encoder'){
+                    $data->is_ojt = $user->is_ojt;
+                }
+
+                $data->is_press_release = $req->is_press_release ? 1 : 0;
+                $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
+                $data->save();
+
+                MaterialSubjectHeading::where('id', $id)
+                    ->delete();
+
+                $subjectHeadings = [];
+                foreach ($req->input('subject_headings', []) as $item) {
+                    $subjectHeadings[] = [
+                        'material_id' => $id,
+                        'subject_heading_id' => $item['subject_heading_id'],
+                        'score' => $item['score'],
+                        'analysis' => $item['analysis'],
+                    ];
+                }
+
+                MaterialSubjectHeading::insert($subjectHeadings);
+
+            });
+
+            return response()->json([
+                'status' => 'saved'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        //call user for record trail
-        $user = Auth::user();
-        $name = $user->lname . ',' . $user->fname;
 
-        $data = Material::find($id);
-        $data->title = $req->title;
-        $data->alias = Str::slug($req->title);
-        $data->description = $modifiedHtml;
-        $data->description_text = $content;
-        $data->filter_type = $req->filter_type;
-        $data->category_id = $req->category;
-        $data->author = $req->author;
-        $data->modified_by_id = $user->id;
-        $data->modified_at = now();
-        $data->agency = $req->agency ? $req->agency : null;
-        $data->region = $req->region ? $req->region : null;
-        //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
-        $data->source_url = $req->source_url;
-        $data->is_publish = $req->status === 'publish' ? 1 : 0;
-        $data->status = $req->status;
-        $data->publish_date = $dateFormated;
-        $data->tags = $tagsString;
 
-        if($user->role === 'encoder'){
-            $data->is_ojt = $user->is_ojt;
-        }
-
-        $data->is_press_release = $req->is_press_release ? 1 : 0;
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
-        $data->save();
-
-        // $info = Information::where('article_id', $id)
-        //     ->update([
-        //         'title' => $req->title,
-        //         'description' => $modifiedHtml,
-        //         'alias' => Str::slug($req->title),
-        //         'agency_code' => 'DOST-STII',
-        //         'tags' => $tagsString,
-        //         'source' => 'scienceph',
-        //         'source_url' => 'https://www.science.ph',
-        //         'content_type' => 'blog',
-        //         'region' => $req->region,
-        //         'is_publish' => 0,
-        //     ]);
-
-        return response()->json([
-            'status' => 'updated'
-        ], 200);
 
     }
 

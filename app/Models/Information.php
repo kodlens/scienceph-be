@@ -8,9 +8,6 @@ class Information extends Model
 {
     //
 
-    protected $primaryKey = 'id';
-    protected $table = 'informations';
-
     protected $fillable = [
         'source_id',
         'title',

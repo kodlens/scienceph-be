@@ -1,8 +1,7 @@
 export interface Article {
-    data(data: any): unknown;
     id: number;
     source_id?: number;
-    title?: string;
+    title: string;
     description?: string;
     description_text?: string;
 

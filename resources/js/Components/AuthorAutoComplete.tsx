@@ -3,8 +3,6 @@ import { AutoComplete } from 'antd'
 import { useState } from 'react'
 
 
-
-
 type Props = {
   //options: AutoCompleteOption[]
   authors: Author[]
@@ -15,6 +13,7 @@ type Props = {
 type AutoCompleteOption = {
   value: string
 }
+
 export default function AuthorAutoComplete({
   onChange,
   authors,

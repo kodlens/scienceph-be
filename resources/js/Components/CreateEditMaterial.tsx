@@ -12,6 +12,8 @@ import AgencyAutoComplete from "./AgencyAutoComplete";
 import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
+
+
 const CreateEditMaterial = ({
   id,
   auth,
@@ -32,8 +34,6 @@ const CreateEditMaterial = ({
   const { message, modal } = App.useApp();
 
   const role = auth.user?.role ? auth.user?.role.toLowerCase() : '';
-
-
 
   useEffect(() => {
     if (id > 0) {
@@ -86,7 +86,7 @@ const CreateEditMaterial = ({
 
     if (id > 0) {
       axios.patch(`${uri}/${id}`, values).then(res => {
-
+        values
         if (res.data.status === 'updated') {
           modal.success({
             title: "Updated!",
