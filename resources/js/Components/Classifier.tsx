@@ -91,12 +91,9 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   useEffect(() => {
 
     if (data.length > 0) {
-
       console.log('useEffect for data');
       const matchedHeadings = data.map(datum => {
         const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
-        //console.log('matched', matched);
-
         return {
           subject_heading_id: datum.id,
           subject_heading: matched?.subject_heading || "",
@@ -105,7 +102,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
         };
       });
 
-      setNewData([...newData, ...matchedHeadings]);
+      setNewData(matchedHeadings);
     }
   }, [data]);
 
@@ -116,12 +113,16 @@ const Classifier = ( { form, errors, id } : PageProps) => {
       console.log('useEffect for selectedRowKeys');
 
       const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
-      form.setFieldValue("subject_headings", selectedHeadings.map(item => { return {
-        subject_heading_id: item.subject_heading_id,
-        subject_heading: item.subject_heading,
-        score: item.score,
-        analysis: item.analysis
-      } }));
+      console.log('selectedHeadings', selectedHeadings);
+
+      // form.setFieldValue("subject_headings", selectedHeadings.map(item => { return {
+      //   subject_heading_id: item.subject_heading_id,
+      //   subject_heading: item.subject_heading,
+      //   score: item.score,
+      //   analysis: item.analysis
+      // } }));
+
+
     } else {
       form.setFieldValue("subject_headings", []);
     }
@@ -131,8 +132,9 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   useEffect(() => {
     if(id> 0){
       console.log('change newData', newData);
-      //form.setFieldValue("subject_headings", newData)
     }
+
+    form.setFieldValue("subject_headings", newData)
 
   }, [newData]);
 
@@ -211,16 +213,16 @@ const Classifier = ( { form, errors, id } : PageProps) => {
             return;
           }
 
-          const newSelected = [...data, {
+          const newSelected =  {
             id: record.id,
             subject_heading_id: record.id,
             subject_heading: record.subject_heading,
             score: 1,
             analysis: "Manually added"
-          }];
-          setData(newSelected);
+          };
+          setData([...data, newSelected]);
 
-          console.log(newSelected);
+          //console.log(newSelected);
 
           //setSelectedRowKeys(newSelected.map(item => item.subject_heading_id));
         }} />
