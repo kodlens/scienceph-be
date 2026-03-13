@@ -114,10 +114,10 @@ const Classifier = ( { form, errors, id } : PageProps) => {
     );
 
     if (index !== -1) {
-    const newData = [...data];
-    newData.splice(index, 1);
-    setData(newData);
-  }
+      const newData = [...data];
+      newData.splice(index, 1);
+      setData(newData);
+    }
   }
 
   return (
