@@ -44,7 +44,7 @@ class PublisherMaterialController extends MaterialController
         if (!empty($status)) {
             $query->where('status', $status);
         } else {
-            $query->whereIn('status', ['publish', 'draft', 'unpublish']);
+            $query->whereIn('status', ['submit', 'unpublish']);
         }
 
         if(!empty($request->encoder)){
@@ -60,8 +60,6 @@ class PublisherMaterialController extends MaterialController
                 ->orWhere('fname', $request->modifier);
             });
         }
-
-
 
         // Search filter
         $query->when($title, function ($q) use ($title) {
