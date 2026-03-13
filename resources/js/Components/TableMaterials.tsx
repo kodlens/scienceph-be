@@ -66,10 +66,6 @@ const TableMaterials = (
                   <div className="font-medium">{material.category?.name}</div>
                 </div>
                 <div>
-                  <div className="text-slate-500">Section</div>
-                  <div className="font-medium">{material.section?.name}</div>
-                </div>
-                <div>
                   <div className="text-slate-500">Author</div>
                   <div className="font-medium">{material.author}</div>
                 </div>
