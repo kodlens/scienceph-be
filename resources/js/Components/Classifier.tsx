@@ -132,9 +132,10 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   useEffect(() => {
     if(id> 0){
       console.log('change newData', newData);
+    }else{
+      form.setFieldValue("subject_headings", newData)
     }
 
-    form.setFieldValue("subject_headings", newData)
 
   }, [newData]);
 

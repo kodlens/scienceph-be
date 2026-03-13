@@ -49,7 +49,7 @@ class Material extends Model
     public function subject_headings(){
         return $this->hasMany(MaterialSubjectHeading::class)
             ->leftJoin('subject_headings', 'subject_heading_id', 'subject_headings.id')
-            ->join('subjects', 'subject_id', 'subjects.id')
+            ->leftJoin('subjects', 'subject_id', 'subjects.id')
             ->select(
                 'material_subject_headings.material_id as material_id',
                 'subject_headings.id as subject_heading_id',
@@ -57,8 +57,9 @@ class Material extends Model
                 'subjects.subject as subject',
                 'subjects.slug as subject_slug',
                 'subject_headings.subject_heading as subject_heading',
-                'subject_headings.slug as sh_slug'
-
+                'subject_headings.slug as sh_slug',
+                'material_subject_headings.score as score',
+                'material_subject_headings.analysis as analysis',
             );
     }///tiwason
 
