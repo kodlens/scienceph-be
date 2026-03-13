@@ -40,12 +40,9 @@ Route::get('/get-tags', [App\Http\Controllers\OpenController::class, 'getTags'])
 
 Route::middleware('auth')->group(function () {
 
-
     Route::post('/classify-content', [App\Http\Controllers\Base\ClassifyController::class, 'classify']);
 
-
     Route::post('/material/validate-title/{id}', [App\Http\Controllers\Validation\InputTitleController::class, 'inputMaterial']);
-
 
     Route::get('/my-account', [App\Http\Controllers\Auth\MyAccountController::class, 'index'])->name('my-account.index');
     Route::patch('/my-account-update', [App\Http\Controllers\Auth\MyAccountController::class, 'update'])->name('my-account.update');
@@ -61,12 +58,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/top-last-six-months', [App\Http\Controllers\DashboardController::class, 'topLastSixMonths']);
     Route::get('/dashboard/articles-last-six-months', [App\Http\Controllers\DashboardController::class, 'articlesLastSixMonths']);
 
-
-
     Route::get('/get-subjects', [App\Http\Controllers\OpenController::class, 'getSubjects'])->name('open.subjects');
     Route::get('/get-subject-headings/{subjectId}', [App\Http\Controllers\OpenController::class, 'getSubjectHeadingsWithParams'])->name('open.subject-headings-with-params');
     Route::get('/get-subject-headings', [App\Http\Controllers\OpenController::class, 'getSubjectHeadings'])->name('open.subject-headings');
-
 
 });
 
