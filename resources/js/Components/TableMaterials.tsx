@@ -18,6 +18,7 @@ type Props = {
   refetch: () => void
   // New Props
   showEdit?: boolean
+  showSubmit?:boolean,
   showDelete?: boolean
   showTrash?: boolean
   showPublish?: boolean
@@ -28,7 +29,7 @@ type Props = {
 }
 const TableMaterials = (
   { routePrefix, data, isFetching, refetch, page, paginationPageChange,
-    showEdit, showTrash, showView, showPublish, showDraft, showDelete
+    showEdit, showSubmit, showTrash, showView, showPublish, showDraft, showDelete
 }: Props) => {
 
   const {notification} = App.useApp();
@@ -186,6 +187,16 @@ const TableMaterials = (
                   handleEditClick: showEdit ? () =>
                     router.visit(`/${routePrefix}/materials/${material.id}/edit`)
                   : undefined,
+                  handleSubmitClick: showSubmit ? async () => {
+                    modal.confirm({
+                      title: 'Submit',
+                      content: 'This material will be set to submit.',
+                      onOk: async () => {
+                        await axios.post(`/${routePrefix}/material-submit/${material.id}`)
+                        refetch()
+                      },
+                    })
+                  } : undefined,
                   handleTrashClick: showTrash ? async () => {
                     modal.confirm({
                       title: 'Move to Trash?',

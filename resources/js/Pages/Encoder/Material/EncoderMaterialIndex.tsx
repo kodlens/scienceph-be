@@ -171,6 +171,7 @@ export default function EncoderMaterialIndex() {
               }}
               page={page}
               showDelete={false}
+              showSubmit={true}
               showEdit={true}
               showPublish={false}
               showDraft={false}

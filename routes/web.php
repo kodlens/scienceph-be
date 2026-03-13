@@ -181,6 +181,7 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
     //Route::resource('/posts', App\Http\Controllers\Encoder\EncoderArticleController::class);
     Route::get('/get-materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'getData'])->name('encoder.materials.get-data');
 
+    Route::post('/material-submit/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'submit'])->name('encoder.materials.submit');
     Route::post('/material-trash/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'trash'])->name('encoder.materials.trash');
     //   Route::post('/temp-upload', [App\Http\Controllers\Author\AuthorPostController::class, 'tempUpload'])->name('posts.temp-upload');
     //   Route::post('/temp-remove/{filename}', [App\Http\Controllers\Author\AuthorPostController::class, 'removeUpload'])->name('posts.temp-remove');

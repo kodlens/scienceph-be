@@ -176,6 +176,21 @@ class EncoderMaterialController extends MaterialController
         ], 200);
     }
 
+    public function submit($id)
+    {
+        $user = Auth::user();
+        $data = Material::find($id);
+        $data->status = 'submit'; // submit-for-publishing (static)
+        $data->trash = 0; // be sure to set 0 the trash if draft
+        $name = $user->lname . ',' . $user->fname;
+        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);
+        $data->save();
+
+        return response()->json([
+            'status' => 'submit',
+        ], 200);
+    }
+
     public function postArchived($id)
     {
         $user = Auth::user();

@@ -121,14 +121,14 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   }
 
   return (
-    <>
+    <div className='border p-4 rounded-md'>
       <Button
         type="primary"
         loading={loading}
         onClick={() => {
           handleClassification();
         }}>
-        Classify Information
+        Classify Content
       </Button>
 
       <div>
@@ -227,7 +227,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
       </div>
 
-    </>
+    </div>
   )
 }
 

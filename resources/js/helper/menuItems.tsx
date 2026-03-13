@@ -1,11 +1,11 @@
-import { Article } from "@/types/article";
 import { Material } from "@/types/material";
 import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
-import { Eye } from "lucide-react";
+import { Captions, Eye } from "lucide-react";
 
 export const menuItems = (
   {
     handleEditClick,
+    handleSubmitClick,
     handleTrashClick,
     handleView,
     handlePublish,
@@ -16,6 +16,7 @@ export const menuItems = (
   }:
   {
     handleEditClick?: () => void,
+    handleSubmitClick?:() => void,
     handleTrashClick?: () => void,
     handleView?: () => void,
     handlePublish?: () => void,
@@ -34,6 +35,16 @@ export const menuItems = (
       disabled: material?.status === 'publish',
       icon: <EditOutlined />,
       onClick: () => handleEditClick(),
+    })
+  }
+
+  if(handleSubmitClick){
+    items.push({
+      label: 'Submit',
+      key: `${prefix}.materials.submit`,
+      disabled: material?.status === 'publish',
+      icon: <Captions size={15} />,
+      onClick: () => handleSubmitClick(),
     })
   }
 
