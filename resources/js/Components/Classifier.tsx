@@ -2,7 +2,6 @@ import { SubjectHeading } from '@/types/subject';
 import { App, Button, Form, FormInstance, Input, Table } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import type { Key } from 'react';
 
 import { BrushCleaning } from 'lucide-react';
 import ModalSubjectHeadings from './ModalSubjectHeading';
@@ -18,7 +17,7 @@ type AIResult = {
   score: number,
   analysis: string
 }
-type NewSubjectResult = {
+type SubjectResult = {
   subject_heading_id: number,
   subject_heading?: string,
   score: number,
@@ -28,11 +27,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const { notification } = App.useApp();
-  const [data, setData] = useState<AIResult[]>([]);
-
-  const [newData, setNewData] = useState<NewSubjectResult[]>([]);
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [data, setData] = useState<SubjectResult[]>([]);
   const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
 
 
@@ -51,6 +46,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
     }
 
     axios.post("/classify-content", { content: content }).then((res) => {
+
       if (res.data.results.length === 0) {
         notification.info({
           message: "No Relevant Subject Headings",
@@ -58,8 +54,20 @@ const Classifier = ( { form, errors, id } : PageProps) => {
           duration: 5,
         });
       }
-      setData(res.data.results);
-      setSelectedRowKeys([]);
+
+      const resData:AIResult[] = res.data.results
+
+      const matchedHeadings = resData.map(datum => {
+        const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
+        return {
+          subject_heading_id: datum.id,
+          subject_heading: matched?.subject_heading || "",
+          score: datum.score,
+          analysis: datum.analysis
+        };
+      });
+
+      setData(matchedHeadings);
       setLoading(false)
 
     }).catch((err) => {
@@ -81,64 +89,36 @@ const Classifier = ( { form, errors, id } : PageProps) => {
   //load data if edit mode
   useEffect(() => {
     if(id > 0){
-      //form.setFieldValue('subject_headings', form.getFieldValue('subject_headings'))
       const subjH = form.getFieldValue('subject_headings');
-      setNewData(subjH)
-      //put ang ina!!!!
+      setData(subjH)
     }
   }, [form, id])
 
+
   useEffect(() => {
 
-    if (data.length > 0) {
-      console.log('useEffect for data');
-      const matchedHeadings = data.map(datum => {
-        const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
-        return {
-          subject_heading_id: datum.id,
-          subject_heading: matched?.subject_heading || "",
-          score: datum.score,
-          analysis: datum.analysis
-        };
-      });
+    form.setFieldValue("subject_headings", data.map(item => (
+      {
+        subject_heading_id: item.subject_heading_id,
+        subject_heading: item.subject_heading,
+        score: item.score,
+        analysis: item.analysis
+      }
+    )));
 
-      setNewData(matchedHeadings);
-    }
   }, [data]);
 
+  const handleDelete = (subjH_id:number) => {
+    const index = data.findIndex(
+      item => item.subject_heading_id === subjH_id
+    );
 
-  useEffect(() => {
-
-    if (selectedRowKeys.length > 0) {
-      console.log('useEffect for selectedRowKeys');
-
-      const selectedHeadings = newData.filter(item => selectedRowKeys.includes(item.subject_heading_id));
-      console.log('selectedHeadings', selectedHeadings);
-
-      // form.setFieldValue("subject_headings", selectedHeadings.map(item => { return {
-      //   subject_heading_id: item.subject_heading_id,
-      //   subject_heading: item.subject_heading,
-      //   score: item.score,
-      //   analysis: item.analysis
-      // } }));
-
-
-    } else {
-      form.setFieldValue("subject_headings", []);
-    }
-
-  }, [selectedRowKeys]);
-
-  useEffect(() => {
-    if(id> 0){
-      console.log('change newData', newData);
-    }else{
-      form.setFieldValue("subject_headings", newData)
-    }
-
-
-  }, [newData]);
-
+    if (index !== -1) {
+    const newData = [...data];
+    newData.splice(index, 1);
+    setData(newData);
+  }
+  }
 
   return (
     <>
@@ -160,15 +140,9 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
           <Table
             rowKey="subject_heading_id"
-            dataSource={newData}
+            dataSource={data}
             pagination={false}
             size="small"
-            rowSelection={{
-              selectedRowKeys,
-              onChange: (newSelectedRowKeys) => {
-                setSelectedRowKeys(newSelectedRowKeys);
-              },
-            }}
             columns={[
               {
                 title: "Id",
@@ -193,6 +167,22 @@ const Classifier = ( { form, errors, id } : PageProps) => {
                 dataIndex: "analysis",
                 key: "analysis",
               },
+              {
+                title: "Action",
+                key: "action",
+                width: 150,
+                render: (_, record) => (
+                  <>
+                    <Button
+                      type="link"
+                      danger
+                      onClick={() => handleDelete(record.subject_heading_id)}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ),
+              },
             ]}
           />
         </Form.Item>
@@ -202,7 +192,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
       <div className='flex gap-2'>
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
 
-          const existsInData = data.find(item => item.id === record.id);
+          const existsInData = data.find(item => item.subject_heading_id === record.id);
 
           if(existsInData) {
             notification.warning({
@@ -214,26 +204,20 @@ const Classifier = ( { form, errors, id } : PageProps) => {
             return;
           }
 
-          const newSelected =  {
-            id: record.id,
-            subject_heading_id: record.id,
-            subject_heading: record.subject_heading,
-            score: 1,
-            analysis: "Manually added"
-          };
-          setData([...data, newSelected]);
-
-          //console.log(newSelected);
-
-          //setSelectedRowKeys(newSelected.map(item => item.subject_heading_id));
+          setData([...data, {
+              subject_heading_id: record.id,
+              subject_heading: record.subject_heading,
+              score: 1,
+              analysis: "Manually added"
+            }]);
         }} />
 
         <Button danger icon={<BrushCleaning size={15} />}
           onClick={()=>{
-
+            setData([])
           }}
         >
-          Remove
+          Remove All
         </Button>
 
         <Form.Item name="subject_headings" hidden>

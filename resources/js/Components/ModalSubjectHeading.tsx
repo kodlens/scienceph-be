@@ -47,6 +47,7 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
 
       <Button
         icon={<ListPlus  size={15}/>}
+        type='primary'
         onClick={() => setIsModalOpen(true)}>
         Add Manually
       </Button>

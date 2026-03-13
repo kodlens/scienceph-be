@@ -31,7 +31,7 @@ class MaterialController extends Controller
     //
     public function store(Request $req)
     {
-        return $req;
+        //return $req;
 
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
@@ -137,7 +137,6 @@ class MaterialController extends Controller
 
     public function update(Request $req, $id){
 
-        //return $req;
 
         $req->validate([
             'title' => ['required', 'unique:materials,title,' . $id . ',id'],
@@ -150,7 +149,7 @@ class MaterialController extends Controller
 
 
         try {
-            DB::transaction(function () use ($req) {
+            DB::transaction(function () use ($req, $id) {
                 // Database operations here
 
                 $filterDom = new FilterDom();
@@ -209,7 +208,7 @@ class MaterialController extends Controller
                 $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
                 $data->save();
 
-                MaterialSubjectHeading::where('id', $id)
+                MaterialSubjectHeading::where('material_id', $id)
                     ->delete();
 
                 $subjectHeadings = [];
@@ -227,7 +226,7 @@ class MaterialController extends Controller
             });
 
             return response()->json([
-                'status' => 'saved'
+                'status' => 'updated'
             ], 200);
 
         } catch (\Throwable $e) {
