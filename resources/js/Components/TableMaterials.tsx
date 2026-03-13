@@ -1,17 +1,18 @@
 import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
 import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
-import modal from 'antd/es/modal'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
 //import { adminMenuItems } from '@/helper/adminMenuItems'
 import { menuItems } from '@/helper/menuItems'
 import { Material } from '@/types/material'
 import MaterialView from './MaterialView'
+import { User } from '@/types'
 
 type Props = {
   routePrefix: string
   data: { data: Material[], total: number }
+  user: User,
   isFetching: boolean
   page: number
   paginationPageChange: (page: number) => void
@@ -28,11 +29,11 @@ type Props = {
 
 }
 const TableMaterials = (
-  { routePrefix, data, isFetching, refetch, page, paginationPageChange,
+  { routePrefix, data, isFetching, refetch, page, paginationPageChange, user,
     showEdit, showSubmit, showTrash, showView, showPublish, showDraft, showDelete
 }: Props) => {
 
-  const {notification} = App.useApp();
+  const {notification, modal} = App.useApp();
 
   const statusStyles: Record<string, string> = {
     submit: 'bg-blue-100 text-blue-700',
@@ -182,6 +183,7 @@ const TableMaterials = (
               trigger={['click']}
               menu={{
                 items: menuItems({
+                  user,
                   material,
                   prefix: routePrefix,
                   handleEditClick: showEdit ? () =>

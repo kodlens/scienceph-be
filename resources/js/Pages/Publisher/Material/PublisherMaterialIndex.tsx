@@ -1,13 +1,14 @@
 import { Head, router } from '@inertiajs/react'
 import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Input, Select } from 'antd'
-import { ReactNode, useState } from 'react'
+import { ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableMaterials from '@/Components/TableMaterials'
 import PublisherLayout from '@/Layouts/PublisherLayout'
+import { PageProps } from '@/types'
 
 type Filters = {
   status: string
@@ -16,7 +17,7 @@ type Filters = {
   modifier: string
 }
 
-export default function PublisherMaterialIndex() {
+export default function PublisherMaterialIndex( {auth}:PageProps) {
   const [page, setPage] = useState(1)
   const perPage = 10
 
@@ -173,6 +174,7 @@ export default function PublisherMaterialIndex() {
             </div>
 
             <TableMaterials
+              user={auth.user}
               routePrefix='publisher'
               data={data}
               isFetching={isFetching}
@@ -196,7 +198,7 @@ export default function PublisherMaterialIndex() {
 }
 
 PublisherMaterialIndex.layout = (page: ReactNode) => (
-  <PublisherLayout user={(page as any).props.auth.user}>
+  <PublisherLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </PublisherLayout>
 )

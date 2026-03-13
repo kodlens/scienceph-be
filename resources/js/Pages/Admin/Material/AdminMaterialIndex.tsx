@@ -7,15 +7,16 @@ import {
 
 import { FileAddOutlined, AppstoreOutlined, ProfileOutlined } from '@ant-design/icons';
 
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import axios from 'axios';
 
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TableArticles from '@/Components/TableMaterials';
 import SearchFilter from '@/Components/SearchFilter';
+import { PageProps } from '@/types';
 
-const AdminMaterialIndex = () => {
+const AdminMaterialIndex = ( {auth}:PageProps ) => {
 
 
   //const [perPage, setPerPage] = useState(10);
@@ -107,6 +108,7 @@ const AdminMaterialIndex = () => {
             />
 
             <TableArticles
+              user={auth.user}
               routePrefix='admin'
               data={data}
               isFetching={isFetching}
@@ -131,5 +133,5 @@ const AdminMaterialIndex = () => {
   )
 }
 
-AdminMaterialIndex.layout = (page: any) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
+AdminMaterialIndex.layout = (page: ReactElement) => <AuthenticatedLayout user={page.props.auth.user}>{page}</AuthenticatedLayout>
 export default AdminMaterialIndex;

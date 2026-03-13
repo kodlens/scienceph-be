@@ -161,7 +161,7 @@ class EncoderMaterialController extends MaterialController
         ], 200);
     }
 
-    public function postDraft($id)
+    public function draft($id)
     {
         $user = Auth::user();
         $data = Material::find($id);

@@ -189,7 +189,7 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     //   Route::post('/posts-published/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPublished'])->name('posts.published');
     //   Route::post('/posts-archived/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postArchived'])->name('posts.archived');
-        Route::post('/material-draft/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postDraft'])->name('encoder.articles.draft');
+        Route::post('/material-draft/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'draft'])->name('encoder.articles.draft');
     //   Route::post('/posts-pending/{id}', [App\Http\Controllers\Author\AuthorPostController::class, 'postPending'])->name('posts.pending');
 
     Route::post('/material-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');

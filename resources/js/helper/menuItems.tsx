@@ -1,3 +1,4 @@
+import { User } from "@/types";
 import { Material } from "@/types/material";
 import { DeleteOutlined, EditOutlined, GlobalOutlined, StopOutlined } from "@ant-design/icons";
 import { Captions, Eye } from "lucide-react";
@@ -12,7 +13,8 @@ export const menuItems = (
     handleDraft,
     handleDelete,
     material,
-    prefix
+    prefix,
+    user
   }:
   {
     handleEditClick?: () => void,
@@ -23,16 +25,28 @@ export const menuItems = (
     handleDraft?: () => void,
     handleDelete?: () => void
     material?: Material,
-    prefix: string
+    prefix: string,
+    user: User
   }
 ) => {
   const items = []
+
+  //this will handle the disable enable per user role
+  const disableEdit = (status?:string) => {
+    if(user.role.toLowerCase() === 'encoder'){
+      return status === 'submit'
+    }
+
+    if(user.role.toLowerCase() === 'publisher'){
+      return status === 'publish'
+    }
+  }
 
   if(handleEditClick){
     items.push({
       label: 'Edit',
       key: `${prefix}.materials.edit`,
-      disabled: material?.status === 'publish',
+      disabled: disableEdit(material?.status),
       icon: <EditOutlined />,
       onClick: () => handleEditClick(),
     })
@@ -42,7 +56,7 @@ export const menuItems = (
     items.push({
       label: 'Submit',
       key: `${prefix}.materials.submit`,
-      disabled: material?.status === 'publish',
+      disabled: material?.status === 'submit',
       icon: <Captions size={15} />,
       onClick: () => handleSubmitClick(),
     })

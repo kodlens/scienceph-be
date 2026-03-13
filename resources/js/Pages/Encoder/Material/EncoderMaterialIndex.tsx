@@ -6,15 +6,16 @@ import {
   Select,
 
 } from 'antd'
-import {  ReactNode, useState } from 'react'
+import {  ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableMaterials'
+import { PageProps } from '@/types'
 
-export default function EncoderMaterialIndex() {
+export default function EncoderMaterialIndex( { auth } : PageProps ) {
 
 
   const [page, setPage] = useState(1)
@@ -170,11 +171,12 @@ export default function EncoderMaterialIndex() {
                 setPage(v)
               }}
               page={page}
+              user={auth.user}
               showDelete={false}
               showSubmit={true}
               showEdit={true}
               showPublish={false}
-              showDraft={false}
+              showDraft={true}
               showView={true}
               showTrash={false}
             />
@@ -190,7 +192,7 @@ export default function EncoderMaterialIndex() {
 }
 
 EncoderMaterialIndex.layout = (page: ReactNode) => (
-  <EncoderLayout user={(page as any).props.auth.user}>
+  <EncoderLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </EncoderLayout>
 )
