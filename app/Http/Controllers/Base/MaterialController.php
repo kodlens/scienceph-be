@@ -216,7 +216,7 @@ class MaterialController extends Controller
                 }
 
                 $data->is_press_release = $req->is_press_release ? 1 : 0;
-                $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
+                //$data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'update', $user->id, $name);
                 $data->save();
 
                 MaterialSubjectHeading::where('material_id', $id)
@@ -233,6 +233,16 @@ class MaterialController extends Controller
                 }
 
                 MaterialSubjectHeading::insert($subjectHeadings);
+
+                (new RecordTrail())->activityLog(
+                    'materials',
+                    $data->id,
+                    $user->id,
+                    'update',
+                    'material updated by ' . $name,
+                    $data,
+                    Material::find($id)
+                );
 
             });
 
@@ -276,12 +286,21 @@ class MaterialController extends Controller
         $filterDom = new FilterDom();
         $filterDom->removeImagesFromDOM($data->description);
 
-
         $name = $user->lname . ',' . $user->fname;
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $name);
+        //$data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'delete', $user->id, $name);
         $data->save();
 
         Material::destroy($id);
+
+        (new RecordTrail())->activityLog(
+            'materials',
+            $data->id,
+            $user->id,
+            'deleted',
+            'material deleted by ' . $name,
+            $data,
+            null
+        );
 
 
         return response()->json([
@@ -299,8 +318,18 @@ class MaterialController extends Controller
         $data->status = 'trash';
         $data->trash = 1;
         $name = $user->lname . ',' . $user->fname;
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'trash', $user->id, $name);
+        //$data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'trash', $user->id, $name);
         $data->save();
+
+        (new RecordTrail())->activityLog(
+            'materials',
+            $data->id,
+            $user->id,
+            'draft',
+            'material set to trash by ' . $name,
+            $data,
+            null
+        );
 
         //remove to info table
         // Information::where('source_id', $id)
@@ -309,7 +338,7 @@ class MaterialController extends Controller
         //     ]);
 
         return response()->json([
-            'status' => 'trashed',
+            'status' => 'trash',
         ], 200);
     }
 
@@ -322,25 +351,19 @@ class MaterialController extends Controller
 
                 $data = Material::find($id);
                 $data->status = 'publish'; //submit-for-publishing (static)
-                $data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+                //$data->record_trail = $data->record_trail . 'publish|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
 
+                (new RecordTrail())->activityLog(
+                    'materials',
+                    $data->id,
+                    $user->id,
+                    'publish',
+                    'material set to publish by ' . $name,
+                    $data,
+                    null
+                );
 
-                // $info = Information::updateOrCreate(['source_id' => $data->id],
-                // [
-                //     'source_id' => $data->id,
-                //     'title' => $data->title,
-                //     'description' => $data->description,
-                //     'description_text' => $data->description_text,
-                //     'alias' => $data->alias,
-                //     'agency_code' => $data->agency,
-                //     'tags' => $data->tags,
-                //     'source' => 'scienceph',
-                //     'source_url' => 'https://www.science.ph',
-                //     'content_type' => 'blog',
-                //     'region' => $data->region,
-                //     'is_publish' => 1,
-                // ]);
             });
 
             return response()->json([
@@ -363,8 +386,18 @@ class MaterialController extends Controller
                 $data->status = 'draft';
                 $data->is_publish = 0;
                 $data->trash = 0;
-                $data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
+                //$data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
+
+                (new RecordTrail())->activityLog(
+                    'materials',
+                    $data->id,
+                    $user->id,
+                    'draft',
+                    'material set to draft by ' . $name,
+                    $data,
+                    null
+                );
 
                 // $infoExists = Information::where('alias', $data->alias)->exists();
                 // if($infoExists){

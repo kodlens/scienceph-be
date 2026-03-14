@@ -12,7 +12,7 @@ class ActivityLog extends Model
      protected $fillable = [
         'source_table',
         'material_id',
-        'usre_id',
+        'user_id',
         'action',
         'description',
         'old_values',

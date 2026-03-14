@@ -66,7 +66,7 @@ export const menuItems = (
     items.push({
       label: 'Trash',
       key: `${prefix}.materials.trash`,
-      disabled: material?.status === 'publish',
+      disabled: material?.status === 'publish' || material?.status === 'submit',
       icon: <DeleteOutlined />,
       onClick: () => handleTrashClick()
     })

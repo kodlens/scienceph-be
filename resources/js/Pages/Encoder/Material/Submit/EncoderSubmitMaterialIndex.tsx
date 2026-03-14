@@ -71,7 +71,7 @@ export default function EncoderSubmitMaterialIndex({ auth }: PageProps) {
 
   return (
     <>
-      <Head title="Publish Materials" />
+      <Head title="Submit Materials" />
 
       <div className="flex justify-center">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">

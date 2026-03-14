@@ -72,7 +72,7 @@ export default function EncoderDraftMaterialIndex( { auth } : PageProps ) {
 
   return (
     <>
-      <Head title="Publish Materials" />
+      <Head title="Draft Materials" />
 
 
       <div className="flex justify-center">

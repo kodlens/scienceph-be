@@ -6,7 +6,7 @@ import {
   Select,
 
 } from 'antd'
-import {  ReactElement, ReactNode, useState } from 'react'
+import {  ReactElement, ReactNode, useEffect, useState } from 'react'
 import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
@@ -33,7 +33,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
 
 
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['encoder-draft-materials', { perPage, page, appliedFilters }],
+    queryKey: ['encoder-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -68,13 +68,27 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
     })
   }
 
+  useEffect(()=>{
+    setAppliedFilters({
+      title: filters.title,
+      status: filters.status,
+    })
+
+  }, [filters.status])
+
+  useEffect(()=>{
+    refetch()
+  }, [appliedFilters.status])
+
+
+
   if (error) {
     return <Error404 error={error} />
   }
 
   return (
     <>
-      <Head title="Publish Materials" />
+      <Head title="All Materials" />
 
 
       <div className="flex justify-center">
@@ -95,7 +109,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
                   Encoder Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Draft Materials
+                  All Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
                   Manage and update your encoded science and technology materials.
@@ -179,7 +193,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
               showPublish={false}
               showDraft={true}
               showView={true}
-              showTrash={false}
+              showTrash={true}
             />
 
           </div>
