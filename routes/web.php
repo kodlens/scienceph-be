@@ -149,6 +149,9 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/publish-materials', [App\Http\Controllers\Publisher\Publish\PublisherPublishMaterialController::class, 'index'])->name('publisher.publish-materials.index');
     Route::get('/get-publish-materials', [App\Http\Controllers\Publisher\Publish\PublisherPublishMaterialController::class, 'getData'])->name('publisher.get-publish-materials.index');
 
+    Route::get('/ojt-materials', [App\Http\Controllers\Publisher\Ojt\PublisherOjtMaterialController::class, 'index'])->name('publisher.ojt-materials.index');
+    Route::get('/get-ojt-materials', [App\Http\Controllers\Publisher\Ojt\PublisherOjtMaterialController::class, 'getData'])->name('publisher.get-ojt-materials.index');
+
 
     //Route::get('/trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'index'])->name('publisher.trash-materials.index');
     //Route::get('/get-trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'getData'])->name('publisher.trash-materials.get-data');
