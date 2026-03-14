@@ -170,6 +170,9 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Encoder\EncoderDashboardController::class, 'index'])->name('encoder.dashboard.index');
 
+    Route::get('/materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'index'])->name('encoder.materials.index');
+    Route::get('/get-materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'getData'])->name('encoder.materials.get-data');
+
     Route::get('/draft-materials', [App\Http\Controllers\Encoder\Draft\EncoderDraftController::class, 'index'])->name('encoder.draft-materials.index');
     Route::get('/get-draft-materials', [App\Http\Controllers\Encoder\Draft\EncoderDraftController::class, 'getData'])->name('encoder.get-draft-materials');
 
@@ -188,7 +191,6 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
     Route::delete('/materials/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'destroy'])->name('encoder.materials.destroy');
 
     //Route::resource('/posts', App\Http\Controllers\Encoder\EncoderArticleController::class);
-    Route::get('/get-materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'getData'])->name('encoder.materials.get-data');
 
     Route::post('/material-submit/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'submit'])->name('encoder.materials.submit');
     Route::post('/material-trash/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'trash'])->name('encoder.materials.trash');

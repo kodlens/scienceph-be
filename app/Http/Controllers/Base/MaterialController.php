@@ -101,9 +101,9 @@ class MaterialController extends Controller
                     'publish_date' => $dateFormated,
                     'is_publish' => 0,
                     'is_ojt' => $user->role === 'encoder' ? $user->is_ojt : 0,
-                    'is_press_release' => $req->is_press_release ? 1 : 0,
-                    'record_trail' => (new RecordTrail())
-                        ->recordTrail('', 'insert', $user->id, $name),
+                    'is_press_release' => $req->is_press_release ? 1 : 0
+                    // 'record_trail' => (new RecordTrail())
+                    //     ->recordTrail('', 'insert', $user->id, $name),
                 ]);
 
 
@@ -118,6 +118,17 @@ class MaterialController extends Controller
                 }
 
                 MaterialSubjectHeading::insert($subjectHeadings);
+
+                //record activity
+                (new RecordTrail())->activityLog(
+                    'materials',
+                    $data->id,
+                    $user->id,
+                    'insert',
+                    'material created by ' . $name,
+                    $data,
+                    null
+                );
 
             });
 

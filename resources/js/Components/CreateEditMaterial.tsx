@@ -12,6 +12,7 @@ import AgencyAutoComplete from "./AgencyAutoComplete";
 import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
+import { Material } from "@/types/material";
 
 
 const CreateEditMaterial = ({
@@ -80,7 +81,7 @@ const CreateEditMaterial = ({
       });
   }
 
-  const submit = (values: Article) => {
+  const submit = (values: Material) => {
     setLoading(true)
     setErrors({});
 
