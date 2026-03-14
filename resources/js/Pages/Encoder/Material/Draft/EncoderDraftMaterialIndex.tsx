@@ -3,7 +3,6 @@ import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from
 import {
   Button,
   Input,
-  Select,
 
 } from 'antd'
 import {  ReactElement, ReactNode, useState } from 'react'
@@ -11,7 +10,6 @@ import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
-import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
 
@@ -74,7 +72,8 @@ export default function EncoderDraftMaterialIndex( { auth } : PageProps ) {
 
   return (
     <>
-      <Head title="Articles" />
+      <Head title="Publish Materials" />
+
 
       <div className="flex justify-center">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">

@@ -6,7 +6,7 @@ import {
   Select,
 
 } from 'antd'
-import {  ReactElement, ReactNode, useState } from 'react'
+import { ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +15,7 @@ import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
 
-export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
+export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
 
 
   const [page, setPage] = useState(1)
@@ -74,7 +74,7 @@ export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
 
   return (
     <>
-      <Head title="Articles" />
+      <Head title="Publish Materials" />
 
       <div className="flex justify-center">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -94,7 +94,7 @@ export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
                   Encoder Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Materials
+                  Publish Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
                   Manage and update your encoded science and technology materials.
@@ -124,10 +124,10 @@ export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
 
             </div>
 
-          {/* ================= FILTERS ================= */}
-          <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
+            {/* ================= FILTERS ================= */}
+            <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
 
-            {/* <Select
+              {/* <Select
               className="w-[180px]"
               value={filters.status}
               onChange={(v) =>
@@ -136,52 +136,52 @@ export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
               options={statusDropdownMenu('encoder')}
             /> */}
 
-            <Input
-              placeholder="Search by material title"
-              className="w-full"
-              value={filters.title}
-              prefix={<SearchOutlined className='text-slate-400' />}
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, title: e.target.value }))
-              }
-              onKeyDown={(e)=>{
-                if(e.key === 'Enter')
-                  applyFilters()
-              }}
-              allowClear
-            />
+              <Input
+                placeholder="Search by material title"
+                className="w-full"
+                value={filters.title}
+                prefix={<SearchOutlined className='text-slate-400' />}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, title: e.target.value }))
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter')
+                    applyFilters()
+                }}
+                allowClear
+              />
 
-            <Button className="ml-auto" type="primary" onClick={applyFilters}>
-              Search
-            </Button>
-            <Button onClick={clearFilters}>
-              Clear
-            </Button>
-          </div>
+              <Button className="ml-auto" type="primary" onClick={applyFilters}>
+                Search
+              </Button>
+              <Button onClick={clearFilters}>
+                Clear
+              </Button>
+            </div>
 
 
-          <div className='overflow-auto'>
+            <div className='overflow-auto'>
 
-            <TableArticles
-              routePrefix='encoder'
-              data={data}
-              isFetching={isFetching}
-              refetch={refetch}
-              paginationPageChange={(v) => {
-                setPage(v)
-              }}
-              page={page}
-              user={auth.user}
-              showDelete={false}
-              showSubmit={true}
-              showEdit={true}
-              showPublish={false}
-              showDraft={true}
-              showView={true}
-              showTrash={false}
-            />
+              <TableArticles
+                routePrefix='encoder'
+                data={data}
+                isFetching={isFetching}
+                refetch={refetch}
+                paginationPageChange={(v) => {
+                  setPage(v)
+                }}
+                page={page}
+                user={auth.user}
+                showDelete={false}
+                showSubmit={false}
+                showEdit={false}
+                showPublish={false}
+                showDraft={false}
+                showView={false}
+                showTrash={false}
+              />
 
-          </div>
+            </div>
           </div>
 
 
