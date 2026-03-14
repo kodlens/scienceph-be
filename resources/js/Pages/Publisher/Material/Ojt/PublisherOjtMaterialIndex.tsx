@@ -1,5 +1,5 @@
-import { Head, router } from '@inertiajs/react'
-import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
+import { Head } from '@inertiajs/react'
+import {  FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
 import {
   Button,
   Input,
