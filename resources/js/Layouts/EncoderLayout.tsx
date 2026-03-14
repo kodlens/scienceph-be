@@ -11,7 +11,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { LogOut } from 'lucide-react';
+import { BookCheck, LogOut, Newspaper, SquarePen } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -48,13 +48,26 @@ export default function EncoderLayout(
         label: 'Materials',
         children: [
           {
-            key: 'encoder.materials.index',
-            label: 'Materials',
-            onClick: () => router.visit('/encoder/materials'),
+            key: 'encoder.draft-materials.index',
+            icon: <SquarePen size={15}/>,
+            label: 'Draft Materials',
+            onClick: () => router.visit('/encoder/draft-materials'),
           },
+          {
+            key: 'encoder.publish-materials.index',
+            icon: <BookCheck size={15}/>,
+            label: 'Publish Materials',
+            onClick: () => router.visit('/encoder/publish-materials'),
+          },
+          // {
+          //   key: 'encoder.materials.index',
+          //   label: 'Materials',
+          //   onClick: () => router.visit('/encoder/materials'),
+          // },
           {
             key: 'encoder.materials.create',
             label: 'New Post/Material',
+            icon: <Newspaper size={15}/>,
             onClick: () => router.visit('/encoder/materials/create'),
           },
 

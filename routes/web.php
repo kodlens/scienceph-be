@@ -170,7 +170,13 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\Encoder\EncoderDashboardController::class, 'index'])->name('encoder.dashboard.index');
 
-    Route::get('/materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'index'])->name('encoder.materials.index');
+    Route::get('/draft-materials', [App\Http\Controllers\Encoder\Draft\EncoderDraftController::class, 'index'])->name('encoder.draft-materials.index');
+    Route::get('/get-draft-materials', [App\Http\Controllers\Encoder\Draft\EncoderDraftController::class, 'getData'])->name('encoder.get-draft-materials');
+
+    Route::get('/publish-materials', [App\Http\Controllers\Encoder\Publish\EncoderPublishController::class, 'index'])->name('encoder.publish-materials.index');
+    Route::get('/get-publish-materials', [App\Http\Controllers\Encoder\Publish\EncoderPublishController::class, 'getData'])->name('encoder.get-publish-materials');
+
+
     Route::get('/materials/create', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'create'])->name('encoder.materials.create');
     Route::post('/materials', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'store'])->name('encoder.materials.store');
     Route::get('/materials/{id}/edit', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'edit'])->name('encoder.materials.edit');

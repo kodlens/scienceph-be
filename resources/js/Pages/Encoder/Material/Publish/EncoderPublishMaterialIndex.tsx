@@ -15,7 +15,7 @@ import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
 
-export default function EncoderMaterialIndex( { auth } : PageProps ) {
+export default function EncoderPublishMaterialIndex( { auth } : PageProps ) {
 
 
   const [page, setPage] = useState(1)
@@ -42,7 +42,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/encoder/get-materials?${params}`)
+      const res = await axios.get(`/encoder/get-publish-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -127,14 +127,14 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
           {/* ================= FILTERS ================= */}
           <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
 
-            <Select
+            {/* <Select
               className="w-[180px]"
               value={filters.status}
               onChange={(v) =>
                 setFilters((prev) => ({ ...prev, status: v }))
               }
               options={statusDropdownMenu('encoder')}
-            />
+            /> */}
 
             <Input
               placeholder="Search by material title"
@@ -191,7 +191,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
   )
 }
 
-EncoderMaterialIndex.layout = (page: ReactNode) => (
+EncoderPublishMaterialIndex.layout = (page: ReactNode) => (
   <EncoderLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </EncoderLayout>
