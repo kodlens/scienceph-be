@@ -1,11 +1,10 @@
 import { Head, router } from '@inertiajs/react'
 import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Input, Select } from 'antd'
+import { Button, Input } from 'antd'
 import { ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
-import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableMaterials from '@/Components/TableMaterials'
 import PublisherLayout from '@/Layouts/PublisherLayout'
 import { PageProps } from '@/types'
@@ -99,7 +98,7 @@ export default function PublisherMaterialIndex( {auth}:PageProps) {
                   Publisher Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Materials
+                  Submitted Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
                   Review, update, and publish submitted science and technology materials.
@@ -129,11 +128,11 @@ export default function PublisherMaterialIndex( {auth}:PageProps) {
 
             <div className="mb-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-                <Select
+                {/* <Select
                   value={filters.status}
                   onChange={(v) => setFilters((prev) => ({ ...prev, status: v }))}
                   options={statusDropdownMenu('publisher')}
-                />
+                /> */}
 
                 <Input
                   placeholder="Search by material title"

@@ -4,13 +4,13 @@ import { router, useForm } from '@inertiajs/react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined, FormOutlined, LockOutlined,
+  UserOutlined, LockOutlined,
   MenuOutlined, DownOutlined
 } from '@ant-design/icons';
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, LogOut } from 'lucide-react';
+import { DatabaseZap, LogOut, SendHorizontal } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -51,13 +51,13 @@ export default function PublisherLayout(
       children: [
         {
           key: 'publisher.materials.index',
-          label: 'Materials',
-          icon: <FormOutlined />,
+          label: 'Submitted',
+          icon: <SendHorizontal size={15} />,
           onClick: () => router.visit('/publisher/materials'),
         },
         {
           key: 'publisher.trash-materials.index',
-          label: 'Trash Materials',
+          label: 'Trash',
           icon: <DatabaseZap size={15} />,
           onClick: () => router.visit('/publisher/trash-materials'),
         },

@@ -72,13 +72,18 @@ const TableMaterials = (
                   <div className="font-medium">{material.author}</div>
                 </div>
                 <div>
+                  <div className="text-slate-500">Encoded</div>
+                  <div>{dateFormat(material.encoded_at?.toString() ?? '')}</div>
+                </div>
+                <div>
                   <div className="text-slate-500">Modified</div>
                   <div>{dateFormat(material.modified_at?.toString() ?? '')}</div>
                 </div>
                 <div>
-                  <div className="text-slate-500">Encoded</div>
-                  <div>{dateFormat(material.encoded_at?.toString() ?? '')}</div>
+                  <div className="text-slate-500">Submitted</div>
+                  <div>{dateFormat(material.submitted_at?.toString() ?? '')}</div>
                 </div>
+
               </div>
             </div>
           ),

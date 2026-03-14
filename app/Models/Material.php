@@ -25,6 +25,8 @@ class Material extends Model
         'encoded_at',
         'modified_by_id',
         'modified_at',
+        'submitted_at',
+        'publisher_publish_date',
         'agency',
         'region',
         'regional_office',

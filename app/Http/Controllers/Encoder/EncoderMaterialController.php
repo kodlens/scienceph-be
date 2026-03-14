@@ -31,27 +31,27 @@ class EncoderMaterialController extends MaterialController
         return Inertia::render('Encoder/Material/EncoderMaterialIndex');
     }
 
-    public function getData(Request $req)
-    {
+    // public function getData(Request $req)
+    // {
 
-        $sort = explode('.', $req->sort_by);
+    //     $sort = explode('.', $req->sort_by);
 
-        $userId = Auth::user()->id;
+    //     $userId = Auth::user()->id;
 
-        $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
-            ->where('trash', 0)
-            ->where('encoded_by_id', $userId);
+    //     $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
+    //         ->where('trash', 0)
+    //         ->where('encoded_by_id', $userId);
 
-        if ($req->status != '' || $req->status != null) {
-            $data->where('status', $req->status);
-        }
+    //     if ($req->status != '' || $req->status != null) {
+    //         $data->where('status', $req->status);
+    //     }
 
-        $data->where('title', 'like', '%'.$req->title.'%');
+    //     $data->where('title', 'like', '%'.$req->title.'%');
 
-        return $data
-            ->orderBy('id', 'desc')
-            ->paginate($req->perpage);
-    }
+    //     return $data
+    //         ->orderBy('id', 'desc')
+    //         ->paginate($req->perpage);
+    // }
 
     public function create()
     {
@@ -166,6 +166,7 @@ class EncoderMaterialController extends MaterialController
         $user = Auth::user();
         $data = Material::find($id);
         $data->status = 'draft'; // submit-for-publishing (static)
+        $data->submitted_at = null;
         $data->trash = 0; // be sure to set 0 the trash if draft
         $name = $user->lname . ',' . $user->fname;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);
@@ -181,6 +182,7 @@ class EncoderMaterialController extends MaterialController
         $user = Auth::user();
         $data = Material::find($id);
         $data->status = 'submit'; // submit-for-publishing (static)
+        $data->submitted_at = date('Y-m-d H:i:s');
         $data->trash = 0; // be sure to set 0 the trash if draft
         $name = $user->lname . ',' . $user->fname;
         $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);

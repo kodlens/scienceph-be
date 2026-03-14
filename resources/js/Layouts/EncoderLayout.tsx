@@ -54,16 +54,16 @@ export default function EncoderLayout(
             onClick: () => router.visit('/encoder/draft-materials'),
           },
           {
-            key: 'encoder.publish-materials.index',
-            icon: <BookCheck size={15}/>,
-            label: 'Publish Materials',
-            onClick: () => router.visit('/encoder/publish-materials'),
-          },
-          {
             key: 'encoder.submit-materials.index',
             icon: <SendHorizontal size={15}/>,
             label: 'Submit Materials',
             onClick: () => router.visit('/encoder/submit-materials'),
+          },
+          {
+            key: 'encoder.publish-materials.index',
+            icon: <BookCheck size={15}/>,
+            label: 'Publish Materials',
+            onClick: () => router.visit('/encoder/publish-materials'),
           },
           // {
           //   key: 'encoder.materials.index',

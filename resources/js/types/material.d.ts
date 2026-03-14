@@ -28,6 +28,7 @@ export interface Material {
     modified_by_id?: number;
     modified_by?: User;
     modified_at?: string | Date;
+    submitted_at?: string | Date;
 
 
     is_publish?: string;
