@@ -12,7 +12,7 @@ import Error404 from '@/Components/Error404'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
 
-export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
+export default function EncoderSubmitMaterialIndex({ auth }: PageProps) {
 
 
   const [page, setPage] = useState(1)
@@ -30,7 +30,7 @@ export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
 
 
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['encoder-publish-materials', { perPage, page, appliedFilters }],
+    queryKey: ['encoder-submit-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -39,7 +39,7 @@ export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/encoder/get-publish-materials?${params}`)
+      const res = await axios.get(`/encoder/get-submit-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -91,7 +91,7 @@ export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
                   Encoder Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Publish Materials
+                  Submit Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
                   Manage and update your encoded science and technology materials.
@@ -188,7 +188,7 @@ export default function EncoderPublishMaterialIndex({ auth }: PageProps) {
   )
 }
 
-EncoderPublishMaterialIndex.layout = (page: ReactNode) => (
+EncoderSubmitMaterialIndex.layout = (page: ReactNode) => (
   <EncoderLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </EncoderLayout>
