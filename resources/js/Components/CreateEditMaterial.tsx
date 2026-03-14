@@ -2,7 +2,6 @@ import { CreateEditProps, User } from "@/types";
 import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
-import { Article } from "@/types/article";
 import axios from "axios";
 import { router } from "@inertiajs/react";
 import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
@@ -74,7 +73,18 @@ const CreateEditMaterial = ({
     form
       .validateFields()
       .then((values) => {
-        submit({ ...values, is_publish: true, status: 'publish' });
+        submit({ ...values, is_publish: true, status: 'publish', submit_status: 'save-publish' });
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  }
+
+  const handleSubmitAndSetSubmit = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        submit({ ...values, status: 'submit', submit_status: 'save-submit' });
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
@@ -358,7 +368,7 @@ const CreateEditMaterial = ({
             icon={<ProjectOutlined />}
             loading={loading}
           >
-            Save
+            Save / Draft
           </Button>
         </ConfigProvider>
 
@@ -371,6 +381,19 @@ const CreateEditMaterial = ({
               loading={loading}
             >
               Save and Publish
+            </Button>
+          )
+        }
+
+        { role === 'encoder' && (
+            <Button
+              className="ml-2"
+              type="primary"
+              onClick={handleSubmitAndSetSubmit}
+              icon={<ProjectOutlined />}
+              loading={loading}
+            >
+              Save and Submit
             </Button>
           )
         }

@@ -29,8 +29,7 @@ class PublisherMaterialController extends MaterialController
         return Inertia::render('Publisher/Material/PublisherMaterialIndex');
     }
 
-    public function getData(Request $request): JsonResponse
-    {
+    public function getData(Request $request): JsonResponse{
         $perPage = $request->integer('perpage', 10);
         $status  = $request->string('status')->toString();
         $title  = $request->string('title')->toString();
@@ -70,11 +69,11 @@ class PublisherMaterialController extends MaterialController
         });
 
         // Sorting & pagination
-        $articles = $query
+        $materials = $query
             ->orderByDesc('id')
             ->paginate($perPage);
 
-        return response()->json($articles);
+        return response()->json($materials);
     }
 
 
@@ -120,11 +119,9 @@ class PublisherMaterialController extends MaterialController
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
         $regionalOffices = $fetcher->getRegionalOffices();
-
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-
-        $article = Article::find($id);
+        $material = Material::with(['subject_headings'])->find($id);
 
 
         return Inertia::render('Publisher/Material/PublisherMaterialCreateEdit', [
@@ -140,42 +137,6 @@ class PublisherMaterialController extends MaterialController
             'authors' => $authors
         ]);
     }
-
-    public function postReturnToEncoder($id){
-        $user = Auth::user();
-        $data = Post::find($id);
-        $data->status = 'return';
-        $data->record_trail = $data->record_trail . 'return to encoder|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
-
-        $data->save();
-
-        return response()->json([
-            'status' => 'return'
-        ], 200);
-    }
-
-    // public function postArchived($id){
-    //     $data = Post::find($id);
-    //     $data->status_id = 3; //submit-for-publishing (static)
-    //     $data->save();
-
-    //     return response()->json([
-    //         'status' => 'archived'
-    //     ], 200);
-    // }
-
-    // public function postSubmitForPublishing($id){
-    //     $data = Post::find($id);
-    //     $data->status_id = 7; //submit-for-publishing (static)
-    //     $data->save();
-
-    //     return response()->json([
-    //         'status' => 'submit-for-publishing'
-    //     ], 200);
-    // }
-
-
-
 
 
 }

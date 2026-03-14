@@ -9,6 +9,7 @@ import Error404 from '@/Components/Error404'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 import TableMaterials from '@/Components/TableMaterials'
 import PublisherLayout from '@/Layouts/PublisherLayout'
+import { PageProps } from '@/types'
 
 type Filters = {
   status: string
@@ -17,7 +18,7 @@ type Filters = {
   modifier: string
 }
 
-export default function TrashMaterialIndex() {
+export default function TrashMaterialIndex( { auth }: PageProps ) {
   const [page, setPage] = useState(1)
   const perPage = 10
 
@@ -172,7 +173,7 @@ export default function TrashMaterialIndex() {
               refetch={refetch}
               paginationPageChange={(v) => {
                 setPage(v)
-              }}
+              } }
               page={page}
               showDelete={false}
               showEdit={false}
@@ -180,7 +181,7 @@ export default function TrashMaterialIndex() {
               showDraft={true}
               showView={true}
               showTrash={false}
-            />
+              user={auth.user}            />
           </div>
         </div>
       </div>

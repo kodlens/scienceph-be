@@ -124,8 +124,8 @@ class MaterialController extends Controller
                     'materials',
                     $data->id,
                     $user->id,
-                    'insert',
-                    'material created by ' . $name,
+                    $req->submit_status === 'save-submit' ? 'submit' : 'insert',
+                    $req->submit_status === 'save-submit' ? 'material set to submit by '. $name : 'material created by ' . $name,
                     $data,
                     null
                 );
@@ -238,8 +238,8 @@ class MaterialController extends Controller
                     'materials',
                     $data->id,
                     $user->id,
-                    'update',
-                    'material updated by ' . $name,
+                    $req->submit_status === 'save-publish' ? 'publish' : 'update',
+                    $req->submit_status === 'save-publish' ? 'material set to publish by '. $name : 'material updated by ' . $name,
                     $data,
                     Material::find($id)
                 );
@@ -325,7 +325,7 @@ class MaterialController extends Controller
             'materials',
             $data->id,
             $user->id,
-            'draft',
+            'trash',
             'material set to trash by ' . $name,
             $data,
             null
@@ -348,6 +348,7 @@ class MaterialController extends Controller
             DB::transaction(function () use ($id) {
                 // Database operations here
                 $user = Auth::user();
+                $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::find($id);
                 $data->status = 'publish'; //submit-for-publishing (static)
@@ -363,7 +364,6 @@ class MaterialController extends Controller
                     $data,
                     null
                 );
-
             });
 
             return response()->json([
@@ -382,6 +382,7 @@ class MaterialController extends Controller
         try {
             DB::transaction(function () use ($id) {
                 $user = Auth::user();
+                $name = $user->lname . ',' . $user->fname;
                 $data = Material::find($id);
                 $data->status = 'draft';
                 $data->is_publish = 0;
@@ -399,13 +400,6 @@ class MaterialController extends Controller
                     null
                 );
 
-                // $infoExists = Information::where('alias', $data->alias)->exists();
-                // if($infoExists){
-                //     Information::where('alias', $data->alias)->update([
-                //         'is_publish' => 0
-                //     ]);
-                // }
-
             });
 
             return response()->json([
@@ -417,9 +411,44 @@ class MaterialController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
 
+    public function submit($id)
+    {
+        try {
+            DB::transaction(function() use ($id){
+                $user = Auth::user();
+                $data = Material::find($id);
+                $data->status = 'submit'; // submit-for-publishing (static)
+                $data->submitted_at = date('Y-m-d H:i:s');
+                $data->trash = 0; // be sure to set 0 the trash if draft
+                $name = $user->lname . ',' . $user->fname;
+                // $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);
+                $data->save();
+
+                (new RecordTrail())->activityLog(
+                    'materials',
+                    $data->id,
+                    $user->id,
+                    'submit',
+                    'material set to submit by ' . $name,
+                    $data,
+                    null
+                );
+
+                return response()->json([
+                    'status' => 'submit',
+                ], 200);
+            });
+
+        }catch(\Throwable $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
 
     }
+
 
 
 

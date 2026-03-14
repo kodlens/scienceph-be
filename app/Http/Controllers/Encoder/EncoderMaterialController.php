@@ -161,67 +161,39 @@ class EncoderMaterialController extends MaterialController
         ], 200);
     }
 
-    public function draft($id)
-    {
-        $user = Auth::user();
-        $data = Material::find($id);
-        $data->status = 'draft'; // submit-for-publishing (static)
-        $data->submitted_at = null;
-        $data->trash = 0; // be sure to set 0 the trash if draft
-        $name = $user->lname . ',' . $user->fname;
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);
-        $data->save();
 
-        return response()->json([
-            'status' => 'draft',
-        ], 200);
-    }
 
-    public function submit($id)
-    {
-        $user = Auth::user();
-        $data = Material::find($id);
-        $data->status = 'submit'; // submit-for-publishing (static)
-        $data->submitted_at = date('Y-m-d H:i:s');
-        $data->trash = 0; // be sure to set 0 the trash if draft
-        $name = $user->lname . ',' . $user->fname;
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'draft', $user->id, $name);
-        $data->save();
 
-        return response()->json([
-            'status' => 'submit',
-        ], 200);
-    }
 
-    public function postArchived($id)
-    {
-        $user = Auth::user();
-        $name = $user->lname . ',' . $user->fname;
+    // public function postArchived($id)
+    // {
+    //     $user = Auth::user();
+    //     $name = $user->lname . ',' . $user->fname;
 
-        $data = Material::find($id);
-        // $data->status_id = 3; //submit-for-publishing (static)
-        $data->status = 'archive'; // submit-for-publishing (static)
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'archive', $user->id, $name);
-        $data->save();
+    //     $data = Material::find($id);
+    //     // $data->status_id = 3; //submit-for-publishing (static)
+    //     $data->status = 'archive'; // submit-for-publishing (static)
+    //     $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'archive', $user->id, $name);
+    //     $data->save();
 
-        return response()->json([
-            'status' => 'archive',
-        ], 200);
-    }
+    //     return response()->json([
+    //         'status' => 'archive',
+    //     ], 200);
+    // }
 
-    public function postSubmitForPublishing($id)
-    {
-        $user = Auth::user();
-        $name = $user->lname . ',' . $user->fname;
+    // public function postSubmitForPublishing($id)
+    // {
+    //     $user = Auth::user();
+    //     $name = $user->lname . ',' . $user->fname;
 
-        $data = Material::find($id);
-        $data->status = 'submit'; // submit-for-publishing (static)
-        // $data->status_id = 7; //submit-for-publishing (static)
-        $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'submit', $user->id, $name);
-        $data->save();
+    //     $data = Material::find($id);
+    //     $data->status = 'submit'; // submit-for-publishing (static)
+    //     // $data->status_id = 7; //submit-for-publishing (static)
+    //     $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'submit', $user->id, $name);
+    //     $data->save();
 
-        return response()->json([
-            'status' => 'submit-for-publishing',
-        ], 200);
-    }
+    //     return response()->json([
+    //         'status' => 'submit-for-publishing',
+    //     ], 200);
+    // }
 }

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 import { CreateEditProps } from "@/types";
-import CreateEditArticle from "@/Components/CreateEditMaterial";
+import CreateEditMaterial from "@/Components/CreateEditMaterial";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 
@@ -21,7 +21,7 @@ const PublisherMaterialCreateEdit = ({
 
   return (
     <>
-      <Head title="Add/Edit Article" />
+      <Head title="Add/Edit Material" />
 
       {/* card container */}
       <div className="">
@@ -37,14 +37,14 @@ const PublisherMaterialCreateEdit = ({
               ADD/EDIT POST
             </div>
 
-            <CreateEditArticle
+            <CreateEditMaterial
               id={id}
               auth={auth}
               material={material}
               ckLicense={ckLicense}
               sections={sections}
               categories={categories}
-              uri="/publisher/articles"
+              uri="/publisher/materials"
               authors={authors}
               agencies={agencies}
               regions={regions}
