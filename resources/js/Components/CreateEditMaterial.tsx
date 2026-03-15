@@ -368,7 +368,7 @@ const CreateEditMaterial = ({
             icon={<ProjectOutlined />}
             loading={loading}
           >
-            Save / Draft
+            Save Information
           </Button>
         </ConfigProvider>
 

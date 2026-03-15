@@ -56,7 +56,7 @@ export const menuItems = (
     items.push({
       label: 'Submit',
       key: `${prefix}.materials.submit`,
-      disabled: material?.status === 'submit',
+      disabled: material?.status === 'submit' || material?.status === 'publish',
       icon: <Captions size={15} />,
       onClick: () => handleSubmitClick(),
     })

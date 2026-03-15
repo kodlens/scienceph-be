@@ -29,7 +29,7 @@ export interface Material {
     modified_by?: User;
     modified_at?: string | Date;
     submitted_at?: string | Date;
-
+    publisher_publish_date?: string | Date;
 
     is_publish?: string;
     publish_date?: string | Date;

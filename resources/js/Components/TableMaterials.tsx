@@ -83,6 +83,10 @@ const TableMaterials = (
                   <div className="text-slate-500">Submitted</div>
                   <div>{dateFormat(material.submitted_at?.toString() ?? '')}</div>
                 </div>
+                <div>
+                  <div className="text-slate-500">Publisher Publish</div>
+                  <div>{dateFormat(material.publisher_publish_date?.toString() ?? '')}</div>
+                </div>
 
               </div>
             </div>
