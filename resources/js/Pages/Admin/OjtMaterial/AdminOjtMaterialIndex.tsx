@@ -11,8 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import TableArticles from '@/Components/TableMaterials';
 import SearchFilter from '@/Components/SearchFilter';
+import { PageProps } from '@/types';
 
-const AdminOjtMaterialIndex = () => {
+const AdminOjtMaterialIndex = ( { auth } : PageProps ) => {
 
 
   //const [perPage, setPerPage] = useState(10);
@@ -93,21 +94,21 @@ const AdminOjtMaterialIndex = () => {
           />
 
           <TableArticles
-            routePrefix='admin'
-            data={data}
-            isFetching={isFetching}
-            refetch={refetch}
-            page={page}
-            paginationPageChange={(p)=>{
-              setPage(p)
-            }}
-            showDelete={true}
-            showEdit={true}
-            showTrash={true}
-            showPublish={true}
-            showDraft={true}
-            showView={true}
-          />
+              routePrefix='admin'
+              data={data}
+              isFetching={isFetching}
+              refetch={refetch}
+              page={page}
+              paginationPageChange={(p) => {
+                setPage(p);
+              } }
+              showDelete={true}
+              showEdit={true}
+              showTrash={true}
+              showPublish={true}
+              showDraft={true}
+              showView={true}
+              user={auth.user}          />
           </div>
         </div>
       </div>
