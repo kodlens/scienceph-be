@@ -65,7 +65,6 @@ export interface CreateEditProps {
   auth: AuthProps,
   material: Material,
   ckLicense: string,
-  sections: Section[],
   categories: Category[],
   authors: AuthorApi,
   agencies: Agency[],

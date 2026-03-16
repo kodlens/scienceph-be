@@ -1,16 +1,15 @@
 import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 import { CreateEditProps } from "@/types";
-import CreateEditArticle from "@/Components/CreateEditMaterial";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import CreateEditMaterial from "@/Components/CreateEditMaterial";
 
 
 const AdminMaterialCreateEdit = ({
   id,
   auth,
-  article,
+  material,
   ckLicense,
-  sections,
   categories,
   authors,
   agencies,
@@ -21,7 +20,7 @@ const AdminMaterialCreateEdit = ({
 
   return (
     <>
-      <Head title="Article" />
+      <Head title="Material" />
 
       {/* card container */}
       <div className="">
@@ -34,17 +33,16 @@ const AdminMaterialCreateEdit = ({
           <div className="bg-white p-6 mx-2 md:max-w-7xl w-full" >
 
             <div className="font-bold text-lg pb-2 mb-2 border-b">
-              ADD/EDIT ARTICLE
+              ADD/EDIT MATERIAL
             </div>
 
-            <CreateEditArticle
+            <CreateEditMaterial
               id={id}
               auth={auth}
-              article={article}
+              material={material}
               ckLicense={ckLicense}
-              sections={sections}
               categories={categories}
-              uri="/publisher/articles"
+              uri="/admin/materials"
               authors={authors}
               agencies={agencies}
               regions={regions}

@@ -12,7 +12,6 @@ const EncoderMaterialCreateEdit = ({
   auth,
   material,
   ckLicense,
-  sections,
   categories,
   authors,
   agencies,
@@ -73,7 +72,6 @@ const EncoderMaterialCreateEdit = ({
               auth={auth}
               material={material}
               ckLicense={ckLicense}
-              sections={sections}
               categories={categories}
               uri="/encoder/materials"
               authors={authors}

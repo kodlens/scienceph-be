@@ -10,7 +10,6 @@ const PublisherMaterialCreateEdit = ({
   auth,
   material,
   ckLicense,
-  sections,
   categories,
   authors,
   agencies,
@@ -42,7 +41,6 @@ const PublisherMaterialCreateEdit = ({
               auth={auth}
               material={material}
               ckLicense={ckLicense}
-              sections={sections}
               categories={categories}
               uri="/publisher/materials"
               authors={authors}

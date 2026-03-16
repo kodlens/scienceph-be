@@ -87,19 +87,19 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource('/materials', App\Http\Controllers\Admin\AdminMaterialController::class)->names('admin.materials');
     Route::get('/get-materials', [App\Http\Controllers\Admin\AdminMaterialController::class, 'getData'])->name('admin.materials.getdata');
 
-    Route::post('/material-trash/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'trash'])->name('material.trash');
-    Route::post('/material-publish/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'publish'])->name('material.published');
+    Route::post('/material-trash/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'trash'])->name('admin.material.trash');
+    Route::post('/material-publish/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'publish'])->name('admin.material.published');
 
-    Route::post('/material-draft/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'draft'])->name('material.draft');
+    Route::post('/material-draft/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'draft'])->name('admin.material.draft');
+
     //Route::post('/article-pending/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'pending'])->name('article.pending');
     //Route::post('/article-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'submit'])->name('article.submit-for-publishing');
     //Route::post('/article-featured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'featured'])->name('article.featured');
     //Route::post('/article-unfeatured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'unfeatured'])->name('article.unfeatured');
     //Route::post('/article-set-publish-date/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'setPublishDate'])->name('admin.post-set-publish-date');
 
-
     Route::resource('/trash-materials', App\Http\Controllers\Admin\AdminTrashController::class)->names('admin.trash-articles');
-    Route::get('/get-trash-materials', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('trashes.get-data');
+    Route::get('/get-trash-materials', [App\Http\Controllers\Admin\AdminTrashController::class, 'getData'])->name('admin.trash-materials.getdata');
 
     // ARCHIVES CONTORLLER AND LOGICS
     //Route::resource('/post-archives', App\Http\Controllers\Admin\AdminPostArchiveController::class);

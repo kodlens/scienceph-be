@@ -153,7 +153,6 @@ const CreateEditMaterial = ({
         title: '',
         slug: '',
         category: "",
-        section: 1,
         status: 'draft',
         region: null,
         regional_office: null,

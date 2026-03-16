@@ -84,32 +84,28 @@ class AdminMaterialController extends MaterialController
 
     public function edit($id){
 
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+       $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
 
         $fetcher = new Fetcher();
 
-        $sections = $fetcher->getSections();
+        //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
         $regionalOffices = $fetcher->getRegionalOffices();
-
         $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-
-        $article = Material::find($id);
-
+        $material = Material::with(['subject_headings'])->find($id);
 
         return Inertia::render('Admin/Material/AdminMaterialCreateEdit', [
             'id' => $id,
             'ckLicense' => $CK_LICENSE,
-            'article' => $article,
+            'material' => $material,
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
             'categories' => $categories,
-            'sections' => $sections,
             'authors' => $authors
         ]);
     }

@@ -12,9 +12,9 @@ import axios from 'axios';
 
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import TableArticles from '@/Components/TableMaterials';
 import SearchFilter from '@/Components/SearchFilter';
 import { PageProps } from '@/types';
+import TableMaterials from '@/Components/TableMaterials';
 
 const AdminMaterialIndex = ( {auth}:PageProps ) => {
 
@@ -32,7 +32,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
     })
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ['articles', page, perPage, filters.status],
+    queryKey: ['materials', page, perPage, filters.status],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -50,7 +50,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
 
   return (
     <>
-      <Head title="Articles" />
+      <Head title="Materials" />
 
       <div className="flex justify-center px-4 py-8">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -93,9 +93,9 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
                   className='h-11 ml-auto'
                   icon={<FileAddOutlined />}
                   type="primary"
-                  onClick={() => router.visit('/admin/articles/create')}
+                  onClick={() => router.visit('/admin/materials/create')}
                 >
-                  New Article
+                  New Material
                 </Button>
 
             </div>
@@ -107,7 +107,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
               refetch={refetch}
             />
 
-            <TableArticles
+            <TableMaterials
               user={auth.user}
               routePrefix='admin'
               data={data}

@@ -29,7 +29,7 @@ class SearchController extends Controller
         $sh     = trim($validated['sh']   ?? '');
 
         $subQuery = DB::table('materials as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.material_id')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('subjects as d', 'c.subject_id', '=', 'd.id')
             ->select([
@@ -107,8 +107,8 @@ class SearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.material_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('subjects as d', 'c.subject_id', '=', 'd.id')
             ->select([
@@ -193,8 +193,8 @@ class SearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.material_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('subjects as d', 'c.subject_id', '=', 'd.id')
             ->groupBy('a.id')
@@ -260,8 +260,8 @@ class SearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.material_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('subjects as d', 'c.subject_id', '=', 'd.id')
             ->groupBy('a.id')

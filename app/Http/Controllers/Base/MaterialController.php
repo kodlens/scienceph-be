@@ -390,6 +390,7 @@ class MaterialController extends Controller
                 $data->is_publish = 0;
                 $data->trash = 0;
                 $data->publisher_publish_date = null;
+                $data->submitted_at = null;
                 //$data->record_trail = $data->record_trail . 'draft|('.$user->id.')' . $user->lname . ', ' . $user->fname . '|' . date('Y-m-d H:i:s') . ';';
                 $data->save();
 
