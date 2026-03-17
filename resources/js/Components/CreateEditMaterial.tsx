@@ -50,7 +50,7 @@ const CreateEditMaterial = ({
         { name: "description", value: material.description },
         { name: "status", value: material.status ? material.status : 'draft' },
         { name: "source_url", value: material.source_url },
-        { name: "filter_type", value: material.filter_type },
+        { name: "resource_type", value: material.resource_type },
         { name: "category", value: material.category_id },
         // { name: "section", value: material.section_id },
         { name: "subject_headings", value: material.subject_headings },

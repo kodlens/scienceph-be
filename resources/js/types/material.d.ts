@@ -16,7 +16,7 @@ export interface Material {
 
     status?: string;
     tags?: string[];
-    content_type: string;
+    resource_type: string;
 
     agency?: string;
     region?: string;

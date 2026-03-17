@@ -16,6 +16,9 @@ export const SelectResourceType = ( { errors } : Props ) => {
     axios.get('/get-resource-types').then(res => {
       setResourceTypes(res.data);
       setLoading(false)
+    }).catch(err => {
+      setLoading(false);
+      console.error(err.response ? err.response.data : err.message);
     })
   }
 
@@ -24,7 +27,7 @@ export const SelectResourceType = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return resourceTypes.map(item => ({ value: item.id, label: item.name }))
+    return resourceTypes.map(item => ({ value: item.slug, label: item.name }))
   }
 
 

@@ -31,14 +31,14 @@ class MaterialController extends Controller
     //
     public function store(Request $req)
     {
-        //return $req;
+        // return $req;
 
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['string', 'nullable'],
             'description' => ['required'],
             'category' => ['required'],
-            'filter_type' => ['required', 'string', 'max:50'],
+            'resource_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
             //'publish_date' => ['required'],
         ], [
@@ -87,7 +87,7 @@ class MaterialController extends Controller
                     'alias' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
-                    'filter_type' => $req->filter_type,
+                    'resource_type' => $req->resource_type,
                     'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->id,
@@ -154,7 +154,7 @@ class MaterialController extends Controller
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
             'category' => ['required'],
-            'filter_type' => ['required', 'string', 'max:50'],
+            'resource_type' => ['required', 'string', 'max:50'],
             //'publish_date' => ['required'],
         ]);
 
@@ -197,7 +197,7 @@ class MaterialController extends Controller
                 $data->alias = Str::slug($req->title);
                 $data->description = $modifiedHtml;
                 $data->description_text = $content;
-                $data->filter_type = $req->filter_type;
+                $data->resource_type = $req->resource_type;
                 $data->category_id = $req->category;
                 $data->author = $req->author;
                 $data->modified_by_id = $user->id;
