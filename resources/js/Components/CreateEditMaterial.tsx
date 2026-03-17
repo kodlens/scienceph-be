@@ -12,6 +12,7 @@ import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
 import { Material } from "@/types/material";
+import { SelectResourceType } from "./SelectResourceType";
 
 
 const CreateEditMaterial = ({
@@ -243,7 +244,7 @@ const CreateEditMaterial = ({
           />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="resource_type"
           label="Resource Type"
           className="w-full"
@@ -259,7 +260,9 @@ const CreateEditMaterial = ({
             allowClear
             placeholder="Select Resource Type"
           />
-        </Form.Item>
+        </Form.Item> */}
+
+        <SelectResourceType errors={errors} />
 
       </div>
 
