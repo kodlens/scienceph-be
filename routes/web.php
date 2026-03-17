@@ -37,6 +37,7 @@ Route::get('/get-regions', [App\Http\Controllers\OpenController::class, 'getRegi
 Route::get('/get-authors-autocomplete', [App\Http\Controllers\OpenController::class, 'getAuthorsAutocomplete'])->name('open.authors-autocomplete');
 Route::get('/get-tags', [App\Http\Controllers\OpenController::class, 'getTags'])->name('open.tags');
 
+//http:localhost:8000/get-subjects
 
 
 Route::middleware('auth')->group(function () {
@@ -66,7 +67,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
+Route::middleware('auth', 'admin')
+    ->group(function () {
+
+    //https://localhost:8000/client/get-categories
 
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -134,7 +138,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     // Route::resource('/role-has-permissions', App\Http\Controllers\Admin\AdminRoleHasPermissionController::class);
     // Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
 
-});
+})->prefix('admin');
 
 
 
