@@ -37,7 +37,7 @@ type PaginationMeta = {
   to: number;
 }
 
-const ResourceTypeIndex = () => {
+const AdminResourceTypeIndex = () => {
 
   const [form] = Form.useForm();
 
@@ -45,7 +45,6 @@ const ResourceTypeIndex = () => {
 
   const [data, setData] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(false);
-
   const [open, setOpen] = useState(false); //for modal
 
   const [perPage, setPerPage] = useState(10);
@@ -124,7 +123,7 @@ const ResourceTypeIndex = () => {
   }
 
   const onFinish = async (values: ResourceType) => {
-
+    setLoading(true)
     if (id > 0) {
       try {
         const res = await axios.put('/admin/resource-types/' + id, values)
@@ -146,7 +145,7 @@ const ResourceTypeIndex = () => {
       try {
         const res = await axios.post('/admin/resource-types', values)
         if (res.data.status === 'saved') {
-          notification.info({
+          notification.success({
             message: 'Saved!',
             description: 'Resource Type successfully saved.',
             placement: 'topRight'
@@ -155,9 +154,10 @@ const ResourceTypeIndex = () => {
           loadAsync()
         }
       } catch (err: any) {
+          setLoading(false);
+
         if (err.response.status === 422) {
           setErrors(err.response.data.errors)
-
         }
       }
     }
@@ -230,9 +230,8 @@ const ResourceTypeIndex = () => {
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
 
               <Column title="Id" dataIndex="id" width={80} />
-              <Column title="Resource Type" dataIndex="name" key="name" />
-              <Column title="Description" dataIndex="description" key="description" />
               <Column title="Slug" dataIndex="slug" key="slug" />
+              <Column title="Resource Type" dataIndex="name" key="name" />
               <Column title="Active" dataIndex="active" key="active" render={(active) => (
                 active ? (
                   <span className='rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700'>Active</span>
@@ -293,6 +292,7 @@ const ResourceTypeIndex = () => {
         open={open}
         title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Resource Type' : 'Create Resource Type'}</span>}
         okText="Save"
+        loading={loading}
         okButtonProps={{
           icon: <FileAddOutlined />,
           autoFocus: true,
@@ -344,5 +344,5 @@ const ResourceTypeIndex = () => {
   )
 }
 
-ResourceTypeIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
-export default ResourceTypeIndex;
+AdminResourceTypeIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+export default AdminResourceTypeIndex;
