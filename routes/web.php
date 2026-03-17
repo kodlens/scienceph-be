@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware('auth', 'admin')
+Route::prefix('admin')->middleware('auth', 'admin')
     ->group(function () {
 
     //https://localhost:8000/client/get-categories
@@ -122,12 +122,16 @@ Route::middleware('auth', 'admin')
     Route::get('/get-ojt-materials', [App\Http\Controllers\Admin\AdminOjtMaterialController::class, 'getData'])->name('admin.ojt-materials.getdata');
 
 
+    Route::resource('/material-assignments', App\Http\Controllers\Admin\AdminMaterialAssignmentController::class);
+    Route::get('/get-material-assignments', [App\Http\Controllers\Admin\AdminMaterialAssignmentController::class, 'getData'])->name('admin.material-assignments.getdata');
 
     Route::resource('/users', App\Http\Controllers\Admin\AdminUserController::class);
     Route::get('/get-users', [App\Http\Controllers\Admin\AdminUserController::class, 'getData'])->name('users.getdata');
     Route::post('/users-change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
     Route::post('/change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
-    
+    Route::get('/load-users', [App\Http\Controllers\Admin\AdminUserController::class, 'loadUsers'])->name('users.load-users');
+
+
     // Route::resource('/roles', App\Http\Controllers\Admin\AdminRoleController::class);
     // Route::get('/get-roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'getData'])->name('roles.getdata');
 
@@ -137,7 +141,7 @@ Route::middleware('auth', 'admin')
     // Route::resource('/role-has-permissions', App\Http\Controllers\Admin\AdminRoleHasPermissionController::class);
     // Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
 
-})->prefix('admin');
+});
 
 
 

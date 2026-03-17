@@ -120,7 +120,12 @@ export default function AdminLayout(
     {
       type: 'divider'
     },
-
+    {
+      key: 'admin.material-assignments',
+      icon: <UserOutlined />,
+      label: 'Material Assignments',
+      onClick: () => router.visit('/admin/material-assignments'),
+    },
     {
       key: 'admin.users',
       icon: <UserOutlined />,

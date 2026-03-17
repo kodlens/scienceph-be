@@ -28,6 +28,12 @@ class AdminUserController extends Controller
             ->paginate($req->perpage);
     }
 
+    public function loadUsers(Request $req){
+        return User::orderBy('lname', 'asc')
+            ->where('role', 'publisher')
+            ->get();
+    }
+
     public function show($id){
         return User::find($id);
     }
