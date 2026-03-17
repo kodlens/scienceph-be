@@ -31,6 +31,7 @@ Route::get('/login', [App\Http\Controllers\WelcomePageController::class, 'index'
 
 Route::get('/get-sections', [App\Http\Controllers\OpenController::class, 'getSections'])->name('open.sections');
 Route::get('/get-categories', [App\Http\Controllers\OpenController::class, 'getCategories'])->name('open.categories');
+Route::get('/get-resource-types', [App\Http\Controllers\OpenController::class, 'getResourceTypes'])->name('open.resource-types');
 Route::get('/get-agencies', [App\Http\Controllers\OpenController::class, 'getAgencies'])->name('open.agencies');
 Route::get('/get-regions', [App\Http\Controllers\OpenController::class, 'getRegions'])->name('open.regions');
 Route::get('/get-authors-autocomplete', [App\Http\Controllers\OpenController::class, 'getAuthorsAutocomplete'])->name('open.authors-autocomplete');

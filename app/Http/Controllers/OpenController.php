@@ -10,7 +10,9 @@ use App\Models\Material;
 use App\Models\Region;
 use App\Models\Subject;
 use App\Models\SubjectHeading;
+use App\Models\ResourceType;
 use Illuminate\Http\JsonResponse;
+
 
 
 class OpenController extends Controller
@@ -61,6 +63,11 @@ class OpenController extends Controller
 
      public function getAgencies(): JsonResponse{
         $data = Agency::where('active', 1)->get();
+        return response()->json($data);
+    }
+
+    public function getResourceTypes(): JsonResponse{
+        $data = ResourceType::where('active', 1)->get();
         return response()->json($data);
     }
 

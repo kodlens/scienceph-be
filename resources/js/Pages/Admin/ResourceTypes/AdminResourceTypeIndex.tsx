@@ -172,7 +172,7 @@ const AdminResourceTypeIndex = () => {
       <div className='flex justify-center px-4 py-8'>
 
         {/* card */}
-        <div className='w-full max-w-[1150px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>
+        <div className='w-full max-w-4xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>
           {/* card header */}
           <div className='relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sky-50 via-white to-cyan-50 px-6 py-6'>
             <div className='pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-cyan-100/60 blur-2xl' />

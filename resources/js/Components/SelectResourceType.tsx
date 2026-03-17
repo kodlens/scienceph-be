@@ -1,0 +1,44 @@
+
+import ResourceType from "@/types/resourceType";
+import { Form, Select } from "antd"
+import axios from "axios";
+import { useEffect, useState } from "react"
+
+type Props = {
+  errors: Record<string, string[]>
+}
+export const SelectResourceType = ( { errors } : Props ) => {
+  const [loading, setLoading] = useState(false);
+  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
+
+  const loadData = () => {
+    setLoading(true);
+    axios.get('/get-resource-types').then(res => {
+      setResourceTypes(res.data);
+      setLoading(false)
+    })
+  }
+
+  useEffect(() => {
+    loadData();
+  }, [])
+
+  const selectData = () => {
+    return resourceTypes.map(item => ({ value: item.id, label: item.name }))
+  }
+
+
+  return (
+    <>
+      <Form.Item
+        name="resource_type"
+        label="Select Resource Type"
+        className="w-full"
+        validateStatus={errors.resource_type ? "error" : ""}
+        help={errors.resource_type ? errors.resource_type[0] : ""}
+      >
+        <Select loading={loading} options={resourceTypes ? selectData() : []} allowClear/>
+      </Form.Item>
+    </>
+  )
+}
