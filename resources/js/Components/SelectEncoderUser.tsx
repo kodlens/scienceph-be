@@ -7,13 +7,13 @@ import { useEffect, useState } from "react"
 type Props = {
   errors: Record<string, string>
 }
-export const SelectPublisherUser = ( { errors } : Props ) => {
+export const SelectEncoderUser = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
 
   const loadData = () => {
     setLoading(true);
-    axios.get('/admin/load-publisher-users').then(res => {
+    axios.get('/admin/load-encoder-users').then(res => {
       setUsers(res.data);
       setLoading(false)
     })
@@ -30,15 +30,7 @@ export const SelectPublisherUser = ( { errors } : Props ) => {
 
   return (
     <>
-      <Form.Item
-        name="publisher_user_id"
-        label="Select Publisher"
-        className="w-full"
-        validateStatus={errors.publisher_user_id ? "error" : ""}
-        help={errors.publisher_user_id ? errors.publisher_user_id[0] : ""}
-      >
-        <Select loading={loading} options={users ? selectData() : []} allowClear/>
-      </Form.Item>
+      <Select loading={loading} style={{width: '80%'}} options={users ? selectData() : []} allowClear/>
     </>
   )
 }

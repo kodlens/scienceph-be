@@ -24,6 +24,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Category } from '@/types/category';
 import { MaterialAssignment } from '@/types/type';
 import { SelectPublisherUser } from '@/Components/SelectPublisherUser';
+import AddSelectEncoder from '@/Components/AddSelectEncoder';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -326,7 +327,7 @@ const MaterialAssignmentIndex = () => {
             autoComplete='off'
             initialValues={{
               publisher_user_id: null,
-              encoder_user_id: null,
+              encoder_users: null,
             }}
             clearOnDestroy
             onFinish={(values) => onFinish(values)}
@@ -337,22 +338,8 @@ const MaterialAssignmentIndex = () => {
       >
        <SelectPublisherUser errors={errors} />
 
-        <Form.Item
-          name="description"
-          label="Description"
-          validateStatus={errors.description ? 'error' : ''}
-          help={errors.description ? errors.description[0] : ''}
-        >
-          <Input.TextArea placeholder="Short description" rows={4} />
-        </Form.Item>
-
-        <Form.Item
-          name="active"
-          valuePropName="checked"
-        >
-          <Checkbox>Active</Checkbox>
-        </Form.Item>
-
+       <AddSelectEncoder />
+       
       </Modal>
 
     </>
