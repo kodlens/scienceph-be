@@ -61,12 +61,12 @@ export default function PublisherLayout(
           icon: <BookCheck size={15} />,
           onClick: () => router.visit('/publisher/publish-materials'),
         },
-        {
-          key: 'publisher.ojt-materials.index',
-          label: 'Ojt Materials',
-          icon: <BookCheck size={15} />,
-          onClick: () => router.visit('/publisher/ojt-materials'),
-        },
+        // {
+        //   key: 'publisher.ojt-materials.index',
+        //   label: 'Ojt Materials',
+        //   icon: <BookCheck size={15} />,
+        //   onClick: () => router.visit('/publisher/ojt-materials'),
+        // },
         // {
         //   key: 'publisher.trash-materials.index',
         //   label: 'Trash',

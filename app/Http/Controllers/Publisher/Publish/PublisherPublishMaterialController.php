@@ -9,7 +9,8 @@ use Inertia\Response;
 use App\Models\Material;
 //use Illuminate\Support\Facades\JsonResponse;
 use Illuminate\Http\JsonResponse;
-
+use App\Models\MaterialAssignment;
+use Illuminate\Support\Facades\Auth;
 
 class PublisherPublishMaterialController extends Controller
 {
@@ -25,11 +26,17 @@ class PublisherPublishMaterialController extends Controller
         $status  = $request->string('status')->toString();
         $title  = $request->string('title')->toString();
 
+        $userId = Auth::id();
+        $usersData = MaterialAssignment::where('publisher_user_id', $userId)
+            ->get();
+        //assigned material ids
+        $assignedMaterialIds = $usersData->pluck('encoder_user_id')->toArray();
+
         $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
             ->where('status', 'publish')
-            ->where('is_ojt', 0);
+            ->whereIn('encoded_by_id', $assignedMaterialIds);
 
         if(!empty($request->encoder)){
             $query->whereHas('encodedBy', function($q) use ($request){

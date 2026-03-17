@@ -24,6 +24,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Category } from '@/types/category';
 import { MaterialAssignment } from '@/types/type';
 import { SelectPublisherUser } from '@/Components/SelectPublisherUser';
+import { SelectEncoderUser } from '@/Components/SelectEncoderUser';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -246,7 +247,7 @@ const MaterialAssignmentIndex = () => {
                   {row.encoder ? (row.encoder.lname + ', ' + row.encoder.fname) : 'N/A'}
                 </div>
               )} />
-            
+
 
               <Column title="Action" key="action"
                 width={130}

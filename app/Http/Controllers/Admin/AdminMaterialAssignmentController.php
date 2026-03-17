@@ -43,17 +43,17 @@ class AdminMaterialAssignmentController extends Controller
     //         'encoder_users' => ['required', 'array'],
     //         'publisher_user_id' => ['required', 'integer'],
     //     ]);
-  
+
     //     $encoderUserId = [];
     //     foreach($req->encoder_users as $user){
-    //         $data[] = [ 
+    //         $data[] = [
     //             'encoder_user_id' => $user['encoder_user_id'],
     //             'publisher_user_id' => $req->publisher_user_id,
     //         ];
     //     }
 
     //     MaterialAssignment::insert($data);
-        
+
     //     return response()->json([
     //         'status' => 'saved'
     //     ], 200);
@@ -61,7 +61,6 @@ class AdminMaterialAssignmentController extends Controller
 
     public function store(Request $req){
 
-    return $req;
         $req->validate([
             'publisher_user_id',
             'encoder_user_id'

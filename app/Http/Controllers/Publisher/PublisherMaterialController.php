@@ -20,6 +20,7 @@ use App\Models\Material;
 use App\Http\Controllers\Helpers\RecordTrail;
 use App\Http\Controllers\Helpers\Fetcher;
 use App\Http\Controllers\Base\MaterialController;
+use App\Models\MaterialAssignment;
 
 class PublisherMaterialController extends MaterialController
 {
@@ -29,21 +30,27 @@ class PublisherMaterialController extends MaterialController
         return Inertia::render('Publisher/Material/PublisherMaterialIndex');
     }
 
-    public function getData(Request $request): JsonResponse{
+    public function getData(Request $request) {
         $perPage = $request->integer('perpage', 10);
         $status  = $request->string('status')->toString();
         $title  = $request->string('title')->toString();
 
+        $userId = Auth::id();
+        $usersData = MaterialAssignment::where('publisher_user_id', $userId)
+            ->get();
+        //assigned material ids
+        $assignedMaterialIds = $usersData->pluck('encoder_user_id')->toArray();
+
         $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
-            ->where('is_ojt', 0);
+            ->whereIn('encoded_by_id', $assignedMaterialIds);
 
         // Status filter
         if (!empty($status)) {
             $query->where('status', $status);
         } else {
-            $query->whereIn('status', ['submit', 'unpublish']);
+            //$query->whereIn('status', ['submit', 'unpublish']);
         }
 
         if(!empty($request->encoder)){

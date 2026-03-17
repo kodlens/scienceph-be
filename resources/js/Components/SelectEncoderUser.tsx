@@ -6,13 +6,13 @@ import { useEffect, useState } from "react"
 type Props = {
   errors: Record<string, string[]>
 }
-export const SelectEncoder = ( { errors } : Props ) => {
+export const SelectEncoderUser = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<User[]>([]);
 
   const loadData = () => {
     setLoading(true);
-    axios.get('/get-encoder-users').then(res => {
+    axios.get('/admin/load-encoder-users').then(res => {
       setData(res.data);
       setLoading(false)
     })
