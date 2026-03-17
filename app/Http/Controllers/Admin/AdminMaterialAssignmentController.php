@@ -16,6 +16,7 @@ class AdminMaterialAssignmentController extends Controller
     }
 
     public function getData(Request $request){
+
         $search = $request->input('search');
         $perPage = $request->input('perPage', 10);
 
@@ -24,9 +25,9 @@ class AdminMaterialAssignmentController extends Controller
 
         if ($search) {
             $query->orWhereHas('publisher', function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
+                $q->where('lname', 'like', "%$search%");
             })->orWhereHas('encoder', function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
+                $q->where('fname', 'like', "%$search%");
             });
         }
 
@@ -36,5 +37,54 @@ class AdminMaterialAssignmentController extends Controller
     }
 
 
+    // public function store(Request $req){
+
+    //     $validate = $req->validate([
+    //         'encoder_users' => ['required', 'array'],
+    //         'publisher_user_id' => ['required', 'integer'],
+    //     ]);
+  
+    //     $encoderUserId = [];
+    //     foreach($req->encoder_users as $user){
+    //         $data[] = [ 
+    //             'encoder_user_id' => $user['encoder_user_id'],
+    //             'publisher_user_id' => $req->publisher_user_id,
+    //         ];
+    //     }
+
+    //     MaterialAssignment::insert($data);
+        
+    //     return response()->json([
+    //         'status' => 'saved'
+    //     ], 200);
+    // }
+
+    public function store(Request $req){
+
+    return $req;
+        $req->validate([
+            'publisher_user_id',
+            'encoder_user_id'
+        ]);
+
+
+        MaterialAssignment::create([
+            'publisher_user_id' => $req->publisher_user_id,
+            'encoder_user_id' => $req->encoder_user_id,
+        ]);
+
+        return response()->json([
+            'status' => 'saved'
+        ], 200);
+
+    }
+
+    public function destroy($id){
+        MaterialAssignment::destroy($id);
+
+        return response()->json([
+            'status' => 'deleted'
+        ], 200);
+    }
 
 }

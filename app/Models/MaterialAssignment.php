@@ -15,14 +15,14 @@ class MaterialAssignment extends Model
     ];
 
 
-    public function Publisher()
+    public function publisher()
     {
-        return $this->belongsTo(User::class, 'publisher_user_id');
+        return $this->belongsTo(User::class, 'publisher_user_id', 'id');
     }
 
-
-    public function Encoder()
+    
+    public function encoder()
     {
-        return $this->hasMany(User::class, 'encoder_user_id');
+        return $this->belongsTo(User::class, 'encoder_user_id', 'id');
     }
 }

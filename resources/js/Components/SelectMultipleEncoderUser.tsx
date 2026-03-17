@@ -1,13 +1,15 @@
 
 import { User } from "@/types";
-import { Form, Select } from "antd"
+import {  Select } from "antd"
 import axios from "axios";
 import { useEffect, useState } from "react"
 
 type Props = {
-  errors: Record<string, string>
+  value?: number;
+  onChange?: (value: number) => void;
 }
-export const SelectEncoderUser = () => {
+
+export const SelectMultipleEncoderUser = ( {value, onChange } : Props) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -30,7 +32,11 @@ export const SelectEncoderUser = () => {
 
   return (
     <>
-      <Select loading={loading} style={{width: '80%'}} options={users ? selectData() : []} allowClear/>
+      <Select loading={loading} 
+        className="w-full"
+        value={value}
+        onChange={onChange}
+        options={users ? selectData() : []} allowClear/>
     </>
   )
 }

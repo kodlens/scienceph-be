@@ -1,5 +1,4 @@
-
-import { Category } from "@/types/category";
+import { User } from "@/types";
 import { Form, Select } from "antd"
 import axios from "axios";
 import { useEffect, useState } from "react"
@@ -7,14 +6,14 @@ import { useEffect, useState } from "react"
 type Props = {
   errors: Record<string, string[]>
 }
-export const SelectCategory = ( { errors } : Props ) => {
+export const SelectEncoder = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [data, setData] = useState<User[]>([]);
 
   const loadData = () => {
     setLoading(true);
-    axios.get('/get-categories').then(res => {
-      setCategories(res.data);
+    axios.get('/get-encoder-users').then(res => {
+      setData(res.data);
       setLoading(false)
     })
   }
@@ -24,20 +23,20 @@ export const SelectCategory = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return categories.map(item => ({ value: item.id, label: item.name }))
+    return data.map(item => ({ value: item.id, label: item.lname + ', ' + item.fname }))
   }
 
 
   return (
     <>
       <Form.Item
-        name="category"
-        label="Select Category"
+        name="encoder_user_id"
+        label="Select Encoder"
         className="w-full"
         validateStatus={errors.category ? "error" : ""}
         help={errors.category ? errors.category[0] : ""}
       >
-        <Select loading={loading} options={categories ? selectData() : []} allowClear/>
+        <Select loading={loading} options={data ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )

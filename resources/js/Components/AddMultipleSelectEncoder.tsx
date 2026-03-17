@@ -1,18 +1,18 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
-import { SelectEncoderUser } from './SelectEncoderUser';
+import { SelectEncoderUser } from './SelectMultipleEncoderUser';
 
-const AddSelectEncoder = () => {
-
+const AddMultipleSelectEncoder = () => {
   return (
     <>
       <label>Select Encoder</label>
+      <div className="h-[12px]"></div>
       <Form.List
         name="encoder_users"
         rules={[
           {
             validator: async (_, encoder_users) => {
-              if (!encoder_users || encoder_users.length < 2) {
+              if (!encoder_users || encoder_users.length < 1) {
                 return Promise.reject(new Error('At least 1 encoder'));
               }
             },
@@ -21,34 +21,32 @@ const AddSelectEncoder = () => {
       >
         {(fields, { add, remove }, { errors }) => (
           <>
-            {fields.map(({key, name, ...restField}) => (
-              <Form.Item
-                required={false}
-                key={key}
-              >
+            {fields.map(({ key, name, ...restField }) => (
+              <Form.Item key={key} required={false}>
+                
+                {/* ✅ THIS is where name should be */}
                 <Form.Item
                   {...restField}
+                  name={[name, 'encoder_user_id']}
                   validateTrigger={['onChange', 'onBlur']}
                   rules={[
                     {
                       required: true,
-                      whitespace: true,
-                      message: "Please select encoder or delete this field.",
+                      message: 'Please select encoder or delete this field.',
                     },
                   ]}
                   noStyle
                 >
-                    <SelectEncoderUser />
+                  <SelectEncoderUser />
                 </Form.Item>
-                {
-                  <MinusCircleOutlined
-                    className="dynamic-delete-button ml-2"
-                    type='danger'
-                    onClick={() => remove(name)}
-                  />
-                }
+
+                <MinusCircleOutlined
+                  className="dynamic-delete-button ml-2"
+                  onClick={() => remove(name)}
+                />
               </Form.Item>
             ))}
+
             <Form.Item>
               <Button
                 type="dashed"
@@ -64,9 +62,8 @@ const AddSelectEncoder = () => {
           </>
         )}
       </Form.List>
-      
     </>
-  )
-}
+  );
+};
 
-export default AddSelectEncoder
+export default AddMultipleSelectEncoder;

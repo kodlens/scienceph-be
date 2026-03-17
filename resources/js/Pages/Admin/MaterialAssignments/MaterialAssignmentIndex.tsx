@@ -13,7 +13,7 @@ import {
 import {
   Space, Table, Modal,
   Pagination, Button,
-  Form, Input, Checkbox,
+  Form, Input,
   App
 } from 'antd';
 
@@ -24,7 +24,6 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Category } from '@/types/category';
 import { MaterialAssignment } from '@/types/type';
 import { SelectPublisherUser } from '@/Components/SelectPublisherUser';
-import AddSelectEncoder from '@/Components/AddSelectEncoder';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -87,7 +86,7 @@ const MaterialAssignmentIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<MaterialAssignment>(`/admin/categories/${id}`);
+      const res = await axios.get<MaterialAssignment>(`/admin/material-assignments/${id}`);
       // form.setFields([
       //   { name: 'name', value: res.data. },
       //   { name: 'description', value: res.data.description },
@@ -125,7 +124,6 @@ const MaterialAssignmentIndex = () => {
   }
 
   const onFinish = async (values: MaterialAssignment) => {
-
     if (id > 0) {
       try {
         const res = await axios.put('/admin/material-assignments/' + id, values)
@@ -162,8 +160,6 @@ const MaterialAssignmentIndex = () => {
         }
       }
     }
-
-    //throw new Error('Function not implemented.');
   }
 
   return (
@@ -242,18 +238,15 @@ const MaterialAssignmentIndex = () => {
               <Column title="Id" dataIndex="id" width={80} />
               <Column title="Publisher" render={(_, row) => (
                 <div>
-                  {row.publisher ? row.publisher.lname : 'N/A'}
+                  {row.publisher ? (row.publisher.lname + ', ' + row.publisher.fname) : 'N/A'}
                 </div>
               )} />
-              <Column title="Description" dataIndex="description" key="description" />
-              <Column title="Slug" dataIndex="slug" key="slug" />
-              <Column title="Active" dataIndex="active" key="active" render={(active) => (
-                active ? (
-                  <span className='rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700'>Active</span>
-                ) : (
-                  <span className='rounded-full bg-rose-100 px-2.5 py-1 text-[11px] font-semibold text-rose-700'>Inactive</span>
-                )
+               <Column title="Encoder" render={(_, row) => (
+                <div>
+                  {row.encoder ? (row.encoder.lname + ', ' + row.encoder.fname) : 'N/A'}
+                </div>
               )} />
+            
 
               <Column title="Action" key="action"
                 width={130}
@@ -338,8 +331,9 @@ const MaterialAssignmentIndex = () => {
       >
        <SelectPublisherUser errors={errors} />
 
-       <AddSelectEncoder />
-       
+       {/* <AddMultipleSelectEncoder /> */}
+       <SelectEncoderUser errors={errors} />
+
       </Modal>
 
     </>
