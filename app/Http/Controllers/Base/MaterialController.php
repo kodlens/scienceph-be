@@ -12,7 +12,6 @@ Base controller for Materials
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\Material;
 use App\Models\User;
 use App\Rules\ValidateSlug;
@@ -25,14 +24,12 @@ use App\Http\Controllers\Helpers\RecordTrail;
 use App\Models\Information;
 use App\Models\MaterialSubjectHeading;
 
-
 class MaterialController extends Controller
 {
     //
     public function store(Request $req)
     {
         // return $req;
-
         $req->validate([
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['string', 'nullable'],
