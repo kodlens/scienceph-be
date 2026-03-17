@@ -80,6 +80,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource('/categories', App\Http\Controllers\Admin\AdminCategoryController::class)->names('admin.categories');
     Route::get('/get-categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'getData'])->name('admin.categories-get-data');
 
+
+    Route::resource('/resource-types', App\Http\Controllers\Admin\AdminResourceTypeController::class)->names('admin.resource-types');
+    Route::get('/get-resource-types', [App\Http\Controllers\Admin\AdminResourceTypeController::class, 'getData'])->name('admin.resource-types-get-data');
+
      Route::resource('/regions', App\Http\Controllers\Admin\AdminRegionController::class)->names('admin.regions');
     Route::get('/get-regions', [App\Http\Controllers\Admin\AdminRegionController::class, 'getData'])->name('admin.regions-get-data');
 

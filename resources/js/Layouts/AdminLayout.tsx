@@ -83,6 +83,12 @@ export default function AdminLayout(
       onClick: () => router.visit('/admin/regions'),
     },
     {
+      key: 'admin.resource-types',
+      icon: <LandPlot size={15} />,
+      label: 'Resource Types',
+      onClick: () => router.visit('/admin/resource-types'),
+    },
+    {
       type: 'divider',
     },
     {

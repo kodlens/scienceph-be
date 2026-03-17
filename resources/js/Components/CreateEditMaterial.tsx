@@ -244,26 +244,24 @@ const CreateEditMaterial = ({
         </Form.Item>
 
         <Form.Item
-          name="filter_type"
-          label="Select Filter Type"
+          name="resource_type"
+          label="Resource Type"
           className="w-full"
-          validateStatus={errors.filter_type ? "error" : ""}
-          help={errors.filter_type ? errors.filter_type[0] : ""}
+          validateStatus={errors.resource_type ? "error" : ""}
+          help={errors.resource_type ? errors.resource_type[0] : ""}
         >
           <Select
             options={[
-              { value: 'text', label: 'Text/Content' },
+              { value: 'articles', label: 'Articles' },
               { value: 'videos', label: 'Videos' },
               { value: 'images', label: 'Images' },
             ]}
             allowClear
-            placeholder="Select Filter Type"
+            placeholder="Select Resource Type"
           />
         </Form.Item>
 
       </div>
-
-
 
       <Form.Item
         name="source_url"

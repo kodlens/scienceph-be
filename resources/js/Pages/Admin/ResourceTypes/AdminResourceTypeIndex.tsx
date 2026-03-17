@@ -21,20 +21,30 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Category } from '@/types/category';
+import ResourceType from '@/types/resourceType';
 
 const { Column } = Table;
 const { Search } = Input;
 
-const AdminCategoryIndex = () => {
+
+type PaginationMeta = {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  from: number;
+  data: ResourceType[];
+  to: number;
+}
+
+const ResourceTypeIndex = () => {
 
   const [form] = Form.useForm();
 
   const { notification, modal } = App.useApp();
 
-  const [data, setData] = useState<Category[]>([]);
+  const [data, setData] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
 
   const [open, setOpen] = useState(false); //for modal
 
@@ -45,12 +55,6 @@ const AdminCategoryIndex = () => {
 
   const sortBy = 'id.desc'
   const [id, setId] = useState(0);
-
-  interface CategoryResponse {
-    data: any[];
-    total: number;
-  }
-
   const loadAsync = async () => {
 
     setLoading(true)
@@ -62,9 +66,8 @@ const AdminCategoryIndex = () => {
     ].join('&');
 
     try {
-      const res = await axios.get<CategoryResponse>(`/admin/get-categories?${params}`);
-      setData(res.data.data)
-      setTotal(res.data.total)
+      const res = await axios.get<PaginationMeta>(`/admin/get-resource-types?${params}`);
+      setData(res.data)
       setLoading(false)
     } catch (err) {
       setLoading(false)
@@ -84,10 +87,9 @@ const AdminCategoryIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Category>(`/admin/categories/${id}`);
+      const res = await axios.get<ResourceType>(`/admin/resource-types/${id}`);
       form.setFields([
         { name: 'name', value: res.data.name },
-        { name: 'description', value: res.data.description },
         { name: 'active', value: res.data.active ? true : false },
       ]);
     } catch (err) {
@@ -110,26 +112,26 @@ const AdminCategoryIndex = () => {
   }
 
   const handleDeleteClick = async (id: number) => {
-    const res = await axios.delete('/admin/categories/' + id);
+    const res = await axios.delete('/admin/resource-types/' + id);
     if (res.data.status === 'deleted') {
       notification.success({
         message: 'Deleted!',
-        description: 'Category successfully deleted.',
+        description: 'Resource Type successfully deleted.',
         placement: 'topRight'
       })
       loadAsync()
     }
   }
 
-  const onFinish = async (values: Category) => {
+  const onFinish = async (values: ResourceType) => {
 
     if (id > 0) {
       try {
-        const res = await axios.put('/admin/categories/' + id, values)
+        const res = await axios.put('/admin/resource-types/' + id, values)
         if (res.data.status === 'updated') {
           notification.success({
             message: 'Updated!',
-            description: 'Category successfully updated.',
+            description: 'Resource Type successfully updated.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -142,11 +144,11 @@ const AdminCategoryIndex = () => {
       }
     } else {
       try {
-        const res = await axios.post('/admin/categories', values)
+        const res = await axios.post('/admin/resource-types', values)
         if (res.data.status === 'saved') {
           notification.info({
             message: 'Saved!',
-            description: 'Category successfully save.',
+            description: 'Resource Type successfully saved.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -165,7 +167,7 @@ const AdminCategoryIndex = () => {
 
   return (
     <>
-      <Head title="Category Management"></Head>
+      <Head title="Resource Type Management"></Head>
 
       <div className='flex justify-center px-4 py-8'>
 
@@ -186,25 +188,16 @@ const AdminCategoryIndex = () => {
                   Admin Panel
                 </p>
                 <h1 className='mt-1 text-2xl font-semibold leading-tight text-slate-900'>
-                  Category Management
+                  Resource Type Management
                 </h1>
                 <p className='mt-1 text-sm text-slate-600'>
-                  Create and maintain article categories and visibility status.
+                  Create and maintain resource types and visibility status.
                 </p>
-
-                <div className='mt-3 flex flex-wrap gap-2'>
-                  <span className='rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-medium text-sky-700'>
-                    Content Taxonomy
-                  </span>
-                  <span className='rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700'>
-                    {total} Categories
-                  </span>
-                </div>
               </div>
 
               <div className='ml-auto rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm'>
                 <p className='text-[11px] uppercase tracking-wide text-slate-500'>Total Records</p>
-                <p className='text-2xl font-semibold leading-none text-slate-900'>{total}</p>
+                <p className='text-2xl font-semibold leading-none text-slate-900'>{data ? (data.total as number) : 0}</p>
               </div>
             </div>
           </div>
@@ -226,18 +219,18 @@ const AdminCategoryIndex = () => {
                 type="primary"
                 size='large'
                 onClick={handClickNew}>
-                New Category
+                New Resource Type
               </Button>
             </div>
-            <Table dataSource={data}
+            <Table dataSource={data ? data?.data : []}
               loading={loading}
-              rowKey={(data: Category) => data.id as number}
+              rowKey={(data: ResourceType) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
 
               <Column title="Id" dataIndex="id" width={80} />
-              <Column title="Category" dataIndex="name" key="name" />
+              <Column title="Resource Type" dataIndex="name" key="name" />
               <Column title="Description" dataIndex="description" key="description" />
               <Column title="Slug" dataIndex="slug" key="slug" />
               <Column title="Active" dataIndex="active" key="active" render={(active) => (
@@ -250,15 +243,15 @@ const AdminCategoryIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: Category) => (
+                render={(_, data: ResourceType) => (
                   <Space size="small">
 
                     <Button
-                      title='Edit category'
+                      title='Edit resource type'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete category'
+                      title='Delete resource type'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -283,7 +276,7 @@ const AdminCategoryIndex = () => {
                 current={page}
                 defaultCurrent={1}
                 showSizeChanger
-                total={total}
+                total={data?.total}
                 showTotal={(value, range) => `${range[0]}-${range[1]} of ${value} items`}
               />
             </div>
@@ -298,7 +291,7 @@ const AdminCategoryIndex = () => {
       {/* Modal with Cancel and Save button*/}
       <Modal
         open={open}
-        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Category' : 'Create Category'}</span>}
+        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Resource Type' : 'Create Resource Type'}</span>}
         okText="Save"
         okButtonProps={{
           icon: <FileAddOutlined />,
@@ -320,7 +313,6 @@ const AdminCategoryIndex = () => {
             autoComplete='off'
             initialValues={{
               name: '',
-              description: '',
               active: true,
             }}
             clearOnDestroy
@@ -332,20 +324,11 @@ const AdminCategoryIndex = () => {
       >
         <Form.Item
           name="name"
-          label="Category"
+          label="Resource Type"
           validateStatus={errors.name ? 'error' : ''}
           help={errors.name ? errors.name[0] : ''}
         >
-          <Input placeholder="Category name" />
-        </Form.Item>
-
-        <Form.Item
-          name="description"
-          label="Description"
-          validateStatus={errors.description ? 'error' : ''}
-          help={errors.description ? errors.description[0] : ''}
-        >
-          <Input.TextArea placeholder="Short description" rows={4} />
+          <Input placeholder="Resource Type name" />
         </Form.Item>
 
         <Form.Item
@@ -361,5 +344,5 @@ const AdminCategoryIndex = () => {
   )
 }
 
-AdminCategoryIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
-export default AdminCategoryIndex;
+ResourceTypeIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+export default ResourceTypeIndex;
