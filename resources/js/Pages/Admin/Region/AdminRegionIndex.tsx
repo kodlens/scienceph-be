@@ -168,7 +168,7 @@ const AdminRegionIndex = () => {
     <>
       <Head title="Region Management"></Head>
 
-      <div className='flex justify-center px-4 py-8'>
+      <div className='flex justify-center'>
 
         {/* card */}
         <div className='w-full max-w-[1150px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>

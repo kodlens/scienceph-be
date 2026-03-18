@@ -169,7 +169,7 @@ const AdminResourceTypeIndex = () => {
     <>
       <Head title="Resource Type Management"></Head>
 
-      <div className='flex justify-center px-4 py-8'>
+      <div className='flex justify-center'>
 
         {/* card */}
         <div className='w-full max-w-4xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>

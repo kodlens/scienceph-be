@@ -73,7 +73,7 @@ const AdminActivityLogsIndex = () => {
     <>
       <Head title="Category Management"></Head>
 
-      <div className='flex justify-center px-4 py-8'>
+      <div className='flex justify-center'>
 
         {/* card */}
         <div className='w-full max-w-[1150px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>
@@ -137,7 +137,6 @@ const AdminActivityLogsIndex = () => {
 
               <Column title="Id" dataIndex="id" width={80} />
               <Column title="Title" dataIndex={['material', 'title']} key="title" />
-
               <Column title="Description" dataIndex="description" key="description" />
               <Column title="Action" dataIndex="action" key="action" />
 
