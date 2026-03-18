@@ -12,7 +12,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, LandPlot, LogOut, UserPen } from 'lucide-react';
+import { DatabaseZap, LandPlot, LogOut, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -122,7 +122,7 @@ export default function AdminLayout(
     },
     {
       key: 'admin.material-assignments',
-      icon: <UserOutlined />,
+      icon: <UserRoundCog size={15} />,
       label: 'Material Assignments',
       onClick: () => router.visit('/admin/material-assignments'),
     },
@@ -131,6 +131,12 @@ export default function AdminLayout(
       icon: <UserOutlined />,
       label: 'Users',
       onClick: () => router.visit('/admin/users'),
+    },
+    {
+      key: 'admin.activity-logs',
+      icon: <SquareChartGantt size={15} />,
+      label: 'Activity Logs',
+      onClick: () => router.visit('/admin/activity-logs'),
     },
   ]), []);
 

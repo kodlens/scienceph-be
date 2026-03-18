@@ -125,6 +125,10 @@ Route::prefix('admin')->middleware('auth', 'admin')
     Route::resource('/material-assignments', App\Http\Controllers\Admin\AdminMaterialAssignmentController::class);
     Route::get('/get-material-assignments', [App\Http\Controllers\Admin\AdminMaterialAssignmentController::class, 'getData'])->name('admin.material-assignments.getdata');
 
+    Route::resource('/activity-logs', App\Http\Controllers\Admin\AdminActivityLogController::class);
+    Route::get('/get-activity-logs', [App\Http\Controllers\Admin\AdminActivityLogController::class, 'getData'])->name('admin.activity-logs.getdata');
+
+
     Route::resource('/users', App\Http\Controllers\Admin\AdminUserController::class);
     Route::get('/get-users', [App\Http\Controllers\Admin\AdminUserController::class, 'getData'])->name('users.getdata');
     Route::post('/users-change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
