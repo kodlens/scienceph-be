@@ -16,11 +16,6 @@ class AdminActivityLogController extends Controller
         return inertia('Admin/ActivityLogs/AdminActivityLogsIndex');
     }
 
-
-    public function show($id){
-    
-    }
-
     public function getData(Request $request){
 
         $search = $request->input('search', '');
@@ -38,12 +33,5 @@ class AdminActivityLogController extends Controller
 
         return response()->json($data, 200);
     }
-
-
-    public function store(Request $request)
-    {
-        //
-    }
-
 
 }
