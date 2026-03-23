@@ -17,9 +17,11 @@ class Material extends Model
         'alias',
         'description',
         'description_text',
+        
         'category_id',
         'author',
         'resource_type',
+        'resource_format',
         'encoded_by_id',
         'encoded_at',
         'modified_by_id',
