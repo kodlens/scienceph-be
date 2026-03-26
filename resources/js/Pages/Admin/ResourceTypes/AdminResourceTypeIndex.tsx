@@ -96,6 +96,13 @@ const AdminResourceTypeIndex = () => {
     }
   }
 
+  // useEffect(() => {
+  //   form.setFieldsValue({
+  //     name: '',
+  //     active: true,
+  //   })
+  // }, [open]);
+
 
   const handClickNew = () => {
     //router.visit('/');
@@ -172,7 +179,7 @@ const AdminResourceTypeIndex = () => {
       <div className='flex justify-center'>
 
         {/* card */}
-        <div className='w-full max-w-4xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>
+        <div className='w-full max-w-6xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm'>
           {/* card header */}
           <div className='relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sky-50 via-white to-cyan-50 px-6 py-6'>
             <div className='pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-cyan-100/60 blur-2xl' />
@@ -305,39 +312,37 @@ const AdminResourceTypeIndex = () => {
         }}
         onCancel={() => setOpen(false)}
         destroyOnHidden
-        modalRender={(dom) => (
-          <Form
-            layout="vertical"
-            form={form}
-            name="form_in_modal"
-            autoComplete='off'
-            initialValues={{
-              name: '',
-              active: true,
-            }}
-            clearOnDestroy
-            onFinish={(values) => onFinish(values)}
-          >
-            {dom}
-          </Form>
-        )}
       >
-        <Form.Item
-          name="name"
-          label="Resource Type"
-          validateStatus={errors.name ? 'error' : ''}
-          help={errors.name ? errors.name[0] : ''}
+        <Form
+          layout="vertical"
+          form={form}
+          name="form_in_modal"
+          autoComplete='off'
+          initialValues={{
+            name: '',
+            active: true,
+          }}
+          onFinish={(values) => onFinish(values)}
         >
-          <Input placeholder="Resource Type name" />
-        </Form.Item>
 
-        <Form.Item
-          name="active"
-          valuePropName="checked"
-        >
-          <Checkbox>Active</Checkbox>
-        </Form.Item>
+          <Form.Item
+            name="name"
+            label="Resource Type"
+            validateStatus={errors.name ? 'error' : ''}
+            help={errors.name ? errors.name[0] : ''}
+          >
+            <Input placeholder="Resource Type name" />
+          </Form.Item>
 
+          <Form.Item
+            name="active"
+            valuePropName="checked"
+          >
+            <Checkbox>Active</Checkbox>
+          </Form.Item>
+              
+        </Form>
+        
       </Modal>
 
     </>

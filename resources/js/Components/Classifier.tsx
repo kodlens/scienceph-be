@@ -38,7 +38,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
     if (content === undefined || content.trim() === "") {
       notification.error({
         message: "Empty Content",
-        description: "Description is empty. Please provide content for classification.",
+        description: "Content is empty. Please provide content for classification.",
         duration: 5,
       });
       setLoading(false);
