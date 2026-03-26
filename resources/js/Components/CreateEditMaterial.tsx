@@ -1,5 +1,5 @@
 import { CreateEditProps, User } from "@/types";
-import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
+import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox, Radio, Flex } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,7 +12,7 @@ import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
 import { Material } from "@/types/material";
-import { SelectResourceType } from "./SelectResourceType";
+import { SelectFilterType } from "./SelectFilterType";
 
 
 const CreateEditMaterial = ({
@@ -143,6 +143,8 @@ const CreateEditMaterial = ({
     }
   };
 
+   
+
 
   return (
     <Form
@@ -167,6 +169,26 @@ const CreateEditMaterial = ({
         tags: null
       }}
     >
+
+
+      <div className="w-[500px] mb-4">
+        <Form.Item
+          name="slug"
+          label="Select for the resource type"
+          validateStatus={errors.slug ? "error" : ""}
+          help={errors.slug ? errors.slug[0] : ""}
+        >
+          <Radio.Group block
+            buttonStyle="solid" 
+            optionType="button"
+            options={[
+              { label: 'Article (SciencePH)', value: 'article' },
+              { label: 'Information', value: 'information' },
+            ]} defaultValue="article" />
+
+        </Form.Item>
+      </div>
+      
 
       <InputTitleWithValidation id={id} errors={errors} setErrors={setErrors}/>
 
@@ -262,7 +284,7 @@ const CreateEditMaterial = ({
           />
         </Form.Item> */}
 
-        <SelectResourceType errors={errors} />
+        <SelectFilterType errors={errors} />
 
       </div>
 

@@ -96,12 +96,12 @@ const AdminResourceTypeIndex = () => {
     }
   }
 
-  // useEffect(() => {
-  //   form.setFieldsValue({
-  //     name: '',
-  //     active: true,
-  //   })
-  // }, [open]);
+  useEffect(() => {
+    form.setFieldsValue({
+      name: '',
+      active: true,
+    })
+  }, [open]);
 
 
   const handClickNew = () => {
@@ -312,6 +312,7 @@ const AdminResourceTypeIndex = () => {
         }}
         onCancel={() => setOpen(false)}
         destroyOnHidden
+        onOk={() => form.submit()}
       >
         <Form
           layout="vertical"
@@ -342,7 +343,7 @@ const AdminResourceTypeIndex = () => {
           </Form.Item>
               
         </Form>
-        
+
       </Modal>
 
     </>

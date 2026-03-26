@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 type Props = {
   errors: Record<string, string[]>
 }
-export const SelectResourceType = ( { errors } : Props ) => {
+export const SelectFilterType = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
 
