@@ -29,7 +29,7 @@ class MaterialController extends Controller
     //
     public function store(Request $req)
     {
-        // return $req;
+        //return $req;
         $req->validate([
             'resource_type' => ['string', 'required', 'max:50'],
             'title' => ['required', new ValidateTitle(0)],
@@ -95,12 +95,13 @@ class MaterialController extends Controller
                     'encoded_at' => now(),
                     'region' => $req->region,
                     'agency' => $req->agency,
+                    'submitted_at' => $req->submit_status === 'save-submit' ? date('Y-m-d H:i:s') : null,
                     //'regional_office' => $req->regional_office, //remove for the meantime as discussed last meeting
                     'tags' => $tagsString,
                     'source_url' => $req->source_url,
                     'status' => $req->status,
                     'publish_date' => $dateFormated,
-                    'is_publish' => 0,
+                    'is_publish' => $req->submit_status === 'save-publish' ? 1 : 0,
                     'is_ojt' => $user->role === 'encoder' ? $user->is_ojt : 0,
                     'is_press_release' => $req->is_press_release ? 1 : 0
                     // 'record_trail' => (new RecordTrail())
@@ -207,6 +208,7 @@ class MaterialController extends Controller
                 $data->author = $req->author;
                 $data->modified_by_id = $user->id;
                 $data->modified_at = now();
+                $data->submitted_at = $req->submit_status === 'save-submit' ? date('Y-m-d H:i:s') : null;
                 $data->agency = $req->agency ? $req->agency : null;
                 $data->region = $req->region ? $req->region : null;
                 //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting

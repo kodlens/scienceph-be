@@ -351,7 +351,7 @@ const CreateEditMaterial = ({
       </Form.Item>
 
       <div className="flex mb-4 mt-6">
-        <ConfigProvider
+        {/* <ConfigProvider
           theme={{
             components: {
               Button: {
@@ -377,7 +377,17 @@ const CreateEditMaterial = ({
           >
             Save Information
           </Button>
-        </ConfigProvider>
+        </ConfigProvider> */}
+        <Button
+          className="ml-2"
+          htmlType="submit"
+          icon={<ProjectOutlined />}
+          loading={loading}
+          type="primary"
+          variant="outlined"
+        >
+          Save as Draft
+        </Button>
 
         { role === 'administrator' || role === 'publisher' && (
             <Button
@@ -393,15 +403,34 @@ const CreateEditMaterial = ({
         }
 
         { role === 'encoder' && (
+          <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                defaultBg: 'green',
+                defaultColor: 'white',
+                defaultHoverBorderColor: 'green',
+
+                defaultActiveColor: 'white',
+                defaultActiveBorderColor: '#1a8c12',
+                defaultActiveBg: '#1a8c12',
+
+                defaultHoverBg: '#379b30',
+                defaultHoverColor: 'white',
+              }
+            }
+          }}>
             <Button
               className="ml-2"
-              type="primary"
               onClick={handleSubmitAndSetSubmit}
               icon={<ProjectOutlined />}
               loading={loading}
             >
               Save and Submit
             </Button>
+
+          </ConfigProvider>
+            
           )
         }
 
