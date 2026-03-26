@@ -13,15 +13,13 @@ class Material extends Model
 
     protected $fillable = [
         'title',
-       // 'excerpt',
-        'alias',
+        'slug',
         'description',
         'description_text',
-        
         'category_id',
-        'author',
+        'filter_type',
         'resource_type',
-        'resource_format',
+        'author',
         'encoded_by_id',
         'encoded_at',
         'modified_by_id',
