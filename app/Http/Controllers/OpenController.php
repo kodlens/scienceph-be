@@ -23,9 +23,31 @@ class OpenController extends Controller
         return response()->json($subjects);
     }
 
-    public function getSubjectHeadingsWithParams($subjectId){
-        $subjectHeadings = Subject::find($subjectId)->subject_headings()->where('active', 1)->get();
-        return response()->json($subjectHeadings);
+    public function getSubjectHeadingsWithParams(Request $req, $subjectId){
+        if($req->has('search') && $req->search != ''){
+
+            if($subjectId == 0){
+                $subjectHeadings = SubjectHeading::where('active', 1)
+                ->where('subject_heading', 'like', '%'.$req->search.'%')
+                ->get(); 
+            }else {
+                $subjectHeadings = Subject::find($subjectId)->subject_headings()
+                    ->where('active', 1)
+                    ->where('subject_heading', 'like', '%'.$req->search.'%')
+                    ->get();
+            }
+            return response()->json($subjectHeadings);
+        }else{
+            if($subjectId == 0){
+                $subjectHeadings = SubjectHeading::where('active', 1)->get();
+            } else {
+                $subjectHeadings = Subject::find($subjectId)->subject_headings()
+                    ->where('active', 1)
+                    ->get();
+            }
+            
+            return response()->json($subjectHeadings);
+        }
     }
 
 

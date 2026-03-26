@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { Button, Input, Modal, Table } from 'antd';
-import { SubjectHeading } from '@/types/subject';
+import { Subject, SubjectHeading } from '@/types/subject';
 import axios from 'axios';
 import { ListPlus } from 'lucide-react';
+import ModalSelectSubject from './ModalSelectSubject';
 type PageProps = {
   onSelectSubjectHeading: (record: SubjectHeading) => void
 }
@@ -11,25 +12,32 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [subjectHeadings, setSubjectHeadings] = React.useState<SubjectHeading[]>([]);
   const [search, setSearch] = React.useState<string>("");
+  const [subject, setSubject] = React.useState<Subject>();
 
   const loadSubjectHeadings = () => {
     // Load subject headings from the server or use static data
     // setSubjectHeadings(data);
     setLoading(true);
-    axios.get(`/get-subject-headings?search=${search}`).then(res => {
+    axios.get(`/get-subject-headings/${subject ? subject.id : 0}?search=${search}`).then(res => {
       setSubjectHeadings(res.data);
       setLoading(false);
     }).catch(err => {
       setLoading(false);
       console.log(err);
-
+      
     });
   }
+
 
   useEffect(() => {
     loadSubjectHeadings();
   }, []);
 
+  useEffect(() => {
+    if(subject) {
+      loadSubjectHeadings();
+    }
+  }, [subject]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -53,11 +61,19 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
       </Button>
 
       <Modal
-        title="Basic Modal"
+        title="Browse Subjects / Subject Headings"
         open={isModalOpen}
         footer={null}
         destroyOnHidden
         onCancel={handleCancel}>
+
+          <div>
+            {/* <SelectSubjects form={undefined} /> */}
+            <ModalSelectSubject onSelectSubject={(record)=> {
+              setSubject(record);
+              
+            }}/>
+          </div>
 
         <div className='my-2'>
           <Input placeholder="Search Subject Headings"
