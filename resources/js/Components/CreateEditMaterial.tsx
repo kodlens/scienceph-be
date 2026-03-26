@@ -378,6 +378,7 @@ const CreateEditMaterial = ({
             Save Information
           </Button>
         </ConfigProvider> */}
+        
         <Button
           className="ml-2"
           htmlType="submit"
@@ -390,15 +391,33 @@ const CreateEditMaterial = ({
         </Button>
 
         { role === 'administrator' || role === 'publisher' && (
+
+          <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                defaultBg: 'green',
+                defaultColor: 'white',
+                defaultHoverBorderColor: 'green',
+
+                defaultActiveColor: 'white',
+                defaultActiveBorderColor: '#1a8c12',
+                defaultActiveBg: '#1a8c12',
+
+                defaultHoverBg: '#379b30',
+                defaultHoverColor: 'white',
+              }
+            }
+          }}>
             <Button
               className="ml-2"
-              type="primary"
               onClick={handleSubmitAndPublish}
               icon={<ProjectOutlined />}
               loading={loading}
             >
               Save and Publish
             </Button>
+          </ConfigProvider>
           )
         }
 
