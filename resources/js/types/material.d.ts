@@ -1,21 +1,19 @@
 export interface Material {
     data(data: any): unknown;
     id: number;
-    source_id?: number;
     title?: string;
     description?: string;
     description_text?: string;
-
-    section_id: number;
-    section?: Section;
+    author?: string;
     category_id?: number;
     category?: Category;
 
-    alias?: string;
+    slug?: string;
     source_url?: string;
 
     status?: string;
     tags?: string[];
+    filter_type: string;
     resource_type: string;
 
     agency?: string;
@@ -34,7 +32,7 @@ export interface Material {
     is_publish?: string;
     publish_date?: string | Date;
 
-    author?: string;
+
     hits?: number;
 
 

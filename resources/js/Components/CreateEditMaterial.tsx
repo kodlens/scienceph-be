@@ -46,7 +46,7 @@ const CreateEditMaterial = ({
     try {
       form.setFields([
         { name: "title", value: material.title },
-        { name: "slug", value: material.alias },
+        { name: "slug", value: material.slug },
         { name: "description", value: material.description },
         { name: "status", value: material.status ? material.status : 'draft' },
         { name: "source_url", value: material.source_url },

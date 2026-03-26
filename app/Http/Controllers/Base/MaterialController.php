@@ -81,7 +81,7 @@ class MaterialController extends Controller
 
                 $data = Material::create([
                     'title' => $req->title,
-                    'alias' => Str::slug($req->title),
+                    'slug' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
                     'resource_type' => $req->resource_type,
@@ -191,7 +191,7 @@ class MaterialController extends Controller
 
                 $data = Material::find($id);
                 $data->title = $req->title;
-                $data->alias = Str::slug($req->title);
+                $data->slug = Str::slug($req->title);
                 $data->description = $modifiedHtml;
                 $data->description_text = $content;
                 $data->resource_type = $req->resource_type;
