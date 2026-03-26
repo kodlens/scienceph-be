@@ -37,6 +37,7 @@ class MaterialController extends Controller
             'description' => ['required'],
             'category' => ['required'],
             'resource_type' => ['required', 'string', 'max:50'],
+            'filter_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
             //'publish_date' => ['required'],
         ], [
@@ -87,6 +88,7 @@ class MaterialController extends Controller
                     'description' => $modifiedHtml,
                     'description_text' => $content,
                     'resource_type' => $req->resource_type,
+                    'filter_type' => $req->filter_type,
                     'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->id,
@@ -153,6 +155,7 @@ class MaterialController extends Controller
             'title' => ['required', 'unique:materials,title,' . $id . ',id'],
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
+            'filter_type' => ['required', 'string', 'max:50'],
             'category' => ['required'],
             'resource_type' => ['required', 'string', 'max:50'],
             //'publish_date' => ['required'],
@@ -199,6 +202,7 @@ class MaterialController extends Controller
                 $data->description = $modifiedHtml;
                 $data->description_text = $content;
                 $data->resource_type = $req->resource_type;
+                $data->filter_type = $req->filter_type;
                 $data->category_id = $req->category;
                 $data->author = $req->author;
                 $data->modified_by_id = $user->id;

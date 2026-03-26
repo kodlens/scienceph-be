@@ -59,14 +59,14 @@ const CreateEditMaterial = ({
         { name: "region", value: material.region },
         { name: "regional_office", value: material.regional_office },
         { name: "author", value: material.author },
+        { name: 'filter_type', value: material.filter_type ? material.filter_type : '' },
         { name: "is_publish", value: material.is_publish },
         { name: "tags", value: material.tags ? material.tags.split(',') : [] },
         { name: "is_press_release", value: material.is_press_release && material.is_press_release > 0 ? true : false },
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
-
+      
       //console.log('material.subject_headings', material.subject_headings);
-
     } catch (err) { }
   };
 
@@ -162,7 +162,7 @@ const CreateEditMaterial = ({
         region: null,
         regional_office: null,
         agency: null,
-        author: '',
+        author: null,
         is_publish: 0,
         is_press_release: 0,
         source_url: '',
@@ -368,7 +368,7 @@ const CreateEditMaterial = ({
               }
             }
           }}>
-            
+
           <Button
             className="ml-2"
             htmlType="submit"

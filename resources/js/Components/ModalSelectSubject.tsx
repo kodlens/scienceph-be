@@ -28,8 +28,6 @@ const ModalSelectSubject = ( { onSelectSubject } : PageProps) => {
     loadSubjects();
   }, []);
 
-
-
   return (
     <>
       <Select placeholder="Select a subject" 
