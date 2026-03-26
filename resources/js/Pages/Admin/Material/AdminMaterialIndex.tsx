@@ -125,8 +125,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
               showView={true}
             />
           </div>
-
-
+          
         </div>
       </div>
     </>
