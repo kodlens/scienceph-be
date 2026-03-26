@@ -44,6 +44,7 @@ class PublisherMaterialController extends MaterialController
         $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
+            ->where('status', 'submit')
             ->whereIn('encoded_by_id', $assignedMaterialIds);
 
         // Status filter
