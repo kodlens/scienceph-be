@@ -154,6 +154,7 @@ const CreateEditMaterial = ({
       onFinish={submit}
       initialValues={{
         title: '',
+        resource_type: 'article',
         slug: '',
         category: "",
         status: 'draft',
@@ -173,10 +174,10 @@ const CreateEditMaterial = ({
 
       <div className="w-[500px] mb-4">
         <Form.Item
-          name="slug"
+          name="resource_type"
           label="Select for the resource type"
-          validateStatus={errors.slug ? "error" : ""}
-          help={errors.slug ? errors.slug[0] : ""}
+          validateStatus={errors.resource_type ? "error" : ""}
+          help={errors.resource_type ? errors.resource_type[0] : ""}
         >
           <Radio.Group block
             buttonStyle="solid" 
