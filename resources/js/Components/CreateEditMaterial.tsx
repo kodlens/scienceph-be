@@ -176,7 +176,7 @@ const CreateEditMaterial = ({
       <div className="w-[500px] mb-4">
         <Form.Item
           name="resource_type"
-          label="Select for the resource type"
+          label="Select Resource Type"
           validateStatus={errors.resource_type ? "error" : ""}
           help={errors.resource_type ? errors.resource_type[0] : ""}
         >
@@ -186,7 +186,7 @@ const CreateEditMaterial = ({
             options={[
               { label: 'Article (SciencePH)', value: 'article' },
               { label: 'Information', value: 'information' },
-            ]} defaultValue="article" />
+            ]}  />
 
         </Form.Item>
       </div>
