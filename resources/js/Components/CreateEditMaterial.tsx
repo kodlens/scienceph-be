@@ -45,6 +45,7 @@ const CreateEditMaterial = ({
   const getData = () => {
     try {
       form.setFields([
+        { name:"resource_type", value: material.resource_type ? material.resource_type : 'article' },
         { name: "title", value: material.title },
         { name: "slug", value: material.slug },
         { name: "description", value: material.description },

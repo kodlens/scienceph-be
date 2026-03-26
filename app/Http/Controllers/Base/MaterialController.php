@@ -31,6 +31,7 @@ class MaterialController extends Controller
     {
         // return $req;
         $req->validate([
+            'resource_type' => ['string', 'required', 'max:50'],
             'title' => ['required', new ValidateTitle(0)],
             'author' => ['string', 'nullable'],
             'description' => ['required'],
@@ -80,6 +81,7 @@ class MaterialController extends Controller
                 $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::create([
+                    'resource_type' => $req->resource_type,
                     'title' => $req->title,
                     'slug' => Str::slug($req->title),
                     'description' => $modifiedHtml,
@@ -147,6 +149,7 @@ class MaterialController extends Controller
 
 
         $req->validate([
+            'resource_type' => ['string', 'required', 'max:50'],
             'title' => ['required', 'unique:materials,title,' . $id . ',id'],
             'description' => ['required', 'string'],
             'author' => ['string', 'nullable'],
@@ -190,6 +193,7 @@ class MaterialController extends Controller
                 $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::find($id);
+                $data->resource_type = $req->resource_type;
                 $data->title = $req->title;
                 $data->slug = Str::slug($req->title);
                 $data->description = $modifiedHtml;
