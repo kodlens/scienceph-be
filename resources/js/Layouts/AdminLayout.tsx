@@ -12,7 +12,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, LandPlot, LogOut, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
+import { DatabaseZap, Funnel, LandPlot, LogOut, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -83,10 +83,10 @@ export default function AdminLayout(
       onClick: () => router.visit('/admin/regions'),
     },
     {
-      key: 'admin.resource-types',
-      icon: <LandPlot size={15} />,
-      label: 'Resource Types',
-      onClick: () => router.visit('/admin/resource-types'),
+      key: 'admin.filter-types',
+      icon: <Funnel size={15} />,
+      label: 'Filter Types',
+      onClick: () => router.visit('/admin/filter-types'),
     },
     {
       type: 'divider',

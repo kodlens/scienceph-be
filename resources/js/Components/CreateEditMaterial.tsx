@@ -1,5 +1,5 @@
 import { CreateEditProps, User } from "@/types";
-import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox, Radio, Flex } from "antd";
+import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox, Radio } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
 import axios from "axios";

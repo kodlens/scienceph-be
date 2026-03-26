@@ -31,7 +31,7 @@ Route::get('/login', [App\Http\Controllers\WelcomePageController::class, 'index'
 
 Route::get('/get-sections', [App\Http\Controllers\OpenController::class, 'getSections'])->name('open.sections');
 Route::get('/get-categories', [App\Http\Controllers\OpenController::class, 'getCategories'])->name('open.categories');
-Route::get('/get-resource-types', [App\Http\Controllers\OpenController::class, 'getResourceTypes'])->name('open.resource-types');
+Route::get('/get-filter-types', [App\Http\Controllers\OpenController::class, 'getFilterTypes'])->name('open.filter-types');
 Route::get('/get-agencies', [App\Http\Controllers\OpenController::class, 'getAgencies'])->name('open.agencies');
 Route::get('/get-regions', [App\Http\Controllers\OpenController::class, 'getRegions'])->name('open.regions');
 Route::get('/get-authors-autocomplete', [App\Http\Controllers\OpenController::class, 'getAuthorsAutocomplete'])->name('open.authors-autocomplete');
@@ -86,8 +86,8 @@ Route::prefix('admin')->middleware('auth', 'admin')
     Route::get('/get-categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'getData'])->name('admin.categories-get-data');
 
 
-    Route::resource('/resource-types', App\Http\Controllers\Admin\AdminResourceTypeController::class)->names('admin.resource-types');
-    Route::get('/get-resource-types', [App\Http\Controllers\Admin\AdminResourceTypeController::class, 'getData'])->name('admin.resource-types-get-data');
+    Route::resource('/filter-types', App\Http\Controllers\Admin\AdminFilterTypeController::class)->names('admin.filter-types');
+    Route::get('/get-filter-types', [App\Http\Controllers\Admin\AdminFilterTypeController::class, 'getData'])->name('admin.filter-types-get-data');
 
      Route::resource('/regions', App\Http\Controllers\Admin\AdminRegionController::class)->names('admin.regions');
     Route::get('/get-regions', [App\Http\Controllers\Admin\AdminRegionController::class, 'getData'])->name('admin.regions-get-data');

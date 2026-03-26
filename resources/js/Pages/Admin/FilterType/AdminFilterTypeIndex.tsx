@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import ResourceType from '@/types/resourceType';
+import FilterType from '@/types/resourceType';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -33,11 +33,11 @@ type PaginationMeta = {
   current_page: number;
   last_page: number;
   from: number;
-  data: ResourceType[];
+  data: FilterType[];
   to: number;
 }
 
-const AdminResourceTypeIndex = () => {
+const AdminFilterTypeIndex = () => {
 
   const [form] = Form.useForm();
 
@@ -65,7 +65,7 @@ const AdminResourceTypeIndex = () => {
     ].join('&');
 
     try {
-      const res = await axios.get<PaginationMeta>(`/admin/get-resource-types?${params}`);
+      const res = await axios.get<PaginationMeta>(`/admin/get-filter-types?${params}`);
       setData(res.data)
       setLoading(false)
     } catch (err) {
@@ -86,7 +86,7 @@ const AdminResourceTypeIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<ResourceType>(`/admin/resource-types/${id}`);
+      const res = await axios.get<FilterType>(`/admin/filter-types/${id}`);
       form.setFields([
         { name: 'name', value: res.data.name },
         { name: 'active', value: res.data.active ? true : false },
@@ -118,26 +118,26 @@ const AdminResourceTypeIndex = () => {
   }
 
   const handleDeleteClick = async (id: number) => {
-    const res = await axios.delete('/admin/resource-types/' + id);
+    const res = await axios.delete('/admin/filter-types/' + id);
     if (res.data.status === 'deleted') {
       notification.success({
         message: 'Deleted!',
-        description: 'Resource Type successfully deleted.',
+        description: 'Filter Type successfully deleted.',
         placement: 'topRight'
       })
       loadAsync()
     }
   }
 
-  const onFinish = async (values: ResourceType) => {
+  const onFinish = async (values: FilterType) => {
     setLoading(true)
     if (id > 0) {
       try {
-        const res = await axios.put('/admin/resource-types/' + id, values)
+        const res = await axios.put('/admin/filter-types/' + id, values)
         if (res.data.status === 'updated') {
           notification.success({
             message: 'Updated!',
-            description: 'Resource Type successfully updated.',
+            description: 'Filter Type successfully updated.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -150,11 +150,11 @@ const AdminResourceTypeIndex = () => {
       }
     } else {
       try {
-        const res = await axios.post('/admin/resource-types', values)
+        const res = await axios.post('/admin/filter-types', values)
         if (res.data.status === 'saved') {
           notification.success({
             message: 'Saved!',
-            description: 'Resource Type successfully saved.',
+            description: 'Filter Type successfully saved.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -174,7 +174,7 @@ const AdminResourceTypeIndex = () => {
 
   return (
     <>
-      <Head title="Resource Type Management"></Head>
+      <Head title="Filter Type Management"></Head>
 
       <div className='flex justify-center'>
 
@@ -231,7 +231,7 @@ const AdminResourceTypeIndex = () => {
             </div>
             <Table dataSource={data ? data?.data : []}
               loading={loading}
-              rowKey={(data: ResourceType) => data.id as number}
+              rowKey={(data: FilterType) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
@@ -249,15 +249,15 @@ const AdminResourceTypeIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: ResourceType) => (
+                render={(_, data: FilterType) => (
                   <Space size="small">
 
                     <Button
-                      title='Edit resource type'
+                      title='Edit filter type'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete resource type'
+                      title='Delete filter type'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -297,7 +297,7 @@ const AdminResourceTypeIndex = () => {
       {/* Modal with Cancel and Save button*/}
       <Modal
         open={open}
-        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Resource Type' : 'Create Resource Type'}</span>}
+        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Filter Type' : 'Create Filter Type'}</span>}
         okText="Save"
         loading={loading}
         okButtonProps={{
@@ -328,11 +328,11 @@ const AdminResourceTypeIndex = () => {
 
           <Form.Item
             name="name"
-            label="Resource Type"
+            label="Filter Type"
             validateStatus={errors.name ? 'error' : ''}
             help={errors.name ? errors.name[0] : ''}
           >
-            <Input placeholder="Resource Type name" />
+            <Input placeholder="Filter Type name" />
           </Form.Item>
 
           <Form.Item
@@ -350,5 +350,5 @@ const AdminResourceTypeIndex = () => {
   )
 }
 
-AdminResourceTypeIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
-export default AdminResourceTypeIndex;
+AdminFilterTypeIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+export default AdminFilterTypeIndex;

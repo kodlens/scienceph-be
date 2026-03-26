@@ -9,12 +9,12 @@ type Props = {
 }
 export const SelectFilterType = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
-  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
+  const [filterTypes, setFilterTypes] = useState<ResourceType[]>([]);
 
   const loadData = () => {
     setLoading(true);
-    axios.get('/get-resource-types').then(res => {
-      setResourceTypes(res.data);
+    axios.get('/get-filter-types').then(res => {
+      setFilterTypes(res.data);
       setLoading(false)
     }).catch(err => {
       setLoading(false);
@@ -27,7 +27,7 @@ export const SelectFilterType = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return resourceTypes.map(item => ({ value: item.slug, label: item.name }))
+    return filterTypes.map(item => ({ value: item.slug, label: item.name }))
   }
 
 
@@ -40,7 +40,7 @@ export const SelectFilterType = ( { errors } : Props ) => {
         validateStatus={errors.resource_type ? "error" : ""}
         help={errors.resource_type ? errors.resource_type[0] : ""}
       >
-        <Select loading={loading} options={resourceTypes ? selectData() : []} allowClear/>
+        <Select loading={loading} options={filterTypes ? selectData() : []} allowClear/>
       </Form.Item>
     </>
   )
