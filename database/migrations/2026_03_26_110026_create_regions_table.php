@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->integer('order_no')->default(0);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
