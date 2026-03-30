@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Category } from '@/types/category';
+import { Subject } from '@/types/subject';
 
 const { Column } = Table;
 const { Search } = Input;
@@ -32,7 +32,7 @@ const AdminCategoryIndex = () => {
 
   const { notification, modal } = App.useApp();
 
-  const [data, setData] = useState<Category[]>([]);
+  const [data, setData] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
@@ -46,7 +46,7 @@ const AdminCategoryIndex = () => {
   const sortBy = 'id.desc'
   const [id, setId] = useState(0);
 
-  interface CategoryResponse {
+  interface AxiosResponse {
     data: any[];
     total: number;
   }
@@ -62,7 +62,7 @@ const AdminCategoryIndex = () => {
     ].join('&');
 
     try {
-      const res = await axios.get<CategoryResponse>(`/admin/get-categories?${params}`);
+      const res = await axios.get<AxiosResponse>(`/admin/get-categories?${params}`);
       setData(res.data.data)
       setTotal(res.data.total)
       setLoading(false)
@@ -84,10 +84,10 @@ const AdminCategoryIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Category>(`/admin/categories/${id}`);
+      const res = await axios.get<Subject>(`/admin/categories/${id}`);
       form.setFields([
-        { name: 'name', value: res.data.name },
-        { name: 'description', value: res.data.description },
+        { name: 'name', value: res.data.subject },
+        { name: 'description', value: res.data.subject_heading },
         { name: 'active', value: res.data.active ? true : false },
       ]);
     } catch (err) {
@@ -121,7 +121,7 @@ const AdminCategoryIndex = () => {
     }
   }
 
-  const onFinish = async (values: Category) => {
+  const onFinish = async (values: Subject) => {
 
     if (id > 0) {
       try {
@@ -165,7 +165,7 @@ const AdminCategoryIndex = () => {
 
   return (
     <>
-      <Head title="Category Management"></Head>
+      <Head title="Subject Management"></Head>
 
       <div className='flex justify-center'>
 
@@ -186,6 +186,7 @@ const AdminCategoryIndex = () => {
                   Admin Panel
                 </p>
                 <h1 className='mt-1 text-2xl font-semibold leading-tight text-slate-900'>
+                  {/* Subject but display as Category */}
                   Category Management
                 </h1>
                 <p className='mt-1 text-sm text-slate-600'>
@@ -197,7 +198,7 @@ const AdminCategoryIndex = () => {
                     Content Taxonomy
                   </span>
                   <span className='rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700'>
-                    {total} Categories
+                    {total} Category
                   </span>
                 </div>
               </div>
@@ -231,14 +232,13 @@ const AdminCategoryIndex = () => {
             </div>
             <Table dataSource={data}
               loading={loading}
-              rowKey={(data: Category) => data.id as number}
+              rowKey={(data: Subject) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
 
               <Column title="Id" dataIndex="id" width={80} />
-              <Column title="Category" dataIndex="name" key="name" />
-              <Column title="Description" dataIndex="description" key="description" />
+              <Column title="Category" dataIndex="category" key="category" />
               <Column title="Slug" dataIndex="slug" key="slug" />
               <Column title="Active" dataIndex="active" key="active" render={(active) => (
                 active ? (
@@ -250,15 +250,15 @@ const AdminCategoryIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: Category) => (
+                render={(_, data: Subject) => (
                   <Space size="small">
 
                     <Button
-                      title='Edit category'
+                      title='Edit subject'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete category'
+                      title='Delete subject'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -331,22 +331,22 @@ const AdminCategoryIndex = () => {
         )}
       >
         <Form.Item
-          name="name"
+          name="category"
           label="Category"
-          validateStatus={errors.name ? 'error' : ''}
-          help={errors.name ? errors.name[0] : ''}
+          validateStatus={errors.category ? 'error' : ''}
+          help={errors.category ? errors.category[0] : ''}
         >
           <Input placeholder="Category name" />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="description"
           label="Description"
           validateStatus={errors.description ? 'error' : ''}
           help={errors.description ? errors.description[0] : ''}
         >
           <Input.TextArea placeholder="Short description" rows={4} />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
           name="active"

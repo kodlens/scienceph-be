@@ -71,17 +71,17 @@ export default function AdminLayout(
       onClick: () => router.visit('/admin/dashboard'),
     },
     {
-      key: 'admin.subjects',
-      icon: <ProfileOutlined />,
-      label: 'Subjects',
-      onClick: () => router.visit('/admin/subjects'),
-    },
-    {
       key: 'admin.categories',
       icon: <ProfileOutlined />,
-      label: 'Categories',
+      label: 'Categories', //this is subjects, but display as categories
       onClick: () => router.visit('/admin/categories'),
     },
+    // {
+    //   key: 'admin.categories',
+    //   icon: <ProfileOutlined />,
+    //   label: 'Categories',
+    //   onClick: () => router.visit('/admin/categories'),
+    // },
     {
       key: 'admin.regions',
       icon: <LandPlot size={15} />,

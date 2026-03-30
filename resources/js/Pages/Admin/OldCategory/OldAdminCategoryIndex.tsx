@@ -21,18 +21,18 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Subject } from '@/types/subject';
+import { Category } from '@/types/category';
 
 const { Column } = Table;
 const { Search } = Input;
 
-const AdminSubjectIndex = () => {
+const OldAdminCategoryIndex = () => {
 
   const [form] = Form.useForm();
 
   const { notification, modal } = App.useApp();
 
-  const [data, setData] = useState<Subject[]>([]);
+  const [data, setData] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
@@ -46,7 +46,7 @@ const AdminSubjectIndex = () => {
   const sortBy = 'id.desc'
   const [id, setId] = useState(0);
 
-  interface AxiosResponse {
+  interface CategoryResponse {
     data: any[];
     total: number;
   }
@@ -62,7 +62,7 @@ const AdminSubjectIndex = () => {
     ].join('&');
 
     try {
-      const res = await axios.get<AxiosResponse>(`/admin/get-subjects?${params}`);
+      const res = await axios.get<CategoryResponse>(`/admin/get-categories?${params}`);
       setData(res.data.data)
       setTotal(res.data.total)
       setLoading(false)
@@ -84,10 +84,10 @@ const AdminSubjectIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Subject>(`/admin/subjects/${id}`);
+      const res = await axios.get<Category>(`/admin/categories/${id}`);
       form.setFields([
-        { name: 'name', value: res.data.subject },
-        { name: 'description', value: res.data.subject_heading },
+        { name: 'name', value: res.data.name },
+        { name: 'description', value: res.data.description },
         { name: 'active', value: res.data.active ? true : false },
       ]);
     } catch (err) {
@@ -110,26 +110,26 @@ const AdminSubjectIndex = () => {
   }
 
   const handleDeleteClick = async (id: number) => {
-    const res = await axios.delete('/admin/subjects/' + id);
+    const res = await axios.delete('/admin/categories/' + id);
     if (res.data.status === 'deleted') {
       notification.success({
         message: 'Deleted!',
-        description: 'Subject successfully deleted.',
+        description: 'Category successfully deleted.',
         placement: 'topRight'
       })
       loadAsync()
     }
   }
 
-  const onFinish = async (values: Subject) => {
+  const onFinish = async (values: Category) => {
 
     if (id > 0) {
       try {
-        const res = await axios.put('/admin/subjects/' + id, values)
+        const res = await axios.put('/admin/categories/' + id, values)
         if (res.data.status === 'updated') {
           notification.success({
             message: 'Updated!',
-            description: 'Subject successfully updated.',
+            description: 'Category successfully updated.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -142,11 +142,11 @@ const AdminSubjectIndex = () => {
       }
     } else {
       try {
-        const res = await axios.post('/admin/subjects', values)
+        const res = await axios.post('/admin/categories', values)
         if (res.data.status === 'saved') {
           notification.info({
             message: 'Saved!',
-            description: 'Subject successfully save.',
+            description: 'Category successfully save.',
             placement: 'topRight'
           })
           setOpen(false)
@@ -165,7 +165,7 @@ const AdminSubjectIndex = () => {
 
   return (
     <>
-      <Head title="Subject Management"></Head>
+      <Head title="Category Management"></Head>
 
       <div className='flex justify-center'>
 
@@ -186,10 +186,10 @@ const AdminSubjectIndex = () => {
                   Admin Panel
                 </p>
                 <h1 className='mt-1 text-2xl font-semibold leading-tight text-slate-900'>
-                  Subject Management
+                  Category Management
                 </h1>
                 <p className='mt-1 text-sm text-slate-600'>
-                  Create and maintain article subjects and visibility status.
+                  Create and maintain article categories and visibility status.
                 </p>
 
                 <div className='mt-3 flex flex-wrap gap-2'>
@@ -197,7 +197,7 @@ const AdminSubjectIndex = () => {
                     Content Taxonomy
                   </span>
                   <span className='rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700'>
-                    {total} Subjects
+                    {total} Categories
                   </span>
                 </div>
               </div>
@@ -226,18 +226,19 @@ const AdminSubjectIndex = () => {
                 type="primary"
                 size='large'
                 onClick={handClickNew}>
-                New Subject
+                New Category
               </Button>
             </div>
             <Table dataSource={data}
               loading={loading}
-              rowKey={(data: Subject) => data.id as number}
+              rowKey={(data: Category) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
 
               <Column title="Id" dataIndex="id" width={80} />
-              <Column title="Subject" dataIndex="subject" key="subject" />
+              <Column title="Category" dataIndex="name" key="name" />
+              <Column title="Description" dataIndex="description" key="description" />
               <Column title="Slug" dataIndex="slug" key="slug" />
               <Column title="Active" dataIndex="active" key="active" render={(active) => (
                 active ? (
@@ -249,15 +250,15 @@ const AdminSubjectIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: Subject) => (
+                render={(_, data: Category) => (
                   <Space size="small">
 
                     <Button
-                      title='Edit subject'
+                      title='Edit category'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete subject'
+                      title='Delete category'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -297,7 +298,7 @@ const AdminSubjectIndex = () => {
       {/* Modal with Cancel and Save button*/}
       <Modal
         open={open}
-        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Subject' : 'Create Subject'}</span>}
+        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Category' : 'Create Category'}</span>}
         okText="Save"
         okButtonProps={{
           icon: <FileAddOutlined />,
@@ -331,11 +332,11 @@ const AdminSubjectIndex = () => {
       >
         <Form.Item
           name="name"
-          label="Subject"
+          label="Category"
           validateStatus={errors.name ? 'error' : ''}
           help={errors.name ? errors.name[0] : ''}
         >
-          <Input placeholder="Subject name" />
+          <Input placeholder="Category name" />
         </Form.Item>
 
         <Form.Item
@@ -360,5 +361,5 @@ const AdminSubjectIndex = () => {
   )
 }
 
-AdminSubjectIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
-export default AdminSubjectIndex;
+OldAdminCategoryIndex.layout = (page: any) => <AdminLayout user={page.props.auth.user}>{page}</AdminLayout>
+export default OldAdminCategoryIndex;
