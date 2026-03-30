@@ -29,9 +29,9 @@ class OpenController extends Controller
             if($subjectId == 0){
                 $subjectHeadings = SubjectHeading::where('active', 1)
                 ->where('subject_heading', 'like', '%'.$req->search.'%')
-                ->get(); 
+                ->get();
             }else {
-                $subjectHeadings = Subject::find($subjectId)->subject_headings()
+                $subjectHeadings = Category::find($subjectId)->subject_headings()
                     ->where('active', 1)
                     ->where('subject_heading', 'like', '%'.$req->search.'%')
                     ->get();
@@ -41,11 +41,11 @@ class OpenController extends Controller
             if($subjectId == 0){
                 $subjectHeadings = SubjectHeading::where('active', 1)->get();
             } else {
-                $subjectHeadings = Subject::find($subjectId)->subject_headings()
+                $subjectHeadings = Category::find($subjectId)->subject_headings()
                     ->where('active', 1)
                     ->get();
             }
-            
+
             return response()->json($subjectHeadings);
         }
     }

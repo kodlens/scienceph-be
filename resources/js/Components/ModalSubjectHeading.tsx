@@ -4,6 +4,7 @@ import { Subject, SubjectHeading } from '@/types/subject';
 import axios from 'axios';
 import { ListPlus } from 'lucide-react';
 import ModalSelectSubject from './ModalSelectSubject';
+import { Category } from '@/types/category';
 type PageProps = {
   onSelectSubjectHeading: (record: SubjectHeading) => void
 }
@@ -12,19 +13,19 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [subjectHeadings, setSubjectHeadings] = React.useState<SubjectHeading[]>([]);
   const [search, setSearch] = React.useState<string>("");
-  const [subject, setSubject] = React.useState<Subject>();
+  const [category, setCategory] = React.useState<Category>();
 
   const loadSubjectHeadings = () => {
     // Load subject headings from the server or use static data
     // setSubjectHeadings(data);
     setLoading(true);
-    axios.get(`/get-subject-headings/${subject ? subject.id : 0}?search=${search}`).then(res => {
+    axios.get(`/get-subject-headings/${category ? category.id : 0}?search=${search}`).then(res => {
       setSubjectHeadings(res.data);
       setLoading(false);
     }).catch(err => {
       setLoading(false);
       console.log(err);
-      
+
     });
   }
 
@@ -34,10 +35,10 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
   }, []);
 
   useEffect(() => {
-    if(subject) {
+    if(category) {
       loadSubjectHeadings();
     }
-  }, [subject]);
+  }, [category]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -61,7 +62,7 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
       </Button>
 
       <Modal
-        title="Browse Subjects / Subject Headings"
+        title="Browse Category"
         open={isModalOpen}
         footer={null}
         destroyOnHidden
@@ -69,9 +70,9 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
 
           <div>
             {/* <SelectSubjects form={undefined} /> */}
-            <ModalSelectSubject onSelectSubject={(record)=> {
-              setSubject(record);
-              
+            <ModalSelectSubject onSelectCategory={(record)=> {
+              setCategory(record);
+
             }}/>
           </div>
 

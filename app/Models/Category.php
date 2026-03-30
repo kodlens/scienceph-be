@@ -19,5 +19,8 @@ class Category extends Model
         'active'
     ];
 
+    public function subject_headings(){
+        return $this->hasMany(SubjectHeading::class);
+    }
 
 }
