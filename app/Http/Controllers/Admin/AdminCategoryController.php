@@ -16,6 +16,10 @@ class AdminCategoryController extends Controller
     }
 
 
+    public function show($id){
+        return Category::findOrFail($id);
+    }
+
     public function getData(Request $req){
 
         $perpage = $req->perpage;

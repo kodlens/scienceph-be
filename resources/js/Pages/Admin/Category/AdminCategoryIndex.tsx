@@ -21,7 +21,8 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Subject } from '@/types/subject';
+import { Category } from '@/types/category';
+
 
 const { Column } = Table;
 const { Search } = Input;
@@ -32,7 +33,7 @@ const AdminCategoryIndex = () => {
 
   const { notification, modal } = App.useApp();
 
-  const [data, setData] = useState<Subject[]>([]);
+  const [data, setData] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
@@ -84,10 +85,9 @@ const AdminCategoryIndex = () => {
 
   const getData = async (id: number) => {
     try {
-      const res = await axios.get<Subject>(`/admin/categories/${id}`);
+      const res = await axios.get<Category>(`/admin/categories/${id}`);
       form.setFields([
-        { name: 'name', value: res.data.subject },
-        { name: 'description', value: res.data.subject_heading },
+        { name: 'category', value: res.data.category },
         { name: 'active', value: res.data.active ? true : false },
       ]);
     } catch (err) {
@@ -121,7 +121,7 @@ const AdminCategoryIndex = () => {
     }
   }
 
-  const onFinish = async (values: Subject) => {
+  const onFinish = async (values: Category) => {
 
     if (id > 0) {
       try {
@@ -232,7 +232,7 @@ const AdminCategoryIndex = () => {
             </div>
             <Table dataSource={data}
               loading={loading}
-              rowKey={(data: Subject) => data.id as number}
+              rowKey={(data: Category) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
@@ -250,7 +250,7 @@ const AdminCategoryIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: Subject) => (
+                render={(_, data: Category) => (
                   <Space size="small">
 
                     <Button
