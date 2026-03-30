@@ -82,6 +82,10 @@ Route::prefix('admin')->middleware('auth', 'admin')
     Route::get('/get-sections', [App\Http\Controllers\Admin\AdminSectionController::class, 'getData'])->name('sections.get-data');
     Route::get('/load-sections', [App\Http\Controllers\Admin\AdminSectionController::class, 'loadData'])->name('sections.load');
 
+     Route::resource('/subjects', App\Http\Controllers\Admin\AdminSubjectController::class)->names('admin.subjects');
+    Route::get('/get-subjects', [App\Http\Controllers\Admin\AdminSubjectController::class, 'getData'])->name('admin.subjects-get-data');
+
+
     Route::resource('/categories', App\Http\Controllers\Admin\AdminCategoryController::class)->names('admin.categories');
     Route::get('/get-categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'getData'])->name('admin.categories-get-data');
 

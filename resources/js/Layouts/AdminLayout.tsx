@@ -71,6 +71,12 @@ export default function AdminLayout(
       onClick: () => router.visit('/admin/dashboard'),
     },
     {
+      key: 'admin.subjects',
+      icon: <ProfileOutlined />,
+      label: 'Subjects',
+      onClick: () => router.visit('/admin/subjects'),
+    },
+    {
       key: 'admin.categories',
       icon: <ProfileOutlined />,
       label: 'Categories',
