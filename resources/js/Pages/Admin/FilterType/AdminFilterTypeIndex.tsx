@@ -226,7 +226,7 @@ const AdminFilterTypeIndex = () => {
                 type="primary"
                 size='large'
                 onClick={handClickNew}>
-                New Resource Type
+                New Filter Type
               </Button>
             </div>
             <Table dataSource={data ? data?.data : []}
@@ -341,7 +341,7 @@ const AdminFilterTypeIndex = () => {
           >
             <Checkbox>Active</Checkbox>
           </Form.Item>
-              
+
         </Form>
 
       </Modal>
