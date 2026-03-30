@@ -19,7 +19,7 @@ const CreateEditMaterial = ({
   auth,
   material,
   ckLicense,
-  categories,
+  //categories,
   agencies,
   regions,
   //regionalOffices,
@@ -451,8 +451,7 @@ const CreateEditMaterial = ({
 
           )
         }
-
-
+        
         <Button
           danger
           onClick={() => history.back()}
