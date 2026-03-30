@@ -1,22 +1,22 @@
-import { Subject } from "@/types/subject";
+import { Category } from "@/types/category";
 import { Select } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 type PageProps = {
-  onSelectSubject: (record: Subject) => void
+  onSelectCategory: (record: Category) => void
 }
 
-const ModalSelectSubject = ( { onSelectSubject } : PageProps) => {
+const ModalSelectSubject = ( { onSelectCategory } : PageProps) => {
 
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const loadSubjects = async () => {
     // Load subject headings from the server or use static data
     // setSubjectHeadings(data);
     setLoading(true);
-    axios.get(`/get-subjects`).then(res => {
-      setSubjects(res.data);
+    axios.get(`/get-categories`).then(res => {
+      setCategories(res.data);
       setLoading(false);
     }).catch(err => {
       setLoading(false);
@@ -30,23 +30,23 @@ const ModalSelectSubject = ( { onSelectSubject } : PageProps) => {
 
   return (
     <>
-      <Select placeholder="Select a subject" 
-        style={{ width: '100%' }} loading={loading} 
+      <Select placeholder="Select a category"
+        style={{ width: '100%' }} loading={loading}
         allowClear
         onChange={(value) => {
-          const selectedSubject = subjects.find(subject => subject.id === value);
-          if (selectedSubject) {
-            onSelectSubject(selectedSubject);
+          const selectedItem = categories.find(cat => cat.id === value);
+          if (selectedItem) {
+            onSelectCategory(selectedItem);
           }
       }}>
 
-        {subjects.map((subject: Subject) => (
-          <Select.Option key={subject.id} value={subject.id}>
-            {subject.subject}
+        {categories.map((cat: Category) => (
+          <Select.Option key={cat.id} value={cat.id}>
+            {cat.category}
           </Select.Option>
         ))}
       </Select>
-    
+
     </>
   )
 }

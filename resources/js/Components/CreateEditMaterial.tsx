@@ -12,7 +12,6 @@ import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
 import { Material } from "@/types/material";
-import { SelectFilterType } from "./SelectFilterType";
 
 
 const CreateEditMaterial = ({
@@ -65,7 +64,7 @@ const CreateEditMaterial = ({
         { name: "is_press_release", value: material.is_press_release && material.is_press_release > 0 ? true : false },
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
-      
+
       //console.log('material.subject_headings', material.subject_headings);
     } catch (err) { }
   };
@@ -144,7 +143,7 @@ const CreateEditMaterial = ({
     }
   };
 
-   
+
 
 
   return (
@@ -181,7 +180,7 @@ const CreateEditMaterial = ({
           help={errors.resource_type ? errors.resource_type[0] : ""}
         >
           <Radio.Group block
-            buttonStyle="solid" 
+            buttonStyle="solid"
             optionType="button"
             options={[
               { label: 'Article (SciencePH)', value: 'article' },
@@ -190,7 +189,7 @@ const CreateEditMaterial = ({
 
         </Form.Item>
       </div>
-      
+
 
       <InputTitleWithValidation id={id} errors={errors} setErrors={setErrors}/>
 
@@ -253,7 +252,7 @@ const CreateEditMaterial = ({
       <Classifier form={form} errors={errors} id={id}/>
 
 
-      <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
+      {/* <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
         <Form.Item
           name="category"
           label="Select Category"
@@ -270,12 +269,12 @@ const CreateEditMaterial = ({
 
         <SelectFilterType errors={errors} />
 
-      </div>
+      </div> */}
 
       <Form.Item
         name="source_url"
         label="Source URL"
-        className="w-full"
+        className="w-full mt-4"
         validateStatus={errors.source_url ? "error" : ""}
         help={errors.source_url ? errors.source_url[0] : ""}
       >
@@ -378,7 +377,7 @@ const CreateEditMaterial = ({
             Save Information
           </Button>
         </ConfigProvider> */}
-        
+
         <Button
           className="ml-2"
           htmlType="submit"
@@ -449,7 +448,7 @@ const CreateEditMaterial = ({
             </Button>
 
           </ConfigProvider>
-            
+
           )
         }
 
