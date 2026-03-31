@@ -32,14 +32,11 @@ class MaterialController extends Controller
         //return $req;
         $req->validate([
             'resource_type' => ['string', 'required', 'max:50'],
-            'resource_type' => ['required', 'string', 'max:50'],
-            'title' => ['required', new ValidateTitle(0)],
-             'author' => ['string', 'nullable', 'required_if:resource_type,article'],
+            'title' => ['required', 'max:200',  new ValidateTitle(0)],
+             'author' => ['string', 'nullable', 'required_if:resource_type,article', 'max:255'],
             'description' => ['required'],
-            //'category' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
-            //'publish_date' => ['required'],
         ], [
             'description.required' => 'Description is required.',
         ]);
@@ -153,14 +150,14 @@ class MaterialController extends Controller
 
         $req->validate([
             'resource_type' => ['string', 'required', 'max:50'],
-            'title' => ['required', 'unique:materials,title,' . $id . ',id'],
-            'description' => ['required', 'string'],
-            'author' => ['string', 'nullable'],
+             'title' => ['required', 'max:200', 'unique:materials,title,' . $id . ',id'],
+            'description' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
-            'category' => ['required'],
-            'resource_type' => ['required', 'string', 'max:50'],
-            //'publish_date' => ['required'],
+            'subject_headings' => ['nullable', 'array']
+        ], [
+            'description.required' => 'Description is required.',
         ]);
+        
 
 
         try {

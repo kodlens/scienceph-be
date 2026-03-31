@@ -12,6 +12,7 @@ import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
 import { Material } from "@/types/material";
+import { SelectFilterType } from "./SelectFilterType";
 
 
 const CreateEditMaterial = ({
@@ -252,8 +253,8 @@ const CreateEditMaterial = ({
       <Classifier form={form} errors={errors} id={id}/>
 
 
-      {/* <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
-        <Form.Item
+      <div className="flex mt-4 flex-col md:gap-4 md:flex-row">
+        {/* <Form.Item
           name="category"
           label="Select Category"
           className="w-full"
@@ -265,11 +266,11 @@ const CreateEditMaterial = ({
             allowClear
             placeholder="Select Category"
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <SelectFilterType errors={errors} />
 
-      </div> */}
+      </div>
 
       <Form.Item
         name="source_url"
