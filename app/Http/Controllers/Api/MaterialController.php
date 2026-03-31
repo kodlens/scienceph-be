@@ -32,7 +32,7 @@ class MaterialController extends Controller
             ->get([
                 'id',
                 'title',
-                'alias as slug',
+                'slug',
                 'description',
                 'description_text',
                 'author',
@@ -56,7 +56,7 @@ class MaterialController extends Controller
             ->get([
                 'id',
                 'title',
-                'alias as slug',
+                'slug',
                 'description',
                 'description_text',
                 'author',

@@ -31,7 +31,7 @@ class SearchController extends Controller
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
@@ -42,8 +42,8 @@ class SearchController extends Controller
                 'a.publish_date',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             ])
 
             // ->whereRaw(
@@ -79,7 +79,7 @@ class SearchController extends Controller
 
 
         if ($subj !== '' && $subj !== 'all') {
-            $results->where('t1.subject_slug', $subj);
+            $results->where('t1.category_slug', $subj);
         }
 
         if ($sh !== '' && $sh !== 'all') {

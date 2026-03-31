@@ -9,7 +9,7 @@ use App\Models\Subject;
 class SubjectController extends Controller
 {
     public function loadSubjects(){
-        return Subject::with(['subject_headings'])
+        return Category::with(['subject_headings'])
             ->get();
     }
 }

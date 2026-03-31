@@ -10,7 +10,9 @@ class CategoryController extends Controller
 
     public function loadCategories()
     {
-        $categories = \App\Models\Category::where('active', 1)->get();
+        $categories = \App\Models\Category::with('subject_headings')
+            ->where('active', 1)
+            ->get();
         return response()->json($categories);
     }
 }

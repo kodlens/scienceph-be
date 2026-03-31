@@ -20,6 +20,7 @@ Route::get('/load-categories', [\App\Http\Controllers\Api\CategoryController::cl
 ============================= */
 Route::get('/load-latest-materials', [\App\Http\Controllers\Api\MaterialController::class, 'loadLatestMaterials']);
 Route::get('/load-popular-materials', [\App\Http\Controllers\Api\MaterialController::class, 'loadPopularMaterials']);
+
 Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'getMaterial']);
 
 
@@ -27,6 +28,14 @@ Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController
 
 Route::get('/search-latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
 Route::get('/search-others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
+
+
+/* ============================
+    display list of materials by category
+============================= */
+Route::get('/search-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialSearchByCategoryController::class, 'searchMaterialsByCategory']);
+
+
 
 /* ============================
     Sidebar subject and subject headings search
@@ -76,7 +85,7 @@ This route is for by subject headings label
 
 
 //load broad classes with subject headings (subject with subject headings)
-Route::get('/load-broad-classes', [\App\Http\Controllers\Api\SubjectController::class, 'loadSubjects']);
+//Route::get('/load-category-class', [\App\Http\Controllers\Api\SubjectController::class, 'loadSubjects']);
 
 
 Route::get('/load-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'loadMaterial']);
