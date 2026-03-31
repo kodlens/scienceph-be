@@ -33,7 +33,7 @@ class MaterialController extends Controller
         $req->validate([
             'resource_type' => ['string', 'required', 'max:50'],
             'title' => ['required', 'max:200',  new ValidateTitle(0)],
-             'author' => ['string', 'nullable', 'required_if:resource_type,article', 'max:255'],
+            'author' => ['string', 'nullable', 'required_if:resource_type,article', 'max:255'],
             'description' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
