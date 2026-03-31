@@ -128,10 +128,7 @@ class MaterialController extends Controller
                     $data,
                     null
                 );
-
             });
-
-
 
             return response()->json([
                 'status' => 'saved',
