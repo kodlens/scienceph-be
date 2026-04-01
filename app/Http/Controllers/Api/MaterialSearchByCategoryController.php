@@ -25,6 +25,8 @@ class MaterialSearchByCategoryController extends Controller
             ->where('c.slug', $slug)
             ->select('materials.*', 'c.slug as category_slug', 'c.category as category')
             ->distinct()
+            ->orderBy('materials.publish_date', 'desc')
+            ->where('resource_type', 'article')
             ->paginate($perPage);
 
         return response()->json($data);
