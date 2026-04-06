@@ -22,11 +22,13 @@ class SearchController extends Controller
             's'  => 'nullable|string',
             'cat' => 'nullable|string',
             'sh'   => 'nullable|string',
+            'perpage' => 'nullable|integer',
         ]);
 
         $search = trim($validated['s'] ?? '');
         $cat   = trim($validated['cat'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
+        $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
@@ -88,24 +90,24 @@ class SearchController extends Controller
 
         //count category
         $categoryCounts = (clone $results)
-            ->select('category', DB::raw('COUNT(*) as total'))
-            ->groupBy('category')
+            ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
+            ->groupBy('category_slug')
             ->get();
 
         //count subject heading
-        $subjectCounts = (clone $results)
-            ->select('subject_heading', DB::raw('COUNT(*) as total'))
-            ->groupBy('subject_heading')
+        $subjectHCounts = (clone $results)
+            ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
+            ->groupBy('subject_heading_slug')
             ->get();
             
 
 
        // return $results->paginate(10);
         return response()->json([
-            'data' => $results->paginate(10),
+            'data' => $results->paginate($perPage),
             'meta' => [
                 'category_counts' => $categoryCounts,
-                'subject_counts' => $subjectCounts,
+                'subject_heading_counts' => $subjectHCounts,
             ]
         ]);
 
