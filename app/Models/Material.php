@@ -50,7 +50,7 @@ class Material extends Model
     public function subject_headings(){
         return $this->hasMany(MaterialSubjectHeading::class)
             ->leftJoin('subject_headings', 'subject_heading_id', 'subject_headings.id')
-            ->leftJoin('categories', 'category_id', 'categories.id')
+            ->leftJoin('categories', 'subject_headings.category_id', 'categories.id')
             ->select(
                 'material_subject_headings.material_id as material_id',
                 'subject_headings.id as subject_heading_id',

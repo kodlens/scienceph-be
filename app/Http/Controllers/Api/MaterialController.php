@@ -32,7 +32,7 @@ class MaterialController extends Controller
             ->get([
                 'id',
                 'title',
-                'alias as slug',
+                'slug',
                 'description',
                 'description_text',
                 'author',
@@ -56,7 +56,7 @@ class MaterialController extends Controller
             ->get([
                 'id',
                 'title',
-                'alias as slug',
+                'slug',
                 'description',
                 'description_text',
                 'author',
@@ -116,9 +116,9 @@ class MaterialController extends Controller
 
     public function loadRelatedMaterial($slug) {
 
-        $info = Material::where('alias', $slug)->first();
+        $info = Material::where('slug', $slug)->first();
 
-        $relatedMaterials = Material::select('id', 'title', 'alias as slug', 'description_text', 'publish_date')
+        $relatedMaterials = Material::select('id', 'title', 'slug', 'description_text', 'publish_date')
             ->selectRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
             ->whereRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
             ->where('id', '!=', $info->id)  // exclude current material
