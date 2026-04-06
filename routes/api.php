@@ -23,6 +23,12 @@ Route::get('/load-popular-materials', [\App\Http\Controllers\Api\MaterialControl
 Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'getMaterial']);
 
 
+/* ============================
+    Display materials by category
+    Category Page
+============================= */
+Route::get('/get-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'getMaterialsByCategory']);
+
 
 
 Route::get('/search-latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);

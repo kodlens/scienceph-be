@@ -20,30 +20,30 @@ class SearchController extends Controller
 
         $validated = $req->validate([
             'key'  => 'nullable|string',
-            'subj' => 'nullable|string',
+            'cat' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
         $search = trim($validated['key']  ?? '');
-        $subj   = trim($validated['subj'] ?? '');
+        $cat   = trim($validated['cat'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
                 'a.description',
                 'a.description_text',
-                'a.alias as slug',
+                'a.slug',
                 'a.source_url',
                 'a.publish_date',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             ])
 
             // ->whereRaw(
@@ -78,8 +78,8 @@ class SearchController extends Controller
             ->fromSub($subQuery, 't1');
 
 
-        if ($subj !== '' && $subj !== 'all') {
-            $results->where('t1.subject_slug', $subj);
+        if ($cat !== '' && $cat !== 'all') {
+            $results->where('t1.category_slug', $cat);
         }
 
         if ($sh !== '' && $sh !== 'all') {
@@ -116,7 +116,7 @@ class SearchController extends Controller
                 'a.title',
                 'a.description',
                 'a.description_text',
-                'a.alias as slug',
+                'a.slug',
                 'a.source_url',
                 'a.publish_date',
                 'c.subject_heading',
@@ -156,11 +156,11 @@ class SearchController extends Controller
 
 
         /**
-         * 📚 Subject filter
-         * if subject is not empty and not all
+         * 📚 Category filter
+         * if category is not empty and not all
          */
-        if ($subj !== '' && $subj !== 'all') {
-            $results->where('t1.subject_slug', $subj);
+        if ($cat !== '' && $cat !== 'all') {
+            $results->where('t1.category_slug', $cat);
         }
 
         /**
@@ -218,11 +218,11 @@ class SearchController extends Controller
         }
 
         /**
-         * 📚 Subject filter
-         * if subject is not empty and not all
+         * 📚 Category filter
+         * if category is not empty and not all
          */
-        if ($subj !== '' && $subj !== 'all') {
-            $subQuery->where('d.slug', $subj);
+        if ($cat !== '' && $cat !== 'all') {
+            $subQuery->where('d.slug', $cat);
         }
 
         /**
@@ -238,9 +238,9 @@ class SearchController extends Controller
             ->fromSub($subQuery, 't1')
             ->select(
                 't1.*',
-                DB::raw('COUNT(t1.subject) as count')
+                DB::raw('COUNT(t1.category) as count')
             )
-            ->groupBy('t1.subject')
+            ->groupBy('t1.category')
             ->orderByDesc('count')
             ->get();
 
@@ -295,8 +295,8 @@ class SearchController extends Controller
             );
 
 
-        if ($subj !== '' && $subj !== 'all') {
-            $res->where('subject_slug', $subj);
+        if ($cat !== '' && $cat !== 'all') {
+            $res->where('category_slug', $cat);
         }
 
 

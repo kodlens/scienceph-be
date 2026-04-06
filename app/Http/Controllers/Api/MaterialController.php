@@ -71,8 +71,8 @@ class MaterialController extends Controller
 
 
     public function getMaterial($slug){
-        return Material::where('alias', $slug)
-            ->select('id', 'title', 'description', 'description_text', 'alias as slug', 'category_id', 'author', 'publish_date', 'is_press_release')
+        return Material::where('slug', $slug)
+            ->select('id', 'title', 'description', 'description_text', 'slug', 'category_id', 'author', 'publish_date', 'is_press_release')
             ->with('category')
             ->first();
     }
@@ -129,5 +129,21 @@ class MaterialController extends Controller
 
 
         return $relatedMaterials;
+    }
+
+
+    //get materials by category
+    public function getMaterialsByCategory($slug) {
+        
+        $materials = Material::whereHas('category', function($query) use ($slug) {
+            $query->where('slug', $slug);
+        })
+        ->where('status', 'publish')
+        ->orderBy('publish_date', 'desc')
+        ->select(['id', 'title', 'slug', 'description_text', 'publish_date'])
+        ->paginate(10);
+
+        return response()->json($materials);
+
     }
 }
