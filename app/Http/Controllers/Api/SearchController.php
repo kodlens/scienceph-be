@@ -15,16 +15,16 @@ class SearchController extends Controller
 
 
     public function searchLatest(Request $req){
-
+        //return $req;
         $yearNow = now()->year;
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
+            's'  => 'nullable|string',
             'cat' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key']  ?? '');
+        $search = trim($validated['s'] ?? '');
         $cat   = trim($validated['cat'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
@@ -86,8 +86,28 @@ class SearchController extends Controller
             $results->where('t1.subject_heading_slug', $sh);
         }
 
+        //count category
+        $categoryCounts = (clone $results)
+            ->select('category', DB::raw('COUNT(*) as total'))
+            ->groupBy('category')
+            ->get();
 
-        return $results->paginate(10);
+        //count subject heading
+        $subjectCounts = (clone $results)
+            ->select('subject_heading', DB::raw('COUNT(*) as total'))
+            ->groupBy('subject_heading')
+            ->get();
+            
+
+
+       // return $results->paginate(10);
+        return response()->json([
+            'data' => $results->paginate(10),
+            'meta' => [
+                'category_counts' => $categoryCounts,
+                'subject_counts' => $subjectCounts,
+            ]
+        ]);
 
     }
 
