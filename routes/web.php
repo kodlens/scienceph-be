@@ -136,7 +136,7 @@ Route::prefix('admin')->middleware('auth', 'admin')
     Route::resource('/users', App\Http\Controllers\Admin\AdminUserController::class);
     Route::get('/get-users', [App\Http\Controllers\Admin\AdminUserController::class, 'getData'])->name('users.getdata');
     Route::post('/users-change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
-    Route::post('/change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
+    //Route::post('/change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword'])->name('users.change-password');
     Route::get('/load-publisher-users', [App\Http\Controllers\Admin\AdminUserController::class, 'loadPublisherUsers'])->name('users.load-publisher-users');
     Route::get('/load-encoder-users', [App\Http\Controllers\Admin\AdminUserController::class, 'loadEncoderUsers'])->name('users.load-encoder-users');
 

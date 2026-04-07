@@ -128,7 +128,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
         onClick={() => {
           handleClassification();
         }}>
-        Classify Content
+        Generate Topics
       </Button>
 
       <div>

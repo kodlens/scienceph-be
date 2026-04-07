@@ -42,6 +42,8 @@ const CreateEditMaterial = ({
     }
   }, []);
 
+  console.log(ckLicense);
+
   const getData = () => {
     try {
       form.setFields([
@@ -174,7 +176,7 @@ const CreateEditMaterial = ({
 
 
       <div className="w-full md:w-[500px] mb-4">
-        <Form.Item
+        {/* <Form.Item
           name="resource_type"
           label="Select Resource Type"
           validateStatus={errors.resource_type ? "error" : ""}
@@ -188,7 +190,7 @@ const CreateEditMaterial = ({
               { label: 'Information', value: 'information' },
             ]}  />
 
-        </Form.Item>
+        </Form.Item> */}
       </div>
 
 
@@ -452,7 +454,7 @@ const CreateEditMaterial = ({
 
           )
         }
-        
+
         <Button
           danger
           onClick={() => history.back()}

@@ -66,11 +66,11 @@ class ClassifyController extends Controller
 
         //return response()->json(['prompt' => $prompt]);
         //return $prompt;
-
-        define('API_OLLAMA', env('AI_API'));
+        $ApiOllama = config('app.ai_api');
+        //define('API_OLLAMA',  config('app.ai_api'));
 
         $ollama = Http::timeout(120)->post(
-            API_OLLAMA . '/generate',
+            $ApiOllama . '/generate',
             [
                 'model' => $model,
                 'prompt' => $prompt,

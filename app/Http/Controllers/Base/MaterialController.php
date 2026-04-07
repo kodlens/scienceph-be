@@ -84,7 +84,7 @@ class MaterialController extends Controller
                     'slug' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
-                    'resource_type' => $req->resource_type,
+                    'resource_type' => 'scienceph',
                     'filter_type' => $req->filter_type,
                     'category_id' => $req->category,
                     'author' => $req->author,
@@ -154,7 +154,7 @@ class MaterialController extends Controller
         ], [
             'description.required' => 'Description is required.',
         ]);
-        
+
 
 
         try {

@@ -60,8 +60,16 @@ return [
     'asset_url' => env('ASSET_URL'),
 
     'frontend_url' => env('APP_FE_URL', 'http://localhost:3000'),
-    
+
     'api_token' => env('API_TOKEN'),
+
+    'ai_api' => env('AI_API', '127.0.0.1'), //ai apia for generate topics
+
+
+     //add ck license
+    'ck_license' => env('CK_EDITOR_LICENSE_KEY', ''),
+
+
 
     /*
     |--------------------------------------------------------------------------

@@ -55,7 +55,8 @@ class EncoderMaterialController extends MaterialController
 
     public function create()
     {
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        $CK_LICENSE = config('app.ck_license');
+
         //$openController = new OpenController();
         $fetcher = new Fetcher();
 
