@@ -49,8 +49,8 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
       if (res.data.results.length === 0) {
         notification.info({
-          message: "No Relevant Subject Headings",
-          description: "The AI did not find any relevant subject headings for this article.",
+          message: "No Relevant Topics",
+          description: "The AI did not find any relevant topics for this article.",
           duration: 5,
         });
       }
@@ -122,6 +122,12 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
   return (
     <div className='border p-4 rounded-md'>
+
+      <div className='mb-4 my-2 p-4 bg-orange-100 rounded-md'>
+        Use the AI assistant below to automatically detect and select the most relevant topic from your content.
+        Make sure the content above is not empty, then click <span className='font-bold'>Generate Topics</span> to begin analysis.
+      </div>
+
       <Button
         type="primary"
         loading={loading}
@@ -132,7 +138,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
       </Button>
 
       <div>
-        <h3 className='my-2'>AI Classification Results:</h3>
+        <h3 className='my-2'>Generated Results:</h3>
         <Form.Item
           className="mt-4"
           validateStatus={errors.subject_headings ? "error" : ""}
@@ -151,7 +157,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
                 width: 120,
               },
               {
-                title: "Subject Heading",
+                title: "Topics",
                 dataIndex: "subject_heading",
                 key: "subject_heading",
                 width: 200,
@@ -197,7 +203,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
           if(existsInData) {
             notification.warning({
               message: "Already Exists",
-              description: "This subject heading is already in the classification results.",
+              description: "This topic is already in the classification results.",
               duration: 5,
               placement: 'bottomRight'
             });

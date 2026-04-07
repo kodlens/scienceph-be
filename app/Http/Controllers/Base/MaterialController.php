@@ -144,7 +144,6 @@ class MaterialController extends Controller
 
     public function update(Request $req, $id){
 
-
         $req->validate([
             'resource_type' => ['string', 'required', 'max:50'],
              'title' => ['required', 'max:200', 'unique:materials,title,' . $id . ',id'],

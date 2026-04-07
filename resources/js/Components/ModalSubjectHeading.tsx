@@ -97,7 +97,7 @@ const ModalSubjectHeadings = ( { onSelectSubjectHeading } : PageProps) => {
               key: 'id'
             },
             {
-              title: 'Subject Heading',
+              title: 'Topics',
               dataIndex: 'subject_heading',
               key: 'subject_heading'
             },

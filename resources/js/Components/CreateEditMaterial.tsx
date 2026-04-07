@@ -1,5 +1,5 @@
-import { CreateEditProps, User } from "@/types";
-import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox, Radio } from "antd";
+import { CreateEditProps } from "@/types";
+import { Form, Input, Select, DatePicker, ConfigProvider, Button, App, Checkbox } from "antd";
 import Ckeditor from "./Ckeditor";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,7 +8,6 @@ import { ProjectOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AuthorAutoComplete from "./AuthorAutoComplete";
 import AgencyAutoComplete from "./AgencyAutoComplete";
-import { statusDropdownMenu } from "@/helper/statusMenu";
 import InputTitleWithValidation from "./InputTitleWithValidation";
 import Classifier from "./Classifier";
 import { Material } from "@/types/material";
@@ -323,24 +322,16 @@ const CreateEditMaterial = ({
         />
       </Form.Item>
 
-      <div className="flex flex-col md:gap-4 md:flex-row">
-        <Form.Item
-          name="status"
-          className="w-full"
-          label="Status (Read Only)"
-          validateStatus={
-            errors.status ? "error" : ""
-          }
-          help={errors.status ? errors.status[0] : ""}
-        >
-          <Select
-            disabled
-            options={statusDropdownMenu((auth.user as User).role)}
-          >
-          </Select>
-        </Form.Item>
-
-      </div>
+      <Form.Item
+        name="status"
+        className="w-full"
+        validateStatus={
+          errors.status ? "error" : ""
+        }
+        help={errors.status ? errors.status[0] : ""}
+      >
+        <Input readOnly hidden />
+      </Form.Item>
 
       <Form.Item
         name="is_press_release"
