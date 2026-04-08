@@ -1,8 +1,9 @@
 import { App, Button, Form, Input } from "antd";
-import { useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { LockOutlined, SaveOutlined } from "@ant-design/icons";
 
 import axios from "axios";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 export default function ChangePassword() {
 
@@ -110,3 +111,10 @@ export default function ChangePassword() {
     </div>
   )
 }
+
+
+ChangePassword.layout = (page: ReactNode) => (
+  <AuthenticatedLayout user={(page as ReactElement).props.auth.user}>
+    {page}
+  </AuthenticatedLayout>
+)

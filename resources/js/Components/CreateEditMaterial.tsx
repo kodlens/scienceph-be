@@ -23,7 +23,7 @@ const CreateEditMaterial = ({
   agencies,
   regions,
   //regionalOffices,
-  authors,
+  //authors,
   tags,
   uri
 }: CreateEditProps) => {
@@ -213,7 +213,7 @@ const CreateEditMaterial = ({
           validateStatus={errors.author ? "error" : ""}
           help={errors.author ? errors.author[0] : ""}
         >
-          <AuthorAutoComplete authors={authors} />
+          <AuthorAutoComplete />
         </Form.Item>
 
         <Form.Item

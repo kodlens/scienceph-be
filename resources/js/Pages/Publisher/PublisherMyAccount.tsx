@@ -1,7 +1,7 @@
 import { PageProps } from "@/types";
 import { Head } from "@inertiajs/react";
-import MyAccount from "../Auth/MyAccount";
 import PublisherLayout from "@/Layouts/PublisherLayout";
+import MyAccount from "../Auth/MyAccount";
 
 export default function PublisherMyAccount( {auth} : PageProps ) {
 

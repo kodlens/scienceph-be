@@ -28,12 +28,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        'is_ojt',
     ];
 
     protected $casts = [
         'password' => 'hashed',
     ];
-
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

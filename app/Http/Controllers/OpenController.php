@@ -93,11 +93,21 @@ class OpenController extends Controller
         return response()->json($data);
     }
 
-    public function getAuthorsAutocomplete(): JsonResponse{
+    public function getAuthorsAutocomplete(Request $req): JsonResponse{
+
+        if($req->has('search') && $req->search != ''){
+            $data = Article::where('author', 'like', $req->search.'%')
+                ->distinct('author')
+                ->select('author')
+                ->orderBy('author', 'asc')
+                ->get();
+        } else {
             $data = Article::distinct('author')
-            ->select('author')
-            ->orderBy('author', 'asc')
-            ->get();
+                ->select('author')
+                ->orderBy('author', 'asc')
+                ->limit(10)
+                ->get();
+        }
 
         return response()->json($data);
     }

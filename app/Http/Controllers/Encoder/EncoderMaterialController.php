@@ -65,7 +65,7 @@ class EncoderMaterialController extends MaterialController
         $regionalOffices = $fetcher->getRegionalOffices();
         $regions = $fetcher->getRegions();
         $categories = $fetcher->getCategories();
-        $authors = $fetcher->getAuthorsAutocomplete();
+        //$authors = $fetcher->getAuthorsAutocomplete();
 
         return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
             'id' => 0,
@@ -76,7 +76,7 @@ class EncoderMaterialController extends MaterialController
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
             'categories' => $categories,
-            'authors' => $authors
+            //'authors' => $authors
         ]);
     }
 

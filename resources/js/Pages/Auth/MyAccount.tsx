@@ -1,11 +1,12 @@
 import { App, Button, Form, Input, Select } from "antd";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ProfileOutlined, SaveOutlined } from "@ant-design/icons";
 import { PageProps } from "@/types";
 import { router } from "@inertiajs/react";
 import axios from "axios";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-export default function MyAccount({ auth }: PageProps) {
+const MyAccount = ({ auth }: PageProps) => {
 
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -139,3 +140,11 @@ export default function MyAccount({ auth }: PageProps) {
     </div>
   )
 }
+
+export default MyAccount;
+
+MyAccount.layout = (page: ReactNode) => (
+  <AuthenticatedLayout user={(page as any).props.auth.user}>
+    {page}
+  </AuthenticatedLayout>
+);

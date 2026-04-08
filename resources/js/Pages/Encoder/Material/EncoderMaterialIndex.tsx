@@ -11,7 +11,7 @@ import axios from 'axios'
 import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
-import TableArticles from '@/Components/TableMaterials'
+import TableMaterials from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 
@@ -76,9 +76,9 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
 
   }, [filters.status])
 
-  useEffect(()=>{
-    refetch()
-  }, [appliedFilters.status])
+  // useEffect(()=>{
+  //   refetch()
+  // }, [appliedFilters.status])
 
 
 
@@ -177,7 +177,7 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
 
           <div className='overflow-auto'>
 
-            <TableArticles
+            <TableMaterials
               routePrefix='encoder'
               data={data}
               isFetching={isFetching}
@@ -211,3 +211,4 @@ EncoderMaterialIndex.layout = (page: ReactNode) => (
     {page}
   </EncoderLayout>
 )
+
