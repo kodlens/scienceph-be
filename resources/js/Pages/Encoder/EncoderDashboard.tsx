@@ -6,7 +6,6 @@ import { BarChartOutlined } from "@ant-design/icons"
 import { DashboardStats, RecentArticle, TopArticle } from "@/types"
 import StatCard from "@/Components/StatCard"
 import TableSection from "@/Components/TableSection"
-import Loader from "@/Components/Loader"
 import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 import EncoderLayout from "@/Layouts/EncoderLayout"
 
@@ -15,7 +14,7 @@ const EncoderDashboard = () => {
   const [recent, setRecent] = useState<RecentArticle[]>([])
   const [topArticles, setTopArticles] = useState<TopArticle[]>([])
   const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
-  const [loading, setLoading] = useState(true)
+  // const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchData()
@@ -37,7 +36,7 @@ const EncoderDashboard = () => {
     } catch (error) {
       console.error(error)
     } finally {
-      setLoading(false)
+      // setLoading(false)
     }
   }
 

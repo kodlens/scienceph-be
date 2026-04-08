@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 
 type Props = {
-  errors: Record<string, string[]>
+  errors?: Record<string, string[]>
 }
 export const SelectEncoderUser = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
@@ -33,8 +33,8 @@ export const SelectEncoderUser = ( { errors } : Props ) => {
         name="encoder_user_id"
         label="Select Encoder"
         className="w-full"
-        validateStatus={errors.category ? "error" : ""}
-        help={errors.category ? errors.category[0] : ""}
+        validateStatus={errors?.category ? "error" : ""}
+        help={errors?.category ? errors.category[0] : ""}
       >
         <Select loading={loading} options={data ? selectData() : []} allowClear/>
       </Form.Item>

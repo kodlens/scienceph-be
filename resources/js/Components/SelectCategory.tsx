@@ -24,7 +24,7 @@ export const SelectCategory = ( { errors } : Props ) => {
   }, [])
 
   const selectData = () => {
-    return categories.map(item => ({ value: item.id, label: item.name }))
+    return categories.map(item => ({ value: item.id, label: item.category }))
   }
 
 
@@ -34,7 +34,7 @@ export const SelectCategory = ( { errors } : Props ) => {
         name="category"
         label="Select Category"
         className="w-full"
-        validateStatus={errors.category ? "error" : ""}
+        validateStatus={errors?.category ? "error" : ""}
         help={errors.category ? errors.category[0] : ""}
       >
         <Select loading={loading} options={categories ? selectData() : []} allowClear/>

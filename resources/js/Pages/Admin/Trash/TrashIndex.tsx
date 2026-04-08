@@ -7,7 +7,7 @@ import { DeleteOutlined, FilterOutlined, SearchOutlined } from '@ant-design/icon
 
 import Error404 from '@/Components/Error404'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import TableMaterials from '@/Components/TableMaterials'
+// import TableMaterials from '@/Components/TableMaterials'
 import { statusDropdownMenu } from '@/helper/statusMenu'
 
 type Filters = {
@@ -35,7 +35,7 @@ export default function TrashIndex() {
     modifier: ''
   })
 
-  const { data, isFetching, error, refetch } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['admin-trash-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
@@ -165,22 +165,21 @@ export default function TrashIndex() {
               </div>
             </div>
 
-            <TableMaterials
+            {/* <TableMaterials
               routePrefix='admin'
               data={data}
               isFetching={isFetching}
               refetch={refetch}
               paginationPageChange={(v) => {
                 setPage(v)
-              }}
+              } }
               page={page}
               showDelete={false}
               showEdit={false}
               showPublish={false}
               showDraft={true}
               showView={true}
-              showTrash={false}
-            />
+              showTrash={false} user={auth}            /> */}
           </div>
         </div>
       </div>

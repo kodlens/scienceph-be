@@ -29,8 +29,8 @@ interface PostResponse {
 // 	value: string;
 //   }
 import dayjs from 'dayjs';
-import { Article } from '@/types/article';
 import ArticleView from '@/Components/MaterialView';
+import { Material } from '@/types/material';
 
 const dateFormat = (item:Date):string=> {
 	return dayjs(item).format('MMM-DD-YYYY')
@@ -40,7 +40,7 @@ export default function PublisherPostUnpublishIndex() {
 
 	const { modal } = App.useApp();
 
-    const [data, setData] = useState<Article[]>([]);
+    const [data, setData] = useState<Material[]>([]);
 
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
@@ -49,7 +49,7 @@ export default function PublisherPostUnpublishIndex() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
 
-	const createMenuItems = (post:Article) => {
+	const createMenuItems = (post:Material) => {
 
 		const items: MenuProps['items'] = [];
 
@@ -63,7 +63,7 @@ export default function PublisherPostUnpublishIndex() {
 					width: 1024,
 					title: 'Article Display',
 					content: (
-						<ArticleView article={post} className=''/>
+						<ArticleView material={post} className=''/>
 					),
 				onOk() {},
 				});
@@ -289,7 +289,7 @@ export default function PublisherPostUnpublishIndex() {
 
 							)}/>
 							<Column title="Action" key="action"
-								render={(_, data: Article) => (
+								render={(_, data: Material) => (
 									<Space size="small">
 										<Dropdown.Button menu={{items: createMenuItems(data) }} type='primary'>
 											Options

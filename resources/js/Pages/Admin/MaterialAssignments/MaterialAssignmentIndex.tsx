@@ -21,7 +21,6 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Category } from '@/types/category';
 import { MaterialAssignment } from '@/types/type';
 import { SelectPublisherUser } from '@/Components/SelectPublisherUser';
 import { SelectEncoderUser } from '@/Components/SelectEncoderUser';
@@ -88,11 +87,11 @@ const MaterialAssignmentIndex = () => {
   const getData = async (id: number) => {
     try {
       const res = await axios.get<MaterialAssignment>(`/admin/material-assignments/${id}`);
-      // form.setFields([
-      //   { name: 'name', value: res.data. },
-      //   { name: 'description', value: res.data.description },
-      //   { name: 'active', value: res.data.active ? true : false },
-      // ]);
+      form.setFields([
+        { name: 'name', value: res.data.encoder_user_id },
+        { name: 'description', value: res.data.encoder_user_id },
+        { name: 'active', value: res.data.publisher_user_id ? true : false },
+      ]);
     } catch (err) {
       //console.log(err);
     }
@@ -231,7 +230,7 @@ const MaterialAssignmentIndex = () => {
             </div>
             <Table dataSource={data}
               loading={loading}
-              rowKey={(data: Category) => data.id as number}
+              rowKey={(data: MaterialAssignment) => data.id as number}
               pagination={false}
               scroll={{ x: 980 }}
               className='[&_.ant-table-thead>tr>th]:bg-slate-50 [&_.ant-table-thead>tr>th]:text-slate-700'>
@@ -251,15 +250,15 @@ const MaterialAssignmentIndex = () => {
 
               <Column title="Action" key="action"
                 width={130}
-                render={(_, data: Category) => (
+                render={(_, data: MaterialAssignment) => (
                   <Space size="small">
 
                     <Button
-                      title='Edit category'
+                      title='Edit material assignment'
                       icon={<EditOutlined />} onClick={() => handleEditClick(data.id ? data.id : 0)} />
 
                     <Button danger
-                      title='Delete category'
+                      title='Delete material assignment'
                       onClick={() => (
                         modal.confirm({
                           title: 'Delete?',
@@ -299,7 +298,7 @@ const MaterialAssignmentIndex = () => {
       {/* Modal with Cancel and Save button*/}
       <Modal
         open={open}
-        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Category' : 'Create Category'}</span>}
+        title={<span className='inline-flex items-center gap-2'><TagsOutlined /> {id > 0 ? 'Edit Material Assignment' : 'Create Material Assignment'}</span>}
         okText="Save"
         okButtonProps={{
           icon: <FileAddOutlined />,

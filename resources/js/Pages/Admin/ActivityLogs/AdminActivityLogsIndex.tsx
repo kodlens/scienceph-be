@@ -1,17 +1,12 @@
 import { Head } from '@inertiajs/react'
 
 import {
-  FileAddOutlined,
   SearchOutlined,
-  TagsOutlined,
   AppstoreOutlined,
-  CloseCircleOutlined
 } from '@ant-design/icons';
 
 import {
-  Table, Modal,
-  Pagination, Form, Input, Checkbox,
-  App
+  Table,   Pagination, Input,
 } from 'antd';
 
 

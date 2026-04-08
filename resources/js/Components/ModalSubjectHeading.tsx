@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Button, Input, Modal, Table } from 'antd';
-import { Subject, SubjectHeading } from '@/types/subject';
+import { SubjectHeading } from '@/types/subject';
 import axios from 'axios';
 import { ListPlus } from 'lucide-react';
 import ModalSelectSubject from './ModalSelectSubject';

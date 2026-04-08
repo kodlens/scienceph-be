@@ -86,8 +86,8 @@ const OldAdminCategoryIndex = () => {
     try {
       const res = await axios.get<Category>(`/admin/categories/${id}`);
       form.setFields([
-        { name: 'name', value: res.data.name },
-        { name: 'description', value: res.data.description },
+        { name: 'name', value: res.data.category },
+        { name: 'description', value: res.data.category },
         { name: 'active', value: res.data.active ? true : false },
       ]);
     } catch (err) {
