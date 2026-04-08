@@ -64,7 +64,7 @@ const EncoderMaterialCreateEdit = ({
 
           <div className="p-6">
             <div className="mb-4 my-2 p-4 bg-orange-100 rounded-md">
-              Review all required fields before saving. Classification can help map your content to topics.
+              Review all required fields before saving.
             </div>
 
             <CreateEditMaterial

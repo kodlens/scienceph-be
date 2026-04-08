@@ -29,10 +29,10 @@ class MaterialController extends Controller
     //
     public function store(Request $req)
     {
-        //return $req;
+
         $req->validate([
-            'resource_type' => ['string', 'required', 'max:50'],
-            'title' => ['required', 'max:200',  new ValidateTitle(0)],
+            // 'resource_type' => ['string', 'required', 'max:50'],
+            'title' => ['required', 'max:230',  new ValidateTitle(0)],
             'author' => ['string', 'nullable', 'required_if:resource_type,article', 'max:255'],
             'description' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
@@ -40,6 +40,7 @@ class MaterialController extends Controller
         ], [
             'description.required' => 'Description is required.',
         ]);
+
 
         try {
 
@@ -79,14 +80,15 @@ class MaterialController extends Controller
                 $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::create([
-                    'resource_type' => $req->resource_type,
+                    //'resource_type' => $req->resource_type,
+                    'classification' => 'scienceph',
                     'title' => $req->title,
                     'slug' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
                     'resource_type' => 'scienceph',
                     'filter_type' => $req->filter_type,
-                    'category_id' => $req->category,
+                    //'category_id' => $req->category,
                     'author' => $req->author,
                     'encoded_by_id' => $user->id,
                     'encoded_at' => now(),
@@ -190,14 +192,12 @@ class MaterialController extends Controller
                 $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::find($id);
-                $data->resource_type = $req->resource_type;
                 $data->title = $req->title;
                 $data->slug = Str::slug($req->title);
                 $data->description = $modifiedHtml;
                 $data->description_text = $content;
-                $data->resource_type = $req->resource_type;
                 $data->filter_type = $req->filter_type;
-                $data->category_id = $req->category;
+                //$data->category_id = $req->category;
                 $data->author = $req->author;
                 $data->modified_by_id = $user->id;
                 $data->modified_at = now();

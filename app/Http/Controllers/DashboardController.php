@@ -22,6 +22,37 @@ class DashboardController extends Controller
         ]);
     }
 
+    // public function materialCount(){
+    //     return Material::count();
+    // }
+
+    // public function publishedCount(){
+    //     $data = Material::where('is_publish', 1)->count();
+    //     return response()->json(['count' => $data]);
+    // }
+
+    // public function draftCount(){
+    //     $data = Material::where('is_publish', 0)->count();
+    //     return response()->json(['count' => $data]);
+    // }
+
+    // public function trashedCount(){
+    //     $data = Material::where('trash', 1)->count();
+    //     return response()->json(['count' => $data]);
+    // }
+
+    // public function pressCount(){
+    //     return Material::where('is_press_release', 1)->count();
+    // }
+
+    // public function totalViews(){
+    //     return Material::sum('hits');
+    // }
+
+    // public function thisMonthCount(){
+    //     return Material::whereMonth('created_at', Carbon::now()->month)->count();
+    // }
+
     public function monthly()
     {
         return Material::select(

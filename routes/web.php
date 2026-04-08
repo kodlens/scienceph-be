@@ -54,6 +54,16 @@ Route::middleware('auth')->group(function () {
 
     //common report for dashboard, only authenticated can access this route
     Route::get('/dashboard/stats', [App\Http\Controllers\DashboardController::class, 'stats']);
+
+
+    // Route::get('/dashboard/material-count', [App\Http\Controllers\DashboardController::class, 'materialCount']);
+    // Route::get('/dashboard/published-count', [App\Http\Controllers\DashboardController::class, 'publishedCount']);
+    // Route::get('/dashboard/draft-count', [App\Http\Controllers\DashboardController::class, 'draftCount']);
+    // Route::get('/dashboard/trashed-count', [App\Http\Controllers\DashboardController::class, 'trashedCount']);
+    // Route::get('/dashboard/press-count', [App\Http\Controllers\DashboardController::class, 'pressCount']);
+    // Route::get('/dashboard/total-views', [App\Http\Controllers\DashboardController::class, 'totalViews']);
+    // Route::get('/dashboard/this-month-count', [App\Http\Controllers\DashboardController::class, 'thisMonthCount']);
+
     Route::get('/dashboard/recent', [App\Http\Controllers\DashboardController::class, 'recent']);
     Route::get('/dashboard/monthly', [App\Http\Controllers\DashboardController::class, 'monthly']);
     Route::get('/dashboard/top-articles', [App\Http\Controllers\DashboardController::class, 'topArticles']);

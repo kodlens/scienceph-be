@@ -41,13 +41,13 @@ const EncoderDashboard = () => {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader />
-      </div>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       <Loader />
+  //     </div>
+  //   )
+  // }
 
   return (
     <>

@@ -12,13 +12,14 @@ class Material extends Model
     protected $table = 'materials';
 
     protected $fillable = [
+        'classification',
         'title',
         'slug',
         'description',
         'description_text',
         'category_id',
         'filter_type',
-        'resource_type',
+        'info_type_material',
         'author',
         'encoded_by_id',
         'encoded_at',
