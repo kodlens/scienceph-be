@@ -74,6 +74,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-subject-headings/{subjectId}', [App\Http\Controllers\OpenController::class, 'getSubjectHeadingsWithParams'])->name('open.subject-headings-with-params');
     Route::get('/get-subject-headings', [App\Http\Controllers\OpenController::class, 'getSubjectHeadings'])->name('open.subject-headings');
 
+    Route::get('/reports/material-encoding', [App\Http\Controllers\Reports\MaterialEncodingReportController::class, 'index'])->name('reports.material-encoding');
+    Route::get('/reports/get-material-encoding', [App\Http\Controllers\Reports\MaterialEncodingReportController::class, 'getMaterialEncoding'])->name('reports.get-material-encoding');
+
+
 });
 
 

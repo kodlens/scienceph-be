@@ -89,6 +89,26 @@ export default function EncoderLayout(
       type: 'divider'
     },
     {
+        key: 'reports',
+        icon: <UserOutlined />,
+        label: 'Reports',
+        children: [
+          {
+            key: 'reports.material-encoding',
+            icon: <BookCheck size={15}/>,
+            label: 'Materials Encoding Report',
+            onClick: () => router.visit('/reports/material-encoding'),
+          },
+          {
+            key: 'reports.material-publish',
+            icon: <SquarePen size={15}/>,
+            label: 'Activities Report',
+            onClick: () => router.visit('/reports/material-publish'),
+          },
+        ],
+
+    },
+    {
         key: 'my-account.index',
         icon: <UserOutlined />,
         label: 'My Account',
