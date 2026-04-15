@@ -52,7 +52,6 @@ const MaterialEncodingReport = () => {
             Generate Report
           </Button>
         </div>
-
       </Form>
 
 
@@ -72,7 +71,7 @@ const MaterialEncodingReport = () => {
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.title}</td>
-                <td>{item.encoded_by_id}</td>
+                <td>{item.encoded_by_name}</td>
                 <td>{item.created_at}</td>
               </tr>
             ))}

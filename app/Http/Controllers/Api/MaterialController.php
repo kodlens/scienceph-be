@@ -25,8 +25,20 @@ class MaterialController extends Controller
     ============================= */
     public function loadLatestMaterials()
     {
+         /**
+         * ->whereRaw("LOWER(description) REGEXP ?", ['<[^a-zA-Z]*img'])
+         * This regex pattern is designed to match <img> tags in a case-insensitive manner,
+         * allowing for any non-alphabetic characters (like spaces or attributes)
+         * between the '<' and 'img'. It effectively captures various forms of <img> tags, such as:
+         *  <img
+            < img
+            <\nimg
+            <(weird chars)img
+        */
+
         $latestNews = Material::where('status', 'publish')
-            ->where('description', 'like', '%'. '<img src' . '%')
+            //->where('description', 'like', '%'. '<img src' . '%')
+            ->whereRaw("LOWER(description) REGEXP ?", ['<[^a-zA-Z]*img'])
             ->orderBy('publish_date', 'desc')
             ->take(11)
             ->get([
@@ -134,7 +146,7 @@ class MaterialController extends Controller
 
     //get materials by category
     public function getMaterialsByCategory($slug) {
-        
+
         $materials = Material::whereHas('category', function($query) use ($slug) {
             $query->where('slug', $slug);
         })
