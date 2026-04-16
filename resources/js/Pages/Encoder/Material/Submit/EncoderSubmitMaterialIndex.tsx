@@ -173,7 +173,7 @@ export default function EncoderSubmitMaterialIndex({ auth }: PageProps) {
                 showSubmit={false}
                 showEdit={false}
                 showPublish={false}
-                showDraft={false}
+                showDraft={true}
                 showView={false}
                 showTrash={false}
               />

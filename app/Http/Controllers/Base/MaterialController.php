@@ -40,7 +40,6 @@ class MaterialController extends Controller
             'description.required' => 'Description is required.',
         ]);
 
-
         try {
 
             DB::transaction(function () use ($req) {

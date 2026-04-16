@@ -102,7 +102,7 @@ export const menuItems = (
   }
 
 
-  if(handleDelete){
+  if(handleDelete && material?.status === 'draft'){
     items.push(
       {
         type: 'divider'
@@ -110,7 +110,6 @@ export const menuItems = (
       {
       label: 'Delete',
       key: `${prefix}.materials.delete`,
-      disabled: material?.status === 'publish',
       icon: <DeleteOutlined />,
       onClick: () => handleDelete()
     })

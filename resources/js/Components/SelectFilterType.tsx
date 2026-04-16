@@ -30,10 +30,14 @@ export const SelectFilterType = ( { errors } : Props ) => {
     return filterTypes.map(item => ({ value: item.slug, label: item.name }))
   }
 
-
+  const instruction = "Select the appropriate filter type that best categorizes the material. This classification helps in organizing and retrieving materials based on their content and subject matter. Choose the filter type that most accurately reflects the material's focus to ensure it is easily discoverable by users searching for related topics."
   return (
     <>
       <Form.Item
+        tooltip={{
+          title: instruction ,
+          color: '#234d99'
+         }}
         name="filter_type"
         label="Select Filter Type"
         className="w-full"

@@ -171,7 +171,7 @@ export default function EncoderDraftMaterialIndex( { auth } : PageProps ) {
               }}
               page={page}
               user={auth.user}
-              showDelete={false}
+              showDelete={true}
               showSubmit={true}
               showEdit={true}
               showPublish={false}

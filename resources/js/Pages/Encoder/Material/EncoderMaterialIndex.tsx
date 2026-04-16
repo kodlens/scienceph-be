@@ -187,13 +187,13 @@ export default function EncoderMaterialIndex( { auth } : PageProps ) {
               }}
               page={page}
               user={auth.user}
-              showDelete={false}
+              showDelete={true}
               showSubmit={true}
               showEdit={true}
               showPublish={false}
               showDraft={true}
               showView={true}
-              showTrash={true}
+              showTrash={false}
             />
 
           </div>
