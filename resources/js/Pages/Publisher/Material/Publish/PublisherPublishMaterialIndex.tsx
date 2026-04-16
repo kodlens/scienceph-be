@@ -10,7 +10,6 @@ import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import PublisherLayout from '@/Layouts/PublisherLayout'
 
 export default function PublisherPublishMaterialIndex({ auth }: PageProps) {

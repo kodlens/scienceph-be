@@ -7,7 +7,6 @@ import {
 } from 'antd'
 import {  ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
-import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import TableArticles from '@/Components/TableMaterials'
