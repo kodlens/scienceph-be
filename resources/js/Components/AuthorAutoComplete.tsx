@@ -1,12 +1,9 @@
 import { Author } from '@/types'
 import { AutoComplete } from 'antd'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
-
+import { useRef, useState } from 'react'
 
 type Props = {
-  //options: AutoCompleteOption[]
-  authors?: Author[]
   value?: string
   onChange?: (value: string) => void
 }
@@ -17,72 +14,49 @@ type AutoCompleteOption = {
 
 export default function AuthorAutoComplete({
   onChange,
-  authors,
-  value }: Props
-) {
+  value
+}: Props) {
 
- // const [options, setOptions] = useState<AutoCompleteOption[]>([])
-  const [data, setData] = useState<Author[]>(authors || [])
+  const [options, setOptions] = useState<AutoCompleteOption[]>([])
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const [filteredOptions, setFilteredOptions] = useState<AutoCompleteOption[]>([])
-
-
-  const fetchAuthors = (search: string) => {
-    axios.get(`/get-authors-autocomplete?search=${search}`).then(res => {
-      setData(res.data)
-    }).catch(err => {
-      console.log(err);
-    })
-  }
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      fetchAuthors(value || "")
-    }, 300)
-
-    return () => clearTimeout(delay)
-  }, [value])
-
-
-  const handleSearch = (value: string) => {
-    if (!value) {
-      setFilteredOptions([])
+  const handleSearch = (search: string) => {
+    if (!search) {
+      setOptions([])
       return
     }
 
-    const filtered = data
-      .filter(author =>
-        author.author?.toLowerCase().includes(value.toLowerCase())
-      )
-      .filter(author => author.author !== undefined)
-      .map(author => ({
-        value: author.author as string, // ✅ required by AntD
-      }))
+    // debounce (simple, no library)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
 
-    setFilteredOptions(filtered)
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        const res = await axios.get(`/get-authors-autocomplete?search=${search}`)
+
+        const mapped = res.data
+          .filter((a: Author) => a.author)
+          .map((a: Author) => ({
+            value: a.author as string,
+          }))
+
+        setOptions(mapped)
+      } catch (err) {
+        console.log(err)
+      }
+    }, 1000)
   }
-
-
-  // const handleSelect = (value: string) => {
-  //   form.setFieldsValue({
-  //     author: value
-  //   })
-  // }
-
 
   return (
     <AutoComplete
-      options={data}
-
+      options={options}
       onSearch={handleSearch}
       value={value}
       onChange={onChange}
-
       style={{ width: '100%' }}
       placeholder="Author"
-
       allowClear
-    >
-    </AutoComplete>
+    />
   )
 }

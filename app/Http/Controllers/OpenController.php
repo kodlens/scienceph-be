@@ -96,13 +96,13 @@ class OpenController extends Controller
     public function getAuthorsAutocomplete(Request $req): JsonResponse{
 
         if($req->has('search') && $req->search != ''){
-            $data = Article::where('author', 'like', $req->search.'%')
+            $data = Material::where('author', 'like', $req->search.'%')
                 ->distinct('author')
                 ->select('author')
                 ->orderBy('author', 'asc')
                 ->get();
         } else {
-            $data = Article::distinct('author')
+            $data = Material::distinct('author')
                 ->select('author')
                 ->orderBy('author', 'asc')
                 ->limit(10)
@@ -114,7 +114,7 @@ class OpenController extends Controller
 
 
     public function getTags():JsonResponse{
-        $data = Article::distinct('tags')
+        $data = Material::distinct('tags')
         ->select('tags')
         ->orderBy('tags', 'asc')
         ->get();

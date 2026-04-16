@@ -86,7 +86,6 @@ class MaterialController extends Controller
                     'slug' => Str::slug($req->title),
                     'description' => $modifiedHtml,
                     'description_text' => $content,
-                    'resource_type' => 'scienceph',
                     'filter_type' => $req->filter_type,
                     //'category_id' => $req->category,
                     'author' => $req->author,
@@ -147,8 +146,7 @@ class MaterialController extends Controller
     public function update(Request $req, $id){
 
         $req->validate([
-            'resource_type' => ['string', 'required', 'max:50'],
-             'title' => ['required', 'max:200', 'unique:materials,title,' . $id . ',id'],
+            'title' => ['required', 'max:200', 'unique:materials,title,' . $id . ',id'],
             'description' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
