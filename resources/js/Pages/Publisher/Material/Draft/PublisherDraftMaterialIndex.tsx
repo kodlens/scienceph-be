@@ -2,18 +2,19 @@ import { Head, router } from '@inertiajs/react'
 import { FileAddOutlined, FilterOutlined, ProfileOutlined, SearchOutlined } from '@ant-design/icons'
 import {
   Button,
-  Input
+  Input,
+
 } from 'antd'
-import { ReactElement, ReactNode, useState } from 'react'
+import {  ReactElement, ReactNode, useState } from 'react'
 import axios from 'axios'
+import EncoderLayout from '@/Layouts/EncoderLayout'
 import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import PublisherLayout from '@/Layouts/PublisherLayout'
 
-export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
+export default function PublisherDraftMaterialIndex( { auth } : PageProps ) {
 
 
   const [page, setPage] = useState(1)
@@ -31,7 +32,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
 
 
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['publisher-publish-materials', { perPage, page, appliedFilters }],
+    queryKey: ['publisher-draft-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -40,7 +41,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/publisher/get-publish-materials?${params}`)
+      const res = await axios.get(`/publisher/get-draft-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -72,7 +73,8 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
 
   return (
     <>
-      <Head title="Publish Materials" />
+      <Head title="Draft Materials" />
+
 
       <div className="flex justify-center">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -89,10 +91,10 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
 
               <div>
                 <p className='text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-700'>
-                  Encoder Panel
+                  Publisher Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Publish Materials
+                  Draft Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
                   Manage and update your encoded science and technology materials.
@@ -115,17 +117,17 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
                 className='ml-auto'
                 icon={<FileAddOutlined />}
                 type="primary"
-                onClick={() => router.visit('/encoder/materials/create')}
+                onClick={() => router.visit('/publisher/materials/create')}
               >
                 New Material
               </Button>
 
             </div>
 
-            {/* ================= FILTERS ================= */}
-            <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
+          {/* ================= FILTERS ================= */}
+          <div className="mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row">
 
-              {/* <Select
+            {/* <Select
               className="w-[180px]"
               value={filters.status}
               onChange={(v) =>
@@ -134,52 +136,52 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
               options={statusDropdownMenu('encoder')}
             /> */}
 
-              <Input
-                placeholder="Search by material title"
-                className="w-full"
-                value={filters.title}
-                prefix={<SearchOutlined className='text-slate-400' />}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, title: e.target.value }))
-                }
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter')
-                    applyFilters()
-                }}
-                allowClear
-              />
+            <Input
+              placeholder="Search by material title"
+              className="w-full"
+              value={filters.title}
+              prefix={<SearchOutlined className='text-slate-400' />}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, title: e.target.value }))
+              }
+              onKeyDown={(e)=>{
+                if(e.key === 'Enter')
+                  applyFilters()
+              }}
+              allowClear
+            />
 
-              <Button className="ml-auto" type="primary" onClick={applyFilters}>
-                Search
-              </Button>
-              <Button onClick={clearFilters}>
-                Clear
-              </Button>
-            </div>
+            <Button className="ml-auto" type="primary" onClick={applyFilters}>
+              Search
+            </Button>
+            <Button onClick={clearFilters}>
+              Clear
+            </Button>
+          </div>
 
 
-            <div className='overflow-auto'>
+          <div className='overflow-auto'>
 
-              <TableArticles
-                routePrefix='publisher'
-                data={data}
-                isFetching={isFetching}
-                refetch={refetch}
-                paginationPageChange={(v) => {
-                  setPage(v)
-                }}
-                page={page}
-                user={auth.user}
-                showDelete={false}
-                showSubmit={true}
-                showEdit={false}
-                showPublish={false}
-                showDraft={true}
-                showView={true}
-                showTrash={false}
-              />
+            <TableArticles
+              routePrefix='publisher'
+              data={data}
+              isFetching={isFetching}
+              refetch={refetch}
+              paginationPageChange={(v) => {
+                setPage(v)
+              }}
+              page={page}
+              user={auth.user}
+              showDelete={true}
+              showSubmit={true}
+              showEdit={true}
+              showPublish={false}
+              showDraft={true}
+              showView={true}
+              showTrash={false}
+            />
 
-            </div>
+          </div>
           </div>
 
 
@@ -189,7 +191,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
   )
 }
 
-PublisherPublishMaterialIndex.layout = (page: ReactNode) => (
+PublisherDraftMaterialIndex.layout = (page: ReactNode) => (
   <PublisherLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </PublisherLayout>

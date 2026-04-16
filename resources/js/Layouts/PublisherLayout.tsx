@@ -10,7 +10,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { BookCheck, LogOut, SendHorizontal } from 'lucide-react';
+import { BookCheck, LogOut, Newspaper, SendHorizontal } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -50,10 +50,16 @@ export default function PublisherLayout(
       label: 'Materials',
       children: [
         {
-          key: 'publisher.materials.index',
+          key: 'publisher.draft-materials.index',
+          label: 'Draft',
+          icon: <Newspaper size={15} />,
+          onClick: () => router.visit('/publisher/draft-materials'),
+        },
+        {
+          key: 'publisher.submitted-materials.index',
           label: 'Submitted',
           icon: <SendHorizontal size={15} />,
-          onClick: () => router.visit('/publisher/materials'),
+          onClick: () => router.visit('/publisher/submitted-materials'),
         },
         {
           key: 'publisher.publish-materials.index',

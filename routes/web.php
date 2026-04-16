@@ -180,6 +180,13 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/materials/{id}/edit', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'edit'])->name('publisher.materials.edit');
     Route::patch('/materials/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'update'])->name('publisher.materials.update');
 
+    Route::get('/draft-materials', [App\Http\Controllers\Publisher\PublisherDraftMaterialController::class, 'index'])->name('publisher.draft-materials.index');
+    Route::get('/get-draft-materials', [App\Http\Controllers\Publisher\PublisherDraftMaterialController::class, 'getData'])->name('publisher.get-draft-materials.index');
+
+    Route::get('/submitted-materials', [App\Http\Controllers\Publisher\PublisherSubmittedMaterialController::class, 'index'])->name('publisher.submitted-materials.index');
+    Route::get('/get-submitted-materials', [App\Http\Controllers\Publisher\PublisherSubmittedMaterialController::class, 'getData'])->name('publisher.get-submitted-materials.index');
+
+
     Route::get('/publish-materials', [App\Http\Controllers\Publisher\Publish\PublisherPublishMaterialController::class, 'index'])->name('publisher.publish-materials.index');
     Route::get('/get-publish-materials', [App\Http\Controllers\Publisher\Publish\PublisherPublishMaterialController::class, 'getData'])->name('publisher.get-publish-materials.index');
 

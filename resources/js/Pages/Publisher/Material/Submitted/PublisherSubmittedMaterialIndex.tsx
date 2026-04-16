@@ -10,10 +10,9 @@ import { useQuery } from '@tanstack/react-query'
 import Error404 from '@/Components/Error404'
 import TableArticles from '@/Components/TableMaterials'
 import { PageProps } from '@/types'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import PublisherLayout from '@/Layouts/PublisherLayout'
 
-export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
+export default function PublisherSubmittedMaterialIndex({ auth }: PageProps) {
 
 
   const [page, setPage] = useState(1)
@@ -31,7 +30,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
 
 
   const { data, isFetching, error, refetch } = useQuery({
-    queryKey: ['publisher-publish-materials', { perPage, page, appliedFilters }],
+    queryKey: ['publisher-submitted-materials', { perPage, page, appliedFilters }],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
@@ -40,7 +39,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
         `page=${page}`,
       ].join('&')
 
-      const res = await axios.get(`/publisher/get-publish-materials?${params}`)
+      const res = await axios.get(`/publisher/get-submitted-materials?${params}`)
       return res.data
     },
     refetchOnWindowFocus: false,
@@ -89,13 +88,13 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
 
               <div>
                 <p className='text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-700'>
-                  Encoder Panel
+                  Publisher Panel
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                  Publish Materials
+                  Submitted Materials
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
-                  Manage and update your encoded science and technology materials.
+                  Manage and update your submitted science and technology materials.
                 </p>
               </div>
 
@@ -189,7 +188,7 @@ export default function PublisherPublishMaterialIndex({ auth }: PageProps) {
   )
 }
 
-PublisherPublishMaterialIndex.layout = (page: ReactNode) => (
+PublisherSubmittedMaterialIndex.layout = (page: ReactNode) => (
   <PublisherLayout user={(page as ReactElement).props.auth.user}>
     {page}
   </PublisherLayout>
