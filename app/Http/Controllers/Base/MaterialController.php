@@ -31,9 +31,8 @@ class MaterialController extends Controller
     {
 
         $req->validate([
-            // 'resource_type' => ['string', 'required', 'max:50'],
             'title' => ['required', 'max:230',  new ValidateTitle(0)],
-            'author' => ['string', 'nullable', 'required_if:resource_type,article', 'max:255'],
+            'author' => ['string', 'nullable', 'max:255'],
             'description' => ['required'],
             'filter_type' => ['required', 'string', 'max:50'],
             'subject_headings' => ['nullable', 'array']
@@ -80,7 +79,6 @@ class MaterialController extends Controller
                 $name = $user->lname . ',' . $user->fname;
 
                 $data = Material::create([
-                    //'resource_type' => $req->resource_type,
                     'classification' => 'scienceph',
                     'title' => $req->title,
                     'slug' => Str::slug($req->title),

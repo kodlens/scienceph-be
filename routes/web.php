@@ -55,7 +55,6 @@ Route::middleware('auth')->group(function () {
     //common report for dashboard, only authenticated can access this route
     Route::get('/dashboard/stats', [App\Http\Controllers\DashboardController::class, 'stats']);
 
-
     // Route::get('/dashboard/material-count', [App\Http\Controllers\DashboardController::class, 'materialCount']);
     // Route::get('/dashboard/published-count', [App\Http\Controllers\DashboardController::class, 'publishedCount']);
     // Route::get('/dashboard/draft-count', [App\Http\Controllers\DashboardController::class, 'draftCount']);
