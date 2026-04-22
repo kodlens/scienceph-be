@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Info;
-use App\Models\InfoSubjectHeading;
+use App\Models\Material;
+use App\Models\MaterialSubjectHeading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,14 +20,14 @@ class SearchController extends Controller
 
         $validated = $req->validate([
             's'  => 'nullable|string',
-            'cat' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            'category' => 'nullable|string',
+            'topics'   => 'nullable|string',
             'perpage' => 'nullable|integer',
         ]);
 
         $search = trim($validated['s'] ?? '');
-        $cat   = trim($validated['cat'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topics     = trim($validated['topics']   ?? '');
         $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
@@ -51,7 +51,7 @@ class SearchController extends Controller
             // ->whereRaw(
             //     "MATCH(a.title, a.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)",
             //     [$search]
-            // ) //king inang AI ka!!!
+            // )
 
             ->whereYear('publish_date', '<=', $yearNow)
             ->whereYear('publish_date', '>=', $yearNow - 4) // older than 5 years
@@ -80,12 +80,12 @@ class SearchController extends Controller
             ->fromSub($subQuery, 't1');
 
 
-        if ($cat !== '' && $cat !== 'all') {
-            $results->where('t1.category_slug', $cat);
+        if ($category !== '' && $category !== 'all') {
+            $results->where('t1.category_slug', $category);
         }
 
-        if ($sh !== '' && $sh !== 'all') {
-            $results->where('t1.subject_heading_slug', $sh);
+        if ($topics !== '' && $topics !== 'all') {
+            $results->where('t1.subject_heading_slug', $topics);
         }
 
         //count category
@@ -99,7 +99,7 @@ class SearchController extends Controller
             ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
             ->groupBy('subject_heading_slug')
             ->get();
-            
+
 
 
        // return $results->paginate(10);
@@ -181,16 +181,16 @@ class SearchController extends Controller
          * 📚 Category filter
          * if category is not empty and not all
          */
-        if ($cat !== '' && $cat !== 'all') {
-            $results->where('t1.category_slug', $cat);
+        if ($category !== '' && $category !== 'all') {
+            $results->where('t1.category_slug', $category);
         }
 
         /**
          * 🧩 Subject heading filter
          * if subject heading is not empty and not all
          */
-        if ($sh !== '' && $sh !== 'all') {
-            $results->where('t1.subject_heading_slug', $sh);
+        if ($topics !== '' && $topics !== 'all') {
+            $results->where('t1.subject_heading_slug', $topics);
         }
 
 
@@ -243,16 +243,16 @@ class SearchController extends Controller
          * 📚 Category filter
          * if category is not empty and not all
          */
-        if ($cat !== '' && $cat !== 'all') {
-            $subQuery->where('d.slug', $cat);
+        if ($category !== '' && $category !== 'all') {
+            $subQuery->where('d.slug', $category);
         }
 
         /**
          * 🧩 Subject heading filter
          * if subject heading is not empty and not all
          */
-        if ($sh !== '' && $sh !== 'all') {
-            $subQuery->where('c.slug', $sh);
+        if ($topics !== '' && $topics !== 'all') {
+            $subQuery->where('c.slug', $topics);
         }
 
         //for accurate, we need to count on the subquery
@@ -317,13 +317,13 @@ class SearchController extends Controller
             );
 
 
-        if ($cat !== '' && $cat !== 'all') {
-            $res->where('category_slug', $cat);
+        if ($category !== '' && $category !== 'all') {
+            $res->where('category_slug', $category);
         }
 
 
-        if ($sh !== '' && $sh !== 'all') {
-            $res->where('subject_heading_slug', $sh);
+        if ($topics !== '' && $topics !== 'all') {
+            $res->where('subject_heading_slug', $topics);
         }
 
         return $res->groupBy('t1.subject_heading')
