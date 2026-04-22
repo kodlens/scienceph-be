@@ -20,12 +20,12 @@ class SubjectSearchController extends Controller
         $yearNow = now()->year;
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
+            's'  => 'nullable|string',
             'subj' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key']  ?? '');
+        $search = trim($validated['s']  ?? '');
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
@@ -95,12 +95,12 @@ class SubjectSearchController extends Controller
         $yearNow = now()->year;
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
+            's'  => 'nullable|string',
             'subj' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key']  ?? '');
+        $search = trim($validated['s']  ?? '');
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
@@ -177,12 +177,12 @@ class SubjectSearchController extends Controller
     public function subjectLabels(Request $req){
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
+            's'  => 'nullable|string',
             'subj' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key'] ?? '');
+        $search = trim($validated['s'] ?? '');
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
@@ -246,12 +246,12 @@ class SubjectSearchController extends Controller
     public function subjectHeadingLabels(Request $req){
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
+            's'  => 'nullable|string',
             'subj' => 'nullable|string',
             'sh'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key'] ?? '');
+        $search = trim($validated['s'] ?? '');
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
