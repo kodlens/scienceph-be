@@ -33,9 +33,9 @@ class SubjectSearchController extends Controller
         //return $searchObject->searchLatestNoKeyword($subj, $sh, $yearNow);
 
         $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.info_id')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.info_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('subjects as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
@@ -104,10 +104,10 @@ class SubjectSearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.info_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('subjects as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
@@ -186,14 +186,14 @@ class SubjectSearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.info_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->groupBy('a.id')
             ->select(
                 'd.id',
-                'd.subject',
+                'd.category',
                 'd.slug'
             );
 
@@ -233,9 +233,9 @@ class SubjectSearchController extends Controller
             ->fromSub($subQuery, 't1')
             ->select(
                 't1.*',
-                DB::raw('COUNT(t1.subject) as count')
+                DB::raw('COUNT(t1.category) as count')
             )
-            ->groupBy('t1.subject')
+            ->groupBy('t1.category')
             ->orderByDesc('count')
             ->get();
 
@@ -255,10 +255,10 @@ class SubjectSearchController extends Controller
         $subj   = trim($validated['subj'] ?? '');
         $sh     = trim($validated['sh']   ?? '');
 
-        $subQuery = DB::table('infos as a')
-            ->join('info_subject_headings as b', 'a.id', '=', 'b.info_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('subjects as d', 'c.category_id', '=', 'd.id')
             ->groupBy('a.id')
             ->select(
                 'c.id',
