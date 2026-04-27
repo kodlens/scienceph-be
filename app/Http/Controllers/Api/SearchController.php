@@ -15,7 +15,6 @@ class SearchController extends Controller
 
 
     public function searchLatest(Request $req){
-        //return $req;
         $yearNow = now()->year;
 
         $validated = $req->validate([
@@ -89,27 +88,21 @@ class SearchController extends Controller
         }
 
         //count category
-        $categoryCounts = (clone $results)
-            ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
-            ->groupBy('category_slug')
-            ->get();
+        // $categoryCounts = (clone $results)
+        //     ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
+        //     ->groupBy('category_slug')
+        //     ->get();
 
-        //count subject heading
-        $subjectHCounts = (clone $results)
-            ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
-            ->groupBy('subject_heading_slug')
-            ->get();
+        // //count subject heading
+        // $subjectHCounts = (clone $results)
+        //     ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
+        //     ->groupBy('subject_heading_slug')
+        //     ->get();
 
 
 
        // return $results->paginate(10);
-        return response()->json([
-            'data' => $results->paginate($perPage),
-            'meta' => [
-                'category_counts' => $categoryCounts,
-                'subject_heading_counts' => $subjectHCounts,
-            ]
-        ]);
+        return response()->json($results->paginate($perPage), 200);
 
     }
 
@@ -120,19 +113,19 @@ class SearchController extends Controller
         $yearNow = now()->year;
 
         $validated = $req->validate([
-            'key'  => 'nullable|string',
-            'subj' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            's'  => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
         ]);
 
-        $search = trim($validated['key']  ?? '');
-        $subj   = trim($validated['subj'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        $search = trim($validated['s']  ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
@@ -143,8 +136,8 @@ class SearchController extends Controller
                 'a.publish_date',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             ])
             // ->whereRaw(
             //     "MATCH(a.title, a.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)",
@@ -189,8 +182,8 @@ class SearchController extends Controller
          * 🧩 Subject heading filter
          * if subject heading is not empty and not all
          */
-        if ($topics !== '' && $topics !== 'all') {
-            $results->where('t1.subject_heading_slug', $topics);
+        if ($topic !== '' && $topic !== 'all') {
+            $results->where('t1.subject_heading_slug', $topic);
         }
 
 
@@ -218,12 +211,12 @@ class SearchController extends Controller
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.subject_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->groupBy('a.id')
             ->select(
                 'd.id',
-                'd.subject',
-                'd.slug'
+                'd.category',
+                'd.slug as category_slug'
             );
 
         /**
@@ -251,8 +244,8 @@ class SearchController extends Controller
          * 🧩 Subject heading filter
          * if subject heading is not empty and not all
          */
-        if ($topics !== '' && $topics !== 'all') {
-            $subQuery->where('c.slug', $topics);
+        if ($topic !== '' && $topic !== 'all') {
+            $subQuery->where('c.slug', $topic);
         }
 
         //for accurate, we need to count on the subquery
@@ -322,8 +315,8 @@ class SearchController extends Controller
         }
 
 
-        if ($topics !== '' && $topics !== 'all') {
-            $res->where('subject_heading_slug', $topics);
+        if ($topic !== '' && $topic !== 'all') {
+            $res->where('subject_heading_slug', $topic);
         }
 
         return $res->groupBy('t1.subject_heading')

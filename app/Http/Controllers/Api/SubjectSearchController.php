@@ -35,7 +35,7 @@ class SubjectSearchController extends Controller
         $subQuery = DB::table('infos as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.info_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.category_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
@@ -46,8 +46,8 @@ class SubjectSearchController extends Controller
                 'a.publish_date',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             ])
 
             ->whereYear('publish_date', '<=', $yearNow)
@@ -172,19 +172,19 @@ class SubjectSearchController extends Controller
 
     /*=====================================
     SUBJECT LABELS FOR SEARCH FILTER
-    This will return the list and count of subjects based on search key
+    This will return the list and count of categories based on search key
     =====================================*/
-    public function subjectLabels(Request $req){
+    public function categoryLabels(Request $req){
 
         $validated = $req->validate([
             's'  => 'nullable|string',
-            'subj' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
         ]);
 
         $search = trim($validated['s'] ?? '');
-        $subj   = trim($validated['subj'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        //$category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
@@ -213,23 +213,23 @@ class SubjectSearchController extends Controller
         }
 
         /**
-         * 📚 Subject filter
-         * if subject is not empty and not all
+         * 📚 Category filter
+         * if category is not empty and not all
          */
-        if ($subj !== '' && $subj !== 'all') {
-            $subQuery->where('d.slug', $subj);
-        }
+        // if ($category !== '' && $category !== 'all') {
+        //     $subQuery->where('d.slug', $category);
+        // }
 
         /**
-         * 🧩 Subject heading filter
-         * if subject heading is not empty and not all
+         * 🧩 Topic filter
+         * if topic is not empty and not all
          */
-        if ($sh !== '' && $sh !== 'all') {
-            $subQuery->where('c.slug', $sh);
+        if ($topic !== '' && $topic !== 'all') {
+            $subQuery->where('c.slug', $topic);
         }
 
         //for accurate, we need to count on the subquery
-        $subjects = DB::query()
+        $categories = DB::query()
             ->fromSub($subQuery, 't1')
             ->select(
                 't1.*',
@@ -239,33 +239,33 @@ class SubjectSearchController extends Controller
             ->orderByDesc('count')
             ->get();
 
-        return $subjects;
+        return $categories;
 
     }
 
-    public function subjectHeadingLabels(Request $req){
+    public function topicLabels(Request $req){
 
         $validated = $req->validate([
             's'  => 'nullable|string',
-            'subj' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
         ]);
 
         $search = trim($validated['s'] ?? '');
-        $subj   = trim($validated['subj'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.category_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->groupBy('a.id')
             ->select(
                 'c.id',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             );
 
         /**
@@ -292,14 +292,16 @@ class SubjectSearchController extends Controller
             );
 
 
-        if ($subj !== '' && $subj !== 'all') {
-            $res->where('subject_slug', $subj);
+        if ($category !== '' && $category !== 'all') {
+            $res->where('category_slug', $category);
         }
 
 
-        if ($sh !== '' && $sh !== 'all') {
-            $res->where('subject_heading_slug', $sh);
+        if ($topic !== '' && $topic !== 'all') {
+            $res->where('subject_heading_slug', $topic);
         }
+
+
 
         return $res->groupBy('t1.subject_heading')
             ->orderByDesc('count')
