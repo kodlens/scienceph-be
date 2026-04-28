@@ -33,6 +33,24 @@ Route::get('/get-materials-by-category/{slug}', [\App\Http\Controllers\Api\Mater
 //Main Search route
 Route::get('/search-latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
 Route::get('/search-others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
+/* ============================
+    Sidebar category(subject) and topics(subject headings) search
+============================= */
+Route::get('/category/category-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'categoryLabels']);
+Route::get('/category/topic-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
+
+
+
+
+//
+Route::get('/category/{cat}', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
+
+
+
+/* ===============================
+This route is for by subject search
+================================= */
+
 
 
 /* ============================
@@ -61,15 +79,6 @@ Route::get('/subject/search-latest', [\App\Http\Controllers\Api\SubjectSearchCon
 Route::get('/subject/search-others', [\App\Http\Controllers\Api\SubjectSearchController::class, 'searchOthers']);
 
 
-/* ============================
-    Sidebar category(subject) and topics(subject headings) search
-============================= */
-Route::get('/category/category-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'categoryLabels']);
-Route::get('/category/topic-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
-
-/* ===============================
-This route is for by subject search
-================================= */
 
 
 
