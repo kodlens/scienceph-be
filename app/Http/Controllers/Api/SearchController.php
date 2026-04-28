@@ -116,11 +116,13 @@ class SearchController extends Controller
             's'  => 'nullable|string',
             'category' => 'nullable|string',
             'topic'   => 'nullable|string',
+             'perpage' => 'nullable|integer',
         ]);
 
         $search = trim($validated['s']  ?? '');
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
+        $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
@@ -187,7 +189,7 @@ class SearchController extends Controller
         }
 
 
-        return $results->paginate(10);
+        return $results->paginate($perPage);
 
     }
 
