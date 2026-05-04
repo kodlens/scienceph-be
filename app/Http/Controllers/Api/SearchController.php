@@ -15,18 +15,19 @@ class SearchController extends Controller
 
 
     public function searchLatest(Request $req){
+
         $yearNow = now()->year;
 
         $validated = $req->validate([
             's'  => 'nullable|string',
             'category' => 'nullable|string',
-            'topics'   => 'nullable|string',
+            'topic'   => 'nullable|string',
             'perpage' => 'nullable|integer',
         ]);
 
         $search = trim($validated['s'] ?? '');
         $category   = trim($validated['category'] ?? '');
-        $topics     = trim($validated['topics']   ?? '');
+        $topic     = trim($validated['topic']   ?? '');
         $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
@@ -46,11 +47,6 @@ class SearchController extends Controller
                 'd.category',
                 'd.slug as category_slug'
             ])
-
-            // ->whereRaw(
-            //     "MATCH(a.title, a.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)",
-            //     [$search]
-            // )
 
             ->whereYear('publish_date', '<=', $yearNow)
             ->whereYear('publish_date', '>=', $yearNow - 4); // older than 5 years
@@ -82,25 +78,11 @@ class SearchController extends Controller
             $results->where('t1.category_slug', $category);
         }
 
-        if (isset($req->topics) && $topics !== '') {
-            $results->where('t1.subject_heading_slug', $topics);
+        if (isset($req->topic) && $topic !== '') {
+            $results->where('t1.subject_heading_slug', $topic);
         }
 
-        //count category
-        // $categoryCounts = (clone $results)
-        //     ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
-        //     ->groupBy('category_slug')
-        //     ->get();
 
-        // //count subject heading
-        // $subjectHCounts = (clone $results)
-        //     ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
-        //     ->groupBy('subject_heading_slug')
-        //     ->get();
-
-
-
-       // return $results->paginate(10);
         return $results->paginate($perPage);
 
     }

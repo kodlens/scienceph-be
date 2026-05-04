@@ -146,7 +146,7 @@ class MaterialController extends Controller
             ->selectRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
             ->whereRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
             ->where('materials.id', '!=', $info->id)  // exclude current material
-
+            ->groupBY('materials.id') // group by material to avoid duplicates
             ->orderByDesc('publish_date')
             ->orderByDesc('relevance')
             ->limit(10)
