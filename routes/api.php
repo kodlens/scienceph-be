@@ -28,16 +28,40 @@ Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController
     Display materials by category
     Category Page
 ============================= */
-Route::get('/get-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'getMaterialsByCategory']);
+//search materials (results are by category) for category page
+Route::get('/search-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'searchMaterialsByCategory']);
 
-//Main Search route
+
+/* ============================
+    MAIN SEARCH
+============================= */
 Route::get('/search-latest', [\App\Http\Controllers\Api\SearchController::class, 'searchLatest']);
 Route::get('/search-others', [\App\Http\Controllers\Api\SearchController::class, 'searchOthers']);
 /* ============================
     Sidebar category(subject) and topics(subject headings) search
 ============================= */
-Route::get('/category/category-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'categoryLabels']);
-Route::get('/category/topic-labels', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
+Route::get('/side-menu/category-labels', [\App\Http\Controllers\Api\SearchController::class, 'categoryLabels']);
+Route::get('/side-menu/topic-labels', [\App\Http\Controllers\Api\SearchController::class, 'topicLabels']);
+
+/* ============================
+    END
+============================= */
+
+
+
+/* ============================
+    BY CATEGORY SEARCH
+============================= */
+
+Route::get('/category-search-latest', [\App\Http\Controllers\Api\CategorySearchController::class, 'searchLatest']);
+Route::get('/category-search-others', [\App\Http\Controllers\Api\CategorySearchController::class, 'searchOthers']);
+
+Route::get('/category-side-menu/category-labels', [\App\Http\Controllers\Api\CategorySearchController::class, 'categoryLabels']);
+Route::get('/category-side-menu/topic-labels', [\App\Http\Controllers\Api\CategorySearchController::class, 'topicLabels']);
+
+/* ============================
+    END
+============================= */
 
 
 
@@ -56,17 +80,17 @@ This route is for by subject search
 /* ============================
     display list of materials by category
 ============================= */
-Route::get('/search-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialSearchByCategoryController::class, 'searchMaterialsByCategory']);
+//Route::get('/search-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialSearchByCategoryController::class, 'searchMaterialsByCategory']);
 
 
 
-/* ============================
-    Sidebar subject and subject headings search
-============================= */
-//Subject page api call for subject list
-Route::get('/subject-labels/search', [\App\Http\Controllers\Api\SearchController::class, 'subjectLabels']);
-//Subject page api call for subject-headings list
-Route::get('/subject-headings/search', [\App\Http\Controllers\Api\SearchController::class, 'subjectHeadingLabels']);
+// /* ============================
+//     Sidebar subject and subject headings search
+// ============================= */
+// //Subject page api call for subject list
+// Route::get('/subject-labels/search', [\App\Http\Controllers\Api\SearchController::class, 'subjectLabels']);
+// //Subject page api call for subject-headings list
+// Route::get('/subject-headings/search', [\App\Http\Controllers\Api\SearchController::class, 'subjectHeadingLabels']);
 
 
 
@@ -75,8 +99,8 @@ Route::get('/subject-headings/search', [\App\Http\Controllers\Api\SearchControll
 This route is for by subject
 ============================= */
 //calling the list of subject and subject headings on SUBJECT SEARCH
-Route::get('/subject/search-latest', [\App\Http\Controllers\Api\SubjectSearchController::class, 'searchLatest']);
-Route::get('/subject/search-others', [\App\Http\Controllers\Api\SubjectSearchController::class, 'searchOthers']);
+// Route::get('/subject/search-latest', [\App\Http\Controllers\Api\SubjectSearchController::class, 'searchLatest']);
+// Route::get('/subject/search-others', [\App\Http\Controllers\Api\SubjectSearchController::class, 'searchOthers']);
 
 
 

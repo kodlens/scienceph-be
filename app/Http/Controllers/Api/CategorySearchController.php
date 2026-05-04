@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Info;
-use App\Models\InfoSubjectHeading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Helpers\SubjectSearch;
 
-class SubjectSearchController extends Controller
+class CategorySearchController extends Controller
 {
-
-    private $limit = 0;
-    private $paginate = 10;
+    private $limit = 10; //default limit for category and topic labels when no search term is provided
 
     public function searchLatest(Request $req){
 
@@ -21,19 +16,18 @@ class SubjectSearchController extends Controller
 
         $validated = $req->validate([
             's'  => 'nullable|string',
-            'subj' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
+            'perpage' => 'nullable|integer',
         ]);
 
-        $search = trim($validated['s']  ?? '');
-        $subj   = trim($validated['subj'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        $search = trim($validated['s'] ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
+        $perPage = $validated['perpage'] ?? 10;
 
-        //$searchObject = new SubjectSearch();
-        //return $searchObject->searchLatestNoKeyword($subj, $sh, $yearNow);
-
-        $subQuery = DB::table('infos as a')
-            ->join('material_subject_headings as b', 'a.id', '=', 'b.info_id')
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
@@ -41,7 +35,7 @@ class SubjectSearchController extends Controller
                 'a.title',
                 'a.description',
                 'a.description_text',
-                'a.alias as slug',
+                'a.slug',
                 'a.source_url',
                 'a.publish_date',
                 'c.subject_heading',
@@ -50,13 +44,18 @@ class SubjectSearchController extends Controller
                 'd.slug as category_slug'
             ])
 
-            ->whereYear('publish_date', '<=', $yearNow)
-            ->whereYear('publish_date', '>=', $yearNow - 4) // older than 5 years
-            ->groupBy('a.id');
+            // ->whereRaw(
+            //     "MATCH(a.title, a.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)",
+            //     [$search]
+            // )
 
-        /**
-        🔍 FULLTEXT SEARCH (only when keyword exists)
-         */
+            ->whereYear('publish_date', '<=', $yearNow)
+            ->whereYear('publish_date', '>=', $yearNow - 4); // older than 5 years
+
+        if(!isset($req->topic) || $topic === ''){
+            $subQuery->groupBy('a.id');
+        }
+
         if ($search !== '') {
             $subQuery->selectRaw(
                 "MATCH(a.title, a.description_text)
@@ -69,26 +68,35 @@ class SubjectSearchController extends Controller
                 [$search]
             )
             ->orderByDesc('relevance', 'DESC');
-        }else{
-            if ($this->limit > 0) {
-                $subQuery->limit($this->limit); //default limit if no search term
-            }
         }
 
         $results = DB::query()
             ->fromSub($subQuery, 't1');
 
-        if ($subj !== '' && $subj !== 'all') {
-            $results->where('t1.subject_slug', $subj);
+        if (isset($req->topic) && $topic !== '') {
+            $results->where('t1.subject_heading_slug', $topic);
         }
 
-        if ($sh !== '' && $sh !== 'all') {
-            $results->where('t1.subject_heading_slug', $sh);
-        }
+        //count category
+        // $categoryCounts = (clone $results)
+        //     ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
+        //     ->groupBy('category_slug')
+        //     ->get();
 
-        return $results->paginate($this->paginate);
+        // //count subject heading
+        // $subjectHCounts = (clone $results)
+        //     ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
+        //     ->groupBy('subject_heading_slug')
+        //     ->get();
+
+
+
+       // return $results->paginate(10);
+        return $results->paginate($perPage);
 
     }
+
+
 
     public function searchOthers(Request $req){
 
@@ -96,34 +104,35 @@ class SubjectSearchController extends Controller
 
         $validated = $req->validate([
             's'  => 'nullable|string',
-            'subj' => 'nullable|string',
-            'sh'   => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
+             'perpage' => 'nullable|integer',
         ]);
 
         $search = trim($validated['s']  ?? '');
-        $subj   = trim($validated['subj'] ?? '');
-        $sh     = trim($validated['sh']   ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
+        $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('subjects as d', 'c.category_id', '=', 'd.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select([
                 'a.id',
                 'a.title',
                 'a.description',
                 'a.description_text',
-                'a.alias as slug',
+                'a.slug',
                 'a.source_url',
                 'a.publish_date',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
-                'd.subject',
-                'd.slug as subject_slug'
+                'd.category',
+                'd.slug as category_slug'
             ])
-            ->whereYear('publish_date', '<', $yearNow - 4)// older than 5 years
-            ->groupBy('a.id');
-
+            ->whereYear('publish_date', '<=', $yearNow - 5); // older than 5 years
+        //return $subQuery->get();
         /**
         🔍 FULLTEXT SEARCH (only when keyword exists)
          */
@@ -139,41 +148,40 @@ class SubjectSearchController extends Controller
                 [$search]
             )
             ->orderByDesc('relevance');
-        }else{
-            if ($this->limit > 0) {
-                $subQuery->limit($this->limit); //default limit if no search term
-            }
+        }
+
+        if(!isset($req->topic) || $topic === ''){
+            $subQuery->groupBy('a.id');
         }
 
         $results = DB::query()
             ->fromSub($subQuery, 't1');
 
         /**
-         * 📚 Subject filter
-         * if subject is not empty and not all
+         * 📚 Category filter
+         * if category is not empty and not all
          */
-        if ($subj !== '' && $subj !== 'all') {
-            $results->where('t1.subject_slug', $subj);
+
+
+        if (isset($req->category) && $category !== '' ) {
+            $results->where('t1.category_slug', $category);
         }
 
         /**
          * 🧩 Subject heading filter
          * if subject heading is not empty and not all
          */
-        if ($sh !== '' && $sh !== 'all') {
-            $results->where('t1.subject_heading_slug', $sh);
+        if (isset($req->topic) && $topic !== '') {
+            $results->where('t1.subject_heading_slug', $topic);
         }
 
 
-        return $results->paginate($this->paginate);
+        return $results->paginate($perPage);
 
     }
 
 
-    /*=====================================
-    SUBJECT LABELS FOR SEARCH FILTER
-    This will return the list and count of categories based on search key
-    =====================================*/
+
     public function categoryLabels(Request $req){
 
         $validated = $req->validate([
@@ -206,17 +214,18 @@ class SubjectSearchController extends Controller
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
-        }else{
-            if ($this->limit > 0) {
-                $subQuery->limit($this->limit); //default limit if no search term
-            }
         }
+        // else{
+        //     if ($this->limit > 0) {
+        //         $subQuery->limit($this->limit); //default limit if no search term
+        //     }
+        // }
 
         /**
          * 📚 Category filter
          * if category is not empty and not all
          */
-        // if ($category !== '' && $category !== 'all') {
+        // if (isset($req->category) && $category !== '' && $category !== 'all') {
         //     $subQuery->where('d.slug', $category);
         // }
 
@@ -224,7 +233,7 @@ class SubjectSearchController extends Controller
          * 🧩 Topic filter
          * if topic is not empty and not all
          */
-        if ($topic !== '' && $topic !== 'all') {
+        if (isset($req->topic) && $topic !== '' && $topic !== 'all') {
             $subQuery->where('c.slug', $topic);
         }
 
@@ -245,6 +254,7 @@ class SubjectSearchController extends Controller
 
     public function topicLabels(Request $req){
 
+
         $validated = $req->validate([
             's'  => 'nullable|string',
             'category' => 'nullable|string',
@@ -259,9 +269,7 @@ class SubjectSearchController extends Controller
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('categories as d', 'c.category_id', '=', 'd.id')
-            ->groupBy('a.id')
             ->select(
-                'c.id',
                 'c.subject_heading',
                 'c.slug as subject_heading_slug',
                 'd.category',
@@ -277,37 +285,22 @@ class SubjectSearchController extends Controller
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
-        }else{
-            if ($this->limit > 0) {
-                $subQuery->limit($this->limit); //default limit if no search term
-            }
         }
 
         //for accurate, we need to count on the subquery
         $res = DB::query()
             ->fromSub($subQuery, 't1')
+            ->when($category !== '', function ($query) use ($category) {
+                $query->where('t1.category_slug', $category);
+            })
             ->select(
                 't1.*',
                 DB::raw('COUNT(t1.subject_heading) as count')
             );
 
-
-        if ($category !== '' && $category !== 'all') {
-            $res->where('category_slug', $category);
-        }
-
-
-        if ($topic !== '' && $topic !== 'all') {
-            $res->where('subject_heading_slug', $topic);
-        }
-
-
-
-        return $res->groupBy('t1.subject_heading')
+        return $res->groupBy('t1.subject_heading_slug')
             ->orderByDesc('count')
             ->get();
 
     }
-
-
 }

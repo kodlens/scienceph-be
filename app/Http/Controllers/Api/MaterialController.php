@@ -145,7 +145,7 @@ class MaterialController extends Controller
 
 
     //get materials by category
-    public function getMaterialsByCategory($slug) {
+    public function searchMaterialsByCategory($slug) {
 
         $materials = Material::whereHas('category', function($query) use ($slug) {
             $query->where('slug', $slug);
