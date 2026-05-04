@@ -32,6 +32,7 @@ Route::get('/get-material/{slug}', [\App\Http\Controllers\Api\MaterialController
 Route::get('/search-materials-by-category/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'searchMaterialsByCategory']);
 
 
+
 /* ============================
     MAIN SEARCH
 ============================= */
@@ -63,10 +64,17 @@ Route::get('/category-side-menu/topic-labels', [\App\Http\Controllers\Api\Catego
     END
 ============================= */
 
+//load related materials
+Route::get('/load-related-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'loadRelatedMaterial']);
 
 
 
-//
+//category and topic menu in articles side
+Route::get('/material-side-menu/category-labels', [\App\Http\Controllers\Api\MaterialController::class, 'categoryLabels']);
+Route::get('/material-side-menu/topic-labels', [\App\Http\Controllers\Api\MaterialController::class, 'topicLabels']);
+
+
+
 Route::get('/category/{cat}', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
 
 
@@ -122,13 +130,11 @@ This route is for by subject headings label
 ============================= */
 
 
-
 //load broad classes with subject headings (subject with subject headings)
 //Route::get('/load-category-class', [\App\Http\Controllers\Api\SubjectController::class, 'loadSubjects']);
 
 
-Route::get('/load-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'loadMaterial']);
-Route::get('/load-related-material/{title}', [\App\Http\Controllers\Api\MaterialController::class, 'loadRelatedMaterial']);
+// Route::get('/load-material/{slug}', [\App\Http\Controllers\Api\MaterialController::class, 'loadMaterial']);
 
 //Route::get('/subjects/{subjectSlug}', [\App\Http\Controllers\Api\SubjectArticleController::class, 'loadArticle']);
-Route::get('/subject/materials-by-subject', [\App\Http\Controllers\Api\MaterialController::class, 'materialsBySubject']);
+//Route::get('/subject/materials-by-subject', [\App\Http\Controllers\Api\MaterialController::class, 'materialsBySubject']);

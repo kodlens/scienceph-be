@@ -53,7 +53,8 @@ class CategorySearchController extends Controller
             ->whereYear('publish_date', '>=', $yearNow - 4); // older than 5 years
 
         if(!isset($req->topic) || $topic === ''){
-            $subQuery->groupBy('a.id');
+            $subQuery->groupBy('a.id')
+                ->limit(100);
         }
 
         if ($search !== '') {
@@ -76,22 +77,6 @@ class CategorySearchController extends Controller
         if (isset($req->topic) && $topic !== '') {
             $results->where('t1.subject_heading_slug', $topic);
         }
-
-        //count category
-        // $categoryCounts = (clone $results)
-        //     ->select('category', 'category_slug', DB::raw('COUNT(*) as total'))
-        //     ->groupBy('category_slug')
-        //     ->get();
-
-        // //count subject heading
-        // $subjectHCounts = (clone $results)
-        //     ->select('subject_heading', 'subject_heading_slug', DB::raw('COUNT(*) as total'))
-        //     ->groupBy('subject_heading_slug')
-        //     ->get();
-
-
-
-       // return $results->paginate(10);
         return $results->paginate($perPage);
 
     }

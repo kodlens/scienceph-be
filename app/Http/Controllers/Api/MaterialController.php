@@ -128,12 +128,25 @@ class MaterialController extends Controller
 
     public function loadRelatedMaterial($slug) {
 
+
         $info = Material::where('slug', $slug)->first();
 
-        $relatedMaterials = Material::select('id', 'title', 'slug', 'description_text', 'publish_date')
-            ->selectRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
-            ->whereRaw("MATCH(title, description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
-            ->where('id', '!=', $info->id)  // exclude current material
+        $relatedMaterials = Material::select(
+                'materials.id',
+                'materials.title',
+                'materials.slug',
+                'materials.description_text',
+                'materials.publish_date',
+                'subject_headings.subject_heading',
+                'categories.category'
+            )
+            ->join('material_subject_headings', 'materials.id', '=', 'material_subject_headings.material_id')
+            ->join('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
+            ->join('categories', 'subject_headings.category_id', '=', 'categories.id')
+            ->selectRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
+            ->whereRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
+            ->where('materials.id', '!=', $info->id)  // exclude current material
+
             ->orderByDesc('publish_date')
             ->orderByDesc('relevance')
             ->limit(10)
@@ -158,4 +171,129 @@ class MaterialController extends Controller
         return response()->json($materials);
 
     }
+
+
+
+
+
+
+    public function categoryLabels(Request $req){
+
+        $validated = $req->validate([
+            's'  => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
+        ]);
+
+        $search = trim($validated['s'] ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
+
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
+            ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
+            ->select(
+                'd.id',
+                'd.category',
+                'd.slug'
+            );
+
+        /**
+        * 🔍 FULLTEXT search if there is search keyword
+        */
+        if ($search !== '') {
+            $subQuery->whereRaw(
+                "MATCH(a.title, a.description_text)
+                AGAINST (? IN NATURAL LANGUAGE MODE)",
+                [$search]
+            );
+        }
+
+        // if (isset($req->topic) && $topic !== '') {
+        //     $subQuery->where('c.slug', $topic);
+        // }
+
+        //for accurate, we need to count on the subquery
+        $categories = DB::query()
+            ->fromSub($subQuery, 't1')
+            ->select(
+                't1.*',
+                DB::raw('COUNT(t1.slug) as count')
+            )
+            ->groupBy('t1.slug')
+            ->orderByDesc('count')
+            ->get();
+
+        return $categories;
+
+    }
+
+    public function topicLabels(Request $req){
+
+
+        $validated = $req->validate([
+            's'  => 'nullable|string',
+            'category' => 'nullable|string',
+            'topic'   => 'nullable|string',
+        ]);
+
+        $search = trim($validated['s'] ?? '');
+        $category   = trim($validated['category'] ?? '');
+        $topic     = trim($validated['topic']   ?? '');
+
+        $subQuery = DB::table('materials as a')
+            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
+            ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
+            ->join('categories as d', 'c.category_id', '=', 'd.id')
+            ->select(
+                'c.id',
+                'c.subject_heading',
+                'c.slug as subject_heading_slug',
+                'd.category',
+                'd.slug as category_slug'
+            );
+
+        /**
+        * 🔍 FULLTEXT search — SAME logic as main query
+        */
+        if ($search !== '') {
+            $subQuery->whereRaw(
+                "MATCH(a.title, a.description_text)
+                AGAINST (? IN NATURAL LANGUAGE MODE)",
+                [$search]
+            );
+        }
+        //remove for the meantime
+        // else{
+        //     if ($this->limit > 0) {
+        //         $subQuery->limit($this->limit); //default limit if no search term
+        //     }
+        // }
+
+        //for accurate, we need to count on the subquery
+        $res = DB::query()
+            ->fromSub($subQuery, 't1')
+            ->select(
+                't1.*',
+                DB::raw('COUNT(t1.subject_heading) as count')
+            );
+
+
+        if (isset($req->category) && $category !== '') {
+            $res->where('category_slug', $category);
+        }
+
+
+        if (isset($req->topic) && $topic !== '') {
+            $res->where('subject_heading_slug', $topic);
+        }
+
+        return $res->groupBy('t1.subject_heading')
+            ->orderByDesc('count')
+            ->get();
+
+    }
+
+
 }

@@ -158,9 +158,9 @@ class SearchController extends Controller
             )
             ->orderByDesc('relevance');
         }
-        // else{
-        //     $subQuery->limit($this->limit); //default limit if no search term
-        // }
+        else{
+            $subQuery->limit($this->limit); //default limit if no search term
+        }
 
         $results = DB::query()
             ->fromSub($subQuery, 't1');
