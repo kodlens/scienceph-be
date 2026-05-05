@@ -44,12 +44,6 @@ export default function AgencyAutoComplete({
     setFilteredOptions(filtered)
   }
 
-  // const handleSelect = (value: string) => {
-  //   form.setFieldsValue({
-  //     author: value
-  //   })
-  // }
-
 
   return (
     <AutoComplete
@@ -59,7 +53,7 @@ export default function AgencyAutoComplete({
       onChange={onChange}
 
       style={{ width: '100%' }}
-      placeholder="Author"
+      placeholder="Agency"
 
       allowClear
     >
