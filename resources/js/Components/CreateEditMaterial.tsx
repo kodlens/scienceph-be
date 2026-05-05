@@ -41,7 +41,6 @@ const CreateEditMaterial = ({
     }
   }, []);
 
-  console.log(ckLicense);
 
   const getData = () => {
     try {
@@ -144,8 +143,6 @@ const CreateEditMaterial = ({
       })
     }
   };
-
-
 
 
   return (
@@ -251,7 +248,7 @@ const CreateEditMaterial = ({
 
       </div>
 
-      {/* <Classifier form={form} errors={errors} id={id}/> */}
+      <Classifier form={form} errors={errors} id={id}/>
 
 
       <div className="flex mt-4 flex-col md:gap-4 md:flex-row">

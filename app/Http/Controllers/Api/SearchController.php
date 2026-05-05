@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SearchController extends Controller
 {
 
-    private $limit = 50;
+    private $limit = 500;
 
 
     public function searchLatest(Request $req){
@@ -237,6 +237,8 @@ class SearchController extends Controller
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
+        }else{
+            $subQuery->limit($this->limit); //default limit if no search term
         }
 
         // if (isset($req->topic) && $topic !== '') {
@@ -294,11 +296,11 @@ class SearchController extends Controller
             );
         }
         //remove for the meantime
-        // else{
-        //     if ($this->limit > 0) {
-        //         $subQuery->limit($this->limit); //default limit if no search term
-        //     }
-        // }
+        else{
+            if ($this->limit > 0) {
+                $subQuery->limit($this->limit); //default limit if no search term
+            }
+        }
 
         //for accurate, we need to count on the subquery
         $res = DB::query()
