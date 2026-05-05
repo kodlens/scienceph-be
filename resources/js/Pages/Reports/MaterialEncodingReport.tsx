@@ -2,7 +2,6 @@ import { Button, DatePicker, Form } from "antd"
 import PublisherLayout from "@/Layouts/PublisherLayout"
 import { ReactElement, ReactNode, useState } from "react"
 import axios from "axios";
-import { User } from "@/types";
 
 type Props = {
   id:number;

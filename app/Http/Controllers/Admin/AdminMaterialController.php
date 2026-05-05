@@ -39,7 +39,8 @@ class AdminMaterialController extends MaterialController
             $status = $req->status;
         }
         $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
-            ->where('trash', 0);
+            ->where('trash', 0)
+            ->where('classification', 'scienceph');
 
         if ($status != '') {
             $data = $data->where('status', $status);
