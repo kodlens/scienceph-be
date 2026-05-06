@@ -77,6 +77,10 @@ class CategorySearchController extends Controller
         if (isset($req->topic) && $topic !== '') {
             $results->where('t1.subject_heading_slug', $topic);
         }
+
+        if (isset($req->topic) && $topic !== '') {
+            $results->where('t1.subject_heading_slug', $topic);
+        }
         return $results->paginate($perPage);
 
     }
@@ -218,6 +222,7 @@ class CategorySearchController extends Controller
          * 🧩 Topic filter
          * if topic is not empty and not all
          */
+
         if (isset($req->topic) && $topic !== '' && $topic !== 'all') {
             $subQuery->where('c.slug', $topic);
         }

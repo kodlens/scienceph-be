@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Material;
+use App\Models\MaterialAssignment;
+
 
 class PublisherDraftMaterialController extends Controller
 {
@@ -18,10 +20,16 @@ class PublisherDraftMaterialController extends Controller
 
     public function getData(Request $request)
     {
-        $user = Auth::user();
+        $userId = Auth::id();
+        $usersData = MaterialAssignment::where('publisher_user_id', $userId)
+            ->get();
+        //assigned material ids
+        $assignedMaterialIds = $usersData->pluck('encoder_user_id')->toArray();
 
         $draftMaterials = Material::where('status', 'draft')
-            ->where('encoded_by_id', $user->id)
+            ->where('classification', 'scienceph')
+            ->where('trash', 0)
+            ->whereIn('encoded_by_id', $assignedMaterialIds)
             ->paginate(10);
 
         return response()->json($draftMaterials);

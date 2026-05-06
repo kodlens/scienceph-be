@@ -237,9 +237,10 @@ class SearchController extends Controller
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
-        }else{
-            $subQuery->limit($this->limit); //default limit if no search term
         }
+        // else{
+        //     $subQuery->limit($this->limit); //default limit if no search term
+        // }
 
         // if (isset($req->topic) && $topic !== '') {
         //     $subQuery->where('c.slug', $topic);
