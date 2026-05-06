@@ -42,9 +42,9 @@ class SearchController extends Controller
                 'a.slug',
                 'a.source_url',
                 'a.publish_date',
-                'c.subject_heading',
-                'c.slug as subject_heading_slug',
-                'd.category',
+                'c.subject_heading as topic_name',
+                'c.slug as topic_slug',
+                'd.category as category_name',
                 'd.slug as category_slug'
             ])
 
@@ -66,8 +66,6 @@ class SearchController extends Controller
                 [$search]
             )
             ->orderByDesc('relevance', 'DESC');
-        }else{
-            $subQuery->limit($this->limit); //default limit if no search term
         }
 
         $results = DB::query()
@@ -79,7 +77,7 @@ class SearchController extends Controller
         }
 
         if (isset($req->topic) && $topic !== '') {
-            $results->where('t1.subject_heading_slug', $topic);
+            $results->where('t1.topic_slug', $topic);
         }
 
 
@@ -117,9 +115,9 @@ class SearchController extends Controller
                 'a.slug',
                 'a.source_url',
                 'a.publish_date',
-                'c.subject_heading',
-                'c.slug as subject_heading_slug',
-                'd.category',
+                'c.subject_heading as topic_name',
+                'c.slug as topic_slug',
+                'd.category as category_name',
                 'd.slug as category_slug'
             ])
             ->whereYear('publish_date', '<=', $yearNow - 5); // older than 5 years
@@ -147,15 +145,12 @@ class SearchController extends Controller
         $results = DB::query()
             ->fromSub($subQuery, 't1');
 
-        /**
-         * 📚 Category filter
-         * if category is not empty and not all
-         */
         if (isset($req->category) && $category !== '') {
             $results->where('t1.category_slug', $category);
         }
+
         if (isset($req->topic) && $topic !== '' ) {
-            $results->where('t1.subject_heading_slug', $topic);
+            $results->where('t1.topic_slug', $topic);
         }
 
 
@@ -225,35 +220,43 @@ class SearchController extends Controller
             ->select(
                 'd.id',
                 'd.category',
-                'd.slug'
+                'd.slug as category_slug',
+                'c.slug as topic_slug'
             );
 
         /**
         * 🔍 FULLTEXT search if there is search keyword
         */
-        if ($search !== '') {
+        if (isset($req->s) && $search !== '') {
             $subQuery->whereRaw(
                 "MATCH(a.title, a.description_text)
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
         }
-        // else{
-        //     $subQuery->limit($this->limit); //default limit if no search term
-        // }
-
-        // if (isset($req->topic) && $topic !== '') {
-        //     $subQuery->where('c.slug', $topic);
-        // }
 
         //for accurate, we need to count on the subquery
         $categories = DB::query()
             ->fromSub($subQuery, 't1')
             ->select(
                 't1.*',
-                DB::raw('COUNT(t1.slug) as count')
-            )
-            ->groupBy('t1.slug')
+                DB::raw('COUNT(t1.category_slug) as count')
+            );
+
+        if (!isset($req->s) && $search === '') {
+            $categories->where('category_slug', $category);
+        }
+
+        // if (isset($req->category) && $category !== '') {
+        //     $categories->where('category_slug', $category);
+        // }
+
+
+        // if (isset($req->topic) && $topic !== '') {
+        //     $categories->where('topic_slug', $topic);
+        // }
+
+        $categories = $categories->groupBy('t1.category_slug')
             ->orderByDesc('count')
             ->get();
 
@@ -280,8 +283,8 @@ class SearchController extends Controller
             ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select(
                 'c.id',
-                'c.subject_heading',
-                'c.slug as subject_heading_slug',
+                'c.subject_heading as topic',
+                'c.slug as topic_slug',
                 'd.category',
                 'd.slug as category_slug'
             );
@@ -296,32 +299,25 @@ class SearchController extends Controller
                 [$search]
             );
         }
-        //remove for the meantime
-        else{
-            if ($this->limit > 0) {
-                $subQuery->limit($this->limit); //default limit if no search term
-            }
-        }
+
 
         //for accurate, we need to count on the subquery
         $res = DB::query()
             ->fromSub($subQuery, 't1')
             ->select(
                 't1.*',
-                DB::raw('COUNT(t1.subject_heading) as count')
+                DB::raw('COUNT(t1.topic_slug) as count')
             );
-
 
         if (isset($req->category) && $category !== '') {
             $res->where('category_slug', $category);
         }
 
+        // if (isset($req->topic) && $topic !== '') {
+        //     $res->where('topic_slug', $topic);
+        // }
 
-        if (isset($req->topic) && $topic !== '') {
-            $res->where('subject_heading_slug', $topic);
-        }
-
-        return $res->groupBy('t1.subject_heading')
+        return $res->groupBy('t1.topic_slug')
             ->orderByDesc('count')
             ->get();
 

@@ -13,6 +13,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Material;
+use App\Models\MaterialSubjectHeading;
+
 use Illuminate\Support\Facades\DB;
 use \Carbon\Carbon;
 
@@ -36,45 +38,91 @@ class MaterialController extends Controller
             <(weird chars)img
         */
 
-        $latestNews = Material::where('status', 'publish')
-            //->where('description', 'like', '%'. '<img src' . '%')
-            ->whereRaw("LOWER(description) REGEXP ?", ['<[^a-zA-Z]*img'])
-            ->orderBy('publish_date', 'desc')
+        // $latestNews = Material::where('status', 'publish')
+        //     //->where('description', 'like', '%'. '<img src' . '%')
+        //     ->whereRaw("LOWER(description) REGEXP ?", ['<[^a-zA-Z]*img'])
+        //     ->orderBy('publish_date', 'desc')
+        //     ->take(11)
+        //     ->get([
+        //         'id',
+        //         'title',
+        //         'slug',
+        //         'description',
+        //         'description_text',
+        //         'author',
+        //         'publish_date',
+        //         'is_press_release'
+        //     ]);
+
+        $data = MaterialSubjectHeading::join('materials', 'material_subject_headings.material_id', '=', 'materials.id')
+            ->join('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
+            ->join('categories', 'subject_headings.category_id', '=', 'categories.id')
+            ->where('materials.status', 'publish')
+            ->whereRaw("LOWER(materials.description) REGEXP ?", ['<[^a-zA-Z]*img'])
+            ->groupBy('materials.id')
+            ->orderBy('materials.publish_date', 'desc')
             ->take(11)
             ->get([
-                'id',
-                'title',
-                'slug',
-                'description',
-                'description_text',
-                'author',
-                'publish_date',
-                'is_press_release'
+                'materials.id',
+                'materials.title',
+                'materials.slug',
+                'materials.description',
+                'materials.description_text',
+                'materials.author',
+                'materials.publish_date',
+                'materials.is_press_release',
+                'categories.category as category_name',
+                'categories.slug as category_slug',
+                'subject_headings.subject_heading as topic_name',
+                'subject_headings.slug as topic_slug'
             ]);
 
-        return response()->json($latestNews);
+        return response()->json($data);
     }
 
     public function loadPopularMaterials() {
         $monthsAgo = Carbon::now()->subMonths(3);
 
-        $data = Material::where('status', 'publish')
-            ->with('category')
+        // $data = Material::where('status', 'publish')
+        //     ->with('category')
 
-            ->whereDate('publish_date', '>=', $monthsAgo)
-            ->where('description', 'NOT LIKE', '%<img src%')
-            ->orderBy('hits', 'desc')
+        //     ->whereDate('publish_date', '>=', $monthsAgo)
+        //     ->where('description', 'NOT LIKE', '%<img src%')
+        //     ->orderBy('hits', 'desc')
+        //     ->take(6)
+        //     ->get([
+        //         'id',
+        //         'title',
+        //         'slug',
+        //         'description',
+        //         'description_text',
+        //         'author',
+        //         'publish_date',
+        //         'is_press_release',
+        //         'category_id'
+        //     ]);
+        $data = MaterialSubjectHeading::join('materials', 'material_subject_headings.material_id', '=', 'materials.id')
+            ->join('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
+            ->join('categories', 'subject_headings.category_id', '=', 'categories.id')
+            ->where('materials.status', 'publish')
+            ->whereDate('materials.publish_date', '>=', $monthsAgo)
+            ->where('materials.description', 'NOT LIKE', '%<img src%')
+            ->groupBy('materials.id')
+            ->orderBy('materials.hits', 'desc')
             ->take(6)
             ->get([
-                'id',
-                'title',
-                'slug',
-                'description',
-                'description_text',
-                'author',
-                'publish_date',
-                'is_press_release',
-                'category_id'
+                'materials.id',
+                'materials.title',
+                'materials.slug',
+                'materials.description',
+                'materials.description_text',
+                'materials.author',
+                'materials.publish_date',
+                'materials.is_press_release',
+                'categories.category as category_name',
+                'categories.slug as category_slug',
+                'subject_headings.subject_heading as topic_name',
+                'subject_headings.slug as topic_slug'
             ]);
 
         return response()->json($data);
