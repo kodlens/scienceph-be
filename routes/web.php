@@ -77,7 +77,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/get-material-encoding', [App\Http\Controllers\Reports\MaterialEncodingReportController::class, 'getMaterialEncoding'])->name('reports.get-material-encoding');
 
 
+
+
 });
+
+    //EXTERNAL API ROUTES
+    Route::get('/external/dostv-posts', [App\Http\Controllers\External\DostvPostController::class, 'getPosts']);
 
 
 Route::prefix('admin')->middleware('auth', 'admin')
