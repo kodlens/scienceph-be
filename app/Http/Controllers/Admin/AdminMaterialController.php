@@ -45,7 +45,7 @@ class AdminMaterialController extends MaterialController
         if ($status != '') {
             $data = $data->where('status', $status);
         }
-        $data->where('title', 'like', '%'. $req->search . '%');
+        $data->where('title', 'like', '%'. $req->title . '%');
         return $data->orderBy('id', 'desc')
             ->paginate($req->perpage);
     }
