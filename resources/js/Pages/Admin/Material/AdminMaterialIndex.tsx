@@ -52,7 +52,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
     <>
       <Head title="Materials" />
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mx-4">
         <div className="w-full max-w-[1300px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           {/* ================= HEADER ================= */}
           <div className='relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sky-50 via-white to-cyan-50 px-6 py-6'>
@@ -125,7 +125,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
               showView={true}
             />
           </div>
-          
+
         </div>
       </div>
     </>

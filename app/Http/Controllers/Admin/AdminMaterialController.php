@@ -45,7 +45,26 @@ class AdminMaterialController extends MaterialController
         if ($status != '') {
             $data = $data->where('status', $status);
         }
-        $data->where('title', 'like', '%'. $req->title . '%');
+
+        if($req->encoder != '' || $req->encoder != null){
+            $data = $data->whereHas('encodedBy', function($query) use ($req) {
+                $query->where('lname', 'like',  '%'. $req->encoder . '%')
+                    ->orWhere('fname', 'like', '%'. $req->encoder . '%')
+                    ->orWhere('mname', 'like', '%'. $req->encoder . '%');
+            });
+        }
+
+        if($req->modifier != '' || $req->modifier != null){
+            $data = $data->whereHas('modifiedBy', function($query) use ($req) {
+                $query->where('lname', 'like',  '%'. $req->modifier . '%')
+                    ->orWhere('fname', 'like', '%'. $req->modifier . '%')
+                    ->orWhere('mname', 'like', '%'. $req->modifier . '%');
+            });
+        }
+
+        if($req->title != '' || $req->title != null){
+            $data = $data->where('title', 'like', '%'. $req->title . '%');
+        }
         return $data->orderBy('id', 'desc')
             ->paginate($req->perpage);
     }
