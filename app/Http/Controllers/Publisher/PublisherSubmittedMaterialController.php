@@ -24,9 +24,9 @@ class PublisherSubmittedMaterialController extends Controller
         //assigned material ids
         $assignedMaterialIds = $usersData->pluck('encoder_user_id')->toArray();
 
-        return $assignedMaterialIds;
 
         $data = Material::where('status', 'submit')
+            ->with('encodedBy')
             ->where('classification', 'scienceph')
             ->where('trash', 0)
             ->whereIn('encoded_by_id', $assignedMaterialIds)

@@ -1,19 +1,19 @@
 
-import {  Head, router } from '@inertiajs/react'
+import {  Head} from '@inertiajs/react'
 
 import {
-  Button,
+
   Input,
 } from 'antd';
 
-import { FileAddOutlined, AppstoreOutlined, ProfileOutlined } from '@ant-design/icons';
+import {  AppstoreOutlined} from '@ant-design/icons';
 
 import { ReactElement, useState } from 'react'
 import axios from 'axios';
 
 import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import SearchFilter from '@/Components/SearchFilter';
+
 import DostvTable from '@/Components/Dostv/DostvTable';
 
 const DostvIndex = ( ) => {

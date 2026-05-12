@@ -26,7 +26,9 @@ class PublisherDraftMaterialController extends Controller
         //assigned material ids
         $assignedMaterialIds = $usersData->pluck('encoder_user_id')->toArray();
 
+
         $draftMaterials = Material::where('status', 'draft')
+            ->with('encodedBy')
             ->where('classification', 'scienceph')
             ->where('trash', 0)
             ->whereIn('encoded_by_id', $assignedMaterialIds)

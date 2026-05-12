@@ -1,12 +1,11 @@
 import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
-import { router } from '@inertiajs/react'
-import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
+import { Table, Dropdown, Button, Pagination, App } from 'antd'
 import Column from 'antd/es/table/Column'
-import axios from 'axios'
+
 //import { adminMenuItems } from '@/helper/adminMenuItems'
-import { menuItems } from '@/helper/menuItems'
+
 import { Material } from '@/types/material'
-import { User } from '@/types'
+
 import MaterialView from '../MaterialView'
 
 type Props = {
@@ -19,9 +18,9 @@ type Props = {
 
 
 }
-const DostvTable = ( { routePrefix, data, isFetching, page, paginationPageChange, refetch }: Props) => {
+const DostvTable = ( { data, isFetching, page, paginationPageChange }: Props) => {
 
-  const {notification, modal} = App.useApp();
+  const { modal} = App.useApp();
 
   const statusStyles: Record<string, string> = {
     submit: 'bg-blue-100 text-blue-700',
