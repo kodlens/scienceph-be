@@ -168,6 +168,14 @@ Route::prefix('admin')->middleware('auth', 'admin')
     // Route::resource('/role-has-permissions', App\Http\Controllers\Admin\AdminRoleHasPermissionController::class);
     // Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
 
+
+    /*====================================
+    * EXTERNAL API ROUTES FOR ADMIN
+    * ==================================== */
+    Route::get('/external-api/dostv', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'index'])->name('admin.external-api.dostv.index');
+    Route::get('/external-api/get-dostv-materials', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'getData'])->name('admin.external-api.get-dostv-materials.index');
+
+
 });
 
 

@@ -12,7 +12,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, Funnel, LandPlot, LogOut, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
+import { DatabaseZap, Funnel, LandPlot, LogOut, Sparkle, SquareArrowOutUpRight, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -122,6 +122,26 @@ export default function AdminLayout(
         },
 
       ],
+    },
+
+    {
+      key: 'admin.external-api',
+      icon: <SquareArrowOutUpRight size={15} />,
+      label: 'Externals API',
+      children: [
+        {
+          key: 'admin.external-apis.dostv',
+          label: 'DOSTV API',
+          icon: <Sparkle size={15} />,
+          onClick: () => router.visit('/admin/external-api/dostv'),
+        },
+        {
+          key: 'admin.external-apis.science-gov',
+          label: 'Science.gov API',
+          icon: <SquareArrowOutUpRight size={15} />,
+          onClick: () => router.visit('/admin/external-api/science-gov'),
+        },
+      ]
     },
     {
       type: 'divider'
