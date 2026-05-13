@@ -8,9 +8,12 @@ import {
   MenuOutlined, DownOutlined
 } from '@ant-design/icons';
 
-import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
+import { Avatar, Button,
+  ConfigProvider,
+  Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { BookCheck, LogOut,
+import { BookCheck,
+  LogOut,
   //Newspaper,
   SendHorizontal } from 'lucide-react';
 const { Header, Sider, Content } = Layout;

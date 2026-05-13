@@ -1,113 +1,103 @@
 <?php
 namespace App\Http\Controllers\Helpers;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FilterDom
 {
-    private $fileCustomPath = 'public/appnews/'; // <--filepath for remove images from content
+    private string $storageDisk = 'public';
 
-    private $uploadPath = 'storage/appnews'; // this is the upload path
+    private string $storageDirectory = 'appnews';
 
     public function __construct()
     {
 
     }
 
-    public function filterDOM($content){
-        /* ==============================
-            this method return the content
-            change the <img src=(base64) /> to <img src="/storage_path/your_dir" />
-        */
+    /*==============================================================================
+    One practical note: some websites block server-side image fetching with hotlink/CDN rules,
+    so you should expect a few remote images to remain external when that happens.
 
-        $modifiedHtml = '';
-
-        $doc = new \DOMDocument('1.0', 'UTF-8'); // solution add bacbkward slash
-        libxml_use_internal_errors(true);
-        libxml_clear_errors();
-        $doc->encoding = 'UTF-8';
-        $htmlContent = $content;
-        $doc->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'));
-        // $doc->loadHTML($htmlContent);
-
-        $images = $doc->getElementsByTagName('img');
-        // Find all img tags
-        $counter = 0;
-
-        foreach ($images as $image) {
-
-            $src = $image->getAttribute('src');
-            $currentTimestamp = time(); // Get the current Unix timestamp
-            $md5Hash = md5($currentTimestamp.$counter); // Create an MD5 hash of the timestamp
-
-            // Check if the src is a data URL (Base64)
-            if (strpos($src, 'data:image/') === 0) {
-                // Extract image format (e.g., png, jpeg) detect fileFormat
-                $imageFormat = explode(';', explode('/', $src)[1])[0];
-
-                // Modify the src to point to the directory where the image is stored
-                // $imageName = $imgPath . $md5Hash . '.' . $imageFormat; // Replace with your logic for generating unique filenames
-                $imageName = $md5Hash.'.'.$imageFormat; // Replace with your logic for generating unique filenames
-
-                // file_put_contents($this->uploadPath, base64_decode(str_replace('data:image/'.$imageFormat.';base64,', '', $src))); // Save the image
-                file_put_contents($this->uploadPath.'/'.$imageName, base64_decode(str_replace('data:image/'.$imageFormat.';base64,', '', $src))); // Save the image
-
-                // Set the new src attribute
-                // concat '/' for directory
-                $image->setAttribute('src', '/'.$this->uploadPath.'/'.$imageName);
-            }
-            // to make image name unique add counter in time and hash the time together with the counter
-            $counter++;
-        }
-        // save all changes
-        $modifiedReviseImg = $doc->saveHTML();
-
-        // removing all html,header //only tag inside the body will be saved
-        $newDocImg = new \DOMDocument('1.0', 'UTF-8'); // solution add bacbkward slash
-        libxml_use_internal_errors(true);
-        libxml_clear_errors();
-        $newDocImg->encoding = 'UTF-8';
-        // $newDocImg->loadHTML($modifiedReviseImg);
-        $newDocImg->loadHTML(mb_convert_encoding($modifiedReviseImg, 'HTML-ENTITIES', 'UTF-8'));
-
-        // Find the <body> tag
-        $bodyNode = $newDocImg->getElementsByTagName('body')->item(0);
-
-        if ($bodyNode !== null) {
-            // Create a new document for the content inside <body>
-            $newDoc = new \DOMDocument;
-            foreach ($bodyNode->childNodes as $node) {
-                $newNode = $newDoc->importNode($node, true);
-                $newDoc->appendChild($newNode);
-            }
-
-            // Output the content inside <body>
-            $modifiedHtml = $newDoc->saveHTML();
+    ================================================================================*/
+    public function filterDOM($content): string
+    {
+        if (! is_string($content) || trim($content) === '') {
+            return '';
         }
 
-        return $modifiedHtml;
+        $doc = $this->createDocument();
+        $doc->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+
+        $images = iterator_to_array($doc->getElementsByTagName('img'));
+        $savedPaths = [];
+
+        try {
+            foreach ($images as $image) {
+                $src = trim($image->getAttribute('src'));
+
+                if ($src === '') {
+                    continue;
+                }
+
+                if (str_starts_with($src, 'data:image/')) {
+                    $imageData = $this->parseBase64ImageSource($src);
+                    $relativePath = $this->storeImageBinary($imageData['binary'], $imageData['extension']);
+
+                    $savedPaths[] = $relativePath;
+                    $image->setAttribute('src', Storage::url($relativePath));
+                    continue;
+                }
+
+                if ($this->isRemoteImageUrl($src)) {
+                    $imageData = $this->downloadRemoteImage($src);
+
+                    if ($imageData === null) {
+                        continue;
+                    }
+
+                    $relativePath = $this->storeImageBinary($imageData['binary'], $imageData['extension']);
+                    $savedPaths[] = $relativePath;
+                    $image->setAttribute('src', Storage::url($relativePath));
+                }
+            }
+        } catch (\Throwable $e) {
+            if ($savedPaths !== []) {
+                Storage::disk($this->storageDisk)->delete($savedPaths);
+            }
+
+            throw $e;
+        }
+
+        return $this->extractBodyHtml($doc);
     }
 
     public function removeImagesFromDOM($content) {
 
-        $doc = new \DOMDocument('1.0', 'UTF-8'); // solution add backward slash
-        libxml_use_internal_errors(true);
-        libxml_clear_errors();
-        $doc->encoding = 'UTF-8';
+        $doc = $this->createDocument();
         $htmlContent = $content ? $content : '';
         $doc->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'));
         $images = $doc->getElementsByTagName('img');
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
-            // output --> storage/upload_files/130098028b5a1f88aa110e1146ce8375.jpeg
-            // sample output of $src
 
-            $imgName = explode('/', $src); // this will explode separate using / character
-            $fileImageName = $imgName[3]; // get the 4th index, this is the filename -> 130098028b5a1f88aa110e1146ce8375.jpeg
+            if (! is_string($src) || trim($src) === '') {
+                continue;
+            }
 
-            if (Storage::exists($this->fileCustomPath.$fileImageName)) {
-                Storage::delete($this->fileCustomPath.$fileImageName);
+            $path = parse_url($src, PHP_URL_PATH);
+            $fileImageName = basename($path ?: '');
+
+            if ($fileImageName === '' || $fileImageName === '.' || $fileImageName === '..') {
+                continue;
+            }
+
+            $relativePath = $this->storageDirectory . '/' . $fileImageName;
+
+            if (Storage::disk($this->storageDisk)->exists($relativePath)) {
+                Storage::disk($this->storageDisk)->delete($relativePath);
             }
         }
     }
@@ -125,5 +115,144 @@ class FilterDom
         return trim(preg_replace('/\s+/u', ' ', $text));
     }
 
+    private function createDocument(): \DOMDocument
+    {
+        libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->encoding = 'UTF-8';
+
+        return $doc;
+    }
+
+    private function extractBodyHtml(\DOMDocument $doc): string
+    {
+        $html = $doc->saveHTML();
+        $newDoc = $this->createDocument();
+        $newDoc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        $bodyNode = $newDoc->getElementsByTagName('body')->item(0);
+
+        if ($bodyNode === null) {
+            return '';
+        }
+
+        $output = new \DOMDocument('1.0', 'UTF-8');
+
+        foreach ($bodyNode->childNodes as $node) {
+            $output->appendChild($output->importNode($node, true));
+        }
+
+        return $output->saveHTML() ?: '';
+    }
+
+    private function parseBase64ImageSource(string $src): array
+    {
+        if (! preg_match('/^data:image\/([a-zA-Z0-9.+-]+);base64,(.+)$/s', $src, $matches)) {
+            throw new \RuntimeException('Invalid base64 image source.');
+        }
+
+        $extension = strtolower($matches[1]);
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+
+        $allowedExtensions = ['jpg', 'png', 'gif', 'webp', 'bmp', 'svg+xml'];
+        if (! in_array($extension, $allowedExtensions, true)) {
+            throw new \RuntimeException('Unsupported image type.');
+        }
+
+        $binary = base64_decode($matches[2], true);
+        if ($binary === false) {
+            throw new \RuntimeException('Invalid base64 image payload.');
+        }
+
+        $extension = $extension === 'svg+xml' ? 'svg' : $extension;
+
+        return [
+            'extension' => $extension,
+            'binary' => $binary,
+        ];
+    }
+
+    private function isRemoteImageUrl(string $src): bool
+    {
+        if (! filter_var($src, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+
+        $scheme = strtolower((string) parse_url($src, PHP_URL_SCHEME));
+
+        return in_array($scheme, ['http', 'https'], true);
+    }
+
+    private function downloadRemoteImage(string $src): ?array
+    {
+        try {
+            $response = Http::timeout(10)
+                ->retry(1, 200)
+                ->withHeaders([
+                    'User-Agent' => 'scienceph-be image fetcher',
+                ])
+                ->get($src);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        if (! $response->successful()) {
+            return null;
+        }
+
+        $contentType = strtolower(trim(explode(';', (string) $response->header('Content-Type'))[0]));
+        if (! str_starts_with($contentType, 'image/')) {
+            return null;
+        }
+
+        $binary = $response->body();
+        if ($binary === '') {
+            return null;
+        }
+
+        return [
+            'extension' => $this->resolveImageExtension($contentType, $src),
+            'binary' => $binary,
+        ];
+    }
+
+    private function storeImageBinary(string $binary, string $extension): string
+    {
+        $fileName = Str::uuid()->toString() . '.' . $extension;
+        $relativePath = $this->storageDirectory . '/' . $fileName;
+
+        Storage::disk($this->storageDisk)->put($relativePath, $binary);
+
+        return $relativePath;
+    }
+
+    private function resolveImageExtension(string $contentType, string $src = ''): string
+    {
+        $map = [
+            'image/jpeg' => 'jpg',
+            'image/jpg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/webp' => 'webp',
+            'image/bmp' => 'bmp',
+            'image/svg+xml' => 'svg',
+        ];
+
+        if (isset($map[$contentType])) {
+            return $map[$contentType];
+        }
+
+        $path = (string) parse_url($src, PHP_URL_PATH);
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+
+        if (in_array($extension, $allowedExtensions, true)) {
+            return $extension === 'jpeg' ? 'jpg' : $extension;
+        }
+
+        throw new \RuntimeException('Unsupported image type.');
+    }
 
 }
