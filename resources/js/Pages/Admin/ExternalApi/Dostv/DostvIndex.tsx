@@ -2,11 +2,11 @@
 import {  Head} from '@inertiajs/react'
 
 import {
-
+  Button,
   Input,
 } from 'antd';
 
-import {  AppstoreOutlined} from '@ant-design/icons';
+import {  AppstoreOutlined, SearchOutlined} from '@ant-design/icons';
 
 import { ReactElement, useState } from 'react'
 import axios from 'axios';
@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 import DostvTable from '@/Components/Dostv/DostvTable';
+import MigrateDostv from './MigrateDostv';
 
 const DostvIndex = ( ) => {
 
@@ -22,7 +23,6 @@ const DostvIndex = ( ) => {
   //const [perPage, setPerPage] = useState(10);
   const perPage = 10
   const [page, setPage] = useState(1);
-
 
   const [filters, setFilters] = useState({
       status: '',
@@ -44,6 +44,8 @@ const DostvIndex = ( ) => {
       return res.data;
     },
   });
+
+
 
   return (
     <>
@@ -98,7 +100,12 @@ const DostvIndex = ( ) => {
             </div> */}
 
             {/* ================= FILTERS ================= */}
-            <div className='my-4'>
+
+            <MigrateDostv onRefetch={()=>{
+              refetch()
+            }} />
+
+            <div className='flex gap-4 flex-col md:flex-row my-4'>
               <Input
                 placeholder="Search by article title"
                 className="w-full"
@@ -112,6 +119,13 @@ const DostvIndex = ( ) => {
                     refetch()
                 }}
               />
+
+              <Button
+                onClick={() => refetch()}
+                type='primary'
+                icon={<SearchOutlined />}>
+                Search
+              </Button>
             </div>
 
             <DostvTable

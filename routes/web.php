@@ -174,6 +174,8 @@ Route::prefix('admin')->middleware('auth', 'admin')
     * ==================================== */
     Route::get('/external-api/dostv', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'index'])->name('admin.external-api.dostv.index');
     Route::get('/external-api/get-dostv-materials', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'getData'])->name('admin.external-api.get-dostv-materials.index');
+    Route::post('/external-api/migrate-dostv-materials', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'migrate'])->name('admin.external-api.migrate-dostv-materials.index');
+    Route::get('/external-api/dostv-migration-status', [App\Http\Controllers\Admin\External\AdminDostvController::class, 'migrationStatus'])->name('admin.external-api.dostv-migration-status.index');
 
 
 });

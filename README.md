@@ -67,6 +67,40 @@ npm run dev
 
 Browse the application on localhost:8000
 
+### Queue Setup
+
+This project now uses Laravel queues for long-running tasks such as DOSTv migration.
+
+Set the queue driver in your `.env`:
+```bash
+QUEUE_CONNECTION=database
+```
+
+Run database migrations, including the `jobs` table:
+```bash
+php artisan migrate
+```
+
+Start the queue worker:
+```bash
+php artisan queue:work --queue=external-migrations
+```
+
+Keep the worker terminal open while using queued features in the admin panel.
+
+### DOSTv Migration
+
+To migrate DOSTv materials from the admin page:
+
+1. Start the Laravel app with `php artisan serve`
+2. Start the frontend with `npm run dev`
+3. Start the queue worker with `php artisan queue:work --queue=external-migrations`
+4. Open the DOSTv admin page
+5. Select the date range
+6. Click `Migrate`
+
+The request is queued immediately, then processed by the background worker. The page will poll the migration status and refresh when the job completes.
+
 
 Error during build
 ```bash
@@ -82,4 +116,3 @@ Notes
 
     Change database structure
     Articles -> Materials
-
