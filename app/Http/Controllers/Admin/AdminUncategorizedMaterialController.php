@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Material;
+use App\Http\Controllers\Helpers\Fetcher;
+use App\Http\Controllers\Base\MaterialController;
 
-class AdminUncategorizedMaterialController extends Controller
+class AdminUncategorizedMaterialController extends MaterialController
 {
     public function index()
     {
-        return Inertia::render('Admin/Material/UncategorizedMaterials/UncategorizedMaterialIndex');
+        return Inertia::render('Admin/Material/UncategorizedMaterials/AdminUncategorizedMaterialIndex');
     }
 
     public function getData(Request $request)
@@ -25,5 +27,65 @@ class AdminUncategorizedMaterialController extends Controller
             ->paginate($perpage, ['*'], 'page', $page);
 
         return response()->json($uncategorizedMaterials);
+    }
+
+    public function create(){
+
+        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        //$openController = new OpenController();
+        $fetcher = new Fetcher();
+
+        $sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $regionalOffices = $fetcher->getRegionalOffices();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
+
+
+        return Inertia::render('Admin/Material/UncategorizedMaterials/AdminUncategorizedMaterialAddEdit', [
+            'id' => 0,
+            'ckLicense' => $CK_LICENSE,
+            'post' => null,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'categories' => $categories,
+            'regionalOffices' => $regionalOffices,
+            'sections' => $sections,
+            'authors' => $authors
+        ]);
+    }
+
+
+
+
+    public function edit($id){
+
+       $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+
+        $fetcher = new Fetcher();
+
+        //$sections = $fetcher->getSections();
+        $tags = $fetcher->getTags();
+        $agencies = $fetcher->getAgencies();
+        $regions = $fetcher->getRegions();
+        $regionalOffices = $fetcher->getRegionalOffices();
+        $categories = $fetcher->getCategories();
+        $authors = $fetcher->getAuthorsAutocomplete();
+        $material = Material::with(['subject_headings'])->find($id);
+
+        return Inertia::render('Admin/Material/UncategorizedMaterials/AdminUncategorizedMaterialAddEdit', [
+            'id' => $id,
+            'ckLicense' => $CK_LICENSE,
+            'material' => $material,
+            'tags' => $tags,
+            'agencies' => $agencies,
+            'regions' => $regions,
+            'regionalOffices' => $regionalOffices,
+            'categories' => $categories,
+            'authors' => $authors
+        ]);
     }
 }

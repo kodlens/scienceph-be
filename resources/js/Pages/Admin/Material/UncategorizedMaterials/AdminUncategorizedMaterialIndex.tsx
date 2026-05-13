@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import SearchFilter from '@/Components/SearchFilter';
 import { PageProps } from '@/types';
-import TableUncategorizedMaterials from '@/Components/TableUncategorizedMaterials';
+import TableUncategorizedMaterials from '@/Components/Admin/Material/TableUncategorizedMaterials';
 
 
 const AdminUncategorizedMaterialIndex = ( {auth}:PageProps ) => {

@@ -6,7 +6,7 @@ import axios from 'axios'
 //import { adminMenuItems } from '@/helper/adminMenuItems'
 import { menuItems } from '@/helper/menuItems'
 import { Material } from '@/types/material'
-import MaterialView from './MaterialView'
+import MaterialView from '../../MaterialView'
 import { User } from '@/types'
 
 type Props = {
@@ -212,14 +212,14 @@ const TableUncategorizedMaterials = (
                   material,
                   prefix: routePrefix,
                   handleEditClick: showEdit ? () =>
-                    router.visit(`/${routePrefix}/materials/${material.id}/edit`)
+                    router.visit(`/${routePrefix}/uncategorized-materials/${material.id}/edit`)
                   : undefined,
                   handleSubmitClick: showSubmit ? async () => {
                     modal.confirm({
                       title: 'Submit',
                       content: 'This material will be set to submit.',
                       onOk: async () => {
-                        await axios.post(`/${routePrefix}/material-submit/${material.id}`)
+                        await axios.post(`/${routePrefix}/uncategorized-materials-submit/${material.id}`)
                         refetch()
                       },
                     })

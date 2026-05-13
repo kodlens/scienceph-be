@@ -133,7 +133,7 @@ export default function AdminLayout(
     {
       key: 'admin.external-api',
       icon: <SquareArrowOutUpRight size={15} />,
-      label: 'Externals API',
+      label: 'External API',
       children: [
         {
           key: 'admin.external-apis.dostv',
@@ -141,12 +141,12 @@ export default function AdminLayout(
           icon: <Sparkle size={15} />,
           onClick: () => router.visit('/admin/external-api/dostv'),
         },
-        {
-          key: 'admin.external-apis.science-gov',
-          label: 'Science.gov API',
-          icon: <SquareArrowOutUpRight size={15} />,
-          onClick: () => router.visit('/admin/external-api/science-gov'),
-        },
+        // {
+        //   key: 'admin.external-apis.science-gov',
+        //   label: 'Science.gov API',
+        //   icon: <SquareArrowOutUpRight size={15} />,
+        //   onClick: () => router.visit('/admin/external-api/science-gov'),
+        // },
       ]
     },
     {
