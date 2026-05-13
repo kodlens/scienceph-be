@@ -8,6 +8,7 @@ use App\Models\ExternalMigration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Models\Material;
 
 class AdminDostvController extends Controller
 {
@@ -17,9 +18,11 @@ class AdminDostvController extends Controller
 
     public function getData(Request $req)
     {
-        $dostvs = DB::table('materials')
-            ->where('classification', 'dostv')
-            ->get();
+        $perpage = $req->input('perpage', 10);
+        $page = $req->input('page', 1);
+
+        $dostvs = Material::where('classification', 'dostv')
+            ->paginate($perpage, ['*'], 'page', $page);
 
         return $dostvs;
     }

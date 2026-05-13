@@ -15,19 +15,26 @@ const MigrateDostv = ( { onRefetch }: Props) => {
   const [toDate, setToDate] = useState<Dayjs>(dayjs().endOf('month'));
   const [loading, setLoading] = useState(false);
   const [migration, setMigration] = useState<any>(null);
-  const hasRefetchedAfterCompletion = useRef(false);
+  const previousStatusRef = useRef<string | null>(null);
+  const shouldNotifyOnCompletionRef = useRef(false);
 
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval> | null = null;
-
     const loadStatus = async () => {
       try {
         const res = await axios.get('/admin/external-api/dostv-migration-status');
         const nextMigration = res.data?.migration ?? null;
-        setMigration(nextMigration);
+        const previousStatus = previousStatusRef.current;
+        const nextStatus = nextMigration?.status ?? null;
 
-        if (nextMigration?.status === 'completed' && !hasRefetchedAfterCompletion.current) {
-          hasRefetchedAfterCompletion.current = true;
+        setMigration(nextMigration);
+        previousStatusRef.current = nextStatus;
+
+        const hasTransitionedFromRunningState = previousStatus !== null
+          && ['queued', 'processing'].includes(previousStatus)
+          && nextStatus !== previousStatus;
+
+        if (hasTransitionedFromRunningState && nextStatus === 'completed' && shouldNotifyOnCompletionRef.current) {
+          shouldNotifyOnCompletionRef.current = false;
           onRefetch();
           notification.success({
             message: 'DOSTv migration completed.',
@@ -36,8 +43,8 @@ const MigrateDostv = ( { onRefetch }: Props) => {
           });
         }
 
-        if (nextMigration?.status === 'failed' && !hasRefetchedAfterCompletion.current) {
-          hasRefetchedAfterCompletion.current = true;
+        if (hasTransitionedFromRunningState && nextStatus === 'failed' && shouldNotifyOnCompletionRef.current) {
+          shouldNotifyOnCompletionRef.current = false;
           notification.error({
             message: 'DOSTv migration failed.',
             description: nextMigration?.error_message ?? 'The queued migration did not complete.',
@@ -50,25 +57,67 @@ const MigrateDostv = ( { onRefetch }: Props) => {
     };
 
     loadStatus();
-    intervalId = setInterval(loadStatus, 3000);
+  }, [notification, onRefetch]);
+
+  useEffect(() => {
+    if (migration?.status !== 'queued' && migration?.status !== 'processing') {
+      return;
+    }
+
+    const intervalId = setInterval(async () => {
+      try {
+        const res = await axios.get('/admin/external-api/dostv-migration-status');
+        const nextMigration = res.data?.migration ?? null;
+        const previousStatus = previousStatusRef.current;
+        const nextStatus = nextMigration?.status ?? null;
+
+        setMigration(nextMigration);
+        previousStatusRef.current = nextStatus;
+
+        const hasTransitionedFromRunningState = previousStatus !== null
+          && ['queued', 'processing'].includes(previousStatus)
+          && nextStatus !== previousStatus;
+
+        if (hasTransitionedFromRunningState && nextStatus === 'completed' && shouldNotifyOnCompletionRef.current) {
+          shouldNotifyOnCompletionRef.current = false;
+          onRefetch();
+          notification.success({
+            message: 'DOSTv migration completed.',
+            duration: 3,
+            showProgress: true,
+          });
+        }
+
+        if (hasTransitionedFromRunningState && nextStatus === 'failed' && shouldNotifyOnCompletionRef.current) {
+          shouldNotifyOnCompletionRef.current = false;
+          notification.error({
+            message: 'DOSTv migration failed.',
+            description: nextMigration?.error_message ?? 'The queued migration did not complete.',
+            duration: 4,
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load migration status:', error);
+      }
+    }, 3000);
 
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
+      clearInterval(intervalId);
     };
-  }, [notification, onRefetch]);
+  }, [migration?.status, notification, onRefetch]);
 
   const handleMigrate = async () => {
     try {
       setLoading(true);
-      hasRefetchedAfterCompletion.current = false;
+      shouldNotifyOnCompletionRef.current = true;
 
       const res = await axios.post('/admin/external-api/migrate-dostv-materials', {
         from: fromDate.format('YYYY-MM-DD'),
         to: toDate.format('YYYY-MM-DD'),
       });
-      setMigration(res.data?.migration ?? null);
+      const nextMigration = res.data?.migration ?? null;
+      setMigration(nextMigration);
+      previousStatusRef.current = nextMigration?.status ?? null;
       notification.info({
         message: 'DOSTv migration queued.',
         description: 'Run a queue worker to process the import.',
@@ -76,6 +125,7 @@ const MigrateDostv = ( { onRefetch }: Props) => {
         showProgress: true,
       });
     } catch (error) {
+      shouldNotifyOnCompletionRef.current = false;
       console.error('Migration failed:', error);
       notification.error({
         message: axios.isAxiosError(error)

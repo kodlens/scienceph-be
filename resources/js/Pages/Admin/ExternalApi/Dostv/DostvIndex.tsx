@@ -21,8 +21,9 @@ const DostvIndex = ( ) => {
 
 
   //const [perPage, setPerPage] = useState(10);
-  const perPage = 10
+
   const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState<number>(10);
 
   const [filters, setFilters] = useState({
       status: '',
@@ -136,6 +137,10 @@ const DostvIndex = ( ) => {
               page={page}
               paginationPageChange={(p)=>{
                 setPage(p)
+              }}
+              pageSizeChange={(current, size) => {
+                setPage(current);
+                setPerPage(size);
               }}
 
             />

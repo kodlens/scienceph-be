@@ -14,11 +14,12 @@ type Props = {
   isFetching: boolean
   page: number
   paginationPageChange: (page: number) => void
+  pageSizeChange?: (page: number, size: number) => void
   refetch: () => void
 
 
 }
-const DostvTable = ( { data, isFetching, page, paginationPageChange }: Props) => {
+const DostvTable = ( { data, isFetching, page, paginationPageChange, pageSizeChange }: Props) => {
 
   const { modal} = App.useApp();
 
@@ -204,6 +205,11 @@ const DostvTable = ( { data, isFetching, page, paginationPageChange }: Props) =>
           total={data?.total}
           onChange={(value) => {
             paginationPageChange(value)
+
+          }}
+          pageSizeOptions={['10', '20', '50']}
+          onShowSizeChange={(current, size) => {
+            pageSizeChange?.(current, size);
           }}
         />
 
