@@ -170,9 +170,9 @@ export default function PublisherSubmittedMaterialIndex({ auth }: PageProps) {
                 page={page}
                 user={auth.user}
                 showDelete={false}
-                showSubmit={true}
-                showEdit={false}
-                showPublish={false}
+                showSubmit={false}
+                showEdit={true}
+                showPublish={true}
                 showDraft={true}
                 showView={true}
                 showTrash={false}
