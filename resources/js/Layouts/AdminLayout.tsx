@@ -12,7 +12,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, Funnel, LandPlot, LogOut, Sparkle, SquareArrowOutUpRight, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
+import { DatabaseZap, Funnel, LandPlot, LogOut, Newspaper, Sparkle, SquareArrowOutUpRight, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -104,9 +104,15 @@ export default function AdminLayout(
       children: [
         {
           key: 'admin.materials',
-          label: 'Materials',
+          label: 'All Materials',
           icon: <FormOutlined />,
           onClick: () => router.visit('/admin/materials'),
+        },
+        {
+          key: 'admin.uncategorized-materials',
+          label: 'Uncategorized Materials',
+          icon: <Newspaper size={15} />,
+          onClick: () => router.visit('/admin/uncategorized-materials'),
         },
         {
           key: 'admin.ojt-materials',

@@ -1,5 +1,5 @@
 export interface Material {
-    data(data: any): unknown;
+    classification?: string;
     id: number;
     title?: string;
     description?: string;

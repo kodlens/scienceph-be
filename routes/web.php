@@ -123,6 +123,9 @@ Route::prefix('admin')->middleware('auth', 'admin')
 
     Route::post('/material-draft/{id}', [App\Http\Controllers\Admin\AdminMaterialController::class, 'draft'])->name('admin.material.draft');
 
+    //uncategorized-materials
+    Route::get('/uncategorized-materials', [App\Http\Controllers\Admin\AdminUncategorizedMaterialController::class, 'index'])->name('admin.uncategorized-materials.index');
+    Route::get('/get-uncategorized-materials', [App\Http\Controllers\Admin\AdminUncategorizedMaterialController::class, 'getData'])->name('admin.uncategorized-materials.getdata');
     //Route::post('/article-pending/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'pending'])->name('article.pending');
     //Route::post('/article-submit-for-publishing/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'submit'])->name('article.submit-for-publishing');
     //Route::post('/article-featured/{id}', [App\Http\Controllers\Admin\AdminArticleController::class, 'featured'])->name('article.featured');
