@@ -106,7 +106,6 @@ export default function EncoderLayout(
     //         onClick: () => router.visit('/reports/material-publish'),
     //       },
     //     ],
-
     // },
     {
         key: 'my-account.index',
