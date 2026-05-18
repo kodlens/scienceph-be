@@ -12,7 +12,7 @@ class DostvPostController extends Controller
 
     public function getPosts(Request $req)
     {
-        $apiKey = env('DOSTV_API_KEY');
+        $apiKey = config('cache.DOSTV_API_KEY');
         $url = config('cache.DOSTV_API_URL') . '?from=' . $req->query('from') . '&to=' . $req->query('to');
         $options = [
             'http' => [

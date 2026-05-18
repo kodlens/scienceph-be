@@ -38,8 +38,11 @@ class MigrateDostvMaterials implements ShouldQueue
             'error_message' => null,
         ]);
 
-        $apiKey = env('DOSTV_API_KEY');
+        $apiKey = config('cache.DOSTV_API_KEY');
         $url = config('cache.DOSTV_API_URL');
+
+       // $apiKey = env('DOSTV_API_KEY');
+        //$url = env('DOSTV_API_URL');
 
         $response = Http::timeout(120)
             ->retry(2, 1000)
