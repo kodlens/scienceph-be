@@ -199,10 +199,67 @@ class SearchController extends Controller
 
 
 
+    // public function categoryLabels(Request $req){
 
+    //     $validated = $req->validate([
+    //         's'  => 'nullable|string',
+    //         'category' => 'nullable|string',
+    //         'topic'   => 'nullable|string',
+    //     ]);
+
+    //     $search = trim($validated['s'] ?? '');
+    //     $category   = trim($validated['category'] ?? '');
+    //     $topic     = trim($validated['topic']   ?? '');
+
+    //     $subQuery = DB::table('materials as a')
+    //     //$subQuery = Material::with()
+    //         ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
+    //         ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
+    //         ->join('categories as d', 'c.category_id', '=', 'd.id')
+    //         ->select(
+    //             'd.id',
+    //             'd.category',
+    //             'd.slug as category_slug',
+    //             'c.slug as topic_slug'
+    //         );
+
+    //     if (isset($req->s) && $search !== '') {
+    //         $subQuery->whereRaw(
+    //             "MATCH(a.title, a.description_text)
+    //             AGAINST (? IN NATURAL LANGUAGE MODE)",
+    //             [$search]
+    //         );
+    //     }
+
+    //     //for accurate, we need to count on the subquery
+    //     $categories = DB::query()
+    //         ->fromSub($subQuery, 't1')
+    //         ->select(
+    //             't1.*',
+    //             DB::raw('COUNT(t1.category_slug) as count')
+    //         );
+
+    //     if (!isset($req->s) && $search === '') {
+    //         $categories->where('category_slug', $category);
+    //     }
+
+    //     // if (isset($req->category) && $category !== '') {
+    //     //     $categories->where('category_slug', $category);
+    //     // }
+
+    //     // if (isset($req->topic) && $topic !== '') {
+    //     //     $categories->where('topic_slug', $topic);
+    //     // }
+
+    //     $categories = $categories->groupBy('t1.category_slug')
+    //         ->orderByDesc('count')
+    //         ->get();
+
+    //     return $categories;
+
+    // }
 
     public function categoryLabels(Request $req){
-
         $validated = $req->validate([
             's'  => 'nullable|string',
             'category' => 'nullable|string',
@@ -213,56 +270,74 @@ class SearchController extends Controller
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
 
-        $subQuery = DB::table('materials as a')
+        $rows = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select(
-                'd.id',
+                'd.id as category_id',
                 'd.category',
                 'd.slug as category_slug',
-                'c.slug as topic_slug'
+                'c.id as subject_heading_id',
+                'c.subject_heading',
+                'c.slug as topic_slug',
+                DB::raw('COUNT(DISTINCT a.id) as count')
             );
 
-        /**
-        * 🔍 FULLTEXT search if there is search keyword
-        */
         if (isset($req->s) && $search !== '') {
-            $subQuery->whereRaw(
+            $rows->whereRaw(
                 "MATCH(a.title, a.description_text)
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );
         }
 
-        //for accurate, we need to count on the subquery
-        $categories = DB::query()
-            ->fromSub($subQuery, 't1')
-            ->select(
-                't1.*',
-                DB::raw('COUNT(t1.category_slug) as count')
-            );
-
         if (!isset($req->s) && $search === '') {
-            $categories->where('category_slug', $category);
+            $rows->where('d.slug', $category);
         }
 
-        // if (isset($req->category) && $category !== '') {
-        //     $categories->where('category_slug', $category);
-        // }
-
-
-        // if (isset($req->topic) && $topic !== '') {
-        //     $categories->where('topic_slug', $topic);
-        // }
-
-        $categories = $categories->groupBy('t1.category_slug')
+        $rows = $rows
+            ->groupBy(
+                'd.id',
+                'd.category',
+                'd.slug',
+                'c.id',
+                'c.subject_heading',
+                'c.slug'
+            )
+            ->orderBy('d.category')
             ->orderByDesc('count')
             ->get();
+
+        $categories = $rows
+            ->groupBy('category_id')
+            ->map(function ($items) {
+                $first = $items->first();
+
+                return [
+                    'id' => $first->category_id,
+                    'category' => $first->category,
+                    'category_slug' => $first->category_slug,
+                    'count' => $items->sum('count'),
+                    'topics' => $items->map(function ($item) {
+                        return [
+                            'id' => $item->subject_heading_id,
+                            'subject_heading' => $item->subject_heading,
+                            'slug' => $item->topic_slug,
+                            'count' => $item->count,
+                        ];
+                    })->values(),
+                ];
+            })
+            ->values();
 
         return $categories;
 
     }
+
+
+
+
 
     public function topicLabels(Request $req){
 
@@ -277,8 +352,8 @@ class SearchController extends Controller
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
 
-        $subQuery = DB::table('materials as a')
-            ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
+        $subQuery = Material::query()
+            ->join('material_subject_headings as b', 'materials.id', '=', 'b.material_id')
             ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
             ->join('categories as d', 'c.category_id', '=', 'd.id')
             ->select(
@@ -294,7 +369,7 @@ class SearchController extends Controller
         */
         if ($search !== '') {
             $subQuery->whereRaw(
-                "MATCH(a.title, a.description_text)
+                "MATCH(materials.title, materials.description_text)
                 AGAINST (? IN NATURAL LANGUAGE MODE)",
                 [$search]
             );

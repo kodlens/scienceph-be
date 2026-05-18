@@ -65,6 +65,12 @@ class Material extends Model
             );
     }///tiwason
 
+    public function topics(){
+        $this->belongsToMany(SubjectHeadubg::class, '');
+    }
+
+
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
