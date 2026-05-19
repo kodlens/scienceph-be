@@ -67,7 +67,7 @@ return [
 
 
      //add ck license
-    'ck_license' => env('CK_EDITOR_LICENSE_KEY', ''),
+    'ck_license' => env('CK_EDITOR_LICENSE_KEY', 'GPL'),
 
 
 
@@ -82,7 +82,7 @@ return [
     |
     */
 
-    //'timezone' => 'UTC',
+    //timezone' => 'UTC',
     'timezone' => 'Asia/Manila',
     /*
     |--------------------------------------------------------------------------

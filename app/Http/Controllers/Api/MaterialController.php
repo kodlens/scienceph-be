@@ -131,9 +131,21 @@ class MaterialController extends Controller
 
 
     public function getMaterial($slug){
-        return Material::where('slug', $slug)
-            ->select('id', 'title', 'description', 'description_text', 'slug', 'category_id', 'author', 'publish_date', 'is_press_release')
-            ->with('category')
+        return Material::where('materials.slug', $slug)
+            ->join('material_subject_headings', 'materials.id', '=', 'material_subject_headings.material_id')
+            ->join('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
+            ->select(
+                'materials.id',
+                'materials.title',
+                'materials.description',
+                'materials.description_text',
+                'materials.slug',
+                'materials.author',
+                'materials.publish_date',
+                'materials.is_press_release'
+            )
+            ->selectRaw('GROUP_CONCAT(subject_headings.subject_heading) as topics')
+            ->groupBy('materials.id')
             ->first();
     }
 

@@ -190,8 +190,6 @@ class SearchController extends Controller
         return $results->paginate($perPage);
     }
 
-
-
     public function HTMLCleaner($data){
         // If it's a paginator, get the collection
         if ($data instanceof \Illuminate\Pagination\AbstractPaginator) {
