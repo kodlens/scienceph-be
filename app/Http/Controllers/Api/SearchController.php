@@ -13,6 +13,19 @@ class SearchController extends Controller
 
     private $limit = 500;
 
+    private function applyTypeFilter($query, string $type): void
+    {
+        $typeMap = [
+            'articles' => 'text',
+            'videos' => 'video',
+            'people' => 'people',
+        ];
+
+        if ($type !== '' && $type !== 'all' && isset($typeMap[$type])) {
+            $query->where('a.filter_type', $typeMap[$type]);
+        }
+    }
+
 
     public function searchLatest(Request $req){
 
@@ -23,11 +36,13 @@ class SearchController extends Controller
             'category' => 'nullable|string',
             'topic'   => 'nullable|string',
             'perpage' => 'nullable|integer',
+            'type' => 'nullable|in:all,videos,articles,people',
         ]);
 
         $search = trim($validated['s'] ?? '');
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
+        $type = trim($validated['type'] ?? 'all');
         $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
@@ -50,6 +65,8 @@ class SearchController extends Controller
 
             ->whereYear('publish_date', '<=', $yearNow)
             ->whereYear('publish_date', '>=', $yearNow - 4); // older than 5 years
+
+        $this->applyTypeFilter($subQuery, $type);
 
         /**
         🔍 FULLTEXT SEARCH (only when keyword exists)
@@ -80,6 +97,12 @@ class SearchController extends Controller
             $results->where('t1.topic_slug', $topic);
         }
 
+        //add group concat to merge same material with multiple topics
+        $results->selectRaw('t1.*,
+            GROUP_CONCAT(DISTINCT t1.topic_name SEPARATOR ", ") as topic_names,
+            GROUP_CONCAT(DISTINCT t1.topic_slug SEPARATOR ", ") as topic_slugs
+        ')->groupBy('t1.id');
+
 
         return $results->paginate($perPage);
 
@@ -96,11 +119,13 @@ class SearchController extends Controller
             'category' => 'nullable|string',
             'topic'   => 'nullable|string',
             'perpage' => 'nullable|integer',
+            'type' => 'nullable|in:all,videos,articles,people',
         ]);
 
         $search = trim($validated['s']  ?? '');
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
+        $type = trim($validated['type'] ?? 'all');
         $perPage = $validated['perpage'] ?? 10;
 
         $subQuery = DB::table('materials as a')
@@ -121,6 +146,8 @@ class SearchController extends Controller
                 'd.slug as category_slug'
             ])
             ->whereYear('publish_date', '<=', $yearNow - 5); // older than 5 years
+
+        $this->applyTypeFilter($subQuery, $type);
 
         /**
         🔍 FULLTEXT SEARCH (only when keyword exists)
@@ -153,9 +180,14 @@ class SearchController extends Controller
             $results->where('t1.topic_slug', $topic);
         }
 
+        //add group concat to merge same material with multiple topics
+        $results->selectRaw('t1.*,
+            GROUP_CONCAT(DISTINCT t1.topic_name SEPARATOR ", ") as topic_names,
+            GROUP_CONCAT(DISTINCT t1.topic_slug SEPARATOR ", ") as topic_slugs
+        ')->groupBy('t1.id');
+
 
         return $results->paginate($perPage);
-
     }
 
 
@@ -256,7 +288,6 @@ class SearchController extends Controller
     //         ->get();
 
     //     return $categories;
-
     // }
 
     public function categoryLabels(Request $req){
@@ -264,11 +295,13 @@ class SearchController extends Controller
             's'  => 'nullable|string',
             'category' => 'nullable|string',
             'topic'   => 'nullable|string',
+            'type' => 'nullable|in:all,videos,articles,people',
         ]);
 
         $search = trim($validated['s'] ?? '');
         $category   = trim($validated['category'] ?? '');
         $topic     = trim($validated['topic']   ?? '');
+        $type = trim($validated['type'] ?? 'all');
 
         $rows = DB::table('materials as a')
             ->join('material_subject_headings as b', 'a.id', '=', 'b.material_id')
@@ -283,6 +316,8 @@ class SearchController extends Controller
                 'c.slug as topic_slug',
                 DB::raw('COUNT(DISTINCT a.id) as count')
             );
+
+        $this->applyTypeFilter($rows, $type);
 
         if (isset($req->s) && $search !== '') {
             $rows->whereRaw(
@@ -339,64 +374,64 @@ class SearchController extends Controller
 
 
 
-    public function topicLabels(Request $req){
+    // public function topicLabels(Request $req){
 
 
-        $validated = $req->validate([
-            's'  => 'nullable|string',
-            'category' => 'nullable|string',
-            'topic'   => 'nullable|string',
-        ]);
+    //     $validated = $req->validate([
+    //         's'  => 'nullable|string',
+    //         'category' => 'nullable|string',
+    //         'topic'   => 'nullable|string',
+    //     ]);
 
-        $search = trim($validated['s'] ?? '');
-        $category   = trim($validated['category'] ?? '');
-        $topic     = trim($validated['topic']   ?? '');
+    //     $search = trim($validated['s'] ?? '');
+    //     $category   = trim($validated['category'] ?? '');
+    //     $topic     = trim($validated['topic']   ?? '');
 
-        $subQuery = Material::query()
-            ->join('material_subject_headings as b', 'materials.id', '=', 'b.material_id')
-            ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
-            ->join('categories as d', 'c.category_id', '=', 'd.id')
-            ->select(
-                'c.id',
-                'c.subject_heading as topic',
-                'c.slug as topic_slug',
-                'd.category',
-                'd.slug as category_slug'
-            );
+    //     $subQuery = Material::query()
+    //         ->join('material_subject_headings as b', 'materials.id', '=', 'b.material_id')
+    //         ->join('subject_headings as c', 'b.subject_heading_id', '=', 'c.id')
+    //         ->join('categories as d', 'c.category_id', '=', 'd.id')
+    //         ->select(
+    //             'c.id',
+    //             'c.subject_heading as topic',
+    //             'c.slug as topic_slug',
+    //             'd.category',
+    //             'd.slug as category_slug'
+    //         );
 
-        /**
-        * 🔍 FULLTEXT search — SAME logic as main query
-        */
-        if ($search !== '') {
-            $subQuery->whereRaw(
-                "MATCH(materials.title, materials.description_text)
-                AGAINST (? IN NATURAL LANGUAGE MODE)",
-                [$search]
-            );
-        }
+    //     /**
+    //     * 🔍 FULLTEXT search — SAME logic as main query
+    //     */
+    //     if ($search !== '') {
+    //         $subQuery->whereRaw(
+    //             "MATCH(materials.title, materials.description_text)
+    //             AGAINST (? IN NATURAL LANGUAGE MODE)",
+    //             [$search]
+    //         );
+    //     }
 
 
-        //for accurate, we need to count on the subquery
-        $res = DB::query()
-            ->fromSub($subQuery, 't1')
-            ->select(
-                't1.*',
-                DB::raw('COUNT(t1.topic_slug) as count')
-            );
+    //     //for accurate, we need to count on the subquery
+    //     $res = DB::query()
+    //         ->fromSub($subQuery, 't1')
+    //         ->select(
+    //             't1.*',
+    //             DB::raw('COUNT(t1.topic_slug) as count')
+    //         );
 
-        if (isset($req->category) && $category !== '') {
-            $res->where('category_slug', $category);
-        }
+    //     if (isset($req->category) && $category !== '') {
+    //         $res->where('category_slug', $category);
+    //     }
 
-        // if (isset($req->topic) && $topic !== '') {
-        //     $res->where('topic_slug', $topic);
-        // }
+    //     // if (isset($req->topic) && $topic !== '') {
+    //     //     $res->where('topic_slug', $topic);
+    //     // }
 
-        return $res->groupBy('t1.topic_slug')
-            ->orderByDesc('count')
-            ->get();
+    //     return $res->groupBy('t1.topic_slug')
+    //         ->orderByDesc('count')
+    //         ->get();
 
-    }
+    // }
 
 
 
