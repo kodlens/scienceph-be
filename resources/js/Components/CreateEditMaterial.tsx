@@ -19,11 +19,8 @@ const CreateEditMaterial = ({
   auth,
   material,
   ckLicense,
-  //categories,
   agencies,
   regions,
-  //regionalOffices,
-  //authors,
   tags,
   uri
 }: CreateEditProps) => {
@@ -57,7 +54,7 @@ const CreateEditMaterial = ({
         { name: "subject_headings", value: material.subject_headings },
         { name: "agency", value: material.agency },
         { name: "region", value: material.region },
-        { name: "regional_office", value: material.regional_office },
+        //{ name: "regional_office", value: material.regional_office },
         { name: "author", value: material.author },
         { name: 'filter_type', value: material.filter_type ? material.filter_type : '' },
         { name: "is_publish", value: material.is_publish },
@@ -65,6 +62,8 @@ const CreateEditMaterial = ({
         { name: "is_press_release", value: material.is_press_release && material.is_press_release > 0 ? true : false },
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
+
+      console.log(material.publish_date);
 
       //console.log('material.subject_headings', material.subject_headings);
     } catch (err) { }
@@ -158,7 +157,7 @@ const CreateEditMaterial = ({
         category: "",
         status: 'draft',
         region: null,
-        regional_office: null,
+        //regional_office: null,
         agency: null,
         author: null,
         is_publish: 0,

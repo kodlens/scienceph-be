@@ -96,7 +96,7 @@ class PublisherMaterialController extends MaterialController
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
         $regionalOffices = $fetcher->getRegionalOffices();
-        $categories = $fetcher->getCategories();
+        //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
 
@@ -107,7 +107,7 @@ class PublisherMaterialController extends MaterialController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
-            'categories' => $categories,
+            //'categories' => $categories,
             'regionalOffices' => $regionalOffices,
             //'sections' => $sections,
             'authors' => $authors
@@ -127,7 +127,7 @@ class PublisherMaterialController extends MaterialController
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
         $regionalOffices = $fetcher->getRegionalOffices();
-        $categories = $fetcher->getCategories();
+        //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
         $material = Material::with(['subject_headings'])->find($id);
 
@@ -140,7 +140,7 @@ class PublisherMaterialController extends MaterialController
             'agencies' => $agencies,
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
-            'categories' => $categories,
+            //'categories' => $categories,
             //'sections' => $sections,
             'authors' => $authors
         ]);

@@ -10,11 +10,9 @@ const PublisherMaterialCreateEdit = ({
   auth,
   material,
   ckLicense,
-  categories,
   authors,
   agencies,
   regions,
-  regionalOffices,
   tags
 }: CreateEditProps) => {
 
@@ -41,12 +39,11 @@ const PublisherMaterialCreateEdit = ({
               auth={auth}
               material={material}
               ckLicense={ckLicense}
-              categories={categories}
               uri="/publisher/materials"
               authors={authors}
               agencies={agencies}
               regions={regions}
-              tags={tags} regionalOffices={regionalOffices}            />
+              tags={tags}           />
 
           </div>
           {/* end input card */}

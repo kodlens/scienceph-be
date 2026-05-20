@@ -12,11 +12,9 @@ const EncoderMaterialCreateEdit = ({
   auth,
   material,
   ckLicense,
-  categories,
   authors,
   agencies,
   regions,
-  regionalOffices,
   tags
 }: CreateEditProps) => {
   const isEditMode = Number(id) > 0;
@@ -72,12 +70,10 @@ const EncoderMaterialCreateEdit = ({
               auth={auth}
               material={material}
               ckLicense={ckLicense}
-              categories={categories}
               uri="/encoder/materials"
               authors={authors}
               agencies={agencies}
               regions={regions}
-              regionalOffices={regionalOffices}
               tags={tags}
             />
           </div>

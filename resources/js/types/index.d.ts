@@ -65,11 +65,11 @@ export interface CreateEditProps {
   auth: AuthProps,
   material: Material,
   ckLicense: string,
-  categories: Category[],
+  //categories: Category[],
   authors: AuthorApi,
   agencies: Agency[],
   regions: Region[],
-  regionalOffices: RegionalOffice[],
+  //regionalOffices: RegionalOffice[],
   tags: string[],
   uri: string
 }

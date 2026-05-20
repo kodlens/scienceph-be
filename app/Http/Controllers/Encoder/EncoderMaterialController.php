@@ -64,7 +64,7 @@ class EncoderMaterialController extends MaterialController
         $agencies = $fetcher->getAgencies();
         $regionalOffices = $fetcher->getRegionalOffices();
         $regions = $fetcher->getRegions();
-        $categories = $fetcher->getCategories();
+        //$categories = $fetcher->getCategories();
         //$authors = $fetcher->getAuthorsAutocomplete();
 
         return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
@@ -73,7 +73,7 @@ class EncoderMaterialController extends MaterialController
             'material' => null,
             'tags' => $tags,
             'agencies' => $agencies,
-            'regions' => $regions,
+            //'regions' => $regions,
             'regionalOffices' => $regionalOffices,
             'categories' => $categories,
             //'authors' => $authors
@@ -93,7 +93,7 @@ class EncoderMaterialController extends MaterialController
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
         $regionalOffices = $fetcher->getRegionalOffices();
-        $categories = $fetcher->getCategories();
+        //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
         $material = Material::with(['subject_headings'])->find($id);
 
@@ -106,7 +106,7 @@ class EncoderMaterialController extends MaterialController
             'agencies' => $agencies,
             'regions' => $regions,
             'regionalOffices' => $regionalOffices,
-            'categories' => $categories,
+            //'categories' => $categories,
             'sections' => $sections,
             'authors' => $authors
         ]);
