@@ -44,9 +44,8 @@ const AdminUncategorizedMaterialAddEdit = ({
                 agencies={agencies}
                 regions={regions}
                 tags={tags}
-                uri="admin/uncategorized-materials"
-                authors={authors}            />
-
+                uri="/admin/uncategorized-materials"
+                authors={authors} />
             </div>
 
           </div>

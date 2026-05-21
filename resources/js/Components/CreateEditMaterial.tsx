@@ -64,8 +64,6 @@ const CreateEditMaterial = ({
         { name: "publish_date", value: material.publish_date ? dayjs(material.publish_date) : null },
       ]);
 
-      console.log(material.publish_date);
-
       //console.log('material.subject_headings', material.subject_headings);
     } catch (err) { }
   };
@@ -78,7 +76,7 @@ const CreateEditMaterial = ({
         submit({ ...values, is_publish: true, submit_status: 'save-only' });
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
+        console.error("Validate Failed:", info);
       });
   }
 
@@ -89,7 +87,7 @@ const CreateEditMaterial = ({
         submit({ ...values, is_publish: true, status: 'publish', submit_status: 'save-publish' });
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
+        console.error("Validate Failed:", info);
       });
   }
 
@@ -100,7 +98,7 @@ const CreateEditMaterial = ({
         submit({ ...values, status: 'submit', submit_status: 'save-submit' });
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
+        console.error("Validate Failed:", info);
       });
   }
 
@@ -109,7 +107,7 @@ const CreateEditMaterial = ({
     setErrors({});
 
     if (id > 0) {
-      axios.patch(`${uri}/${id}`, values).then(res => {
+      axios.put(`${uri}/${id}`, values).then(res => {
         values
         if (res.data.status === 'updated') {
           modal.success({
@@ -154,10 +152,6 @@ const CreateEditMaterial = ({
       })
     }
   };
-
-  console.log(role);
-
-
 
   return (
     <Form
