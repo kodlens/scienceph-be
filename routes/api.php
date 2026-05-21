@@ -75,7 +75,7 @@ Route::get('/material-side-menu/topic-labels', [\App\Http\Controllers\Api\Materi
 
 
 
-Route::get('/category/{cat}', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
+//Route::get('/category/{cat}', [\App\Http\Controllers\Api\SubjectSearchController::class, 'topicLabels']);
 
 
 
