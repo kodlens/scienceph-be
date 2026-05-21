@@ -12,28 +12,30 @@ import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [recent, setRecent] = useState<RecentArticle[]>([])
-  const [topArticles, setTopArticles] = useState<TopArticle[]>([])
-  const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
+  // const [recent, setRecent] = useState<RecentArticle[]>([])
+  // const [topArticles, setTopArticles] = useState<TopArticle[]>([])
+  // const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    //fetchData()
+    fetchData()
   }, [])
 
   const fetchData = async () => {
     try {
-      const [statsRes, recentRes, topRes, topResLastSixMonths] = await Promise.all([
+      const [statsRes,
+        //recentRes, topRes, topResLastSixMonths
+      ] = await Promise.all([
         axios.get<DashboardStats>("/dashboard/stats"),
-        axios.get<RecentArticle[]>("/dashboard/recent"),
-        axios.get<TopArticle[]>("/dashboard/top-articles"),
-        axios.get<TopArticle[]>("/dashboard/top-last-six-months")
+        // axios.get<RecentArticle[]>("/dashboard/recent"),
+        // axios.get<TopArticle[]>("/dashboard/top-articles"),
+        // axios.get<TopArticle[]>("/dashboard/top-last-six-months")
       ])
 
       setStats(statsRes.data)
-      setRecent(recentRes.data)
-      setTopArticles(topRes.data)
-      setTopArticlesLastSixMonths(topResLastSixMonths.data)
+      // setRecent(recentRes.data)
+      // setTopArticles(topRes.data)
+      // setTopArticlesLastSixMonths(topResLastSixMonths.data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -85,15 +87,15 @@ const AdminDashboard = () => {
 
           <div className="space-y-6 p-6">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {/* <StatCard title="Published" value={stats?.published} />
+              <StatCard title="Published" value={stats?.published} />
               <StatCard title="Draft" value={stats?.draft} />
               <StatCard title="Trashed" value={stats?.trashed} />
               <StatCard title="Total Views" value={stats?.total_views} />
               <StatCard title="This Month" value={stats?.this_month} />
-              <StatCard title="Press Releases" value={stats?.press} /> */}
+              <StatCard title="Press Releases" value={stats?.press} />
             </div>
 
-            {/* <ArticlesLastSixMonthsChart /> */}
+            <ArticlesLastSixMonthsChart />
 
             {/* <div className="grid gap-6 xl:grid-cols-2">
               <TableSection

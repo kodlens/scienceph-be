@@ -31,16 +31,18 @@ class AdminUncategorizedMaterialController extends MaterialController
 
     public function create(){
 
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        //$CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        $CK_LICENSE = config('app.ck_license');
+
         //$openController = new OpenController();
         $fetcher = new Fetcher();
 
-        $sections = $fetcher->getSections();
+        //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
-        $regionalOffices = $fetcher->getRegionalOffices();
-        $categories = $fetcher->getCategories();
+        //$regionalOffices = $fetcher->getRegionalOffices();
+        //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
 
@@ -51,19 +53,18 @@ class AdminUncategorizedMaterialController extends MaterialController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
-            'categories' => $categories,
-            'regionalOffices' => $regionalOffices,
-            'sections' => $sections,
+            //'categories' => $categories,
+            //'regionalOffices' => $regionalOffices,
+            //'sections' => $sections,
             'authors' => $authors
         ]);
     }
 
-
-
-
     public function edit($id){
 
-       $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+       //$CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+       $CK_LICENSE = config('app.ck_license');
+
 
         $fetcher = new Fetcher();
 
@@ -71,10 +72,10 @@ class AdminUncategorizedMaterialController extends MaterialController
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
-        $regionalOffices = $fetcher->getRegionalOffices();
-        $categories = $fetcher->getCategories();
+       // $regionalOffices = $fetcher->getRegionalOffices();
+       // $categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
-        $material = Material::with(['subject_headings'])->find($id);
+       // $material = Material::with(['subject_headings'])->find($id);
 
         return Inertia::render('Admin/Material/UncategorizedMaterials/AdminUncategorizedMaterialAddEdit', [
             'id' => $id,
@@ -83,8 +84,8 @@ class AdminUncategorizedMaterialController extends MaterialController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
-            'regionalOffices' => $regionalOffices,
-            'categories' => $categories,
+            //'regionalOffices' => $regionalOffices,
+            //'categories' => $categories,
             'authors' => $authors
         ]);
     }

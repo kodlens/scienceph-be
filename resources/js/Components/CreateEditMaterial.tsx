@@ -32,6 +32,7 @@ const CreateEditMaterial = ({
 
   const role = auth.user?.role ? auth.user?.role.toLowerCase() : '';
 
+
   useEffect(() => {
     if (id > 0) {
       getData();
@@ -153,6 +154,9 @@ const CreateEditMaterial = ({
       })
     }
   };
+
+  console.log(role);
+
 
 
   return (
@@ -382,7 +386,7 @@ const CreateEditMaterial = ({
 
 
 
-        { role === 'administrator' || role === 'publisher' && (
+        { (role === 'administrator' || role === 'publisher') && (
           <>
             <Button
               className="ml-2"
@@ -422,8 +426,8 @@ const CreateEditMaterial = ({
               </Button>
             </ConfigProvider>
           </>
-          )
-        }
+
+        )}
 
         { role === 'encoder' && (
           <>
@@ -440,22 +444,22 @@ const CreateEditMaterial = ({
 
 
             <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  defaultBg: 'green',
-                  defaultColor: 'white',
-                  defaultHoverBorderColor: 'green',
+              theme={{
+                components: {
+                  Button: {
+                    defaultBg: 'green',
+                    defaultColor: 'white',
+                    defaultHoverBorderColor: 'green',
 
-                  defaultActiveColor: 'white',
-                  defaultActiveBorderColor: '#1a8c12',
-                  defaultActiveBg: '#1a8c12',
+                    defaultActiveColor: 'white',
+                    defaultActiveBorderColor: '#1a8c12',
+                    defaultActiveBg: '#1a8c12',
 
-                  defaultHoverBg: '#379b30',
-                  defaultHoverColor: 'white',
+                    defaultHoverBg: '#379b30',
+                    defaultHoverColor: 'white',
+                  }
                 }
-              }
-            }}>
+              }}>
               <Button
                 className="ml-2"
                 onClick={handleSubmitAndSetSubmit}
@@ -481,10 +485,7 @@ const CreateEditMaterial = ({
         </Button>
       </div>
 
-
-
       {/* flex contaner */}
-
 
     </Form>
   );
