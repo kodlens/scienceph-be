@@ -3,18 +3,14 @@ import axios from "axios"
 import { Head } from "@inertiajs/react"
 import { BarChartOutlined } from "@ant-design/icons"
 
-import { DashboardStats, RecentArticle, TopArticle } from "@/types"
+import { DashboardStats } from "@/types"
 import StatCard from "@/Components/StatCard"
-import TableSection from "@/Components/TableSection"
 import Loader from "@/Components/Loader"
 import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 import PublisherLayout from "@/Layouts/PublisherLayout"
 
 const PublisherDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null)
- // const [recent, setRecent] = useState<RecentArticle[]>([])
- // const [topArticles, setTopArticles] = useState<TopArticle[]>([])
- // const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -27,15 +23,11 @@ const PublisherDashboard = () => {
         //recentRes, topRes, topResLastSixMonths
       ] = await Promise.all([
         axios.get<DashboardStats>("/dashboard/stats"),
-       // axios.get<RecentArticle[]>("/dashboard/recent"),
-        //axios.get<TopArticle[]>("/dashboard/top-articles"),
-        //axios.get<TopArticle[]>("/dashboard/top-last-six-months")
+
       ])
 
       setStats(statsRes.data)
-      //setRecent(recentRes.data)
-      //setTopArticles(topRes.data)
-      //setTopArticlesLastSixMonths(topResLastSixMonths.data)
+
     } catch (error) {
       console.error(error)
     } finally {

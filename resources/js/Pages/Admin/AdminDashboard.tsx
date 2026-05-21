@@ -4,17 +4,13 @@ import { Head } from "@inertiajs/react"
 import { DashboardOutlined } from "@ant-design/icons"
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
-import { DashboardStats, RecentArticle, TopArticle } from "@/types"
+import { DashboardStats } from "@/types"
 import StatCard from "@/Components/StatCard"
-import TableSection from "@/Components/TableSection"
 import Loader from "@/Components/Loader"
 import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  // const [recent, setRecent] = useState<RecentArticle[]>([])
-  // const [topArticles, setTopArticles] = useState<TopArticle[]>([])
-  // const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -27,9 +23,7 @@ const AdminDashboard = () => {
         //recentRes, topRes, topResLastSixMonths
       ] = await Promise.all([
         axios.get<DashboardStats>("/dashboard/stats"),
-        // axios.get<RecentArticle[]>("/dashboard/recent"),
-        // axios.get<TopArticle[]>("/dashboard/top-articles"),
-        // axios.get<TopArticle[]>("/dashboard/top-last-six-months")
+
       ])
 
       setStats(statsRes.data)
