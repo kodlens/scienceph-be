@@ -40,7 +40,7 @@ class ClassifyController extends Controller
             You are a strict classification engine, not a chatbot.
 
             TASK:
-            Select up to {$topK} MOST RELEVANT SubjectHeadings from the content given below.
+            Select up to {$topK} MOST RELEVANT topics from the content given below.
 
             RULES (MUST FOLLOW):
             - Choose ONLY from the provided SubjectHeadings.
