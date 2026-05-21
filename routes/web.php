@@ -213,6 +213,10 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/ojt-materials', [App\Http\Controllers\Publisher\Ojt\PublisherOjtMaterialController::class, 'index'])->name('publisher.ojt-materials.index');
     Route::get('/get-ojt-materials', [App\Http\Controllers\Publisher\Ojt\PublisherOjtMaterialController::class, 'getData'])->name('publisher.get-ojt-materials.index');
 
+    Route::get('/activity-logs', [App\Http\Controllers\Publisher\PublisherActivityLogsController::class, 'index'])->name('publisher.activity-logs.index');
+    Route::get('/get-activity-logs', [App\Http\Controllers\Publisher\PublisherActivityLogsController::class, 'getData'])->name('publisher.get-activity-logs.index');
+    Route::get('/export-activity-logs', [App\Http\Controllers\Publisher\PublisherActivityLogsController::class, 'export'])->name('publisher.export-activity-logs.index');
+
 
     //Route::get('/trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'index'])->name('publisher.trash-materials.index');
     //Route::get('/get-trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'getData'])->name('publisher.trash-materials.get-data');
@@ -224,6 +228,11 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::post('/material-trash/{id}', [App\Http\Controllers\Publisher\PublisherMaterialController::class, 'trash'])->name('publisher.materials.trash');
 
 });
+
+
+
+
+
 
 /** THIS ROUTE IS FOR ENCODER */
 Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
@@ -265,30 +274,35 @@ Route::prefix('encoder')->middleware('auth', 'encoder')->group(function () {
 
     Route::post('/material-submit-for-publishing/{id}', [App\Http\Controllers\Encoder\EncoderMaterialController::class, 'postSubmitForPublishing'])->name('posts.submit-for-publishing');
 
+    Route::get('/activity-logs', [App\Http\Controllers\Encoder\EncoderActivityLogsController::class, 'index'])->name('encoder.activity-logs.index');
+    Route::get('/get-activity-logs', [App\Http\Controllers\Encoder\EncoderActivityLogsController::class, 'getData'])->name('encoder.get-activity-logs.index');
+    Route::get('/export-activity-logs', [App\Http\Controllers\Encoder\EncoderActivityLogsController::class, 'export'])->name('encoder.export-activity-logs.index');
+
+
 
 });
-/** END AUTHOR */
+/** END ENCODER */
 
 require __DIR__.'/auth.php';
 
 
 
 // logout auth (use for debuggin only)
-Route::get('/applogout', function(Request $req){
+// Route::get('/applogout', function(Request $req){
 
-    Auth::guard('web')->logout();
-    $req->session()->invalidate();
+//     Auth::guard('web')->logout();
+//     $req->session()->invalidate();
 
-    $req->session()->regenerateToken();
+//     $req->session()->regenerateToken();
 
-    return redirect('/');
-});
+//     return redirect('/');
+// });
 
-use Illuminate\Support\Facades\Hash;
-if(env('APP_DEBUG')){
-    // logout auth (use for debuggin only)
-    Route::get('/gen/pass/{pass}', function($pass){
-        return Hash::make($pass);
-    });
+// use Illuminate\Support\Facades\Hash;
+// if(env('APP_DEBUG')){
+//     // logout auth (use for debuggin only)
+//     Route::get('/gen/pass/{pass}', function($pass){
+//         return Hash::make($pass);
+//     });
 
-}
+// }

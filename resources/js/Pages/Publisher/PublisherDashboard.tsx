@@ -12,9 +12,9 @@ import PublisherLayout from "@/Layouts/PublisherLayout"
 
 const PublisherDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [recent, setRecent] = useState<RecentArticle[]>([])
-  const [topArticles, setTopArticles] = useState<TopArticle[]>([])
-  const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
+ // const [recent, setRecent] = useState<RecentArticle[]>([])
+ // const [topArticles, setTopArticles] = useState<TopArticle[]>([])
+ // const [topArticlesLastSixMonths, setTopArticlesLastSixMonths] = useState<TopArticle[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,17 +23,19 @@ const PublisherDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [statsRes, recentRes, topRes, topResLastSixMonths] = await Promise.all([
+      const [statsRes,
+        //recentRes, topRes, topResLastSixMonths
+      ] = await Promise.all([
         axios.get<DashboardStats>("/dashboard/stats"),
-        axios.get<RecentArticle[]>("/dashboard/recent"),
-        axios.get<TopArticle[]>("/dashboard/top-articles"),
-        axios.get<TopArticle[]>("/dashboard/top-last-six-months")
+       // axios.get<RecentArticle[]>("/dashboard/recent"),
+        //axios.get<TopArticle[]>("/dashboard/top-articles"),
+        //axios.get<TopArticle[]>("/dashboard/top-last-six-months")
       ])
 
       setStats(statsRes.data)
-      setRecent(recentRes.data)
-      setTopArticles(topRes.data)
-      setTopArticlesLastSixMonths(topResLastSixMonths.data)
+      //setRecent(recentRes.data)
+      //setTopArticles(topRes.data)
+      //setTopArticlesLastSixMonths(topResLastSixMonths.data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -95,7 +97,7 @@ const PublisherDashboard = () => {
 
             <ArticlesLastSixMonthsChart />
 
-            <div className="grid gap-6 xl:grid-cols-2">
+            {/* <div className="grid gap-6 xl:grid-cols-2">
               <TableSection
                 title="Recent Articles"
                 data={recent}
@@ -106,13 +108,13 @@ const PublisherDashboard = () => {
                 data={topArticlesLastSixMonths}
                 type="top"
               />
-            </div>
+            </div> */}
 
-            <TableSection
+            {/* <TableSection
               title="Top Viewed Articles"
               data={topArticles}
               type="top"
-            />
+            /> */}
           </div>
         </div>
       </div>

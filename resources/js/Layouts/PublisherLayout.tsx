@@ -13,6 +13,7 @@ import { Avatar, Button,
   Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
 import { BookCheck,
+  History,
   LogOut,
   //Newspaper,
   SendHorizontal } from 'lucide-react';
@@ -90,6 +91,15 @@ export default function PublisherLayout(
       type: 'divider'
     },
     {
+      key: 'publisher.activity-logs.index',
+      icon: <History size={15} />,
+      label: 'Activity Logs',
+      onClick: () => router.visit('/publisher/activity-logs')
+    },
+    {
+      type: 'divider'
+    },
+    {
       key: 'my-account.index',
       icon: <UserOutlined />,
       label: 'My Account',
@@ -122,6 +132,8 @@ export default function PublisherLayout(
       ? 'Materials'
       : currentRoute.startsWith('publisher.trash-materials')
         ? 'Trash Materials'
+        : currentRoute === 'publisher.activity-logs.index'
+          ? 'Activity Logs'
         : currentRoute === 'my-account.index'
           ? 'My Account'
           : currentRoute === 'change-password.index'

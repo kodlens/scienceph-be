@@ -11,7 +11,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { BookCheck, LogOut, Newspaper, SendHorizontal, SquarePen, WalletCards } from 'lucide-react';
+import { Activity, BookCheck, LogOut, Newspaper, SendHorizontal, SquarePen, WalletCards } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -107,6 +107,13 @@ export default function EncoderLayout(
     //       },
     //     ],
     // },
+
+    {
+      key: 'encoder.activity-logs.index',
+      icon: <Activity size={15}/>,
+      label: 'Activity Logs',
+      onClick: () => router.visit('/encoder/activity-logs'),
+    },
     {
         key: 'my-account.index',
         icon: <UserOutlined />,
@@ -119,8 +126,8 @@ export default function EncoderLayout(
         icon: <LockOutlined />,
         label: 'Change Password',
         onClick: () => router.visit('/change-password')
-
     },
+
   ]), []);
 
   const currentRoute = `${route().current() ?? ''}`;
