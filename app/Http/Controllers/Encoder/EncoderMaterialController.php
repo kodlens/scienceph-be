@@ -65,7 +65,7 @@ class EncoderMaterialController extends MaterialController
         $regionalOffices = $fetcher->getRegionalOffices();
         $regions = $fetcher->getRegions();
         //$categories = $fetcher->getCategories();
-        //$authors = $fetcher->getAuthorsAutocomplete();
+        $authors = $fetcher->getAuthorsAutocomplete();
 
         return Inertia::render('Encoder/Material/EncoderMaterialCreateEdit', [
             'id' => 0,
@@ -73,10 +73,10 @@ class EncoderMaterialController extends MaterialController
             'material' => null,
             'tags' => $tags,
             'agencies' => $agencies,
-            //'regions' => $regions,
-            'regionalOffices' => $regionalOffices,
-            'categories' => $categories,
-            //'authors' => $authors
+            'regions' => $regions,
+            //'regionalOffices' => $regionalOffices,
+            //'categories' => $categories,
+            'authors' => $authors
         ]);
     }
 
@@ -84,15 +84,14 @@ class EncoderMaterialController extends MaterialController
 
     public function edit($id)
     {
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        $CK_LICENSE = config('app.ck_license');
 
         $fetcher = new Fetcher();
-
         $sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
-        $regionalOffices = $fetcher->getRegionalOffices();
+        //$regionalOffices = $fetcher->getRegionalOffices();
         //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
         $material = Material::with(['subject_headings'])->find($id);
@@ -105,7 +104,7 @@ class EncoderMaterialController extends MaterialController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
-            'regionalOffices' => $regionalOffices,
+            //'regionalOffices' => $regionalOffices,
             //'categories' => $categories,
             'sections' => $sections,
             'authors' => $authors

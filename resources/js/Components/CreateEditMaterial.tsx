@@ -69,6 +69,17 @@ const CreateEditMaterial = ({
     } catch (err) { }
   };
 
+  //submitSaveOnly is for admin and publisher only
+  const handleSubmitSaveOnly = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        submit({ ...values, is_publish: true, submit_status: 'save-only' });
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  }
 
   const handleSubmitAndPublish = () => {
     form
@@ -369,79 +380,94 @@ const CreateEditMaterial = ({
           </Button>
         </ConfigProvider> */}
 
-        <Button
-          className="ml-2"
-          htmlType="submit"
-          icon={<ProjectOutlined />}
-          loading={loading}
-          type="primary"
-          variant="outlined"
-        >
-          Save as Draft
-        </Button>
+
 
         { role === 'administrator' || role === 'publisher' && (
-
-          <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                defaultBg: 'green',
-                defaultColor: 'white',
-                defaultHoverBorderColor: 'green',
-
-                defaultActiveColor: 'white',
-                defaultActiveBorderColor: '#1a8c12',
-                defaultActiveBg: '#1a8c12',
-
-                defaultHoverBg: '#379b30',
-                defaultHoverColor: 'white',
-              }
-            }
-          }}>
+          <>
             <Button
               className="ml-2"
-              onClick={handleSubmitAndPublish}
+              onClick={handleSubmitSaveOnly}
               icon={<ProjectOutlined />}
               loading={loading}
+              type="primary"
+              variant="outlined"
             >
-              Save and Publish
+              Save
             </Button>
-          </ConfigProvider>
+
+            <ConfigProvider
+            theme={{
+              components: {
+                Button: {
+                  defaultBg: 'green',
+                  defaultColor: 'white',
+                  defaultHoverBorderColor: 'green',
+
+                  defaultActiveColor: 'white',
+                  defaultActiveBorderColor: '#1a8c12',
+                  defaultActiveBg: '#1a8c12',
+
+                  defaultHoverBg: '#379b30',
+                  defaultHoverColor: 'white',
+                }
+              }
+            }}>
+              <Button
+                className="ml-2"
+                onClick={handleSubmitAndPublish}
+                icon={<ProjectOutlined />}
+                loading={loading}
+              >
+                Save and Publish
+              </Button>
+            </ConfigProvider>
+          </>
           )
         }
 
         { role === 'encoder' && (
-          <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                defaultBg: 'green',
-                defaultColor: 'white',
-                defaultHoverBorderColor: 'green',
-
-                defaultActiveColor: 'white',
-                defaultActiveBorderColor: '#1a8c12',
-                defaultActiveBg: '#1a8c12',
-
-                defaultHoverBg: '#379b30',
-                defaultHoverColor: 'white',
-              }
-            }
-          }}>
+          <>
             <Button
               className="ml-2"
-              onClick={handleSubmitAndSetSubmit}
+              htmlType="submit"
               icon={<ProjectOutlined />}
               loading={loading}
+              type="primary"
+              variant="outlined"
             >
-              Save and Submit
+              Save as Draft
             </Button>
 
-          </ConfigProvider>
 
-          )
-        }
+            <ConfigProvider
+            theme={{
+              components: {
+                Button: {
+                  defaultBg: 'green',
+                  defaultColor: 'white',
+                  defaultHoverBorderColor: 'green',
+
+                  defaultActiveColor: 'white',
+                  defaultActiveBorderColor: '#1a8c12',
+                  defaultActiveBg: '#1a8c12',
+
+                  defaultHoverBg: '#379b30',
+                  defaultHoverColor: 'white',
+                }
+              }
+            }}>
+              <Button
+                className="ml-2"
+                onClick={handleSubmitAndSetSubmit}
+                icon={<ProjectOutlined />}
+                loading={loading}
+              >
+                Save and Submit
+              </Button>
+
+            </ConfigProvider>
+          </>
+        )}
 
         <Button
           danger

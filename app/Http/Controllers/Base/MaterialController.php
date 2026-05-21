@@ -202,7 +202,9 @@ class MaterialController extends Controller
                 //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
                 $data->source_url = $req->source_url;
                 $data->is_publish = $req->status === 'publish' ? 1 : 0;
-                $data->status = $req->status;
+
+                $data->status = $req->submit_status === 'save-only' ? $req->status : $data->status;
+
                 $data->publisher_publish_date = $req->status === 'publish' ? now() : null;
                 $data->publish_date = $dateFormated;
                 $data->tags = $tagsString;
@@ -251,11 +253,8 @@ class MaterialController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-
-
-
-
     }
+
 
 
      /** ======================================

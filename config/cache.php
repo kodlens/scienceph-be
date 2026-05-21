@@ -17,8 +17,7 @@ return [
 
     'default' => env('CACHE_DRIVER', 'file'),
 
-    'DOSTV_API_KEY' => env('DOSTV_API_KEY', '123456789'),
-    'DOSTV_API_URL' => env('DOSTV_API_URL', 'http://localhost:8000/api'),
+
 
     /*
     |--------------------------------------------------------------------------

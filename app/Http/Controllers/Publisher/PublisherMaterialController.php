@@ -87,15 +87,15 @@ class PublisherMaterialController extends MaterialController
 
      public function create()
     {
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+       // $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        $CK_LICENSE = config('app.ck_license');
         //$openController = new OpenController();
         $fetcher = new Fetcher();
-
         //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
-        $regionalOffices = $fetcher->getRegionalOffices();
+        //$regionalOffices = $fetcher->getRegionalOffices();
         //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
 
@@ -108,7 +108,7 @@ class PublisherMaterialController extends MaterialController
             'agencies' => $agencies,
             'regions' => $regions,
             //'categories' => $categories,
-            'regionalOffices' => $regionalOffices,
+            //'regionalOffices' => $regionalOffices,
             //'sections' => $sections,
             'authors' => $authors
         ]);
@@ -118,15 +118,15 @@ class PublisherMaterialController extends MaterialController
 
     public function edit($id)
     {
-        $CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
-
+        //$CK_LICENSE = env('CK_EDITOR_LICENSE_KEY');
+        $CK_LICENSE = config('app.ck_license');
         $fetcher = new Fetcher();
 
         //$sections = $fetcher->getSections();
         $tags = $fetcher->getTags();
         $agencies = $fetcher->getAgencies();
         $regions = $fetcher->getRegions();
-        $regionalOffices = $fetcher->getRegionalOffices();
+        //$regionalOffices = $fetcher->getRegionalOffices();
         //$categories = $fetcher->getCategories();
         $authors = $fetcher->getAuthorsAutocomplete();
         $material = Material::with(['subject_headings'])->find($id);
@@ -139,7 +139,7 @@ class PublisherMaterialController extends MaterialController
             'tags' => $tags,
             'agencies' => $agencies,
             'regions' => $regions,
-            'regionalOffices' => $regionalOffices,
+            //'regionalOffices' => $regionalOffices,
             //'categories' => $categories,
             //'sections' => $sections,
             'authors' => $authors

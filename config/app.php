@@ -64,11 +64,11 @@ return [
     'api_token' => env('API_TOKEN'),
 
     'ai_api' => env('AI_API', '127.0.0.1'), //ai apia for generate topics
-
-
      //add ck license
     'ck_license' => env('CK_EDITOR_LICENSE_KEY', 'GPL'),
 
+    'DOSTV_API_KEY' => env('DOSTV_API_KEY', '123456789'),
+    'DOSTV_API_URL' => env('DOSTV_API_URL', 'http://localhost:8000/api'),
 
 
     /*
