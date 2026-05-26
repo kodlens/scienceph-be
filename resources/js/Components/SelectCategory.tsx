@@ -27,7 +27,6 @@ export const SelectCategory = ( { errors } : Props ) => {
     return categories.map(item => ({ value: item.id, label: item.category }))
   }
 
-
   return (
     <>
       <Form.Item

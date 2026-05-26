@@ -30,6 +30,7 @@ class PublisherSubmittedMaterialController extends Controller
             ->where('classification', 'scienceph')
             ->where('trash', 0)
             ->whereIn('encoded_by_id', $assignedMaterialIds)
+            ->orderByDesc('id')
             ->paginate(10);
 
         return response()->json($data);

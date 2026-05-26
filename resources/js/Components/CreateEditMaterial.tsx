@@ -107,7 +107,7 @@ const CreateEditMaterial = ({
     setErrors({});
 
     if (id > 0) {
-      axios.put(`${uri}/${id}`, values).then(res => {
+      axios.patch(`${uri}/${id}`, values).then(res => {
         values
         if (res.data.status === 'updated') {
           modal.success({

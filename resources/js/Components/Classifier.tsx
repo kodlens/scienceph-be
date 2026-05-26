@@ -70,9 +70,18 @@ const Classifier = ( { form, errors, id } : PageProps) => {
       setData(matchedHeadings);
       setLoading(false)
 
-    }).catch((err) => {
+    }).catch((error) => {
       //message.error(`Classification failed: ${err.message}`);
-      console.log(err);
+      if (axios.isAxiosError(error)) {
+          // Network / server errors
+          throw new Error(
+              error.response?.data?.message ||
+              error.message ||
+              'Something went wrong'
+          );
+
+          throw error;
+      }
       setLoading(false);
     });
   }

@@ -151,11 +151,11 @@ class MaterialController extends Controller
             'description.required' => 'Description is required.',
         ]);
 
-
-
         try {
             DB::transaction(function () use ($req, $id) {
                 // Database operations here
+
+                $role = Auth::user()->role;
 
                 $filterDom = new FilterDom();
                 $modifiedHtml = $filterDom->filterDOM($req->description);
@@ -196,14 +196,24 @@ class MaterialController extends Controller
                 $data->author = $req->author;
                 $data->modified_by_id = $user->id;
                 $data->modified_at = now();
-                $data->submitted_at = $req->submit_status === 'save-submit' ? date('Y-m-d H:i:s') : null;
+
+                if(strtolower($role) === 'encoder'){
+                    $data->submitted_at = $req->submit_status === 'save-submit' ? date('Y-m-d H:i:s') : null;
+                }
+
                 $data->agency = $req->agency ? $req->agency : null;
                 $data->region = $req->region ? $req->region : null;
                 //$data->regional_office = $req->regional_office ? $req->regional_office : null; ////remove for the meantime as discussed last meeting
                 $data->source_url = $req->source_url;
                 $data->is_publish = $req->status === 'publish' ? 1 : 0;
 
-                $data->status = $req->submit_status === 'save-only' ? $req->status : $data->status;
+                if(strtolower($role) === 'encoder'){
+                    $data->status = $req->submit_status === 'save-submit' ? $req->status : $data->status;
+                }
+
+                if(strtolower($role) === 'publisher'){
+                    $data->status = $req->submit_status === 'save-publish' ? $req->status : $data->status;
+                }
 
                 $data->publisher_publish_date = $req->status === 'publish' ? now() : null;
                 $data->publish_date = $dateFormated;
@@ -232,15 +242,32 @@ class MaterialController extends Controller
 
                 MaterialSubjectHeading::insert($subjectHeadings);
 
-                (new RecordTrail())->activityLog(
-                    'materials',
-                    $data->id,
-                    $user->id,
-                    $req->submit_status === 'save-publish' ? 'publish' : 'update',
-                    $req->submit_status === 'save-publish' ? 'material set to publish by '. $name : 'material updated by ' . $name,
-                    $data,
-                    Material::find($id)
-                );
+                if(strtolower($role) === 'encoder'){
+                    (new RecordTrail())->activityLog(
+                        'materials',
+                        $data->id,
+                        $user->id,
+                        $req->submit_status === 'save-submit' ? 'submit' : 'draft',
+                        $req->submit_status === 'save-submit' ? 'material set to submit by '. $name : 'material updated by ' . $name,
+                        $data,
+                        Material::find($id)
+                    );
+
+                }
+
+                if(strtolower($role) === 'publisher'){
+                    (new RecordTrail())->activityLog(
+                        'materials',
+                        $data->id,
+                        $user->id,
+                        $req->submit_status === 'save-publish' ? 'publish' : 'draft',
+                        $req->submit_status === 'save-publish' ? 'material set to publish by '. $name : 'material updated by ' . $name,
+                        $data,
+                        Material::find($id)
+                    );
+                }
+
+
 
             });
 

@@ -42,8 +42,19 @@ export default function AuthorAutoComplete({
           }))
 
         setOptions(mapped)
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+            // Network / server errors
+            throw new Error(
+                error.response?.data?.message ||
+                error.message ||
+                'Something went wrong'
+            );
+
+            throw error;
+        }
+
+
       }
     }, 1000)
   }
