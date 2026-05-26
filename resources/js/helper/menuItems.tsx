@@ -85,7 +85,7 @@ export const menuItems = (
   if(handleDraft) {
     items.push({
       label: 'Draft',
-      disabled: material?.status === 'draft',
+      disabled: enableMenuDraft(user, material!),
       key: `${prefix}.materials.draft`,
       icon: <StopOutlined />,
       onClick: () => handleDraft()
@@ -118,4 +118,17 @@ export const menuItems = (
 
 
   return items
+}
+
+
+function enableMenuDraft(user:User, material:Material){
+  if(user.role.toLowerCase() === 'encoder'){
+    return material?.status === 'draft' || material?.status === 'publish';
+  }
+
+  if(user.role.toLowerCase() === 'publisher'){
+    return material?.status === 'draft';
+  }
+
+  return true;
 }

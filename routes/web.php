@@ -217,7 +217,6 @@ Route::prefix('publisher')->middleware('auth', 'publisher')->group(function () {
     Route::get('/get-activity-logs', [App\Http\Controllers\Publisher\PublisherActivityLogsController::class, 'getData'])->name('publisher.get-activity-logs.index');
     Route::get('/export-activity-logs', [App\Http\Controllers\Publisher\PublisherActivityLogsController::class, 'export'])->name('publisher.export-activity-logs.index');
 
-
     //Route::get('/trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'index'])->name('publisher.trash-materials.index');
     //Route::get('/get-trash-materials', [App\Http\Controllers\Publisher\PublisherTrashMaterialController::class, 'getData'])->name('publisher.trash-materials.get-data');
 
