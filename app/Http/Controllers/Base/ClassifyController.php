@@ -23,7 +23,8 @@ class ClassifyController extends Controller
         $content = $filterDom->htmlToPlainText($request->content);
 
         $topK = 5;
-        $model = 'llama3';
+        //$model = 'llama3';
+        $model = 'qwen3:14b';
 
         $headings = DB::table('subject_headings')->get();
 
