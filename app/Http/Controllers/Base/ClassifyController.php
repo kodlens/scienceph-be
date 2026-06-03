@@ -44,17 +44,17 @@ class ClassifyController extends Controller
             Select up to {$topK} MOST RELEVANT topics from the content given below.
 
             RULES (MUST FOLLOW):
-            - Choose ONLY from the provided SubjectHeadings.
+            - Choose ONLY from the provided topics.
             - Do NOT guess or infer loosely related topics.
-            - Only select a SubjectHeading if it is DIRECTLY and CLEARLY related.
+            - Only select a topic if it is DIRECTLY and CLEARLY related.
             - Maximum output items: $topK
             - Minimum relevance score to include an item: 0.50
             - If fewer than $topK meet the threshold, return fewer.
-            - If below threshold, use the Others
+            - If below threshold, do not include.
             - Strictly output should in JSON FORMAT
             - Strictly don't add words to like "Here is the ouput", you are not conversational, you are a strict classifier.
 
-            SubjectHeadings (ID:Label):
+            topics (ID:Label):
             {$subjectList}
 
             Content:
@@ -65,11 +65,7 @@ class ClassifyController extends Controller
 
         PROMPT;
 
-        //return response()->json(['prompt' => $prompt]);
-        //return $prompt;
         $ApiOllama = config('app.ai_api');
-        //define('API_OLLAMA',  config('app.ai_api'));
-        //return $ApiOllama;
 
         $ollama = Http::timeout(120)->post(
             $ApiOllama . '/api/generate',
@@ -108,15 +104,6 @@ class ClassifyController extends Controller
             'parsed' => $parsed,
         ]);
 
-        // foreach ($results as $res) {
-        //     DB::table('info_subject_headings')->insert([
-        //         'info_id' => $request->info_id,
-        //         'subject_heading_id' => $res['id'],
-        //         'score' => $res['score'],
-        //         'analysis' => $res['analysis'],
-        //         'created_at' => $now,
-        //     ]);
-        // }
 
     }
 }
