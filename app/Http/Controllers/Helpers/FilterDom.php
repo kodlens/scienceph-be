@@ -101,6 +101,7 @@ class FilterDom
         }
     }
 
+    /*
 
     public function htmlToPlainText(string $html): string
     {
@@ -112,6 +113,13 @@ class FilterDom
         $text = $dom->textContent ?? '';
 
         return trim(preg_replace('/\s+/u', ' ', $text));
+    } */
+
+    public function htmlToPlainText(string $html): string
+    {
+        return trim(
+            preg_replace('/\s+/u', ' ', strip_tags($html))
+        );
     }
 
     private function createDocument(): \DOMDocument
