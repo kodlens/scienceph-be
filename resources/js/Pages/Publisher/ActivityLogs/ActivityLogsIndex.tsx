@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react'
 import { DownloadOutlined, ProfileOutlined } from '@ant-design/icons'
 import {
   Button,
-  DatePicker,
+  // DatePicker,
   Pagination,
   Table,
 } from 'antd'
@@ -125,7 +125,7 @@ export default function ActivityLogsIndex() {
 
           <div className='p-6'>
             <div className='mb-5 flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:flex-row'>
-              <DatePicker
+              {/* <DatePicker
                 placeholder="From date"
                 className="w-full md:w-[220px]"
                 value={filters.from ? dayjs(filters.from) : null}
@@ -143,7 +143,7 @@ export default function ActivityLogsIndex() {
                   setFilters((prev) => ({ ...prev, to: Array.isArray(dateString) ? '' : dateString }))
                 }
                 allowClear
-              />
+              /> */}
 
               <Button className="ml-auto" type="primary" onClick={applyFilters}>
                 Search
