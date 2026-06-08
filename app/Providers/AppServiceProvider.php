@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Category;
 use App\Models\StatusPair;
 use Auth;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
