@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Inertia::share([
+
             // Example: Authenticated user
             // 'categories' => function () {
             //     return Category::where('active', 1)->count() > 0
@@ -62,8 +63,10 @@ class AppServiceProvider extends ServiceProvider
             // },
 
 
-
-
         ]);
+
+        // if (app()->environment('production')) {
+        //     URL::forceScheme('https');
+        // }
     }
 }

@@ -8,7 +8,6 @@ import ModalSubjectHeadings from './ModalSubjectHeading';
 
 
 type PageProps = {
-  id:number;
   form: FormInstance
   errors: Record<string, string[]>
 }
@@ -17,18 +16,25 @@ type AIResult = {
   score: number,
   analysis: string
 }
-type SubjectResult = {
-  subject_heading_id: number,
-  subject_heading?: string,
-  score: number,
-  analysis: string
-}
-const Classifier = ( { form, errors, id } : PageProps) => {
+
+// type SubjectResult = {
+//   subject_heading_id: number,
+//   subject_heading?: string,
+//   score: number,
+//   analysis: string
+// }
+
+const Classifier = ( { form, errors } : PageProps) => {
+
+  const subjectHeadingsForm = Form.useWatch(
+    "subject_headings",
+    form
+  ) || [];
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { notification } = App.useApp();
-  const [data, setData] = useState<SubjectResult[]>([]);
-  const [subjectHeadings, setSubjectHeadings] = useState<SubjectHeading[]>([]);
+  const { notification, message } = App.useApp();
+ // const [data, setData] = useState<SubjectResult[]>([]);
+  const [subjectHList, setSubjectHList] = useState<SubjectHeading[]>([]);
 
 
   const handleClassification = () => {
@@ -58,7 +64,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
       const resData:AIResult[] = res.data.results
 
       const matchedHeadings = resData.map(datum => {
-        const matched = subjectHeadings.find((subjHeading:SubjectHeading) => subjHeading.id === datum.id);
+        const matched = subjectHList.find((subjH:SubjectHeading) => subjH.id === datum.id);
         return {
           subject_heading_id: datum.id,
           subject_heading: matched?.subject_heading || "",
@@ -67,7 +73,11 @@ const Classifier = ( { form, errors, id } : PageProps) => {
         };
       });
 
-      setData(matchedHeadings);
+      // setData(matchedHeadings);
+      form.setFieldsValue({
+        ...form.getFieldsValue(),
+        subject_headings: matchedHeadings
+      });
       setLoading(false)
 
     }).catch((error) => {
@@ -88,45 +98,21 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
   const loadSubjectHeadings = async () => {
     const res = await axios.get(`/get-subject-headings`);
-    setSubjectHeadings(res.data);
+    setSubjectHList(res.data);
   };
 
   useEffect(() => {
     loadSubjectHeadings();
   }, []);
 
-  //load data if edit mode
-  useEffect(() => {
-    if(id > 0){
-      const subjH = form.getFieldValue('subject_headings');
-      setData(subjH)
-    }
-  }, [form, id])
-
-
-  useEffect(() => {
-
-    form.setFieldValue("subject_headings", data.map(item => (
-      {
-        subject_heading_id: item.subject_heading_id,
-        subject_heading: item.subject_heading,
-        score: item.score,
-        analysis: item.analysis
-      }
-    )));
-
-  }, [data]);
-
   const handleDelete = (subjH_id:number) => {
-    const index = data.findIndex(
-      item => item.subject_heading_id === subjH_id
-    );
+    const subjH = form.getFieldValue("subject_headings") || [];
 
-    if (index !== -1) {
-      const newData = [...data];
-      newData.splice(index, 1);
-      setData(newData);
-    }
+    form.setFieldsValue({
+      subject_headings: subjH.filter(
+        (item: { subject_heading_id: number }) => item.subject_heading_id !== subjH_id
+      ),
+    });
   }
 
   return (
@@ -155,7 +141,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
           <Table
             rowKey="subject_heading_id"
-            dataSource={data}
+            dataSource={ subjectHeadingsForm }
             pagination={false}
             size="small"
             columns={[
@@ -186,7 +172,7 @@ const Classifier = ( { form, errors, id } : PageProps) => {
                 title: "Action",
                 key: "action",
                 width: 150,
-                render: (_, record) => (
+                render: (_, record: { subject_heading_id: number }) => (
                   <>
                     <Button
                       type="link"
@@ -206,30 +192,38 @@ const Classifier = ( { form, errors, id } : PageProps) => {
 
       <div className='flex gap-2'>
         <ModalSubjectHeadings onSelectSubjectHeading={(record) => {
+          const subjectHeadings = form.getFieldValue("subject_headings") || [];
 
-          const existsInData = data.find(item => item.subject_heading_id === record.id);
-
-          if(existsInData) {
-            notification.warning({
-              message: "Already Exists",
-              description: "This topic is already in the classification results.",
-              duration: 5,
-              placement: 'bottomRight'
-            });
-            return;
+          if(record.id > 0) {
+            const exists = subjectHeadings.some(
+              ( item: { subject_heading_id: number }) => item.subject_heading_id === record.id
+            );
+            if (exists) {
+                message.warning('Topic already exists.');
+              return;
+            }
           }
 
-          setData([...data, {
+          form.setFieldsValue({
+            ...form.getFieldsValue(),
+            subject_headings: [...subjectHeadings, {
               subject_heading_id: record.id,
               subject_heading: record.subject_heading,
-              score: 1,
-              analysis: "Manually added"
-            }]);
+              score: 0,
+              analysis: 'Manully added'
+            }]
+          });
+
+          message.success('Topic added successfully.');
+
         }} />
 
         <Button danger icon={<BrushCleaning size={15} />}
           onClick={()=>{
-            setData([])
+            form.setFieldsValue({
+              ...form.getFieldsValue(),
+              subject_headings: []
+            });
           }}
         >
           Remove All

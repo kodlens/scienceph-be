@@ -56,7 +56,7 @@ export default function AuthorAutoComplete({
 
 
       }
-    }, 1000)
+    }, 600)
   }
 
   return (
