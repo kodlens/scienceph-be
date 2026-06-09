@@ -164,6 +164,8 @@ Route::prefix('admin')->middleware('auth', 'admin')
     Route::get('/load-encoder-users', [App\Http\Controllers\Admin\AdminUserController::class, 'loadEncoderUsers'])->name('users.load-encoder-users');
 
 
+    Route::post('/change-password/{id}', [App\Http\Controllers\Admin\AdminUserController::class, 'changePassword']);
+
     // Route::resource('/roles', App\Http\Controllers\Admin\AdminRoleController::class);
     // Route::get('/get-roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'getData'])->name('roles.getdata');
 

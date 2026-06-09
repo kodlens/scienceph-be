@@ -26,7 +26,7 @@ export default function ChangePassword({data, onSuccess} : {data:User, onSuccess
 
         }).catch(err=>{
             if(err.response.status === 422)
-                setErrors(err.response.data.errors)
+              setErrors(err.response.data.errors)
 
             setLoading(false)
         })
