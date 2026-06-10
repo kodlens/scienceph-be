@@ -195,7 +195,7 @@ class MaterialController extends Controller
             abort(404, 'Material not found.');
         }
 
-        $matches = Material::query()
+        $relatedMaterials = Material::query()
             ->select(
                 'materials.id',
                 'materials.title',
@@ -204,38 +204,34 @@ class MaterialController extends Controller
                 'materials.publish_date'
             )
             ->selectRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
+            ->selectRaw('(
+                SELECT GROUP_CONCAT(DISTINCT subject_headings.subject_heading SEPARATOR ", ")
+                FROM material_subject_headings
+                INNER JOIN subject_headings ON material_subject_headings.subject_heading_id = subject_headings.id
+                WHERE material_subject_headings.material_id = materials.id
+            ) as subject_heading')
+            ->selectRaw('(
+                SELECT GROUP_CONCAT(DISTINCT categories.category SEPARATOR ", ")
+                FROM material_subject_headings
+                INNER JOIN subject_headings ON material_subject_headings.subject_heading_id = subject_headings.id
+                INNER JOIN categories ON subject_headings.category_id = categories.id
+                WHERE material_subject_headings.material_id = materials.id
+            ) as category')
+            ->selectRaw('(
+                SELECT categories.slug
+                FROM material_subject_headings
+                INNER JOIN subject_headings ON material_subject_headings.subject_heading_id = subject_headings.id
+                INNER JOIN categories ON subject_headings.category_id = categories.id
+                WHERE material_subject_headings.material_id = materials.id
+                ORDER BY categories.id
+                LIMIT 1
+            ) as category_slug')
             ->whereRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
             ->where('materials.id', '!=', $info->id)
             ->where('materials.status', 'publish')
             ->orderByDesc('relevance')
             ->orderByDesc('materials.publish_date')
-            ->limit(10);
-
-        $relatedMaterials = DB::query()
-            ->fromSub($matches, 'related')
-            ->leftJoin('material_subject_headings', 'related.id', '=', 'material_subject_headings.material_id')
-            ->leftJoin('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
-            ->leftJoin('categories', 'subject_headings.category_id', '=', 'categories.id')
-            ->select(
-                'related.id',
-                'related.title',
-                'related.slug',
-                'related.description_text',
-                'related.publish_date',
-                'related.relevance'
-            )
-            ->selectRaw('GROUP_CONCAT(DISTINCT subject_headings.subject_heading SEPARATOR ", ") as subject_heading')
-            ->selectRaw('GROUP_CONCAT(DISTINCT categories.category SEPARATOR ", ") as category')
-            ->groupBy(
-                'related.id',
-                'related.title',
-                'related.slug',
-                'related.description_text',
-                'related.publish_date',
-                'related.relevance'
-            )
-            ->orderByDesc('related.relevance')
-            ->orderByDesc('related.publish_date')
+            ->limit(10)
             ->get();
 
 
