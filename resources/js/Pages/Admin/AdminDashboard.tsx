@@ -11,10 +11,10 @@ import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    fetchData()
+    //fetchData()
   }, [])
 
   const fetchData = async () => {
@@ -81,15 +81,15 @@ const AdminDashboard = () => {
 
           <div className="space-y-6 p-6">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <StatCard title="Published" value={stats?.published} />
+              {/* <StatCard title="Published" value={stats?.published} />
               <StatCard title="Draft" value={stats?.draft} />
               <StatCard title="Trashed" value={stats?.trashed} />
               <StatCard title="Total Views" value={stats?.total_views} />
               <StatCard title="This Month" value={stats?.this_month} />
-              <StatCard title="Press Releases" value={stats?.press} />
+              <StatCard title="Press Releases" value={stats?.press} /> */}
             </div>
 
-            <ArticlesLastSixMonthsChart />
+            {/* <ArticlesLastSixMonthsChart /> */}
 
             {/* <div className="grid gap-6 xl:grid-cols-2">
               <TableSection

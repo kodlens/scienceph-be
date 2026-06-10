@@ -27,13 +27,13 @@ class AdminDashboardController extends Controller
         ->get();
     }
 
-    public function topArticles()
-    {
-        return Article::select('id','title','hits','publish_date')
-            ->orderByDesc('hits')
-            ->limit(5)
-            ->get();
-    }
+    // public function topArticles()
+    // {
+    //     return Article::select('id','title','hits','publish_date')
+    //         ->orderByDesc('hits')
+    //         ->limit(5)
+    //         ->get();
+    // }
 
 
 }
