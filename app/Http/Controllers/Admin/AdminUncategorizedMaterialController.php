@@ -23,6 +23,7 @@ class AdminUncategorizedMaterialController extends MaterialController
         $page = $request->input('page', 1);
 
         $uncategorizedMaterials = Material::doesntHave('subject_headings')
+            // ->select('id', 'title', 'slug', 'description_text', 'publish_date')
             ->orderBy('id', 'desc')
             ->paginate($perpage, ['*'], 'page', $page);
 
