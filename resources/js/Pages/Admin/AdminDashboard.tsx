@@ -1,41 +1,41 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useEffect } from "react"
+//import axios from "axios"
 import { Head } from "@inertiajs/react"
 import { DashboardOutlined } from "@ant-design/icons"
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout"
-import { DashboardStats } from "@/types"
-import StatCard from "@/Components/StatCard"
+//import { DashboardStats } from "@/types"
+//import StatCard from "@/Components/StatCard"
 import Loader from "@/Components/Loader"
-import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
+//import ArticlesLastSixMonthsChart from "@/Components/ArticlesLastSixMonthsChart"
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(false)
-
+  //const [stats, setStats] = useState<DashboardStats | null>(null)
+  //const [loading, setLoading] = useState(false)
+  const loading = false
   useEffect(() => {
     //fetchData()
   }, [])
 
-  const fetchData = async () => {
-    try {
-      const [statsRes,
-        //recentRes, topRes, topResLastSixMonths
-      ] = await Promise.all([
-        axios.get<DashboardStats>("/dashboard/stats"),
+  // const fetchData = async () => {
+  //   try {
+  //     const [statsRes,
+  //       //recentRes, topRes, topResLastSixMonths
+  //     ] = await Promise.all([
+  //       axios.get<DashboardStats>("/dashboard/stats"),
 
-      ])
+  //     ])
 
-      setStats(statsRes.data)
-      // setRecent(recentRes.data)
-      // setTopArticles(topRes.data)
-      // setTopArticlesLastSixMonths(topResLastSixMonths.data)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  //     setStats(statsRes.data)
+  //     // setRecent(recentRes.data)
+  //     // setTopArticles(topRes.data)
+  //     // setTopArticlesLastSixMonths(topResLastSixMonths.data)
+  //   } catch (error) {
+  //     console.error(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   if (loading) {
     return (
@@ -74,7 +74,8 @@ const AdminDashboard = () => {
 
               <div className="ml-auto rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-right shadow-sm">
                 <p className="text-[11px] uppercase tracking-wide text-slate-500">Total Materials</p>
-                <p className="text-2xl font-semibold leading-none text-slate-900">{stats?.total ?? 0}</p>
+                {/* <p className="text-2xl font-semibold leading-none text-slate-900">{stats?.total ?? 0}</p> */}
+                <p className="text-2xl font-semibold leading-none text-slate-900">{0}</p>
               </div>
             </div>
           </div>
