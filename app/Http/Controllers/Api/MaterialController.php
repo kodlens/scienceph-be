@@ -188,28 +188,54 @@ class MaterialController extends Controller
 
     public function loadRelatedMaterial($slug) {
 
+        $info = Material::where('slug', $slug)
+            ->first(['id', 'title']);
 
-        $info = Material::where('slug', $slug)->first();
+        if (!$info) {
+            abort(404, 'Material not found.');
+        }
 
-        $relatedMaterials = Material::select(
+        $matches = Material::query()
+            ->select(
                 'materials.id',
                 'materials.title',
                 'materials.slug',
                 'materials.description_text',
-                'materials.publish_date',
-                'subject_headings.subject_heading',
-                'categories.category'
+                'materials.publish_date'
             )
-            ->join('material_subject_headings', 'materials.id', '=', 'material_subject_headings.material_id')
-            ->join('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
-            ->join('categories', 'subject_headings.category_id', '=', 'categories.id')
             ->selectRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE) AS relevance", [$info->title])
             ->whereRaw("MATCH(materials.title, materials.description_text) AGAINST (? IN NATURAL LANGUAGE MODE)", [$info->title])
-            ->where('materials.id', '!=', $info->id)  // exclude current material
-            ->groupBY('materials.id') // group by material to avoid duplicates
-            ->orderByDesc('publish_date')
+            ->where('materials.id', '!=', $info->id)
+            ->where('materials.status', 'publish')
             ->orderByDesc('relevance')
-            ->limit(10)
+            ->orderByDesc('materials.publish_date')
+            ->limit(10);
+
+        $relatedMaterials = DB::query()
+            ->fromSub($matches, 'related')
+            ->leftJoin('material_subject_headings', 'related.id', '=', 'material_subject_headings.material_id')
+            ->leftJoin('subject_headings', 'material_subject_headings.subject_heading_id', '=', 'subject_headings.id')
+            ->leftJoin('categories', 'subject_headings.category_id', '=', 'categories.id')
+            ->select(
+                'related.id',
+                'related.title',
+                'related.slug',
+                'related.description_text',
+                'related.publish_date',
+                'related.relevance'
+            )
+            ->selectRaw('GROUP_CONCAT(DISTINCT subject_headings.subject_heading SEPARATOR ", ") as subject_heading')
+            ->selectRaw('GROUP_CONCAT(DISTINCT categories.category SEPARATOR ", ") as category')
+            ->groupBy(
+                'related.id',
+                'related.title',
+                'related.slug',
+                'related.description_text',
+                'related.publish_date',
+                'related.relevance'
+            )
+            ->orderByDesc('related.relevance')
+            ->orderByDesc('related.publish_date')
             ->get();
 
 
