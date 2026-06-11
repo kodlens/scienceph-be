@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 import { CreateEditProps } from "@/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import CreateEditMaterial from "@/Components/CreateEditMaterial";
+import AdminCreateEditMaterial from "@/Components/Admin/Material/AdminCreateEditMaterial";
 
 const AdminUncategorizedMaterialAddEdit = ({
   id,
@@ -36,7 +36,7 @@ const AdminUncategorizedMaterialAddEdit = ({
             </div>
 
             <div>
-              <CreateEditMaterial
+              <AdminCreateEditMaterial
                 id={id}
                 auth={auth}
                 material={material}
