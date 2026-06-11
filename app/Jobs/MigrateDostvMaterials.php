@@ -38,8 +38,8 @@ class MigrateDostvMaterials implements ShouldQueue
             'error_message' => null,
         ]);
 
-        $apiKey = config('cache.DOSTV_API_KEY');
-        $url = config('cache.DOSTV_API_URL');
+        $apiKey = config('app.DOSTV_API_KEY');
+        $url = config('app.DOSTV_API_URL');
 
         // $apiKey = env('DOSTV_API_KEY');
         //$url = env('DOSTV_API_URL');
@@ -48,6 +48,7 @@ class MigrateDostvMaterials implements ShouldQueue
             ->retry(2, 1000)
             ->withHeaders([
                 'X-API-TOKEN' => $apiKey,
+                'Accept' => 'application/json'
             ])
             ->get($url, [
                 'from' => $this->from,
