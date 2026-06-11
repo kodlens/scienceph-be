@@ -176,6 +176,11 @@ Route::prefix('admin')->middleware('auth', 'admin')
     // Route::get('/get-role-has-permissions', [App\Http\Controllers\Admin\AdminRoleHasPermissionController::class, 'getData'])->name('role-has-permissions.getdata');
 
 
+    Route::resource('/migration-materials', App\Http\Controllers\Admin\AdminMigrationMaterialController::class)->names('admin.migration-materials');
+    Route::get('/get-migration-materials', [App\Http\Controllers\Admin\AdminMigrationMaterialController::class, 'getData']);
+
+
+
     /*====================================
     * EXTERNAL API ROUTES FOR ADMIN
     * ==================================== */

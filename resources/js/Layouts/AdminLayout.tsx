@@ -12,7 +12,7 @@ import {
 
 import { Avatar, Button, ConfigProvider, Dropdown, Layout, Menu, MenuProps } from 'antd';
 import PanelSideBarLogo from '@/Components/PanelSideBarLogo';
-import { DatabaseZap, Funnel, LandPlot, LogOut, Newspaper, Sparkle, SquareArrowOutUpRight, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
+import { Database, DatabaseZap, Funnel, LandPlot, LogOut, Newspaper, Sparkle, SquareArrowOutUpRight, SquareChartGantt, UserPen, UserRoundCog } from 'lucide-react';
 const { Header, Sider, Content } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -128,6 +128,12 @@ export default function AdminLayout(
         },
 
       ],
+    },
+    {
+      key: 'admin.migration-materials',
+      icon: <Database size={15} />,
+      label: 'Migration Materials',
+      onClick: () => router.visit('/admin/migration-materials'),
     },
 
     {
