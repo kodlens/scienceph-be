@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import SearchFilter from '@/Components/SearchFilter';
 import { PageProps } from '@/types';
-import TableMaterials from '@/Components/TableMaterials';
+import AdminTableMaterials from '@/Components/Admin/Material/AdminTableMaterials';
 
 const AdminMaterialIndex = ( {auth}:PageProps ) => {
 
@@ -25,6 +25,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
 
 
   const [filters, setFilters] = useState({
+      id: '',
       status: '',
       title: '',
       encoder: '',
@@ -36,6 +37,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
+        `id=${filters.id ? filters.id : ''}`,
         `title=${filters.title ? filters.title : ''}`,
         `status=${filters.status ? filters.status : ''}`,
         `encoder=${filters.encoder ? filters.encoder : ''}`,
@@ -107,7 +109,7 @@ const AdminMaterialIndex = ( {auth}:PageProps ) => {
               refetch={refetch}
             />
 
-            <TableMaterials
+            <AdminTableMaterials
               user={auth.user}
               routePrefix='admin'
               data={data}

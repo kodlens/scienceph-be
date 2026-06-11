@@ -1,9 +1,6 @@
 
 import {  Head } from '@inertiajs/react'
-
 import { ProfileOutlined, TeamOutlined } from '@ant-design/icons';
-
-
 import { useState } from 'react'
 import axios from 'axios';
 
@@ -22,6 +19,7 @@ const AdminOjtMaterialIndex = ( { auth } : PageProps ) => {
 
 
   const [filters, setFilters] = useState({
+      id: '',
       status: '',
       title: '',
       encoder: '',
@@ -33,6 +31,7 @@ const AdminOjtMaterialIndex = ( { auth } : PageProps ) => {
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
+        `id=${filters.id ? filters.id : ''}`,
         `title=${filters.title ? filters.title : ''}`,
         `status=${filters.status ? filters.status : ''}`,
         `encoder=${filters.encoder ? filters.encoder : ''}`,

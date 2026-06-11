@@ -327,6 +327,9 @@ class MaterialController extends Controller
 
         return response()->json([
             'status' => 'deleted',
+            'success' => true,
+            'type' => 'deleted',
+            'message' => 'Successfully deleted.'
         ], 200);
     }
 

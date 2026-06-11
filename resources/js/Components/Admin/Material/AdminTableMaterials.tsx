@@ -1,14 +1,12 @@
 import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
+import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
 import Column from 'antd/es/table/Column'
 import axios from 'axios'
-//import { adminMenuItems } from '@/helper/adminMenuItems'
-
 import { Material } from '@/types/material'
-import MaterialView from '../../MaterialView'
 import { User } from '@/types'
-import { Eye, Pencil, Trash } from 'lucide-react'
-import { router } from '@inertiajs/react'
+import MaterialView from '@/Components/MaterialView'
+import { adminMenuItems } from '@/helper/adminMenuItems'
 
 type Props = {
   routePrefix: string
@@ -21,6 +19,7 @@ type Props = {
   // New Props
   showEdit?: boolean
   showSubmit?:boolean,
+
   showDelete?: boolean
   showTrash?: boolean
   showPublish?: boolean
@@ -29,8 +28,9 @@ type Props = {
   extraActions?: (material: Material) => MenuProps['items']
 
 }
-const TableUncategorizedMaterials = (
-  { data, isFetching, refetch, page, paginationPageChange
+const AdminTableMaterials = (
+  { routePrefix, data, isFetching, refetch, page, paginationPageChange, user,
+    showEdit, showSubmit, showTrash, showView, showPublish, showDraft, showDelete
 }: Props) => {
 
   const {notification, modal} = App.useApp();
@@ -41,34 +41,11 @@ const TableUncategorizedMaterials = (
     draft: 'bg-slate-100 text-slate-700',
     return: 'bg-red-100 text-red-700',
   }
-
-  const classificationStyles: Record<string, string> = {
-    scienceph: 'bg-sky-100 text-sky-700 border border-sky-200',
-    dostv: 'bg-amber-100 text-amber-700 border border-amber-200',
-  }
-
   const handleView = (material: Material) => {
     modal.info({
       width: 1024,
       title: 'Material Preview',
       content: <MaterialView material={material} className={''} />,
-    })
-  }
-
-  const handleEdit = (material: Material) => {
-    router.visit('/admin/uncategorized-materials/' + material.id + '/edit')
-  }
-
-  const handleDelete = (material:Material) => {
-    axios.delete('/admin/uncategorized-materials/' + material.id).then(res=> {
-      if (res.data.success) {
-        notification.success({
-          message: 'Deleted!',
-          description: 'Material successfully deleted.',
-          placement: 'topRight'
-        })
-        refetch()
-      }
     })
   }
 
@@ -86,7 +63,6 @@ const TableUncategorizedMaterials = (
           expandedRowRender: (material: Material) => (
             <div className="bg-slate-50 p-4 rounded-md border border-slate-200">
               <div className="grid md:grid-cols-5 gap-4 text-sm">
-
                 <div>
                   <div className="text-slate-500">Category</div>
                   <div className="font-medium">{material.category?.name}</div>
@@ -125,18 +101,9 @@ const TableUncategorizedMaterials = (
         <Column
           title="Title"
           dataIndex="title"
-          render={(title, material: Material) => (
-            <div className="space-y-2">
-              <div className="font-medium text-slate-900">
-                {title}
-              </div>
-              <span
-                className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${
-                  classificationStyles[material.classification ?? ''] ?? 'border border-slate-200 bg-slate-100 text-slate-700'
-                }`}
-              >
-                {material.classification ?? 'unknown'}
-              </span>
+          render={(title) => (
+            <div className="font-medium text-slate-900">
+              {title}
             </div>
           )}
         />
@@ -224,26 +191,61 @@ const TableUncategorizedMaterials = (
             <Dropdown
               trigger={['click']}
               menu={{
-                items: [
-                  {
-                    key: 'view',
-                    label: 'View',
-                    icon: <Eye size={15}/>,
-                    onClick: () => handleView(material),
-                  },
-                  {
-                    key: 'edit',
-                    label: 'Edit',
-                    icon: <Pencil size={15}/>,
-                    onClick: () => handleEdit(material),
-                  },
-                  {
-                    key: 'delete',
-                    label: 'Delete',
-                    icon: <Trash size={15}/>,
-                    onClick: () => handleDelete(material),
-                  },
-                ]
+                items: adminMenuItems({
+                  user,
+                  material,
+                  prefix: routePrefix,
+                  handleEditClick: showEdit ? () =>
+                    router.visit(`/${routePrefix}/materials/${material.id}/edit`)
+                  : undefined,
+                  handleSubmitClick: showSubmit ? async () => {
+                    modal.confirm({
+                      title: 'Submit',
+                      content: 'This material will be set to submit.',
+                      onOk: async () => {
+                        await axios.post(`/${routePrefix}/material-submit/${material.id}`)
+                        refetch()
+                      },
+                    })
+                  } : undefined,
+                  handleTrashClick: showTrash ? async () => {
+                    modal.confirm({
+                      title: 'Move to Trash?',
+                      content: 'This article will be moved to trash.',
+                      onOk: async () => {
+                        await axios.post(`/${routePrefix}/material-trash/${material.id}`)
+                        refetch()
+                      },
+                    })
+                  } : undefined,
+                  handleView: showView ? () => handleView(material) : undefined,
+                  handlePublish: showPublish ? async () => {
+                    await axios.post(`/${routePrefix}/material-publish/${material.id}`).then(() => {
+                       notification.success({
+                        message: 'Material has been published.',
+                      })
+                      refetch()
+                    })
+                  } : undefined,
+                  handleDraft: showDraft ? async () => {
+                    await axios.post(`/${routePrefix}/material-draft/${material.id}`).then(() => {
+                       notification.success({
+                        message: 'Material has been returned to draft.',
+                      })
+                      refetch()
+                    })
+                  } : undefined,
+                  handleDelete: showDelete ? () => {
+                    modal.confirm({
+                      title: 'Delete Material?',
+                      content: 'This material will be permanently deleted.',
+                      onOk: async () => {
+                        await axios.delete(`/${routePrefix}/materials/${material.id}`)
+                        refetch()
+                      },
+                    })
+                  } : undefined
+                }) as MenuProps['items'],
               }}
             >
               <Button size="small" type="text">
@@ -276,4 +278,4 @@ const TableUncategorizedMaterials = (
   )
 }
 
-export default TableUncategorizedMaterials
+export default AdminTableMaterials

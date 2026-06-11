@@ -17,18 +17,21 @@ class AdminUncategorizedMaterialController extends MaterialController
         return Inertia::render('Admin/Material/UncategorizedMaterials/AdminUncategorizedMaterialIndex');
     }
 
-    public function getData(Request $request)
+    public function getData(Request $req)
     {
-        $perpage = $request->input('perpage', 10);
-        $page = $request->input('page', 1);
+        $perpage = $req->input('perpage', 10);
+        $page = $req->input('page', 1);
 
-        $uncategorizedMaterials = Material::doesntHave('subject_headings')
-            // ->select('id', 'title', 'slug', 'description_text', 'publish_date')
+        $data = Material::doesntHave('subject_headings')
+            ->when($req->id, function($query) use ($req) {
+                $query->where('id', $req->id);
+            })
             ->orderBy('id', 'desc')
             ->paginate($perpage, ['*'], 'page', $page);
 
-        return response()->json($uncategorizedMaterials);
+        return response()->json($data);
     }
+
 
     public function create(){
 
