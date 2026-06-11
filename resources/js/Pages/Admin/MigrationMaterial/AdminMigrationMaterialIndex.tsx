@@ -32,7 +32,7 @@ const AdminMigrationMaterialIndex = ( ) => {
 
   //const [perPage, setPerPage] = useState(10);
 
-  const [page, setPage] = useState(1);
+  //const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<number>(10);
   const {notification } = App.useApp();
 
@@ -50,12 +50,12 @@ const AdminMigrationMaterialIndex = ( ) => {
     })
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ['migrations', page, perPage, filters.status],
+    queryKey: ['migrations',  perPage, filters.status],
     queryFn: async () => {
       const params = [
         `perpage=${perPage}`,
         `name=${filters.name ? filters.name : ''}`,
-        `page=${page}`,
+        //`page=${page}`,
       ].join('&')
 
       const res = await axios.get(`/admin/get-migration-materials?${params}`);
@@ -234,7 +234,7 @@ const AdminMigrationMaterialIndex = ( ) => {
             <div className="mt-6 mb-4 flex justify-between">
               <Pagination
                 size="small"
-                current={page}
+                current={1}
                 total={data?.total}
                 onChange={(value) => {
                  // paginationPageChange(value)
@@ -242,9 +242,9 @@ const AdminMigrationMaterialIndex = ( ) => {
 
                 }}
                 pageSizeOptions={['10', '20', '50']}
-                onShowSizeChange={(current, size) => {
-                  //pageSizeChange?.(current, size);
-                }}
+                // onShowSizeChange={(current, size) => {
+                //   //pageSizeChange?.(current, size);
+                // }}
               />
 
               <div className="flex items-center gap-2 text-gray-700 font-medium">
