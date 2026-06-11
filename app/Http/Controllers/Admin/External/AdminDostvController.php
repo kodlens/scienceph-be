@@ -9,11 +9,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\Material;
+use Illuminate\Support\Facades\Http;
 
 class AdminDostvController extends Controller
 {
     public function index(){
         return Inertia::render('Admin/ExternalApi/Dostv/DostvIndex');
+    }
+
+    public function checkApiStatus(Request $req)
+    {
+        $dostvApiKey = config('app.DOSTV_API_KEY');
+        $dostvBaseUrl = config('app.DOSTV_BASE_URL');
+        $apiUrl = '/v1/scienceph/get-dostv-status';
+        $uri = $dostvBaseUrl . $apiUrl;
+        //return $uri;
+        try {
+            $response = Http::withHeaders([
+                'X-API-TOKEN' => $dostvApiKey,
+                'Accept' => 'application/json'
+            ])->get($uri);
+
+            return $response->json();
+
+            return response()->json($response->json(), 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'API unreachable',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+        return $dostvs;
     }
 
     public function getData(Request $req)

@@ -69,6 +69,7 @@ return [
 
     'DOSTV_API_KEY' => env('DOSTV_API_KEY', '123456789'),
     'DOSTV_API_URL' => env('DOSTV_API_URL', 'http://localhost:8000/api'),
+    'DOSTV_BASE_URL' => env('DOSTV_BASE_URL', 'http://localhost:8000/api'),
 
 
     /*
