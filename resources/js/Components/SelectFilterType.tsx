@@ -1,15 +1,15 @@
 
-import ResourceType from "@/types/resourceType";
-import { Form, Select } from "antd"
+import { FilterType } from "@/types/resourceType";
+import { Form, Select } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react"
 
 type Props = {
-  errors: Record<string, string[]>
+  errors: Record<string, unknown[]>
 }
 export const SelectFilterType = ( { errors } : Props ) => {
   const [loading, setLoading] = useState(false);
-  const [filterTypes, setFilterTypes] = useState<ResourceType[]>([]);
+  const [filterTypes, setFilterTypes] = useState<FilterType[]>([]);
 
   const loadData = () => {
     setLoading(true);
@@ -31,6 +31,7 @@ export const SelectFilterType = ( { errors } : Props ) => {
   }
 
   const instruction = "Select the appropriate filter type that best categorizes the material. This classification helps in organizing and retrieving materials based on their content and subject matter. Choose the filter type that most accurately reflects the material's focus to ensure it is easily discoverable by users searching for related topics."
+
   return (
     <>
       <Form.Item
@@ -42,7 +43,7 @@ export const SelectFilterType = ( { errors } : Props ) => {
         label="Select Filter Type"
         className="w-full"
         validateStatus={errors.filter_type ? "error" : ""}
-        help={errors.filter_type ? errors.filter_type[0] : ""}
+        help={errors.filter_type ? errors.filter_type[0] as string : ""}
       >
         <Select loading={loading} options={filterTypes ? selectData() : []} allowClear/>
       </Form.Item>

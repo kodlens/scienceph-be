@@ -26,6 +26,24 @@ class PublisherSubmittedMaterialController extends Controller
 
 
         $data = Material::where('status', 'submit')
+            ->select(
+                'id',
+                'title',
+                'slug',
+                'filter_type',
+                'author',
+                'encoded_by_id',
+                'encoded_at',
+                'modified_by_id',
+                'modified_at',
+                'submitted_at',
+                'source_url',
+                'publish_date',
+                'is_publish',
+                'status',
+                'is_ojt',
+                'tags'
+            )
             ->with('encodedBy')
             ->where('classification', 'scienceph')
             ->where('trash', 0)

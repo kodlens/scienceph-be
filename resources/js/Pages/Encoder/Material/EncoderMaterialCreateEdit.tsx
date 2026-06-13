@@ -1,12 +1,12 @@
-import { ReactNode } from "react";
+import { lazy, ReactNode } from "react";
 import { Head, router } from "@inertiajs/react";
 import { ArrowLeftOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
 import { CreateEditProps } from "@/types";
 import EncoderLayout from "@/Layouts/EncoderLayout";
-import CreateEditMaterial from "@/Components/CreateEditMaterial";
-
+//import CreateEditMaterial from "@/Components/CreateEditMaterial";
+const CreateEditMaterial = lazy(() => import('@/Components/CreateEditMaterial'));
 const EncoderMaterialCreateEdit = ({
   id,
   auth,

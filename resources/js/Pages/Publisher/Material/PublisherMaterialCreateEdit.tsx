@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import { lazy, ReactNode } from "react";
 import { Head } from "@inertiajs/react";
 import { CreateEditProps } from "@/types";
-import CreateEditMaterial from "@/Components/CreateEditMaterial";
+const CreateEditMaterial = lazy(() => import('@/Components/CreateEditMaterial'));
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 

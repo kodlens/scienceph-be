@@ -34,6 +34,24 @@ class PublisherPublishMaterialController extends Controller
 
         $query = Material::query()
             ->with(['section', 'category', 'encodedBy', 'modifiedBy'])
+            ->select(
+                'id',
+                'title',
+                'slug',
+                'filter_type',
+                'author',
+                'encoded_by_id',
+                'encoded_at',
+                'modified_by_id',
+                'modified_at',
+                'submitted_at',
+                'source_url',
+                'publish_date',
+                'is_publish',
+                'status',
+                'is_ojt',
+                'tags'
+            )
             ->where('trash', 0)
             ->where('status', 'publish')
             ->whereIn('encoded_by_id', $assignedMaterialIds);

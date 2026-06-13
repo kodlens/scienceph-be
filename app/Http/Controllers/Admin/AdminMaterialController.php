@@ -40,7 +40,25 @@ class AdminMaterialController extends MaterialController
         }
         $data = Material::with(['section', 'category', 'encodedBy', 'modifiedBy'])
             ->where('trash', 0)
-            ->where('classification', 'scienceph');
+            ->where('classification', 'scienceph')
+            ->select(
+                'id',
+                'title',
+                'slug',
+                'filter_type',
+                'author',
+                'encoded_by_id',
+                'encoded_at',
+                'modified_by_id',
+                'modified_at',
+                'submitted_at',
+                'source_url',
+                'publish_date',
+                'is_publish',
+                'status',
+                'is_ojt',
+                'tags'
+            );
 
         if ($status != '') {
             $data = $data->where('status', $status);

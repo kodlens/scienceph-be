@@ -1,4 +1,4 @@
-import { dateFormat, formatNumber, truncate } from '@/helper/helperFunctions'
+import { dateFormat, formatNumber } from '@/helper/helperFunctions'
 import { router } from '@inertiajs/react'
 import { Table, Dropdown, Button, Pagination, App, MenuProps } from 'antd'
 import Column from 'antd/es/table/Column'
@@ -63,10 +63,7 @@ const AdminTableMaterials = (
           expandedRowRender: (material: Material) => (
             <div className="bg-slate-50 p-4 rounded-md border border-slate-200">
               <div className="grid md:grid-cols-5 gap-4 text-sm">
-                <div>
-                  <div className="text-slate-500">Category</div>
-                  <div className="font-medium">{material.category?.name}</div>
-                </div>
+
                 <div>
                   <div className="text-slate-500">Author</div>
                   <div className="font-medium">{material.author}</div>
@@ -113,12 +110,6 @@ const AdminTableMaterials = (
           title="Material Details"
           render={(_, material: Material) => (
             <div className="space-y-2">
-              <p className="text-sm text-slate-600">
-                {material.description_text
-                  ? truncate(material.description_text, 14)
-                  : '—'}
-              </p>
-
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500">Press Release:</span>
                 <span

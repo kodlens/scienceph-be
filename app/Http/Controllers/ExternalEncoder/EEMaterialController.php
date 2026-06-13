@@ -1,34 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Encoder;
+namespace App\Http\Controllers\ExternalEncoder;
 
 use App\Http\Controllers\Controller;
-use App\Models\Material;
-
-use App\Models\User;
-use App\Rules\ValidateSlug;
-use App\Rules\ValidateTitle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Helpers\FilterDom;
-use App\Http\Controllers\Helpers\RecordTrail;
+use Inertia\Response;
+use App\Models\Material;
+use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\Helpers\Fetcher; // <--extending the Fetch
-
-use App\Http\Controllers\Base\MaterialController;
-
-
-class EncoderMaterialController extends MaterialController
+class EEMaterialController extends Controller
 {
-
-
-    public function index()
+        public function index()
     {
-        return Inertia::render('Encoder/Material/EncoderMaterialIndex');
+        return Inertia::render('ExternalEncoder/Material/ExternalEncoderMaterialIndex');
     }
 
     public function getData(Request $req)
@@ -178,40 +163,4 @@ class EncoderMaterialController extends MaterialController
             'status' => 'temp_error',
         ], 200);
     }
-
-
-
-
-
-    // public function postArchived($id)
-    // {
-    //     $user = Auth::user();
-    //     $name = $user->lname . ',' . $user->fname;
-
-    //     $data = Material::find($id);
-    //     // $data->status_id = 3; //submit-for-publishing (static)
-    //     $data->status = 'archive'; // submit-for-publishing (static)
-    //     $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'archive', $user->id, $name);
-    //     $data->save();
-
-    //     return response()->json([
-    //         'status' => 'archive',
-    //     ], 200);
-    // }
-
-    // public function postSubmitForPublishing($id)
-    // {
-    //     $user = Auth::user();
-    //     $name = $user->lname . ',' . $user->fname;
-
-    //     $data = Material::find($id);
-    //     $data->status = 'submit'; // submit-for-publishing (static)
-    //     // $data->status_id = 7; //submit-for-publishing (static)
-    //     $data->record_trail = (new RecordTrail())->recordTrail($data->record_trail, 'submit', $user->id, $name);
-    //     $data->save();
-
-    //     return response()->json([
-    //         'status' => 'submit-for-publishing',
-    //     ], 200);
-    // }
 }

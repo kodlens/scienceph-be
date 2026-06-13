@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 import AdminLayout from '@/Layouts/AdminLayout';
-import FilterType from '@/types/resourceType';
+import { FilterType } from '@/types/resourceType';
 
 const { Column } = Table;
 const { Search } = Input;

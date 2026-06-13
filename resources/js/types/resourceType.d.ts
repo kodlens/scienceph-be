@@ -1,4 +1,4 @@
-export default interface ResourceType {
+export interface ResourceType {
   id?: number;
   name: string;
   slug?: string;
@@ -6,7 +6,7 @@ export default interface ResourceType {
 }
 
 
-export default interface FilterType {
+export interface FilterType {
   id?: number;
   name: string;
   slug?: string;
